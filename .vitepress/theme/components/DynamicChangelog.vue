@@ -38,6 +38,8 @@ function parseNotes(html: string): string {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/\n{3,}/g, '\n\n')
+    // 关键：去掉每行前面的缩进，避免 marked 把列表当代码块
+    .split('\n').map(line => line.replace(/^\s+/, '')).join('\n')
     .trim()
 }
 
@@ -99,22 +101,6 @@ const hasContent = computed(() => content.value.length > 0)
 </template>
 
 <style>
-/* 确保更新日志文字使用正常颜色，不是蓝色链接色 */
-.dynamic-changelog :deep(h2),
-.dynamic-changelog :deep(h3),
-.dynamic-changelog :deep(p),
-.dynamic-changelog :deep(li),
-.dynamic-changelog :deep(span),
-.dynamic-changelog :deep(td),
-.dynamic-changelog :deep(th),
-.dynamic-changelog :deep(div) {
-  color: var(--vp-c-text-1);
-}
-
-.dynamic-changelog :deep(a) {
-  color: var(--vp-c-brand-1);
-}
-
 .changelog-loading {
   display: flex;
   align-items: center;
