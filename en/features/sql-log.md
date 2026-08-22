@@ -1,4 +1,5 @@
 # SQL Log Tool Window
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 Auto-capture `Preparing:` / `Parameters:` logs from the run console, restore to executable SQL.
 
@@ -35,4 +36,3 @@ Sidebar "Log → SQL" tab: paste entire log for batch restore, multi-statement a
 
 Double-click a log entry → opens SQL preview dialog (same as Wrapper preview, supports parameter fill-in and formatting).
 
-<GifPlayer src="/demo/sql-log.gif" alt="SQL Log tool window demo" />

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" fill="none">
+  <rect width="800" height="450" rx="12" fill="#1c2128"/>
+  <rect x="200" y="150" width="400" height="150" rx="20" fill="#30363d"/>
+  <text x="400" y="210" text-anchor="middle" font-family="monospace" font-size="28" font-weight="bold" fill="#1E9FFF">SQL</text>
+  <text x="400" y="250" text-anchor="middle" font-family="system-ui" font-size="16" fill="#8b949e">演示 GIF 即将上线</text>
+</svg>

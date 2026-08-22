@@ -1,4 +1,5 @@
 # SQL 日志工具窗口
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 自动捕获运行控制台的 `Preparing:` / `Parameters:` 日志，还原成可执行 SQL。
 
@@ -35,4 +36,3 @@
 
 双击日志条目 → 弹出 SQL 预览弹窗（同 Wrapper 预览弹窗，支持参数回填和格式化）。
 
-<GifPlayer src="/demo/sql-log.gif" alt="SQL 日志工具窗口演示" />

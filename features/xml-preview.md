@@ -1,4 +1,5 @@
 # XML 动态 SQL 预览
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 mapper XML 文件中的动态 SQL 完整预览——按 MyBatis 语义渲染，OGNL 表达式可在面板勾选。
 
@@ -48,4 +49,3 @@ WHERE name LIKE ?
 ORDER BY create_time DESC
 ```
 
-<GifPlayer src="/demo/xml-preview.gif" alt="XML 预览演示" />

@@ -1,4 +1,5 @@
 # XML Dynamic SQL Preview
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 Complete preview of dynamic SQL in mapper XML — rendered per MyBatis semantics with OGNL expression toggles.
 
@@ -48,4 +49,3 @@ WHERE name LIKE ?
 ORDER BY create_time DESC
 ```
 
-<GifPlayer src="/demo/xml-preview.gif" alt="XML preview demo" />

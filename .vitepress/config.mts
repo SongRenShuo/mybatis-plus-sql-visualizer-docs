@@ -9,8 +9,8 @@ export default defineConfig({
   // 默认语言
   lang: 'zh-CN',
 
-  // 默认暗色主题
-  appearance: 'dark',
+  // 默认亮色主题
+  appearance: 'light',
 
   // 自定义 head
   head: [
@@ -78,7 +78,7 @@ export default defineConfig({
         },
         footer: {
           message: '基于 Apache-2.0 协议开源发布',
-          copyright: 'Copyright © 2024-present SongRenShuo'
+          copyright: 'Copyright © 2026-present SongRenShuo'
         },
         outline: {
           level: [2, 3],
@@ -151,7 +151,7 @@ export default defineConfig({
         },
         footer: {
           message: 'Released under the Apache-2.0 License',
-          copyright: 'Copyright © 2024-present SongRenShuo'
+          copyright: 'Copyright © 2026-present SongRenShuo'
         },
         outline: {
           level: [2, 3],

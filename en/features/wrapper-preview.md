@@ -1,4 +1,5 @@
 # Wrapper → SQL Preview
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 Statically parse MyBatis-Plus / MPJ calls in Java source code into previewable SQL — no need to launch the project or connect to a database.
 
@@ -71,4 +72,3 @@ WHERE id = 1001
     AND station_id IS NOT NULL
 ```
 
-<GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper preview demo" />

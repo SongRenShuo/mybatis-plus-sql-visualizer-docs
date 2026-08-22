@@ -49,7 +49,6 @@ style:
 ---
 
 <script setup>
-import BadgeBar from './.vitepress/theme/components/BadgeBar.vue'
 import CodeTabs from './.vitepress/theme/components/CodeTabs.vue'
 
 const codeExamples = [
@@ -109,8 +108,6 @@ ORDER BY t1.create_time DESC
   }
 ]
 </script>
-
-<BadgeBar />
 
 <CodeTabs :tabs="codeExamples" />
 

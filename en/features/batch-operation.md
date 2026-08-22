@@ -1,4 +1,5 @@
 # Batch Operation Panel
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 `save` / `updateBatchById` / `saveOrUpdate` batch SQL expanded by column, with per-column parameter toggles.
 
@@ -41,4 +42,3 @@ Auto-determine quoting by field type:
 | SQL Server | `MERGE INTO` |
 | Oracle | `MERGE INTO` |
 
-<GifPlayer src="/demo/batch-operation.gif" alt="Batch operation panel demo" />

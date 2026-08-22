@@ -1,4 +1,5 @@
 # SQL → Java Reverse Conversion
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 Select SQL text and one-click generate compilable MyBatis-Plus code — supports four Wrapper forms.
 
@@ -58,4 +59,3 @@ MPJLambdaWrapper<DeviceInfoEntity> wrapper = new MPJLambdaWrapper<DeviceInfoEnti
     .orderByDesc(StationInfoEntity::getCreateTime);
 ```
 
-<GifPlayer src="/demo/sql-to-java.gif" alt="SQL to Java reverse conversion demo" />

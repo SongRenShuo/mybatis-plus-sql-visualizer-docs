@@ -1,4 +1,5 @@
 # SQL → Java 反向转换
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 选中 SQL 文本一键生成可编译的 MyBatis-Plus 代码——支持四种 Wrapper 形态。
 
@@ -58,4 +59,3 @@ MPJLambdaWrapper<DeviceInfoEntity> wrapper = new MPJLambdaWrapper<DeviceInfoEnti
     .orderByDesc(StationInfoEntity::getCreateTime);
 ```
 
-<GifPlayer src="/demo/sql-to-java.gif" alt="SQL → Java 反向转换演示" />

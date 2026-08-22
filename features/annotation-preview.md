@@ -1,4 +1,5 @@
 # 注解 SQL 预览
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 Java Mapper 接口中的 `@Select` / `@Update` / `@Delete` / `@Insert` 注解同样支持预览。
 
@@ -27,4 +28,3 @@ Java Mapper 接口中的 `@Select` / `@Update` / `@Delete` / `@Insert` 注解同
 List<User> selectByCondition(@Param("name") String name, @Param("status") Integer status);
 ```
 
-<GifPlayer src="/demo/annotation-preview.gif" alt="注解预览演示" />

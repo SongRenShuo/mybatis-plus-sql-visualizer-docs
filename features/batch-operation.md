@@ -1,4 +1,5 @@
 # 批量操作参数面板
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 `save` / `updateBatchById` / `saveOrUpdate` 等批量 SQL 按列展开，参数可逐列勾选。
 
@@ -41,4 +42,3 @@ Wrapper 锚点涉及批量操作时，弹窗自动切换到批量参数面板。
 | SQL Server | `MERGE INTO` |
 | Oracle | `MERGE INTO` |
 
-<GifPlayer src="/demo/batch-operation.gif" alt="批量操作参数面板演示" />

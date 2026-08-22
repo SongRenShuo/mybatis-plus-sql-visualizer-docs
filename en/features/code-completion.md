@@ -1,4 +1,5 @@
 # SQL Code Completion
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 `Ctrl+Space` completion in mapper XML and Java SQL annotation strings.
 
@@ -18,4 +19,3 @@
 | XML dynamic tags | `<if>` / `<where>` / `<foreach>` etc. |
 | OGNL expressions | Property names in `<if test="...">` |
 
-<GifPlayer src="/demo/code-completion.gif" alt="SQL code completion demo" />

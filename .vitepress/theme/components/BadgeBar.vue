@@ -26,11 +26,6 @@
         alt="Downloads"
       />
     </a>
-    <!-- 测试覆盖（静态） -->
-    <img
-      src="https://img.shields.io/badge/tests-610%2B%20passing-10b981?style=flat&logo=checkmarx&logoColor=white"
-      alt="Tests"
-    />
     <!-- 方言支持（静态） -->
     <img
       src="https://img.shields.io/badge/dialects-9-3b82f6?style=flat"

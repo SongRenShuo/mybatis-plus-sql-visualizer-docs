@@ -1,5 +1,7 @@
 # Wrapper → SQL 预览
 
+<GifPlayer src="/demo/placeholder.svg" alt="Wrapper 预览演示" />
+
 把 Java 源码中的 MyBatis-Plus / MPJ 调用**静态解析为可预览 SQL**——无需启动项目、无需连接数据库。
 
 ## 触发方式
@@ -71,5 +73,3 @@ FROM device_info_entity
 WHERE id = 1001
     AND station_id IS NOT NULL
 ```
-
-<GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper 预览演示" />

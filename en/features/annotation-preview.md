@@ -1,4 +1,5 @@
 # Annotation SQL Preview
+<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
 
 Java Mapper interface annotations `@Select` / `@Update` / `@Delete` / `@Insert` are also fully supported.
 
@@ -27,4 +28,3 @@ Gutter icon at the annotation line. Click to preview.
 List<User> selectByCondition(@Param("name") String name, @Param("status") Integer status);
 ```
 
-<GifPlayer src="/demo/annotation-preview.gif" alt="Annotation preview demo" />
