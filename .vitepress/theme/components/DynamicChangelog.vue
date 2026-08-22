@@ -108,8 +108,8 @@ const hasContent = computed(() => content.value.length > 0)
       </a>
     </div>
 
-    <!-- 内容 -->
-    <div v-else-if="hasContent" class="changelog-body" v-html="content" />
+    <!-- 内容：用 vp-doc 包裹以继承 VitePress 排版样式 -->
+    <div v-else-if="hasContent" class="vp-doc changelog-body" v-html="content" />
 
     <!-- 底部查看更多 -->
     <div v-if="moreLink" class="changelog-more">
