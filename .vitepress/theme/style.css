@@ -685,3 +685,30 @@ kbd {
 @media (max-width: 768px) {
   .VPHero { padding: 80px 24px 60px !important; }
 }
+
+/* ============================================
+   首页（Cool Request 风格）共享样式
+   ============================================ */
+
+/* 容器 */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* 暗色模式适配（首页组件使用 :global(.dark) 无法覆盖的场景） */
+.dark .cool-home {
+  --bg-primary: #2b2d30;
+  --bg-secondary: #26282c;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --border-color: #374151;
+}

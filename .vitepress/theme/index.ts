@@ -14,6 +14,9 @@ import BadgeBar from './components/BadgeBar.vue'
 import SiteNotice from './components/SiteNotice.vue'
 import NavBarGitee from './components/NavBarGitee.vue'
 
+// 首页组件
+import CoolHome from './components/home/CoolHome.vue'
+
 // 自定义样式
 import './style.css'
 
@@ -33,6 +36,8 @@ export default {
     app.component('CodeCompare', CodeCompare)
     app.component('FeatureCards', FeatureCards)
     app.component('CodeTabs', CodeTabs)
+    // 首页组件
+    app.component('CoolHome', CoolHome)
   },
   setup() {
     let scrollHandler: (() => void) | null = null
