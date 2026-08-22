@@ -2,6 +2,9 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  // 忽略死链接（开发计划中的 localhost 链接）
+  ignoreDeadLinks: true,
+
   title: 'MyBatis-Plus SQL Visualizer',
   description:
     'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join 的 SQL 调试利器——Wrapper 链、XML/注解动态 SQL 实时预览（含 MPJ 联表 JOIN），控制台日志一键还原，SQL 反向转 Java 代码。',
@@ -9,8 +12,8 @@ export default defineConfig({
   // 默认语言
   lang: 'zh-CN',
 
-  // 默认暗色主题
-  appearance: 'dark',
+  // 默认亮色主题
+  appearance: 'light',
 
   // 自定义 head
   head: [
@@ -24,7 +27,7 @@ export default defineConfig({
       '@type': 'WebSite',
       'name': 'MyBatis-Plus SQL Visualizer',
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus SQL 调试利器',
-      'url': 'https://your-domain.dev',
+      'url': 'https://mybatis-plus-sql-visualizer.jvtools.cn',
       'inLanguage': ['zh-CN', 'en']
     })]
   ],
@@ -200,6 +203,6 @@ export default defineConfig({
 
   // sitemap
   sitemap: {
-    hostname: 'https://your-domain.dev'
+    hostname: 'https://mybatis-plus-sql-visualizer.jvtools.cn'
   }
 })
