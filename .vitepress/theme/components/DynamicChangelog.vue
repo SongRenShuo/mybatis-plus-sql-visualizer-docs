@@ -99,6 +99,22 @@ const hasContent = computed(() => content.value.length > 0)
 </template>
 
 <style>
+/* 确保更新日志文字使用正常颜色，不是蓝色链接色 */
+.dynamic-changelog :deep(h2),
+.dynamic-changelog :deep(h3),
+.dynamic-changelog :deep(p),
+.dynamic-changelog :deep(li),
+.dynamic-changelog :deep(span),
+.dynamic-changelog :deep(td),
+.dynamic-changelog :deep(th),
+.dynamic-changelog :deep(div) {
+  color: var(--vp-c-text-1);
+}
+
+.dynamic-changelog :deep(a) {
+  color: var(--vp-c-brand-1);
+}
+
 .changelog-loading {
   display: flex;
   align-items: center;
