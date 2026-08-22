@@ -41,14 +41,6 @@ function parseNotes(html: string): string {
     .trim()
 }
 
-function formatDate(timestamp: string) {
-  const d = new Date(parseInt(timestamp))
-  return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`
-}
-
-function normalizeVersion(v: string) {
-  return v.replace(/^v/, '').trim()
-}
 
 onMounted(async () => {
   try {
@@ -58,27 +50,14 @@ onMounted(async () => {
 
     if (!Array.isArray(data) || data.length === 0) throw new Error('返回数据为空')
 
-    // 去重：按标准化版本号去重，保留第一个（最新）
-    const seen = new Set<string>()
-    const updates = data
-      .sort((a: any, b: any) => parseInt(b.cdate) - parseInt(a.cdate))
-      .filter((item: any) => {
-        const key = normalizeVersion(item.version)
-        if (seen.has(key)) return false
-        seen.add(key)
-        return true
-      })
+    // 按日期排序，取最新版本（第一个）
+    const sorted = data.sort((a: any, b: any) => parseInt(b.cdate) - parseInt(a.cdate))
+    const latest = sorted[0]
 
-    let md = ''
-    for (const item of updates) {
-      const date = formatDate(item.cdate)
-      md += `## ${item.version} (${date})\n\n`
-      let notes = parseNotes(item.notes)
-      // 去掉 notes 中和版本标题重复的 h2/h3
-      const verClean = normalizeVersion(item.version)
-      notes = notes.replace(new RegExp(`^###?\\s*v?${verClean}\\s*$`, 'gim'), '')
-      md += notes + '\n\n'
-    }
+    // 最新版本的 notes 已包含完整更新日志
+    let md = `# 更新日志\n\n`
+    md += `数据来源：[JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer)\n\n`
+    md += parseNotes(latest.notes)
 
     content.value = marked.parse(md) as string
   } catch (e: any) {
