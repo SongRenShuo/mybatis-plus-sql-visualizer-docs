@@ -92,7 +92,7 @@ const hasContent = computed(() => content.value.length > 0)
 </script>
 
 <template>
-  <div class="dynamic-changelog">
+  <div class="dynamic-changelog vp-doc">
     <!-- 加载中 -->
     <div v-if="loading" class="changelog-loading">
       <span class="changelog-spinner"></span>
@@ -107,8 +107,8 @@ const hasContent = computed(() => content.value.length > 0)
       </a>
     </div>
 
-    <!-- 内容：继承 VitePress .vp-doc 默认排版 -->
-    <div v-else-if="hasContent" class="vp-doc" v-html="content" />
+    <!-- 内容：由外层 VitePress .vp-doc 提供排版，不重复嵌套 -->
+    <div v-else-if="hasContent" class="changelog-content" v-html="content" />
 
     <!-- 底部查看更多 -->
     <div v-if="moreLink" class="changelog-more">
