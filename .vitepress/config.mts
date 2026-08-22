@@ -18,9 +18,7 @@ export default defineConfig({
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
     ['meta', { property: 'og:locale:alternate', content: 'en_US' }],
-    ['meta', { property: 'og:site_name', content: 'MyBatis-Plus SQL Visualizer' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
-    // Schema.org WebSite
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
@@ -30,6 +28,25 @@ export default defineConfig({
       'inLanguage': ['zh-CN', 'en']
     })]
   ],
+
+  // 开发服务器代理：/api/changelog → JetBrains Marketplace
+  vite: {
+    server: {
+      proxy: {
+        '/api/changelog': {
+          target: 'https://plugins.jetbrains.com/api/plugins/33633/updates',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/changelog/, ''),
+          configure: (proxy) => {
+            proxy.on('proxyRes', (proxyRes, req, res) => {
+              proxyRes.headers['Access-Control-Allow-Origin'] = '*'
+              proxyRes.headers['Cache-Control'] = 'public, max-age=3600'
+            })
+          }
+        }
+      }
+    }
+  },
 
   // 国际化
   locales: {
