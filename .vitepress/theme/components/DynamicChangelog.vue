@@ -5,6 +5,7 @@ import { marked } from 'marked'
 /**
  * 动态更新日志组件
  * 每次访问页面时从 JetBrains Marketplace API 实时获取
+ * 样式完全继承 VitePress 默认 .vp-doc 排版
  */
 
 const props = defineProps<{
@@ -21,9 +22,6 @@ const content = ref('')
 
 marked.setOptions({ breaks: true, gfm: true })
 
-/**
- * 解析 API 返回的 HTML notes 为 Markdown
- */
 function parseNotes(html: string): string {
   if (!html) return ''
   return html
@@ -58,11 +56,8 @@ onMounted(async () => {
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data = await res.json()
 
-    if (!Array.isArray(data) || data.length === 0) {
-      throw new Error('返回数据为空')
-    }
+    if (!Array.isArray(data) || data.length === 0) throw new Error('返回数据为空')
 
-    // 去重 + 排序
     const seen = new Set<string>()
     const updates = data
       .sort((a: any, b: any) => parseInt(b.cdate) - parseInt(a.cdate))
@@ -73,7 +68,6 @@ onMounted(async () => {
         return true
       })
 
-    // 拼接 Markdown
     let md = ''
     for (const item of updates) {
       const date = formatDate(item.cdate)
@@ -108,8 +102,8 @@ const hasContent = computed(() => content.value.length > 0)
       </a>
     </div>
 
-    <!-- 内容：用 vp-doc 包裹以继承 VitePress 排版样式 -->
-    <div v-else-if="hasContent" class="vp-doc changelog-body" v-html="content" />
+    <!-- 内容：继承 VitePress .vp-doc 默认排版 -->
+    <div v-else-if="hasContent" class="vp-doc" v-html="content" />
 
     <!-- 底部查看更多 -->
     <div v-if="moreLink" class="changelog-more">
@@ -121,10 +115,6 @@ const hasContent = computed(() => content.value.length > 0)
 </template>
 
 <style>
-.dynamic-changelog {
-  margin-top: 24px;
-}
-
 .changelog-loading {
   display: flex;
   align-items: center;
@@ -176,52 +166,5 @@ const hasContent = computed(() => content.value.length > 0)
 
 .changelog-more-link:hover {
   opacity: 0.8;
-}
-
-/* 渲染的 Markdown 样式 */
-.changelog-body :deep(h2) {
-  font-size: 1.4em;
-  font-weight: 700;
-  margin-top: 2em;
-  margin-bottom: 0.5em;
-  padding-bottom: 0;
-  border-bottom: none;
-  text-align: left;
-}
-
-.changelog-body :deep(h3) {
-  font-size: 1.15em;
-  font-weight: 600;
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
-}
-
-.changelog-body :deep(ul),
-.changelog-body :deep(ol) {
-  padding-left: 1.5em;
-  margin: 0.5em 0;
-}
-
-.changelog-body :deep(li) {
-  margin: 0.3em 0;
-  line-height: 1.7;
-  list-style: disc;
-}
-
-.changelog-body :deep(p) {
-  margin: 0.5em 0;
-  line-height: 1.7;
-}
-
-.changelog-body :deep(a) {
-  color: var(--vp-c-brand-1);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.changelog-body :deep(hr) {
-  border: none;
-  border-top: 1px solid var(--vp-c-divider);
-  margin: 2em 0;
 }
 </style>
