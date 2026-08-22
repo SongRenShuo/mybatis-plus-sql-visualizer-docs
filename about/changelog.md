@@ -4,6 +4,6 @@ import DynamicChangelog from '../.vitepress/theme/components/DynamicChangelog.vu
 
 <DynamicChangelog
   src="/api/changelog"
-  more-link="https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer"
+  more-link="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases"
   more-text="查看更多 →"
 />
