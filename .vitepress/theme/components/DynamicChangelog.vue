@@ -58,6 +58,7 @@ onMounted(async () => {
 
     if (!Array.isArray(data) || data.length === 0) throw new Error('返回数据为空')
 
+    // 去重：按标准化版本号去重，保留第一个（最新）
     const seen = new Set<string>()
     const updates = data
       .sort((a: any, b: any) => parseInt(b.cdate) - parseInt(a.cdate))
@@ -72,7 +73,11 @@ onMounted(async () => {
     for (const item of updates) {
       const date = formatDate(item.cdate)
       md += `## ${item.version} (${date})\n\n`
-      md += parseNotes(item.notes) + '\n\n'
+      let notes = parseNotes(item.notes)
+      // 去掉 notes 中和版本标题重复的 h2/h3
+      const verClean = normalizeVersion(item.version)
+      notes = notes.replace(new RegExp(`^###?\\s*v?${verClean}\\s*$`, 'gim'), '')
+      md += notes + '\n\n'
     }
 
     content.value = marked.parse(md) as string
