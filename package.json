@@ -4,9 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prebuild": "node scripts/update-changelog.mjs",
     "dev": "vitepress dev",
-    "build": "vitepress build",
-    "preview": "vitepress preview"
+    "build": "npm run prebuild && vitepress build",
+    "preview": "vitepress preview",
+    "changelog": "node scripts/update-changelog.mjs"
   },
   "devDependencies": {
     "vitepress": "^1.6.3"
