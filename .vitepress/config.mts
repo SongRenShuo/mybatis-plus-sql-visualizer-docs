@@ -9,8 +9,8 @@ export default defineConfig({
   // 默认语言
   lang: 'zh-CN',
 
-  // 默认亮色主题
-  appearance: 'light',
+  // 默认暗色主题
+  appearance: 'dark',
 
   // 自定义 head
   head: [

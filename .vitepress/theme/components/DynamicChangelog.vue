@@ -120,7 +120,7 @@ const hasContent = computed(() => content.value.length > 0)
   </div>
 </template>
 
-<style scoped>
+<style>
 .dynamic-changelog {
   margin-top: 24px;
 }
