@@ -1,5 +1,5 @@
 # SQL Log Tool Window
-<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
+<GifPlayer src="/demo/sql-log.svg" alt="SQL Log Restore Demo" />
 
 Auto-capture `Preparing:` / `Parameters:` logs from the run console, restore to executable SQL.
 

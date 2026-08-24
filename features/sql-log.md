@@ -1,5 +1,5 @@
 # SQL 日志工具窗口
-<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
+<GifPlayer src="/demo/sql-log.svg" alt="控制台日志还原演示" />
 
 自动捕获运行控制台的 `Preparing:` / `Parameters:` 日志，还原成可执行 SQL。
 

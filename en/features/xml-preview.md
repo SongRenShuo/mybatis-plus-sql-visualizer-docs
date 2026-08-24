@@ -1,5 +1,5 @@
 # XML Dynamic SQL Preview
-<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
+<GifPlayer src="/demo/xml-preview.svg" alt="XML Dynamic SQL Preview Demo" />
 
 Complete preview of dynamic SQL in mapper XML — rendered per MyBatis semantics with OGNL expression toggles.
 

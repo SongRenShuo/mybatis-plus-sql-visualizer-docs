@@ -1,5 +1,5 @@
 # SQL 代码补全
-<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
+<GifPlayer src="/demo/code-completion.svg" alt="SQL 代码补全演示" />
 
 mapper XML 与 Java SQL 注解字符串内 `Ctrl+Space` 补全。
 

@@ -1,5 +1,5 @@
 # 注解 SQL 预览
-<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
+<GifPlayer src="/demo/annotation-preview.svg" alt="注解 SQL 预览演示" />
 
 Java Mapper 接口中的 `@Select` / `@Update` / `@Delete` / `@Insert` 注解同样支持预览。
 

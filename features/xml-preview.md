@@ -1,5 +1,5 @@
 # XML 动态 SQL 预览
-<GifPlayer src="/demo/placeholder.svg" alt="Demo" />
+<GifPlayer src="/demo/xml-preview.svg" alt="XML 动态 SQL 预览演示" />
 
 mapper XML 文件中的动态 SQL 完整预览——按 MyBatis 语义渲染，OGNL 表达式可在面板勾选。
 
