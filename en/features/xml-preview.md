@@ -1,7 +1,7 @@
-# XML Dynamic SQL Preview
+# XML / HQL Dynamic SQL Preview
 <GifPlayer src="/demo/xml-preview.svg" alt="XML Dynamic SQL Preview Demo" />
 
-Complete preview of dynamic SQL in mapper XML — rendered per MyBatis semantics with OGNL expression toggles.
+Complete preview of dynamic SQL in mapper XML — rendered per MyBatis semantics with OGNL expression toggles. Hibernate HQL and JPA JPQL previews are supported as well (see below).
 
 ## Trigger Method
 
@@ -48,4 +48,34 @@ SELECT * FROM user
 WHERE name LIKE ?
 ORDER BY create_time DESC
 ```
+
+## HQL / JPQL Preview
+
+Beyond mapper XML, the plugin also previews Hibernate HQL and JPA JPQL statically. All entry points appear as gutter icons in Java source lines:
+
+| Entry | Location |
+|-------|----------|
+| Hibernate HQL calls (`session.createQuery(hql)`) | The HQL string line |
+| `@Query("...")` annotations (JPQL) | The annotation line |
+| JPA Repository derived methods (`findByXxx...`) | The method declaration line |
+| JPA CriteriaQuery chains (`cq.from` / `cb.equal` etc.) | The call chain line |
+| Custom DAO HQL query methods (e.g. `commonDao.findByQuery`) | The call line |
+
+HQL strings split across multiple lines with `+`, or concatenated via chained assignments, are recognized as well — the gutter icon still appears.
+
+### SELECT Entity Alias Expansion
+
+In HQL semantics, `SELECT u` means "fetch the whole entity `u`", but emitting it verbatim makes MySQL fail with `[1054] Unknown column 'u' in 'field list'`. The plugin expands bare entity aliases into the entity's column list automatically:
+
+```sql
+-- HQL: SELECT u FROM User u WHERE u.status = 1
+-- After expansion:
+SELECT u.id, u.name, u.status, ... FROM user u WHERE u.status = 1
+```
+
+Expansion rules:
+
+- Only bare aliases registered in FROM / JOIN are expanded; DELETE / DISTINCT / subqueries / aggregates / explicit column lists are untouched
+- When the query has no SELECT clause, the column list is added automatically
+- Falls back to `alias.*` when a JOIN side table or entity metadata is missing
 

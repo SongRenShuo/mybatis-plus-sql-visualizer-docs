@@ -56,7 +56,7 @@ function handleMouseLeave() {
           </h2>
 
           <p class="welfare-desc">
-            MyBatis-Plus SQL Visualizer 所有功能永久免费使用。无需注册、无需登录，安装即用。
+            SQL Visualizer 所有功能永久免费使用。无需注册、无需登录，安装即用。
           </p>
 
           <ul class="welfare-list">

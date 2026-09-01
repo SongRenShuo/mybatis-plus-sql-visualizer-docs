@@ -26,7 +26,7 @@ onUnmounted(() => {
       <div class="nav-content">
         <div class="logo-area">
           <img src="/logo.svg" alt="Logo" class="nav-logo" />
-          <span class="logo-text">MyBatis-Plus SQL Visualizer</span>
+          <span class="logo-text">SQL Visualizer</span>
         </div>
 
         <nav class="nav-links">

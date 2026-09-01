@@ -33,7 +33,7 @@ const testimonials = [
           深受 <span class="testimonials-title-accent">开发团队信赖</span>
         </h2>
         <p class="testimonials-subtitle">
-          听听那些每天使用 MyBatis-Plus SQL Visualizer 的工程师们怎么说。
+          听听那些每天使用 SQL Visualizer 的工程师们怎么说。
         </p>
       </div>
 

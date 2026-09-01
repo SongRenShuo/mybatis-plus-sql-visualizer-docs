@@ -1,6 +1,6 @@
 # Getting Started
 
-Get up and running with MyBatis-Plus SQL Visualizer in 3 minutes.
+Get up and running with SQL Visualizer in 3 minutes.
 
 ## Installation
 
@@ -9,7 +9,7 @@ Get up and running with MyBatis-Plus SQL Visualizer in 3 minutes.
 ### Method 1: Install via IDE Plugin System (Recommended)
 
 1. Open <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd>
-2. Search for `MyBatis-Plus SQL Visualizer`
+2. Search for `SQL Visualizer`
 3. Click <kbd>Install</kbd>
 4. Restart IDE
 

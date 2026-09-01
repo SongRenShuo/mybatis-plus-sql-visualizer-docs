@@ -11,8 +11,9 @@ The gutter icon appears only at:
 - Wrapper chain end lines (where `.eq()` or other terminal calls are)
 - mapper XML `<select>` / `<update>` statement lines
 - Java Mapper interface `@Select` annotation lines
+- Hibernate HQL call lines (`session.createQuery(...)`) and JPA `@Query` annotation lines, Repository derived method lines
 
-Ensure the cursor is at one of these positions. If still not showing, check "Show preview SQL icon in gutter" in settings.
+Ensure the cursor is at one of these positions. If still not showing, check "Show preview SQL icon in gutter" in settings. HQL strings split across multiple lines with `+` are supported too.
 
 ## Does it support MyBatis-Plus-Join (MPJ) JOIN queries?
 
@@ -42,13 +43,21 @@ Troubleshooting steps:
 4. Check if hit by "Remove lines containing" filter rule
 5. Confirm logs output to run console (not separate log file)
 
+## "Jump to Source" in realtime logs misses — how to fix?
+
+SQL logs contain no call-site info, so without configuration the plugin does an approximate search by table name, which may miss. To jump precisely to the Service / Controller line that fired the SQL, copy the self-contained `SqlSourceInterceptor` shipped with the plugin (see `docs/instrumentation/SqlSourceInterceptor.kt` in the plugin repository) into your project and register it as a MyBatis-Plus `InnerInterceptor` — see [Features · Jump to Source](../features/sql-log.md#jump-to-source). Nothing else is affected without it.
+
+## Where did my SQL history go after upgrading?
+
+Since v2026.9.2 the plugin's in-project data directory is renamed from `.idea/mybatis-plus-sql-visualizer/` to `.idea/sql-visualizer/` (history SQL and execution temp files). Old data is not migrated — history accumulates fresh in the new directory after upgrading. To keep old records, manually copy `.sql` files from the old directory's `sql-history/` into the new one.
+
 ## Can SQL → Java reverse conversion generate compilable code?
 
 Yes. Generated code is strictly based on MyBatis-Plus public APIs (local jar decompilation as sole authority), no fictional methods. Auto-infers entity classes for Lambda type-safe code; falls back to string-column `QueryWrapper` when entity not found.
 
 ## How to switch plugin UI language?
 
-`Settings → Tools → MyBatis-Plus SQL Visualizer → UI Language`. Supports Simplified Chinese / English / Follow System. Plugin language is independent of IDE language; reopen preview dialog to apply.
+`Settings → Tools → SQL Visualizer → UI Language`. Supports Simplified Chinese / English / Follow System. Plugin language is independent of IDE language; reopen preview dialog to apply.
 
 ## Which database dialects are supported?
 

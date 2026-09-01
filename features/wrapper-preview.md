@@ -55,7 +55,7 @@ UPDATE / DELETE 无 WHERE 条件时，弹窗红色警示：
 
 ### 执行 SQL
 
-IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 .sql 文件，`Ctrl+Enter` 执行。
+IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 .sql 文件，`Ctrl+Enter` 执行。预览弹窗为非模态窗口，执行时如数据源密码过期，IDEA 的密码输入框不会被弹窗遮挡，可直接输入。
 
 ## 示例
 

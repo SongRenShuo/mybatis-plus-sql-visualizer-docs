@@ -22,7 +22,7 @@ const cards = [
     icon: 'cog',
     color: 'yellow',
     title: '广泛集成',
-    description: '完美集成 MyBatis XML / 注解 SQL / SQL 日志追踪 / 批量操作，打造完整的开发调试生态。',
+    description: '完美集成 MyBatis XML / 注解 SQL / HQL、JPQL / SQL 日志追踪 / 批量操作，打造完整的开发调试生态。',
   },
   {
     icon: 'chart',
@@ -34,7 +34,7 @@ const cards = [
     icon: 'history',
     color: 'indigo',
     title: '历史记录',
-    description: '自动保存所有预览历史和反向转换结果，支持快速搜索和回溯。让每一次调试都有迹可循。',
+    description: '自动保存所有预览历史和反向转换结果，历史面板两级导航、SQL 带高亮与耗时，可精确跳转回源码。让每一次调试都有迹可循。',
   },
 ]
 </script>
@@ -46,7 +46,7 @@ const cards = [
         <div class="more-features-badge">更多特性</div>
         <h2 class="section-title">我们为您考虑周全</h2>
         <p class="section-description">
-          MyBatis-Plus SQL Visualizer 涵盖了 SQL 调试所需的一切功能。
+          SQL Visualizer 涵盖了 SQL 调试所需的一切功能。
         </p>
       </div>
 

@@ -1,15 +1,15 @@
 ---
 layout: home
-title: MyBatis-Plus SQL Visualizer
+title: SQL Visualizer
 titleTemplate: false
 
 hero:
-  name: MyBatis-Plus SQL Visualizer
+  name: SQL Visualizer
   text: IntelliJ IDEA Plugin
-  tagline: "Wrapper chain, XML/annotation dynamic SQL live preview (incl. MPJ JOIN), console log restore, SQL to Java reverse conversion. No more log digging."
+  tagline: "Wrapper chain, XML/annotation/HQL dynamic SQL live preview (incl. MPJ JOIN), console log restore with precise jump-to-source, SQL to Java reverse conversion. No more log digging."
   image:
     src: /logo.svg
-    alt: MyBatis-Plus SQL Visualizer
+    alt: SQL Visualizer
   actions:
     - theme: brand
       text: "Install — Free"

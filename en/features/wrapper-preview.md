@@ -53,7 +53,7 @@ Entities with `@TableLogic` auto-append `AND deleted = value` (configurable, def
 
 ### Execute SQL
 
-With IntelliJ IDEA Ultimate + Database plugin, auto-creates a temporary `.sql` file, `Ctrl+Enter` to execute.
+With IntelliJ IDEA Ultimate + Database plugin, auto-creates a temporary `.sql` file, `Ctrl+Enter` to execute. The preview dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it.
 
 ## Example
 

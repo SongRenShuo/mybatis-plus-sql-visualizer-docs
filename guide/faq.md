@@ -11,8 +11,9 @@ Gutter 图标仅在以下位置出现：
 - Wrapper 链末尾行（`.eq()` 等终止调用所在行）
 - mapper XML 的 `<select>` / `<update>` 等语句行
 - Java Mapper 接口中 `@Select` 等注解行
+- Hibernate HQL 调用行（`session.createQuery(...)`）与 JPA `@Query` 注解行、Repository 推导方法行
 
-确认光标位于上述位置；如仍不显示，检查设置页「代码左侧显示预览 SQL 图标」是否开启。
+确认光标位于上述位置；如仍不显示，检查设置页「代码左侧显示预览 SQL 图标」是否开启。多行 `+` 拼接的 HQL 字符串同样支持 gutter 图标。
 
 ## 支持 MyBatis-Plus-Join（MPJ）联表查询吗？
 
@@ -42,13 +43,21 @@ Gutter 图标仅在以下位置出现：
 4. 检查是否被「移除包含关键字」过滤规则命中
 5. 确认日志输出到运行控制台（非独立日志文件）
 
+## 实时日志「跳转到源码」跳不准怎么办？
+
+SQL 日志本身不含调用位置，未做任何配置时插件按表名搜索实体做近似跳转，可能落空。要精确跳转到触发 SQL 的 Service / Controller 行，请把插件自带的自包含拦截器 `SqlSourceInterceptor`（见插件仓库 `docs/instrumentation/SqlSourceInterceptor.kt`）复制到项目并注册为 MyBatis-Plus `InnerInterceptor`，详见[功能详解 · 跳转到源码](../features/sql-log.md#跳转到源码)。不配置也不影响其他功能。
+
+## 升级后 SQL 历史记录去哪了？
+
+v2026.9.2 起，插件在项目内的数据目录由 `.idea/mybatis-plus-sql-visualizer/` 改名为 `.idea/sql-visualizer/`（历史 SQL 与执行临时文件）。此次更名不做旧数据迁移，升级后历史 SQL 从新目录起算重新积累；如需保留旧记录，可手动把旧目录 `sql-history/` 下的 `.sql` 文件复制到新目录。
+
 ## SQL → Java 反向转换生成的代码能直接编译吗？
 
 可以。生成代码严格基于 MyBatis-Plus 公开 API（以本地 jar 反编译为唯一权威），不含虚构方法。自动推断实体类后使用 Lambda 形态生成类型安全代码；找不到实体时回退字符串列 `QueryWrapper`。
 
 ## 如何切换插件界面语言？
 
-`Settings → Tools → MyBatis-Plus SQL Visualizer → 界面语言`。支持 简体中文 / English / 跟随系统。插件语言独立于 IDE 语言设置，切换后重新打开预览弹窗即生效。
+`Settings → Tools → SQL Visualizer → 界面语言`。支持 简体中文 / English / 跟随系统。插件语言独立于 IDE 语言设置，切换后重新打开预览弹窗即生效。
 
 ## 支持哪些数据库方言的分页语法？
 

@@ -1,6 +1,6 @@
 # 快速开始
 
-3 分钟上手 MyBatis-Plus SQL Visualizer。
+3 分钟上手 SQL Visualizer。
 
 ## 安装插件
 
@@ -9,7 +9,7 @@
 ### 方式一：IDE 内置插件系统安装（推荐）
 
 1. 打开 <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd>
-2. 搜索 `MyBatis-Plus SQL Visualizer`
+2. 搜索 `SQL Visualizer`
 3. 点击 <kbd>Install</kbd> 安装
 4. 重启 IDE 生效
 

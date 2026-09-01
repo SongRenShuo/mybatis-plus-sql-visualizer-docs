@@ -5,9 +5,9 @@ export default defineConfig({
   // 忽略死链接（开发计划中的 localhost 链接）
   ignoreDeadLinks: true,
 
-  title: 'MyBatis-Plus SQL Visualizer',
+  title: 'SQL Visualizer',
   description:
-    'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join 的 SQL 调试利器——Wrapper 链、XML/注解动态 SQL 实时预览（含 MPJ 联表 JOIN），控制台日志一键还原，SQL 反向转 Java 代码。',
+    'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），控制台日志一键还原，SQL 反向转 Java 代码。',
 
   // 默认语言
   lang: 'zh-CN',
@@ -25,7 +25,7 @@ export default defineConfig({
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      'name': 'MyBatis-Plus SQL Visualizer',
+      'name': 'SQL Visualizer',
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus SQL 调试利器',
       'url': 'https://mybatis-plus-sql-visualizer.jvtools.cn',
       'inLanguage': ['zh-CN', 'en']
@@ -56,9 +56,9 @@ export default defineConfig({
     root: {
       label: '简体中文',
       lang: 'zh-CN',
-      title: 'MyBatis-Plus SQL Visualizer',
+      title: 'SQL Visualizer',
       description:
-        'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join 的 SQL 调试利器',
+        'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器',
       themeConfig: {
         nav: [
           { text: '首页', link: '/' },
@@ -71,7 +71,7 @@ export default defineConfig({
             text: '功能详解',
             items: [
               { text: 'Wrapper → SQL 预览', link: '/features/wrapper-preview' },
-              { text: 'XML 动态 SQL 预览', link: '/features/xml-preview' },
+              { text: 'XML / HQL 动态 SQL 预览', link: '/features/xml-preview' },
               { text: '注解 SQL 预览', link: '/features/annotation-preview' },
               { text: 'SQL → Java 反向转换', link: '/features/sql-to-java' },
               { text: 'SQL 日志工具窗口', link: '/features/sql-log' },
@@ -129,7 +129,7 @@ export default defineConfig({
     en: {
       label: 'English',
       lang: 'en-US',
-      title: 'MyBatis-Plus SQL Visualizer',
+      title: 'SQL Visualizer',
       description:
         'IntelliJ IDEA Plugin: SQL debugging tool for MyBatis-Plus / MPJ — Wrapper chain, XML/annotation dynamic SQL live preview (incl. MPJ JOIN), console log restore, SQL to Java reverse conversion',
       themeConfig: {
@@ -144,7 +144,7 @@ export default defineConfig({
             text: 'Features',
             items: [
               { text: 'Wrapper → SQL Preview', link: '/en/features/wrapper-preview' },
-              { text: 'XML Dynamic SQL Preview', link: '/en/features/xml-preview' },
+              { text: 'XML / HQL Dynamic SQL Preview', link: '/en/features/xml-preview' },
               { text: 'Annotation SQL Preview', link: '/en/features/annotation-preview' },
               { text: 'SQL → Java Reverse Conversion', link: '/en/features/sql-to-java' },
               { text: 'SQL Log Tool Window', link: '/en/features/sql-log' },

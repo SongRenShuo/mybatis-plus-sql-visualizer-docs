@@ -7,12 +7,12 @@
       <div class="hero-grid">
         <div class="hero-content">
           <h1 class="hero-title">
-            MyBatis-Plus SQL<br />
+            SQL<br />
             <span class="hero-title-highlight">Visualizer</span>
           </h1>
 
           <p class="hero-description">
-            IntelliJ IDEA 插件：Wrapper 链、XML/注解动态 SQL 实时预览（含 MPJ 联表 JOIN），控制台日志一键还原，SQL 反向转 Java 代码。告别翻日志、手拼参数。
+            IntelliJ IDEA 插件：Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），控制台日志一键还原并精确跳转源码，SQL 反向转 Java 代码。告别翻日志、手拼参数。
           </p>
 
           <div class="btn-group">
@@ -57,7 +57,7 @@
           <div class="hero-image-wrapper">
             <img
               src="/logo.svg"
-              alt="MyBatis-Plus SQL Visualizer"
+              alt="SQL Visualizer"
               class="hero-image hero-logo"
             />
           </div>
