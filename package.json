@@ -8,7 +8,7 @@
     "build": "vitepress build --ignoreDeadLinks",
     "preview": "vitepress preview",
     "changelog": "node scripts/update-changelog.mjs",
-    "deploy": "vitepress build --ignoreDeadLinks && wrangler pages deploy .vitepress/dist --project-name mybatis-plus-sql-visualizer-docs --branch main --commit-dirty=true"
+    "deploy": "vitepress build --ignoreDeadLinks && wrangler pages deploy .vitepress/dist --project-name sql-visualizer-docs --branch main --commit-dirty=true"
   },
   "devDependencies": {
     "marked": "^15.0.12",

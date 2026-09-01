@@ -27,7 +27,7 @@ export default defineConfig({
       '@type': 'WebSite',
       'name': 'SQL Visualizer',
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus SQL 调试利器',
-      'url': 'https://mybatis-plus-sql-visualizer.jvtools.cn',
+      'url': 'https://sql-visualizer.jvtools.cn',
       'inLanguage': ['zh-CN', 'en']
     })]
   ],
@@ -203,6 +203,6 @@ export default defineConfig({
 
   // sitemap
   sitemap: {
-    hostname: 'https://mybatis-plus-sql-visualizer.jvtools.cn'
+    hostname: 'https://sql-visualizer.jvtools.cn'
   }
 })
