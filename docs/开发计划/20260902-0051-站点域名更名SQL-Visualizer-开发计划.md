@@ -82,3 +82,18 @@
 - 新域名 DNS 未生效前的窗口期：旧域名照常服务，无停机
 - 301 跳转规则若写错路径保留逻辑，最坏情况是旧链接落到新域名首页而非对应页，随时可在 Dashboard 修正规则
 - pages.dev 旧子域 `mybatis-plus-sql-visualizer-docs.pages.dev` 无法重定向（属旧项目），随旧项目删除自然消失，无 SEO 价值需迁移
+
+---
+
+## 6. 实施记录（2026-09-02）
+
+与计划的差异和落地情况：
+
+- 仓库改动照 Phase 1 完成（config.mts 两处 + deploy 脚本），另有新增 `functions/_middleware.js`，提交 daefa11
+- 新项目 `sql-visualizer-docs` 已创建并部署，`https://sql-visualizer-docs.pages.dev` 可访问（200）
+- 自定义域名已通过 API 挂到新项目：新域名 `sql-visualizer.jvtools.cn` 新增；旧域名从旧项目删除后迁入新项目
+- **旧域名 301 未用 zone Redirect Rule**，改为 Pages 根级中间件 `functions/_middleware.js`：wrangler OAuth token 只有 `pages:write` 没有 zone 写权限，中间件方案 API 即可完成，且顺带覆盖旧 pages.dev 主机（这个 zone 规则做不了，pages.dev 不在自己 zone 里）
+- DNS 两处需 Dashboard 手动（token 无 dns_records 权限，DoH/nslookup 复核确认）：
+  1. 新增 CNAME：`sql-visualizer` → `sql-visualizer-docs.pages.dev`，开启代理
+  2. 修改旧记录：`mybatis-plus-sql-visualizer` 的 CNAME 目标从 `mybatis-plus-sql-visualizer-docs.pages.dev` 改为 `sql-visualizer-docs.pages.dev`（API 验证报 `CNAME record not set`，指向旧项目不通过；改指向前旧域名短暂 522）
+- CNAME 生效后证书由 Google CA 自动签发（validation method http），旧域名 301 随中间件生效，无需再操作
