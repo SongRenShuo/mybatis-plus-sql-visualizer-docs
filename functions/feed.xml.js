@@ -48,7 +48,9 @@ export async function onRequest(context) {
       .sort((a, b) => parseInt(b.cdate) - parseInt(a.cdate))
       .slice(0, 20)
       .map((u) => {
-        const pubDate = new Date(parseInt(u.cdate) * 1000).toUTCString()
+        // Marketplace cdate 为毫秒时间戳，兼容秒级以防字段变更
+        const raw = parseInt(u.cdate)
+        const pubDate = new Date(raw > 1e12 ? raw : raw * 1000).toUTCString()
         const desc = stripHtml(u.notes) || `SQL Visualizer ${u.version}`
         return `    <item>
       <title>${escapeXml(`v${u.version}`)}</title>
