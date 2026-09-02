@@ -1,5 +1,5 @@
 # Annotation SQL Preview
-<GifPlayer src="/demo/annotation-preview.svg" alt="Annotation SQL Preview Demo" />
+<GifPlayer src="/demo/annotation-preview.png" alt="Annotation SQL Preview Demo" />
 
 Java Mapper interface annotations `@Select` / `@Update` / `@Delete` / `@Insert` are also fully supported.
 

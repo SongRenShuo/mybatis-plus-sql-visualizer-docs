@@ -26,7 +26,25 @@ export default {
     return h(DefaultTheme.Layout, null, {
       'home-hero-info-after': () => h(BadgeBar),
       'layout-bottom': () => h(SiteNotice),
-      'nav-bar-content-after': () => h(NavBarGitee)
+      'nav-bar-content-after': () => h(NavBarGitee),
+      'not-found': () =>
+        h('div', { style: { textAlign: 'center', padding: '6rem 1rem' } }, [
+          h('p', { style: { fontSize: '4rem', fontWeight: 'bold', margin: '0', lineHeight: '1.1', color: 'var(--vp-c-brand-1)' } }, '404'),
+          h('h1', { style: { fontSize: '1.5rem', margin: '0.5rem 0 1rem' } }, '页面不存在 / Page Not Found'),
+          h('p', { style: { color: 'var(--vp-c-text-2)', marginBottom: '1.5rem' } }, '链接可能已失效，试试搜索或从下面返回。'),
+          h('div', { style: { display: 'flex', gap: '0.75rem', justifyContent: 'center' } }, [
+            h(
+              'a',
+              { href: '/', style: { padding: '0.5rem 1.25rem', borderRadius: '9999px', background: 'var(--vp-c-brand-1)', color: '#fff', textDecoration: 'none' } },
+              '返回首页'
+            ),
+            h(
+              'a',
+              { href: '/guide/getting-started', style: { padding: '0.5rem 1.25rem', borderRadius: '9999px', border: '1px solid var(--vp-c-border)', color: 'var(--vp-c-text-1)', textDecoration: 'none' } },
+              '快速开始'
+            )
+          ])
+        ])
     })
   },
   enhanceApp({ app }) {

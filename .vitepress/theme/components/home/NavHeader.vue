@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useData } from 'vitepress'
+
+const { isDark } = useData()
 
 const scrolled = ref(false)
 
@@ -36,6 +39,29 @@ onUnmounted(() => {
         </nav>
 
         <div class="nav-actions">
+          <button
+            class="theme-toggle"
+            :title="isDark ? '切换到亮色' : '切换到暗色'"
+            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            @click="isDark = !isDark"
+          >
+            <svg v-if="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+            </svg>
+            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+            </svg>
+          </button>
+          <a
+            href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="nav-gitee"
+            title="Gitee 源码仓库"
+          >
+            <img src="/gitee-icon.png" alt="Gitee" class="nav-gitee-icon" />
+          </a>
           <a
             href="https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer"
             target="_blank"
@@ -127,6 +153,40 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.nav-gitee {
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: 9999px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.theme-toggle:hover {
+  color: var(--primary-color);
+}
+
+.theme-toggle svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.nav-gitee-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: block;
 }
 
 .btn-primary {

@@ -21,8 +21,8 @@
   <rect x="115" y="345" width="70" height="22" rx="5" fill="rgba(0,0,0,0.2)"/>
   <text x="150" y="361" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="rgba(255,255,255,0.9)">SQL</text>
   <!-- 标题 -->
-  <text x="260" y="290" font-family="system-ui, sans-serif" font-size="52" font-weight="700" fill="#f8fafc">MyBatis-Plus SQL Visualizer</text>
-  <text x="260" y="350" font-family="system-ui, sans-serif" font-size="28" fill="#94a3b8">Wrapper 链、XML/注解动态 SQL 实时预览</text>
+  <text x="260" y="290" font-family="system-ui, sans-serif" font-size="56" font-weight="700" fill="#f8fafc">SQL Visualizer</text>
+  <text x="260" y="350" font-family="system-ui, sans-serif" font-size="28" fill="#94a3b8">Wrapper 链、XML/注解/HQL 动态 SQL 实时预览</text>
   <text x="260" y="395" font-family="system-ui, sans-serif" font-size="28" fill="#94a3b8">控制台日志一键还原，SQL 反向转 Java 代码</text>
   <!-- 代码块 -->
   <rect x="260" y="440" width="700" height="140" rx="12" fill="rgba(30,41,59,0.8)" stroke="rgba(51,65,85,0.5)"/>

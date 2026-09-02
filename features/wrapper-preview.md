@@ -1,6 +1,6 @@
 # Wrapper → SQL 预览
 
-<GifPlayer src="/demo/wrapper-preview.svg" alt="Wrapper → SQL 预览演示" />
+<GifPlayer src="/demo/wrapper-preview.png" alt="Wrapper → SQL 预览演示" />
 
 把 Java 源码中的 MyBatis-Plus / MPJ 调用**静态解析为可预览 SQL**——无需启动项目、无需连接数据库。
 

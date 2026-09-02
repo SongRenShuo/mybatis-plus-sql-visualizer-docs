@@ -1,4 +1,7 @@
 <script setup>
+import { usePluginVersion } from '../../composables/usePluginVersion'
+
+const { version } = usePluginVersion()
 </script>
 
 <template>
@@ -25,30 +28,24 @@
               <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
               </svg>
-              <span>获取插件 — 免费</span>
+              <span>在 Marketplace 中安装</span>
             </a>
-            <a href="/guide/getting-started" class="btn-large btn-outline">
+            <a
+              href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-large btn-outline"
+            >
               <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                <path d="M8 5v14l11-7z"/>
+                <path d="M12 3v10m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
               </svg>
-              <span>查看文档</span>
+              <span>下载离线包</span>
             </a>
           </div>
 
-          <div class="stats-container">
-            <div class="stat-item">
-              <div class="stat-value">1K+</div>
-              <div class="stat-label">总下载量</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">4.8★</div>
-              <div class="stat-label">用户评分</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">500+</div>
-              <div class="stat-label">活跃用户</div>
-            </div>
-          </div>
+          <p class="hero-meta">
+            最新版本 {{ version }} <span class="hero-meta-divider">·</span> 支持 IDEA 2024.3+ <span class="hero-meta-divider">·</span> Apache-2.0 开源
+          </p>
         </div>
 
         <div class="hero-visual">
@@ -162,27 +159,16 @@
   color: var(--primary-color);
 }
 
-.stats-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  padding-top: 1rem;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--primary-color);
-}
-
-.stat-label {
-  font-size: 0.75rem;
+.hero-meta {
+  font-size: 0.875rem;
   color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.hero-meta-divider {
+  margin: 0 0.375rem;
+  opacity: 0.6;
 }
 
 /* Hero visual */

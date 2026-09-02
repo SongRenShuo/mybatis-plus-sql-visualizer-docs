@@ -53,14 +53,12 @@
         </div>
 
         <div class="docs-showcase-video-wrap">
-          <video
-            src="/video/docs-showcase.mp4"
-            autoplay
-            muted
-            loop
-            playsinline
+          <img
+            src="/demo/wrapper-preview.png"
+            alt="Wrapper → SQL 预览演示"
+            loading="lazy"
             class="docs-showcase-video"
-          ></video>
+          />
         </div>
       </div>
     </div>

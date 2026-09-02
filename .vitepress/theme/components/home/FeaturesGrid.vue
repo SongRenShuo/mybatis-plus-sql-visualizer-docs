@@ -176,6 +176,17 @@ const cards = [
 .feature-icon.indigo { background-color: #e0e7ff; }
 .feature-icon.indigo svg { color: var(--primary-color); }
 
+:global(.dark) .feature-icon.purple { background-color: rgba(139, 92, 246, 0.16); }
+:global(.dark) .feature-icon.blue { background-color: rgba(37, 99, 235, 0.16); }
+:global(.dark) .feature-icon.green { background-color: rgba(16, 185, 129, 0.16); }
+:global(.dark) .feature-icon.yellow { background-color: rgba(245, 158, 11, 0.16); }
+:global(.dark) .feature-icon.orange { background-color: rgba(249, 115, 22, 0.16); }
+:global(.dark) .feature-icon.indigo { background-color: rgba(99, 102, 241, 0.16); }
+:global(.dark) .feature-icon.blue svg { color: #60a5fa; }
+:global(.dark) .feature-icon.green svg { color: #34d399; }
+:global(.dark) .feature-icon.yellow svg { color: #fbbf24; }
+:global(.dark) .feature-icon.orange svg { color: #fb923c; }
+
 .feature-card-title {
   font-size: 1.25rem;
   font-weight: bold;

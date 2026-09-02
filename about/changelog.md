@@ -1,3 +1,7 @@
+---
+title: 更新日志
+---
+
 <script setup>
 import DynamicChangelog from '../.vitepress/theme/components/DynamicChangelog.vue'
 </script>

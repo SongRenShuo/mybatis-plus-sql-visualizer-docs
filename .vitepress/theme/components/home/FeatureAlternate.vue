@@ -9,7 +9,7 @@ const features = [
       { title: '动态条件勾选', description: 'if / choose / where 等标签按需渲染' },
       { title: '9 种方言分页', description: 'MySQL / PG / Oracle 等全方言分页语法' },
     ],
-    videoSrc: '/video/wrapper-preview.mp4',
+    imageSrc: '/demo/wrapper-preview.png',
   },
   {
     badge: '日志还原',
@@ -20,7 +20,7 @@ const features = [
       { title: '批量还原', description: '粘贴整段日志，多组语句自动分隔' },
       { title: '混合前缀匹配', description: '宽容匹配各种日志前缀格式' },
     ],
-    videoSrc: '/video/sql-log.mp4',
+    imageSrc: '/demo/sql-log.png',
     reverse: true,
   },
   {
@@ -32,7 +32,7 @@ const features = [
       { title: '增删改查全覆盖', description: 'SELECT / INSERT / UPDATE / DELETE 全支持' },
       { title: '多表 JOIN', description: '联表查询自动生成 MPJLambdaWrapper' },
     ],
-    videoSrc: '/video/sql-to-java.mp4',
+    imageSrc: '/demo/sql-to-java.png',
   },
   {
     badge: '多框架支持',
@@ -43,7 +43,7 @@ const features = [
       { title: '注解 SQL', description: '@Select / @Update / @Delete / @Insert' },
       { title: 'OGNL 表达式', description: '面板勾选动态条件，实时预览结果' },
     ],
-    videoSrc: '/video/xml-preview.mp4',
+    imageSrc: '/demo/xml-preview.png',
     reverse: true,
   },
 ]
@@ -67,14 +67,12 @@ const features = [
           :class="{ reverse: item.reverse }"
         >
           <div class="feature-video-wrapper" :class="{ reverse: item.reverse }">
-            <video
-              :src="item.videoSrc"
-              autoplay
-              muted
-              loop
-              playsinline
+            <img
+              :src="item.imageSrc"
+              :alt="item.title"
+              loading="lazy"
               class="feature-video"
-            ></video>
+            />
           </div>
 
           <div class="feature-content" :class="{ reverse: item.reverse }">
