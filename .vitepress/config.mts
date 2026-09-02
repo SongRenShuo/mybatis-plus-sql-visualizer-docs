@@ -92,7 +92,8 @@ export default defineConfig({
             items: [
               { text: '作者 & 联系', link: '/about/' },
               { text: '更新日志', link: '/about/changelog' },
-              { text: '开发路线', link: '/about/roadmap' }
+              { text: '开发路线', link: '/about/roadmap' },
+              { text: '友情推荐', link: '/about/friends' }
             ]
           }
         },
@@ -165,6 +166,7 @@ export default defineConfig({
             items: [
               { text: 'Author & Contact', link: '/en/about/' },
               { text: 'Changelog', link: '/en/about/changelog' },
+              { text: 'Friend Plugins', link: '/en/about/friends' },
               { text: 'Roadmap', link: '/en/about/roadmap' }
             ]
           }
