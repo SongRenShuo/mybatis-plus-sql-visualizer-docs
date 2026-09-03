@@ -21,6 +21,16 @@ Here are some quality IDEA plugins built by fellow independent developers. Worth
   </a>
 </div>
 
+<div class="friend-card">
+  <a href="https://cli-manager.github.io" target="_blank" rel="noopener noreferrer" class="friend-card__link">
+    <div class="friend-card__icon friend-card__icon--placeholder">CLI</div>
+    <div class="friend-card__info">
+      <h3 class="friend-card__title">CLI Manager</h3>
+      <p class="friend-card__desc">A cross-platform AI CLI workbench that unifies management of various AI command-line tools. Provides a consistent command-line environment across operating systems, making it easy to use and manage AI-powered CLI utilities.</p>
+    </div>
+  </a>
+</div>
+
 <style>
 .friend-card {
   margin-top: 1.5rem;
@@ -47,6 +57,19 @@ Here are some quality IDEA plugins built by fellow independent developers. Worth
   flex-shrink: 0;
   border-radius: 8px;
   margin-top: 2px;
+}
+
+.friend-card__icon--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .friend-card__info {

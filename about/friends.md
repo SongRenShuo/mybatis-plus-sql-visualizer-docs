@@ -21,6 +21,16 @@ next:
   </a>
 </div>
 
+<div class="friend-card">
+  <a href="https://cli-manager.github.io" target="_blank" rel="noopener noreferrer" class="friend-card__link">
+    <div class="friend-card__icon friend-card__icon--placeholder">CLI</div>
+    <div class="friend-card__info">
+      <h3 class="friend-card__title">CLI Manager</h3>
+      <p class="friend-card__desc">跨平台 AI CLI 工作台，统一管理各类 AI 命令行工具。提供统一的命令行环境，让不同操作系统的用户都能便捷地使用和管理 AI 驱动的 CLI 工具。</p>
+    </div>
+  </a>
+</div>
+
 <style>
 .friend-card {
   margin-top: 1.5rem;
@@ -47,6 +57,19 @@ next:
   flex-shrink: 0;
   border-radius: 8px;
   margin-top: 2px;
+}
+
+.friend-card__icon--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .friend-card__info {
