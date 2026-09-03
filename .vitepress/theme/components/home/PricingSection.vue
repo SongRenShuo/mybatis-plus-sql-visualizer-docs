@@ -41,7 +41,7 @@ const features = [
         </ul>
 
         <a
-          href="https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer"
+          href="https://plugins.jetbrains.com/plugin/33633-sql-visualizer"
           target="_blank"
           rel="noopener noreferrer"
           class="pricing-btn"

@@ -17,7 +17,7 @@ next:
 |---------|------|
 | Gitee Repo | [songrenshuo/mybatis-plus-sql-visualizer](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer) |
 | Issues | [Gitee Issues](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/issues) |
-| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer) |
+| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) |
 
 ## License
 

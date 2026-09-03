@@ -15,7 +15,7 @@
 
 ### 方式二：手动下载插件安装
 
-1. 在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer) 或 [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases) 下载插件包
+1. 在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) 或 [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases) 下载插件包
 2. 进入 IDE，打开 <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>⚙</kbd> > <kbd>Install Plugin from Disk...</kbd>
 3. 选择下载的插件包（无需解压）
 4. 重启 IDE 生效

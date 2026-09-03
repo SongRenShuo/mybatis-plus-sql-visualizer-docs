@@ -13,7 +13,7 @@ hero:
   actions:
     - theme: brand
       text: "Install — Free"
-      link: https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer
+      link: https://plugins.jetbrains.com/plugin/33633-sql-visualizer
     - theme: alt
       text: "View Docs"
       link: /en/guide/getting-started
@@ -151,7 +151,7 @@ ORDER BY t1.create_time DESC
     Supports IntelliJ IDEA 2024.3+, install and go
   </p>
   <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-    <a href="https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer" class="mp-cta mp-cta--primary">
+    <a href="https://plugins.jetbrains.com/plugin/33633-sql-visualizer" class="mp-cta mp-cta--primary">
       🚀 Install from Marketplace
     </a>
     <a href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer" class="mp-cta mp-cta--secondary">

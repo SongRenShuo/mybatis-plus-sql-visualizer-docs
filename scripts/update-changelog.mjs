@@ -15,7 +15,7 @@ const ROOT = resolve(__dirname, '..');
 
 const PLUGIN_ID = '33633';
 const API_URL = `https://plugins.jetbrains.com/api/plugins/${PLUGIN_ID}/updates`;
-const PLUGIN_PAGE = `https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer`;
+const PLUGIN_PAGE = `https://plugins.jetbrains.com/plugin/33633-sql-visualizer`;
 
 /**
  * 解析 HTML 格式的 changelog notes 为 Markdown

@@ -4,7 +4,7 @@
  * 数据源与 /api/changelog 相同：JetBrains Marketplace updates API
  */
 
-const PLUGIN_PAGE = 'https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer'
+const PLUGIN_PAGE = 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer'
 const SITE = 'https://sql-visualizer.jvtools.cn'
 
 function stripHtml(html) {

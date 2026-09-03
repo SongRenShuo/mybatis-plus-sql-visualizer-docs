@@ -58,7 +58,7 @@ onMounted(async () => {
 
     // 最新版本的 notes 已包含完整更新日志
     let md = `# 更新日志\n\n`
-    md += `数据来源：[JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer)\n\n`
+    md += `数据来源：[JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer)\n\n`
     md += parseNotes(latest.notes)
 
     content.value = marked.parse(md) as string

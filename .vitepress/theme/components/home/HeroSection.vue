@@ -20,7 +20,7 @@ const { version } = usePluginVersion()
 
           <div class="btn-group">
             <a
-              href="https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer"
+              href="https://plugins.jetbrains.com/plugin/33633-sql-visualizer"
               target="_blank"
               rel="noopener noreferrer"
               class="btn-large btn-download"

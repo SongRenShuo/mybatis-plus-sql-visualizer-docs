@@ -48,5 +48,5 @@ npm run preview
 ## 相关链接
 
 - 源码仓库：https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer
-- 插件市场：https://plugins.jetbrains.com/plugin/33633-mybatis-plus-sql-visualizer
+- 插件市场：https://plugins.jetbrains.com/plugin/33633-sql-visualizer
 - 开源协议：Apache-2.0
