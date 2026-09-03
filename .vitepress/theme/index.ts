@@ -17,6 +17,9 @@ import NavBarGitee from './components/NavBarGitee.vue'
 // 首页组件
 import CoolHome from './components/home/CoolHome.vue'
 
+// 反馈池组件
+import FeedbackPage from './components/feedback/FeedbackPage.vue'
+
 // 自定义样式
 import './style.css'
 
@@ -56,6 +59,8 @@ export default {
     app.component('CodeTabs', CodeTabs)
     // 首页组件
     app.component('CoolHome', CoolHome)
+    // 反馈池组件
+    app.component('FeedbackPage', FeedbackPage)
   },
   setup() {
     let scrollHandler: (() => void) | null = null

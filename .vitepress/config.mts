@@ -80,13 +80,17 @@ export default defineConfig({
         '/api/changelog': {
           target: 'https://plugins.jetbrains.com/api/plugins/33633/updates',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/changelog/, ''),
+          rewrite: (path) => path.replace(new RegExp('^/api/changelog'), ''),
           configure: (proxy) => {
             proxy.on('proxyRes', (proxyRes, req, res) => {
               proxyRes.headers['Access-Control-Allow-Origin'] = '*'
               proxyRes.headers['Cache-Control'] = 'public, max-age=3600'
             })
           }
+        },
+        '/api/v1': {
+          target: 'https://sql-visualizer-admin.3064597532.workers.dev',
+          changeOrigin: true
         }
       }
     }
@@ -123,11 +127,11 @@ export default defineConfig({
           '/guide/': {
             text: '使用指南',
             items: [
+              { text: '为什么选择 SQL Visualizer', link: '/guide/comparison' },
               { text: '快速开始', link: '/guide/getting-started' },
               { text: '配置详解', link: '/guide/configuration' },
               { text: '快捷键速查', link: '/guide/shortcuts' },
               { text: '版本兼容', link: '/guide/compatibility' },
-              { text: '为什么选择 SQL Visualizer', link: '/guide/comparison' },
               { text: '常见问题 FAQ', link: '/guide/faq' }
             ]
           },
@@ -137,6 +141,7 @@ export default defineConfig({
               { text: '作者 & 联系', link: '/about/' },
               { text: '更新日志', link: '/about/changelog' },
               { text: '开发路线', link: '/about/roadmap' },
+              { text: '需求反馈池', link: '/about/feedback' },
               { text: '友情推荐', link: '/about/friends' }
             ]
           }
@@ -213,8 +218,9 @@ export default defineConfig({
             items: [
               { text: 'Author & Contact', link: '/en/about/' },
               { text: 'Changelog', link: '/en/about/changelog' },
-              { text: 'Friend Plugins', link: '/en/about/friends' },
-              { text: 'Roadmap', link: '/en/about/roadmap' }
+              { text: 'Roadmap', link: '/en/about/roadmap' },
+              { text: 'Feedback Pool', link: '/en/about/feedback' },
+              { text: 'Friend Plugins', link: '/en/about/friends' }
             ]
           }
         },
