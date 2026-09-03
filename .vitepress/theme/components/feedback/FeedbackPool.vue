@@ -37,6 +37,14 @@
             <option value="newest">最新发布</option>
           </select>
         </div>
+        <div class="filter-group filter-search">
+          <input
+            v-model="searchKeyword"
+            type="text"
+            placeholder="搜索标题或内容..."
+            @keyup.enter="applySearch"
+          />
+        </div>
       </div>
 
       <!-- Post List -->
@@ -130,6 +138,7 @@ const view = ref<'list' | 'board'>('list')
 const filterStatus = ref('')
 const filterType = ref('')
 const sortBy = ref('votes')
+const searchKeyword = ref('')
 
 const statusOptions = [
   { value: 1, label: 'Submitted' },
@@ -185,11 +194,18 @@ watch([filterStatus, filterType, sortBy], () => {
   // Filters reactive, no need to reload
 })
 
+function applySearch() {
+  loadData()
+}
+
 async function loadData() {
   loading.value = true
   try {
+    const params = new URLSearchParams({ size: '100' })
+    if (searchKeyword.value) params.set('keyword', searchKeyword.value)
+
     const [postsRes, statsRes] = await Promise.all([
-      fetch(`${props.apiBase}/feedback/posts?size=100`),
+      fetch(`${props.apiBase}/feedback/posts?${params.toString()}`),
       fetch(`${props.apiBase}/feedback/stats`),
     ])
 
@@ -318,6 +334,21 @@ function formatDate(dateStr: string): string {
   color: var(--vp-c-text-1);
   font-size: 0.8rem;
   cursor: pointer;
+}
+
+.filter-search input {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 6px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-size: 0.8rem;
+  width: 200px;
+}
+
+.filter-search input:focus {
+  outline: none;
+  border-color: var(--vp-c-brand-1);
 }
 
 .loading, .empty {
