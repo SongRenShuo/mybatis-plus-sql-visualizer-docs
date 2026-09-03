@@ -23,7 +23,7 @@ Here are some quality IDEA plugins built by fellow independent developers. Worth
 
 <div class="friend-card">
   <a href="https://cli-manager.github.io" target="_blank" rel="noopener noreferrer" class="friend-card__link">
-    <div class="friend-card__icon friend-card__icon--placeholder">CLI</div>
+    <img src="/cli-manager-logo.png" width="40" height="40" alt="CLI Manager Logo" class="friend-card__icon"/>
     <div class="friend-card__info">
       <h3 class="friend-card__title">CLI Manager</h3>
       <p class="friend-card__desc">A cross-platform AI CLI workbench that unifies management of various AI command-line tools. Provides a consistent command-line environment across operating systems, making it easy to use and manage AI-powered CLI utilities.</p>

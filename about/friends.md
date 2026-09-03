@@ -23,7 +23,7 @@ next:
 
 <div class="friend-card">
   <a href="https://cli-manager.github.io" target="_blank" rel="noopener noreferrer" class="friend-card__link">
-    <div class="friend-card__icon friend-card__icon--placeholder">CLI</div>
+    <img src="/cli-manager-logo.png" width="40" height="40" alt="CLI Manager Logo" class="friend-card__icon"/>
     <div class="friend-card__info">
       <h3 class="friend-card__title">CLI Manager</h3>
       <p class="friend-card__desc">跨平台 AI CLI 工作台，统一管理各类 AI 命令行工具。提供统一的命令行环境，让不同操作系统的用户都能便捷地使用和管理 AI 驱动的 CLI 工具。</p>
