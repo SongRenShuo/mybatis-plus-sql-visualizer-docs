@@ -1,10 +1,10 @@
 <template>
   <div class="feedback-form">
-    <h3>提交反馈</h3>
+    <h3>{{ t('submitTitle', props.locale || 'zh') }}</h3>
 
     <!-- 类型选择 -->
     <div class="form-group">
-      <label>类型 *</label>
+      <label>{{ t('formType', props.locale || 'zh') }} *</label>
       <div class="type-selector">
         <button
           v-for="t in types"
@@ -22,30 +22,30 @@
 
     <!-- 标题 -->
     <div class="form-group">
-      <label for="fb-title">标题 *</label>
+      <label for="fb-title">{{ t('formTitle', props.locale || 'zh') }} *</label>
       <input
         id="fb-title"
         v-model="form.title"
         type="text"
-        placeholder="请简要描述您的需求或问题"
+        :placeholder="t('formTitlePlaceholder', props.locale || 'zh')"
         maxlength="200"
       />
     </div>
 
     <!-- 描述 -->
     <div class="form-group">
-      <label for="fb-desc">描述 *</label>
+      <label for="fb-desc">{{ t('formDesc', props.locale || 'zh') }} *</label>
       <textarea
         id="fb-desc"
         v-model="form.description"
         rows="6"
-        placeholder="请详细描述您的问题或需求场景&#10;&#10;## 使用场景&#10;## 期望方案&#10;## 其他说明"
+        :placeholder="t('formDescPlaceholder', props.locale || 'zh')"
       ></textarea>
     </div>
 
     <!-- 功能分类 -->
     <div class="form-group">
-      <label for="fb-category">功能分类</label>
+      <label for="fb-category">{{ t('formCategory', props.locale || 'zh') }}</label>
       <select id="fb-category" v-model="form.category">
         <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
       </select>
@@ -54,20 +54,20 @@
     <!-- 昵称和邮箱 -->
     <div class="form-row">
       <div class="form-group">
-        <label for="fb-name">昵称（选填）</label>
-        <input id="fb-name" v-model="form.submitterName" type="text" placeholder="怎么称呼您？" />
+        <label for="fb-name">{{ t('formName', props.locale || 'zh') }}</label>
+        <input id="fb-name" v-model="form.submitterName" type="text" :placeholder="t('formNamePlaceholder', props.locale || 'zh')" />
       </div>
       <div class="form-group">
-        <label for="fb-email">邮箱（选填）</label>
-        <input id="fb-email" v-model="form.submitterEmail" type="email" placeholder="有进展时通知您" />
+        <label for="fb-email">{{ t('formEmail', props.locale || 'zh') }}</label>
+        <input id="fb-email" v-model="form.submitterEmail" type="email" :placeholder="t('formEmailPlaceholder', props.locale || 'zh')" />
       </div>
     </div>
 
-    <p class="form-tip">昵称和邮箱均为选填。填写邮箱后，当反馈状态有更新时，我们会邮件通知您。</p>
+    <p class="form-tip">{{ t('formTip', props.locale || 'zh') }}</p>
 
     <!-- 提交按钮 -->
     <button class="submit-btn" :disabled="submitting || !isValid" @click="handleSubmit">
-      {{ submitting ? '提交中...' : '提交反馈' }}
+      {{ submitting ? t('submitting', props.locale || 'zh') : t('submitBtn', props.locale || 'zh') }}
     </button>
 
     <!-- 成功提示 -->
@@ -82,7 +82,10 @@ import { ref, computed, reactive } from 'vue'
 
 const props = defineProps<{
   apiBase: string
+  locale?: 'zh' | 'en'
 }>()
+
+import { t } from './i18n'
 
 const types = [
   { value: 1, label: 'Feature', icon: '✨', color: '#3b82f6' },

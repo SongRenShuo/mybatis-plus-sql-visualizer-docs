@@ -2,14 +2,22 @@
   <div class="feedback-pool">
     <!-- Header -->
     <div class="pool-header">
-      <h2>需求反馈池</h2>
-      <p>提交您的需求、Bug 或建议，社区投票决定优先级</p>
+      <div class="header-row">
+        <div>
+          <h2>{{ t('title', locale) }}</h2>
+          <p>{{ t('subtitle', locale) }}</p>
+        </div>
+        <div class="lang-toggle">
+          <button :class="{ active: locale === 'zh' }" @click="locale = 'zh'">中</button>
+          <button :class="{ active: locale === 'en' }" @click="locale = 'en'">EN</button>
+        </div>
+      </div>
     </div>
 
     <!-- View Toggle -->
     <div class="view-toggle">
-      <button :class="{ active: view === 'list' }" @click="view = 'list'">列表</button>
-      <button :class="{ active: view === 'board' }" @click="view = 'board'">看板</button>
+      <button :class="{ active: view === 'list' }" @click="view = 'list'">{{ t('list', locale) }}</button>
+      <button :class="{ active: view === 'board' }" @click="view = 'board'">{{ t('board', locale) }}</button>
     </div>
 
     <!-- List View -->
@@ -17,39 +25,39 @@
       <!-- Filters -->
       <div class="filters">
         <div class="filter-group">
-          <label>状态</label>
+          <label>{{ t('filterStatus', locale) }}</label>
           <select v-model="filterStatus">
-            <option value="">全部</option>
+            <option value="">{{ locale === 'zh' ? '全部' : 'All' }}</option>
             <option v-for="s in statusOptions" :key="s.value" :value="s.value">{{ s.label }}</option>
           </select>
         </div>
         <div class="filter-group">
-          <label>类型</label>
+          <label>{{ t('filterType', locale) }}</label>
           <select v-model="filterType">
-            <option value="">全部</option>
+            <option value="">{{ locale === 'zh' ? '全部' : 'All' }}</option>
             <option v-for="t in typeOptions" :key="t.value" :value="t.value">{{ t.icon }} {{ t.label }}</option>
           </select>
         </div>
         <div class="filter-group">
-          <label>排序</label>
+          <label>{{ t('filterSort', locale) }}</label>
           <select v-model="sortBy">
-            <option value="votes">最多投票</option>
-            <option value="newest">最新发布</option>
+            <option value="votes">{{ t('sortVotes', locale) }}</option>
+            <option value="newest">{{ t('sortNewest', locale) }}</option>
           </select>
         </div>
         <div class="filter-group filter-search">
           <input
             v-model="searchKeyword"
             type="text"
-            placeholder="搜索标题或内容..."
+            :placeholder="t('search', locale)"
             @keyup.enter="applySearch"
           />
         </div>
       </div>
 
       <!-- Post List -->
-      <div v-if="loading" class="loading">加载中...</div>
-      <div v-else-if="!filteredPosts.length" class="empty">暂无反馈，来提交第一个吧！</div>
+      <div v-if="loading" class="loading">{{ t('loading', locale) }}</div>
+      <div v-else-if="!filteredPosts.length" class="empty">{{ t('empty', locale) }}</div>
       <div v-else class="post-list">
         <div
           v-for="post in filteredPosts"
@@ -88,13 +96,13 @@
     </div>
 
     <!-- Submit Form -->
-    <FeedbackForm :api-base="apiBase" />
+    <FeedbackForm :api-base="apiBase" :locale="locale" />
 
     <!-- Stats Bar -->
     <div class="stats-bar">
-      <span>共 {{ stats.totalPosts }} 条反馈</span>
+      <span>{{ t('totalPosts', locale, { n: stats.totalPosts }) }}</span>
       <span>·</span>
-      <span>共 {{ stats.totalVotes }} 票</span>
+      <span>{{ t('totalVotes', locale, { n: stats.totalVotes }) }}</span>
     </div>
   </div>
 </template>
@@ -105,6 +113,7 @@ import StatusBadge from './StatusBadge.vue'
 import VoteButton from './VoteButton.vue'
 import FeedbackForm from './FeedbackForm.vue'
 import RoadmapBoard from './RoadmapBoard.vue'
+import { t, type Locale } from './i18n'
 
 const props = defineProps<{
   apiBase: string
@@ -139,6 +148,7 @@ const filterStatus = ref('')
 const filterType = ref('')
 const sortBy = ref('votes')
 const searchKeyword = ref('')
+const locale = ref<Locale>('zh')
 
 const statusOptions = [
   { value: 1, label: 'Submitted' },
@@ -280,6 +290,36 @@ function formatDate(dateStr: string): string {
 .pool-header p {
   color: var(--vp-c-text-2);
   margin: 0;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.lang-toggle {
+  display: flex;
+  gap: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-border);
+  flex-shrink: 0;
+}
+
+.lang-toggle button {
+  padding: 0.25rem 0.75rem;
+  border: none;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.lang-toggle button.active {
+  background: var(--vp-c-brand-1);
+  color: #fff;
 }
 
 .view-toggle {
