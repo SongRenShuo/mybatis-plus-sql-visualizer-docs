@@ -2,9 +2,17 @@
   <div class="feedback-pool">
     <!-- Header -->
     <div class="pool-header">
-      <div class="pool-title">
-        <h2>{{ t('title', locale) }}</h2>
-        <p>{{ t('subtitle', locale) }}</p>
+      <div class="header-row">
+        <div class="header-spacer"></div>
+        <div class="pool-title">
+          <h2>{{ t('title', locale) }}</h2>
+          <p>{{ t('subtitle', locale) }}</p>
+        </div>
+        <div class="header-actions">
+          <button class="submit-open-btn" @click="showForm = true">
+            <span class="submit-plus">＋</span>{{ t('submitNew', locale) }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -95,13 +103,6 @@
       <RoadmapBoard :posts="postsForBoard" :locale="locale" @select="selectPost" />
     </div>
 
-    <!-- Submit feedback -->
-    <div class="submit-block">
-      <button class="submit-open-btn" @click="showForm = true">
-        <span class="submit-plus">＋</span>{{ t('submitNew', locale) }}
-      </button>
-    </div>
-
     <!-- Submit modal -->
     <Teleport to="body">
       <div v-if="showForm" class="modal-overlay" @mousedown.self="closeForm">
@@ -113,6 +114,7 @@
             <FeedbackForm ref="formRef" :api-base="apiBase" :locale="locale" embedded @done="closeForm" />
           </div>
           <div class="modal-footer">
+            <span v-if="!formRef?.canSubmit" class="modal-hint">{{ (formRef?.invalidTips || []).join('，') }}</span>
             <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
             <button class="modal-submit" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">{{ t('submitBtn', locale) }}</button>
           </div>
@@ -345,7 +347,7 @@ function formatDate(dateStr: string): string {
 
 <style scoped>
 .feedback-pool {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -366,6 +368,21 @@ function formatDate(dateStr: string): string {
 
 .pool-title {
   text-align: center;
+}
+
+.header-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-spacer {
+  min-width: 0;
+}
+
+.header-actions {
+  justify-self: end;
 }
 
 .view-toggle {
@@ -544,27 +561,24 @@ function formatDate(dateStr: string): string {
   border-radius: 50%;
 }
 
-.submit-block {
-  margin: 0.5rem 0 0;
-}
-
 .submit-open-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.625rem 1.25rem;
-  border: 1px dashed var(--vp-c-brand-1);
-  border-radius: 9999px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-brand-1);
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--vp-c-brand-1);
+  color: #fff;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: opacity 0.2s;
+  white-space: nowrap;
 }
 
 .submit-open-btn:hover {
-  background: var(--vp-c-brand-soft);
+  opacity: 0.9;
 }
 
 .submit-plus {
@@ -590,7 +604,7 @@ function formatDate(dateStr: string): string {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 640px;
+  max-width: 720px;
   max-height: 90vh;
   overflow: hidden;
   border-radius: 12px;
@@ -656,6 +670,12 @@ function formatDate(dateStr: string): string {
   color: var(--vp-c-brand-1);
 }
 
+.modal-hint {
+  margin-right: auto;
+  font-size: 0.75rem;
+  color: var(--vp-c-text-3);
+}
+
 .modal-submit {
   padding: 0.5rem 1.5rem;
   border: none;
@@ -675,5 +695,15 @@ function formatDate(dateStr: string): string {
 .modal-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+</style>
+
+<style>
+/* 仅需求反馈池页生效（该组件只在此页渲染）：收紧文档页顶部留白，让自定义页面更紧凑 */
+.VPDoc:has(.feedback-pool) {
+  padding-top: 20px;
+}
+.feedback-page:has(.feedback-pool) {
+  padding: 0;
 }
 </style>

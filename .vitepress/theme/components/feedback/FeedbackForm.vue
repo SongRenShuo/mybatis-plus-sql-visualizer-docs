@@ -283,7 +283,15 @@ const isValid = computed(() =>
 
 // 供父级（提交弹窗 footer）读取/调用
 const canSubmit = computed(() => isValid.value && !submitting.value)
-defineExpose({ submit: handleSubmit, canSubmit })
+const invalidTips = computed(() => {
+  const l = props.locale || 'zh'
+  const tips: string[] = []
+  if (form.title.trim().length < 5) tips.push(t('tipTitleMin', l))
+  if (form.title.length > 200) tips.push(t('tipTitleMax', l))
+  if (form.description.trim().length < 10) tips.push(t('tipDescMin', l))
+  return tips
+})
+defineExpose({ submit: handleSubmit, canSubmit, invalidTips })
 
 async function handleSubmit() {
   if (!isValid.value || submitting.value) return
@@ -384,6 +392,17 @@ async function handleSubmit() {
 .form-group select:focus {
   outline: none;
   border-color: var(--vp-c-brand-1);
+}
+
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  cursor: pointer;
 }
 
 .form-row {
