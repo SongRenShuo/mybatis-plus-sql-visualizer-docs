@@ -2,24 +2,21 @@
   <div class="feedback-pool">
     <!-- Header -->
     <div class="pool-header">
-      <div class="header-row">
-        <div class="header-spacer"></div>
-        <div class="pool-title">
-          <h2>{{ t('title', locale) }}</h2>
-          <p>{{ t('subtitle', locale) }}</p>
-        </div>
-        <div class="header-actions">
-          <button class="submit-open-btn" @click="showForm = true">
-            <span class="submit-plus">＋</span>{{ t('submitNew', locale) }}
-          </button>
-        </div>
+      <div class="pool-title">
+        <h2>{{ t('title', locale) }}</h2>
+        <p>{{ t('subtitle', locale) }}</p>
       </div>
     </div>
 
-    <!-- View Toggle -->
-    <div class="view-toggle">
-      <button :class="{ active: view === 'list' }" @click="view = 'list'">{{ t('list', locale) }}</button>
-      <button :class="{ active: view === 'board' }" @click="view = 'board'">{{ t('board', locale) }}</button>
+    <!-- Toolbar: 列表/看板切换(左) + 新增反馈(右) -->
+    <div class="pool-toolbar">
+      <div class="view-toggle">
+        <button :class="{ active: view === 'list' }" @click="view = 'list'">{{ t('list', locale) }}</button>
+        <button :class="{ active: view === 'board' }" @click="view = 'board'">{{ t('board', locale) }}</button>
+      </div>
+      <button class="submit-open-btn" @click="showForm = true">
+        <span class="submit-plus">＋</span>{{ t('submitNew', locale) }}
+      </button>
     </div>
 
     <!-- List View -->
@@ -370,25 +367,17 @@ function formatDate(dateStr: string): string {
   text-align: center;
 }
 
-.header-row {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+.pool-toolbar {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
-}
-
-.header-spacer {
-  min-width: 0;
-}
-
-.header-actions {
-  justify-self: end;
+  margin-bottom: 1.5rem;
 }
 
 .view-toggle {
   display: flex;
   gap: 0;
-  margin-bottom: 1.5rem;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--vp-c-border);
@@ -699,11 +688,15 @@ function formatDate(dateStr: string): string {
 </style>
 
 <style>
-/* 仅需求反馈池页生效（该组件只在此页渲染）：收紧文档页顶部留白，让自定义页面更紧凑 */
+/* 仅需求反馈池页生效（该组件只在此页渲染）。用 !important 覆盖 VitePress 更高/更靠后的规则：
+   收紧文档页顶部留白 + 放宽内容区宽度，让自定义页面更宽、更紧凑 */
 .VPDoc:has(.feedback-pool) {
-  padding-top: 20px;
+  padding-top: 24px !important;
+}
+.VPDoc:has(.feedback-pool) .content-container {
+  max-width: 1180px !important;
 }
 .feedback-page:has(.feedback-pool) {
-  padding: 0;
+  padding: 0 !important;
 }
 </style>
