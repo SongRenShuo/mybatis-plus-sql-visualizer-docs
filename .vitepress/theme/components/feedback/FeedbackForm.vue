@@ -47,7 +47,7 @@
     <div class="form-group">
       <label for="fb-category">{{ t('formCategory', props.locale || 'zh') }}</label>
       <select id="fb-category" v-model="form.category">
-        <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
+        <option v-for="c in categories" :key="c.value" :value="c.value">{{ c.label }}</option>
       </select>
     </div>
 
@@ -85,19 +85,35 @@ const props = defineProps<{
   locale?: 'zh' | 'en'
 }>()
 
-import { t } from './i18n'
+const emit = defineEmits<{
+  (e: 'done'): void
+}>()
 
-const types = [
-  { value: 1, label: 'Feature', icon: '✨', color: '#3b82f6' },
-  { value: 2, label: 'Bug', icon: '🐛', color: '#ef4444' },
-  { value: 3, label: 'Improvement', icon: '⚡', color: '#f59e0b' },
-  { value: 4, label: 'Question', icon: '❓', color: '#8b5cf6' },
-]
+import { t, type MessageKey } from './i18n'
 
-const categories = [
+const types = computed<Array<{ value: number; label: string; icon: string; color: string }>>(() => {
+  const l = props.locale || 'zh'
+  return [
+    { value: 1, label: t('type.feature', l), icon: '✨', color: '#3b82f6' },
+    { value: 2, label: t('type.bug', l), icon: '🐛', color: '#ef4444' },
+    { value: 3, label: t('type.improvement', l), icon: '⚡', color: '#f59e0b' },
+    { value: 4, label: t('type.question', l), icon: '❓', color: '#8b5cf6' },
+  ]
+})
+
+const categorySlugs = [
   'wrapper', 'xml', 'annotation', 'sql-to-java',
   'sql-log', 'batch', 'completion', 'other',
 ]
+
+const categories = computed<Array<{ value: string; label: string }>>(() => {
+  const l = props.locale || 'zh'
+  return categorySlugs.map(slug => {
+    const key = `cat.${slug}` as MessageKey
+    const label = t(key, l)
+    return { value: slug, label: label === key ? slug : label }
+  })
+})
 
 const form = reactive({
   title: '',
@@ -142,6 +158,7 @@ async function handleSubmit() {
     if (data.code === 0) {
       success.value = true
       submittedPostNo.value = data.data.postNo
+      emit('done')
       // Reset form
       form.title = ''
       form.description = ''

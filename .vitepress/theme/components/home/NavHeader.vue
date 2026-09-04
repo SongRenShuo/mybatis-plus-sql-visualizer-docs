@@ -35,6 +35,7 @@ onUnmounted(() => {
         <nav class="nav-links">
           <a href="/features/wrapper-preview" class="nav-link">功能详解</a>
           <a href="/guide/getting-started" class="nav-link">使用指南</a>
+          <a href="/about/feedback" class="nav-link">需求池</a>
           <a href="/about/" class="nav-link">关于</a>
         </nav>
 

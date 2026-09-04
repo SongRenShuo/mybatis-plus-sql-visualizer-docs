@@ -8,7 +8,7 @@
     <div class="detail-header">
       <div class="header-top">
         <span class="post-no">{{ post.postNo }}</span>
-        <StatusBadge :status="post.status" />
+        <StatusBadge :status="post.status" :locale="locale" />
       </div>
       <h1 class="detail-title">{{ post.title }}</h1>
       <div class="detail-meta">
@@ -17,7 +17,7 @@
         <span class="sep">·</span>
         <span>{{ formatDate(post.createdAt) }}</span>
         <span v-if="post.category" class="sep">·</span>
-        <span v-if="post.category" class="category-tag">{{ post.category }}</span>
+        <span v-if="post.category" class="category-tag">{{ categoryLabel(post.category) }}</span>
       </div>
     </div>
 
@@ -44,7 +44,7 @@
         <div v-for="(log, i) in post.statusLogs" :key="i" class="timeline-item">
           <div class="timeline-dot"></div>
           <div class="timeline-content">
-            <span class="timeline-status">{{ statusLabels[log.to_status] || log.to_status }}</span>
+            <span class="timeline-status">{{ statusLabel(log.to_status) }}</span>
             <span v-if="log.reason" class="timeline-reason">{{ log.reason }}</span>
             <span class="timeline-meta">{{ log.operator }} · {{ formatDate(log.created_at) }}</span>
           </div>
@@ -98,15 +98,38 @@
 import { ref, onMounted } from 'vue'
 import StatusBadge from './StatusBadge.vue'
 import VoteButton from './VoteButton.vue'
+import { t, type Locale, type MessageKey } from './i18n'
 
 const props = defineProps<{
   postNo: string
   apiBase: string
+  locale?: Locale
 }>()
 
 defineEmits<{
   (e: 'back'): void
 }>()
+
+const locale = props.locale || 'zh'
+
+function statusLabel(s: number): string {
+  const keys: Record<number, MessageKey> = {
+    1: 'status.1',
+    2: 'status.2',
+    3: 'status.3',
+    4: 'status.4',
+    5: 'status.5',
+    6: 'status.6',
+    7: 'status.7',
+  }
+  return keys[s] ? t(keys[s], locale) : String(s)
+}
+
+function categoryLabel(category: string): string {
+  const key = `cat.${category}`
+  const label = t(key as MessageKey, locale)
+  return label === key ? category : label
+}
 
 interface StatusLog {
   from_status: number
@@ -142,16 +165,6 @@ interface Post {
   comments: Comment[]
   statusLogs: StatusLog[]
   hasVoted: boolean
-}
-
-const statusLabels: Record<number, string> = {
-  1: 'Submitted',
-  2: 'Under Review',
-  3: 'Planned',
-  4: 'In Progress',
-  5: 'Completed',
-  6: 'Declined',
-  7: 'Duplicate',
 }
 
 const loading = ref(true)

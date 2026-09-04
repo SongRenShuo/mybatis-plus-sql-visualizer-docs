@@ -109,6 +109,7 @@ export default defineConfig({
           { text: '首页', link: '/' },
           { text: '功能详解', link: '/features/wrapper-preview' },
           { text: '使用指南', link: '/guide/getting-started' },
+          { text: '需求池', link: '/about/feedback' },
           { text: '关于', link: '/about/' }
         ],
         sidebar: {
@@ -187,6 +188,7 @@ export default defineConfig({
           { text: 'Home', link: '/en/' },
           { text: 'Features', link: '/en/features/wrapper-preview' },
           { text: 'Guide', link: '/en/guide/getting-started' },
+          { text: 'Feedback', link: '/en/about/feedback' },
           { text: 'About', link: '/en/about/' }
         ],
         sidebar: {

@@ -8,8 +8,8 @@
           <p>{{ t('subtitle', locale) }}</p>
         </div>
         <div class="lang-toggle">
-          <button :class="{ active: locale === 'zh' }" @click="locale = 'zh'">中</button>
-          <button :class="{ active: locale === 'en' }" @click="locale = 'en'">EN</button>
+          <button :class="{ active: locale === 'zh' }" @click="$emit('update-locale', 'zh')">中</button>
+          <button :class="{ active: locale === 'en' }" @click="$emit('update-locale', 'en')">EN</button>
         </div>
       </div>
     </div>
@@ -77,11 +77,11 @@
           <div class="card-right">
             <div class="card-header">
               <h3 class="card-title">{{ post.title }}</h3>
-              <StatusBadge :status="post.status" />
+              <StatusBadge :status="post.status" :locale="locale" />
             </div>
             <div class="card-meta">
-              <span class="meta-type">{{ post.typeIcon }} {{ post.typeLabel }}</span>
-              <span v-if="post.category" class="meta-category">{{ post.category }}</span>
+              <span class="meta-type">{{ post.typeIcon }} {{ typeLabel(post.type) }}</span>
+              <span v-if="post.category" class="meta-category">{{ categoryLabel(post.category) }}</span>
               <span class="meta-date">{{ formatDate(post.createdAt) }}</span>
               <span class="meta-comments">💬 {{ post.commentCount }}</span>
             </div>
@@ -92,11 +92,25 @@
 
     <!-- Board View -->
     <div v-else>
-      <RoadmapBoard :posts="postsForBoard" @select="selectPost" />
+      <div v-if="statusStats.length" class="board-stats">
+        <span v-for="s in statusStats" :key="s.status" class="board-stat">
+          <span class="board-stat-dot" :style="{ background: statusColor(s.status) }"></span>
+          {{ statusLabel(s.status) }} {{ s.count }}
+        </span>
+      </div>
+      <RoadmapBoard :posts="postsForBoard" :locale="locale" @select="selectPost" />
     </div>
 
-    <!-- Submit Form -->
-    <FeedbackForm :api-base="apiBase" :locale="locale" />
+    <!-- Submit feedback (hidden by default, toggle via 新增反馈) -->
+    <div class="submit-block">
+      <button v-if="!showForm" class="submit-open-btn" @click="showForm = true">
+        <span class="submit-plus">＋</span>{{ t('submitNew', locale) }}
+      </button>
+      <div v-else class="submit-open">
+        <button class="submit-collapse" @click="showForm = false">{{ t('collapse', locale) }}</button>
+        <FeedbackForm :api-base="apiBase" :locale="locale" @done="showForm = false" />
+      </div>
+    </div>
 
     <!-- Stats Bar -->
     <div class="stats-bar">
@@ -113,14 +127,16 @@ import StatusBadge from './StatusBadge.vue'
 import VoteButton from './VoteButton.vue'
 import FeedbackForm from './FeedbackForm.vue'
 import RoadmapBoard from './RoadmapBoard.vue'
-import { t, type Locale } from './i18n'
+import { t, type Locale, type MessageKey } from './i18n'
 
 const props = defineProps<{
   apiBase: string
+  locale: Locale
 }>()
 
 const emit = defineEmits<{
   (e: 'select-post', postNo: string): void
+  (e: 'update-locale', locale: Locale): void
 }>()
 
 interface Post {
@@ -138,36 +154,67 @@ interface Post {
   createdAt: string
   tags: Array<{ name: string; color: string }>
   hasVoted: boolean
+  isPinned: boolean
 }
 
 const loading = ref(true)
 const posts = ref<Post[]>([])
 const stats = ref({ totalPosts: 0, totalVotes: 0 })
-const view = ref<'list' | 'board'>('list')
+const statusStats = ref<Array<{ status: number; count: number }>>([])
+const view = ref<'list' | 'board'>('board')
+const showForm = ref(false)
 const filterStatus = ref('')
 const filterType = ref('')
 const sortBy = ref('votes')
 const searchKeyword = ref('')
-const locale = ref<Locale>('zh')
 
-const statusOptions = [
-  { value: 1, label: 'Submitted' },
-  { value: 2, label: 'Under Review' },
-  { value: 3, label: 'Planned' },
-  { value: 4, label: 'In Progress' },
-  { value: 5, label: 'Completed' },
-  { value: 6, label: 'Declined' },
-  { value: 7, label: 'Duplicate' },
-]
+const statusOptions = computed(() => [
+  { value: 1, label: t('status.1', props.locale) },
+  { value: 2, label: t('status.2', props.locale) },
+  { value: 3, label: t('status.3', props.locale) },
+  { value: 4, label: t('status.4', props.locale) },
+  { value: 5, label: t('status.5', props.locale) },
+  { value: 6, label: t('status.6', props.locale) },
+  { value: 7, label: t('status.7', props.locale) },
+])
 
-const typeOptions = [
-  { value: 1, label: 'Feature', icon: '✨' },
-  { value: 2, label: 'Bug', icon: '🐛' },
-  { value: 3, label: 'Improvement', icon: '⚡' },
-  { value: 4, label: 'Question', icon: '❓' },
-]
+const typeOptions = computed(() => [
+  { value: 1, label: t('type.feature', props.locale), icon: '✨' },
+  { value: 2, label: t('type.bug', props.locale), icon: '🐛' },
+  { value: 3, label: t('type.improvement', props.locale), icon: '⚡' },
+  { value: 4, label: t('type.question', props.locale), icon: '❓' },
+])
 
 const typeIcons: Record<number, string> = { 1: '✨', 2: '🐛', 3: '⚡', 4: '❓' }
+
+const statusColors: Record<number, string> = {
+  1: '#6b7280', 2: '#f59e0b', 3: '#3b82f6', 4: '#8b5cf6', 5: '#10b981', 6: '#ef4444', 7: '#6b7280',
+}
+
+const typeKeys: Record<number, MessageKey> = {
+  1: 'type.feature', 2: 'type.bug', 3: 'type.improvement', 4: 'type.question',
+}
+
+function typeLabel(type: number): string {
+  return typeKeys[type] ? t(typeKeys[type], props.locale) : ''
+}
+
+function statusLabel(s: number): string {
+  const keys: Record<number, MessageKey> = {
+    1: 'status.1', 2: 'status.2', 3: 'status.3', 4: 'status.4', 5: 'status.5', 6: 'status.6', 7: 'status.7',
+  }
+  return keys[s] ? t(keys[s], props.locale) : String(s)
+}
+
+function statusColor(s: number): string {
+  return statusColors[s] || '#6b7280'
+}
+
+function categoryLabel(category: string): string {
+  const key = `cat.${category}`
+  const label = t(key as MessageKey, props.locale)
+  return label === key ? category : label
+}
 
 const filteredPosts = computed(() => {
   let result = posts.value
@@ -194,8 +241,12 @@ const postsForBoard = computed(() =>
     title: p.title,
     type: p.type,
     typeIcon: typeIcons[p.type] || '',
+    typeLabel: typeLabel(p.type),
     status: p.status,
     voteCount: p.voteCount,
+    commentCount: p.commentCount,
+    category: p.category,
+    isPinned: !!p.isPinned,
   }))
 )
 
@@ -229,7 +280,8 @@ async function loadData() {
       }))
     }
     if (statsData.code === 0) {
-      stats.value = statsData.data
+      stats.value = { totalPosts: statsData.data.totalPosts, totalVotes: statsData.data.totalVotes }
+      statusStats.value = statsData.data.statusStats || []
     }
   } catch (err) {
     console.error('Failed to load feedback data:', err)
@@ -469,5 +521,74 @@ function formatDate(dateStr: string): string {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.board-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 10px;
+  background: var(--vp-c-bg-soft);
+  font-size: 0.8rem;
+  color: var(--vp-c-text-2);
+}
+
+.board-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  white-space: nowrap;
+}
+
+.board-stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.submit-block {
+  margin: 0.5rem 0 0;
+}
+
+.submit-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1.25rem;
+  border: 1px dashed var(--vp-c-brand-1);
+  border-radius: 9999px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-brand-1);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-open-btn:hover {
+  background: var(--vp-c-brand-soft);
+}
+
+.submit-plus {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.submit-collapse {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--vp-c-text-3);
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+}
+
+.submit-collapse:hover {
+  color: var(--vp-c-brand-1);
 }
 </style>

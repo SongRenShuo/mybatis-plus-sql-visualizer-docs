@@ -28,6 +28,8 @@ const messages = {
     nickname: '昵称',
     // Form
     submitTitle: '提交反馈',
+    submitNew: '新增反馈',
+    collapse: '收起',
     formType: '类型',
     formTitle: '标题',
     formTitlePlaceholder: '请简要描述您的需求或问题',
@@ -47,19 +49,29 @@ const messages = {
     totalVotes: '共 {n} 票',
     // Board
     noItems: '暂无',
+    closed: '已关闭',
     // Types
-    'type.feature': 'Feature',
+    'type.feature': '功能需求',
     'type.bug': 'Bug',
-    'type.improvement': 'Improvement',
-    'type.question': 'Question',
+    'type.improvement': '体验优化',
+    'type.question': '疑问咨询',
     // Status
-    'status.1': 'Submitted',
-    'status.2': 'Under Review',
-    'status.3': 'Planned',
-    'status.4': 'In Progress',
-    'status.5': 'Completed',
-    'status.6': 'Declined',
-    'status.7': 'Duplicate',
+    'status.1': '待审',
+    'status.2': '评估中',
+    'status.3': '已规划',
+    'status.4': '进行中',
+    'status.5': '已完成',
+    'status.6': '已拒绝',
+    'status.7': '重复',
+    // Categories
+    'cat.wrapper': 'Wrapper 预览',
+    'cat.xml': 'XML 预览',
+    'cat.annotation': '注解预览',
+    'cat.sql-to-java': 'SQL 转 Java',
+    'cat.sql-log': 'SQL 日志',
+    'cat.batch': '批量操作',
+    'cat.completion': '代码补全',
+    'cat.other': '其他',
   },
   en: {
     // Pool
@@ -84,6 +96,8 @@ const messages = {
     nickname: 'Name',
     // Form
     submitTitle: 'Submit Feedback',
+    submitNew: 'New Feedback',
+    collapse: 'Close',
     formType: 'Type',
     formTitle: 'Title',
     formTitlePlaceholder: 'Briefly describe your request or issue',
@@ -103,6 +117,7 @@ const messages = {
     totalVotes: '{n} votes',
     // Board
     noItems: 'None',
+    closed: 'Closed',
     // Types
     'type.feature': 'Feature',
     'type.bug': 'Bug',
@@ -116,6 +131,15 @@ const messages = {
     'status.5': 'Completed',
     'status.6': 'Declined',
     'status.7': 'Duplicate',
+    // Categories
+    'cat.wrapper': 'Wrapper Preview',
+    'cat.xml': 'XML Preview',
+    'cat.annotation': 'Annotation Preview',
+    'cat.sql-to-java': 'SQL to Java',
+    'cat.sql-log': 'SQL Log',
+    'cat.batch': 'Batch Operations',
+    'cat.completion': 'Code Completion',
+    'cat.other': 'Other',
   },
 } as const
 
