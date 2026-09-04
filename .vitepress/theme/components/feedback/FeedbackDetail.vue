@@ -26,6 +26,27 @@
       <div class="description" v-html="renderMd(post.description)"></div>
     </div>
 
+    <!-- Attachments -->
+    <div v-if="post.attachments && post.attachments.length" class="section">
+      <h3>{{ t('attachments', locale) }}</h3>
+      <div class="attachment-list">
+        <a
+          v-for="att in post.attachments"
+          :key="att.key"
+          :href="fileUrl(att.key)"
+          class="attachment-item"
+          :class="{ 'is-image': isImage(att) }"
+          target="_blank"
+          rel="noopener"
+        >
+          <img v-if="isImage(att)" :src="fileUrl(att.key)" :alt="att.fileName" class="att-thumb" loading="lazy" />
+          <span v-if="!isImage(att)" class="att-icon">📎</span>
+          <span class="att-name">{{ att.fileName }}</span>
+          <span class="att-size">{{ formatSize(att.fileSize) }}</span>
+        </a>
+      </div>
+    </div>
+
     <!-- Vote + Actions -->
     <div class="detail-actions">
       <VoteButton
@@ -147,6 +168,13 @@ interface Comment {
   created_at: string
 }
 
+interface AttachmentFile {
+  key: string
+  fileName: string
+  mimeType: string
+  fileSize: number
+}
+
 interface Post {
   postNo: string
   title: string
@@ -164,6 +192,7 @@ interface Post {
   tags: Array<{ name: string; color: string }>
   comments: Comment[]
   statusLogs: StatusLog[]
+  attachments?: AttachmentFile[]
   hasVoted: boolean
 }
 
@@ -238,6 +267,25 @@ function renderMd(text: string): string {
     .replace(/>/g, '&gt;')
     .replace(/## (.+)/g, '<h3>$1</h3>')
     .replace(/\n/g, '<br>')
+}
+
+const IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'webp']
+
+function fileUrl(key: string): string {
+  return `${props.apiBase}/feedback/files/${key}`
+}
+
+function isImage(att: { fileName: string; mimeType: string }): boolean {
+  if (att.mimeType && att.mimeType.startsWith('image/')) return true
+  const ext = (att.fileName.split('.').pop() || '').toLowerCase()
+  return IMAGE_EXTENSIONS.includes(ext)
+}
+
+function formatSize(bytes: number): string {
+  if (bytes == null) return ''
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 </script>
 
@@ -319,6 +367,60 @@ function renderMd(text: string): string {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--vp-c-border);
+}
+
+.attachment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 8px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+
+.attachment-item:hover {
+  border-color: var(--vp-c-brand-1);
+}
+
+.attachment-item.is-image {
+  flex-wrap: wrap;
+}
+
+.att-icon {
+  font-size: 0.9rem;
+}
+
+.att-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+
+.att-size {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--vp-c-text-3);
+  white-space: nowrap;
+}
+
+.att-thumb {
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--vp-c-border);
 }
 
 .section {

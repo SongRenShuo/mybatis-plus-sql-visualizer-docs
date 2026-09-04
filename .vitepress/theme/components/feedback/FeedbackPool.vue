@@ -3,7 +3,8 @@
     <!-- Header -->
     <div class="pool-header">
       <div class="header-row">
-        <div>
+        <div class="header-spacer"></div>
+        <div class="pool-title">
           <h2>{{ t('title', locale) }}</h2>
           <p>{{ t('subtitle', locale) }}</p>
         </div>
@@ -101,16 +102,27 @@
       <RoadmapBoard :posts="postsForBoard" :locale="locale" @select="selectPost" />
     </div>
 
-    <!-- Submit feedback (hidden by default, toggle via 新增反馈) -->
+    <!-- Submit feedback -->
     <div class="submit-block">
-      <button v-if="!showForm" class="submit-open-btn" @click="showForm = true">
+      <button class="submit-open-btn" @click="showForm = true">
         <span class="submit-plus">＋</span>{{ t('submitNew', locale) }}
       </button>
-      <div v-else class="submit-open">
-        <button class="submit-collapse" @click="showForm = false">{{ t('collapse', locale) }}</button>
-        <FeedbackForm :api-base="apiBase" :locale="locale" @done="showForm = false" />
-      </div>
     </div>
+
+    <!-- Submit modal -->
+    <Teleport to="body">
+      <div v-if="showForm" class="modal-overlay" @mousedown.self="closeForm">
+        <div class="modal-dialog" role="dialog" aria-modal="true">
+          <button class="modal-close" :title="t('close', locale)" :aria-label="t('close', locale)" @click="closeForm">
+            ×
+          </button>
+          <FeedbackForm :api-base="apiBase" :locale="locale" @done="closeForm" />
+          <div class="modal-footer">
+            <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- Stats Bar -->
     <div class="stats-bar">
@@ -122,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import StatusBadge from './StatusBadge.vue'
 import VoteButton from './VoteButton.vue'
 import FeedbackForm from './FeedbackForm.vue'
@@ -251,9 +263,21 @@ const postsForBoard = computed(() =>
 )
 
 onMounted(loadData)
+onMounted(() => window.addEventListener('keydown', onKeydown))
+onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 watch([filterStatus, filterType, sortBy], () => {
   // Filters reactive, no need to reload
 })
+
+function closeForm() {
+  showForm.value = false
+}
+
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && showForm.value) {
+    closeForm()
+  }
+}
 
 function applySearch() {
   loadData()
@@ -345,9 +369,17 @@ function formatDate(dateStr: string): string {
 }
 
 .header-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: flex-start;
+}
+
+.pool-title {
+  text-align: center;
+}
+
+.header-spacer {
+  min-width: 0;
 }
 
 .lang-toggle {
@@ -578,17 +610,72 @@ function formatDate(dateStr: string): string {
   line-height: 1;
 }
 
-.submit-collapse {
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--vp-c-text-3);
-  font-size: 0.8rem;
-  cursor: pointer;
-  margin-bottom: 0.75rem;
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.55);
+  overflow-y: auto;
 }
 
-.submit-collapse:hover {
+.modal-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-border);
+  padding: 1.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--vp-c-text-3);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 1;
+}
+
+.modal-close:hover {
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+}
+
+.modal-footer {
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.modal-cancel {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 8px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-2);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-cancel:hover {
+  border-color: var(--vp-c-brand-1);
   color: var(--vp-c-brand-1);
 }
 </style>

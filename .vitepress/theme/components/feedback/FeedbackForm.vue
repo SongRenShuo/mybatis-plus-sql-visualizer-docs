@@ -65,6 +65,33 @@
 
     <p class="form-tip">{{ t('formTip', props.locale || 'zh') }}</p>
 
+    <!-- 附件上传 -->
+    <div class="form-group">
+      <label for="fb-att">{{ t('addAttachment', props.locale || 'zh') }}</label>
+      <input
+        id="fb-att"
+        type="file"
+        multiple
+        accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,.md"
+        @change="handleFileSelect"
+      />
+      <p v-if="uploadError" class="upload-error">{{ uploadError }}</p>
+      <div v-if="items.length" class="attachment-list">
+        <div v-for="item in items" :key="item.id" class="attachment-item">
+          <span class="att-name" :title="item.fileName">{{ item.fileName }}</span>
+          <span v-if="item.status === 'uploading'" class="att-status upload">{{ t('uploading', props.locale || 'zh') }}</span>
+          <span v-else-if="item.status === 'success'" class="att-status ok">{{ formatSize(item.fileSize) }}</span>
+          <span v-else class="att-status err">
+            {{ item.error }}
+            <button type="button" class="att-retry" @click="uploadItem(item)">{{ t('retry', props.locale || 'zh') }}</button>
+          </span>
+          <button type="button" class="att-remove" :title="t('removeFile', props.locale || 'zh')" @click="removeItem(item)">
+            {{ t('removeFile', props.locale || 'zh') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- 提交按钮 -->
     <button class="submit-btn" :disabled="submitting || !isValid" @click="handleSubmit">
       {{ submitting ? t('submitting', props.locale || 'zh') : t('submitBtn', props.locale || 'zh') }}
@@ -128,6 +155,114 @@ const submitting = ref(false)
 const success = ref(false)
 const submittedPostNo = ref('')
 
+const MAX_ATTACHMENTS = 3
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'pdf', 'txt', 'md']
+
+interface UploadItem {
+  id: string
+  _file: File
+  key: string
+  fileName: string
+  mimeType: string
+  fileSize: number
+  status: 'uploading' | 'success' | 'error'
+  error: string
+}
+
+const items = ref<UploadItem[]>([])
+const uploadError = ref('')
+let uid = 0
+
+function isAllowedFile(file: File): boolean {
+  const ext = (file.name.split('.').pop() || '').toLowerCase()
+  return ALLOWED_EXTENSIONS.includes(ext)
+}
+
+function handleFileSelect(e: Event) {
+  const input = e.target as HTMLInputElement
+  if (!input.files || !input.files.length) return
+  uploadError.value = ''
+  const l = props.locale || 'zh'
+  const newFiles = Array.from(input.files)
+
+  for (const file of newFiles) {
+    if (items.value.length >= MAX_ATTACHMENTS) {
+      uploadError.value = t('maxAttachment', l)
+      break
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      uploadError.value = `${file.name}: ${t('fileTooLarge', l)}`
+      continue
+    }
+    if (!isAllowedFile(file)) {
+      uploadError.value = `${file.name}: ${t('fileTypeError', l)}`
+      continue
+    }
+    const item: UploadItem = {
+      id: `att-${Date.now()}-${uid++}`,
+      _file: file,
+      key: '',
+      fileName: file.name,
+      mimeType: file.type || 'application/octet-stream',
+      fileSize: file.size,
+      status: 'uploading',
+      error: '',
+    }
+    items.value.push(item)
+    uploadItem(item)
+  }
+  input.value = ''
+}
+
+async function uploadItem(item: UploadItem) {
+  const l = props.locale || 'zh'
+  item.status = 'uploading'
+  item.error = ''
+  try {
+    const formData = new FormData()
+    formData.append('file', item._file)
+    const res = await fetch(`${props.apiBase}/feedback/upload`, {
+      method: 'POST',
+      body: formData,
+    })
+    const data = await res.json()
+    if (data.code === 0) {
+      item.key = data.data.key
+      item.fileName = data.data.fileName || item.fileName
+      item.mimeType = data.data.mimeType || item.mimeType
+      item.fileSize = data.data.fileSize ?? item.fileSize
+      item.status = 'success'
+    } else {
+      item.status = 'error'
+      item.error = t('uploadFailed', l)
+    }
+  } catch (err) {
+    item.status = 'error'
+    item.error = t('uploadFailed', l)
+    console.error(err)
+  }
+}
+
+function removeItem(item: UploadItem) {
+  const idx = items.value.indexOf(item)
+  if (idx > -1) items.value.splice(idx, 1)
+  if (!items.value.length) uploadError.value = ''
+}
+
+function formatSize(bytes: number): string {
+  if (bytes == null) return ''
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+function successfulAttachments() {
+  return items.value
+    .filter(it => it.status === 'success' && it.key)
+    .map(it => ({ key: it.key, fileName: it.fileName, mimeType: it.mimeType, fileSize: it.fileSize }))
+}
+
 const isValid = computed(() =>
   form.title.length >= 5 &&
   form.title.length <= 200 &&
@@ -151,6 +286,7 @@ async function handleSubmit() {
         submitterName: form.submitterName || undefined,
         submitterEmail: form.submitterEmail || undefined,
         isAnonymous: !form.submitterName,
+        attachments: successfulAttachments(),
       }),
     })
     const data = await res.json()
@@ -166,6 +302,8 @@ async function handleSubmit() {
       form.category = 'other'
       form.submitterName = ''
       form.submitterEmail = ''
+      items.value = []
+      uploadError.value = ''
     } else {
       alert('提交失败: ' + data.message)
     }
@@ -266,6 +404,83 @@ async function handleSubmit() {
   font-size: 0.75rem;
   color: var(--vp-c-text-3);
   margin: 0 0 1rem;
+}
+
+.upload-error {
+  font-size: 0.8rem;
+  color: #ef4444;
+  margin: 0.5rem 0 0;
+}
+
+.attachment-list {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 6px;
+  background: var(--vp-c-bg);
+  font-size: 0.8rem;
+}
+
+.att-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--vp-c-text-1);
+}
+
+.att-status {
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.att-status.upload {
+  color: var(--vp-c-text-3);
+}
+
+.att-status.ok {
+  color: #10b981;
+}
+
+.att-status.err {
+  color: #ef4444;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.att-retry {
+  border: none;
+  background: none;
+  color: var(--vp-c-brand-1);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.att-remove {
+  border: none;
+  background: none;
+  color: var(--vp-c-text-3);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.att-remove:hover {
+  color: #ef4444;
 }
 
 .submit-btn {
