@@ -22,7 +22,10 @@
 
     <!-- 标题 -->
     <div class="form-group">
-      <label for="fb-title">{{ t('formTitle', props.locale || 'zh') }} *</label>
+      <div class="label-row">
+        <label for="fb-title">{{ t('formTitle', props.locale || 'zh') }} *</label>
+        <span class="char-count" :class="{ ok: titleOk }">{{ form.title.length }}/5</span>
+      </div>
       <input
         id="fb-title"
         v-model="form.title"
@@ -34,7 +37,10 @@
 
     <!-- 描述 -->
     <div class="form-group">
-      <label for="fb-desc">{{ t('formDesc', props.locale || 'zh') }} *</label>
+      <div class="label-row">
+        <label for="fb-desc">{{ t('formDesc', props.locale || 'zh') }} *</label>
+        <span class="char-count" :class="{ ok: descOk }">{{ form.description.length }}/10</span>
+      </div>
       <textarea
         id="fb-desc"
         v-model="form.description"
@@ -281,6 +287,10 @@ const isValid = computed(() =>
   form.description.length >= 10
 )
 
+// 字数计数器（label 右侧）的达标态
+const titleOk = computed(() => form.title.length >= 5 && form.title.length <= 200)
+const descOk = computed(() => form.description.length >= 10)
+
 // 供父级（提交弹窗 footer）读取/调用
 const canSubmit = computed(() => isValid.value && !submitting.value)
 const invalidTips = computed(() => {
@@ -372,6 +382,27 @@ async function handleSubmit() {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--vp-c-text-2);
+}
+
+.label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.375rem;
+}
+
+.label-row label {
+  margin-bottom: 0;
+}
+
+.char-count {
+  font-size: 0.75rem;
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.char-count.ok {
+  color: #10b981;
 }
 
 .form-group input,

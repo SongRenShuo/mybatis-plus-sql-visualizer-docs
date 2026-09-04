@@ -111,7 +111,7 @@
             <FeedbackForm ref="formRef" :api-base="apiBase" :locale="locale" embedded @done="closeForm" />
           </div>
           <div class="modal-footer">
-            <span v-if="!formRef?.canSubmit" class="modal-hint">{{ (formRef?.invalidTips || []).join('，') }}</span>
+            <span v-if="!formRef?.canSubmit" class="modal-hint">⚠ {{ (formRef?.invalidTips || []).join('，') }}</span>
             <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
             <button class="modal-submit" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">{{ t('submitBtn', locale) }}</button>
           </div>
@@ -592,7 +592,7 @@ function formatDate(dateStr: string): string {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 720px;
+  max-width: 880px;
   max-height: 90vh;
   overflow: hidden;
   border-radius: 12px;
@@ -660,8 +660,9 @@ function formatDate(dateStr: string): string {
 
 .modal-hint {
   margin-right: auto;
-  font-size: 0.75rem;
-  color: var(--vp-c-text-3);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #d97706;
 }
 
 .modal-submit {
