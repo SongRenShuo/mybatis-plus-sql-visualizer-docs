@@ -2,16 +2,9 @@
   <div class="feedback-pool">
     <!-- Header -->
     <div class="pool-header">
-      <div class="header-row">
-        <div class="header-spacer"></div>
-        <div class="pool-title">
-          <h2>{{ t('title', locale) }}</h2>
-          <p>{{ t('subtitle', locale) }}</p>
-        </div>
-        <div class="lang-toggle">
-          <button :class="{ active: locale === 'zh' }" @click="$emit('update-locale', 'zh')">中</button>
-          <button :class="{ active: locale === 'en' }" @click="$emit('update-locale', 'en')">EN</button>
-        </div>
+      <div class="pool-title">
+        <h2>{{ t('title', locale) }}</h2>
+        <p>{{ t('subtitle', locale) }}</p>
       </div>
     </div>
 
@@ -151,7 +144,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'select-post', postNo: string): void
-  (e: 'update-locale', locale: Locale): void
 }>()
 
 interface Post {
@@ -372,42 +364,8 @@ function formatDate(dateStr: string): string {
   margin: 0;
 }
 
-.header-row {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: flex-start;
-}
-
 .pool-title {
   text-align: center;
-}
-
-.header-spacer {
-  min-width: 0;
-}
-
-.lang-toggle {
-  display: flex;
-  gap: 0;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid var(--vp-c-border);
-  flex-shrink: 0;
-}
-
-.lang-toggle button {
-  padding: 0.25rem 0.75rem;
-  border: none;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
-  cursor: pointer;
-  font-size: 0.75rem;
-  transition: all 0.2s;
-}
-
-.lang-toggle button.active {
-  background: var(--vp-c-brand-1);
-  color: #fff;
 }
 
 .view-toggle {
