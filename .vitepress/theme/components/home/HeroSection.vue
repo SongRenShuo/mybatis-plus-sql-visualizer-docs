@@ -43,9 +43,20 @@ const { version } = usePluginVersion()
             </a>
           </div>
 
-          <p class="hero-meta">
-            最新版本 {{ version }} <span class="hero-meta-divider">·</span> 支持 IDEA 2024.3+ <span class="hero-meta-divider">·</span> Apache-2.0 开源
-          </p>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-value">{{ version }}</span>
+              <span class="hero-stat-label">最新版本</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">2024.3+</span>
+              <span class="hero-stat-label">IDEA 支持</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">Apache-2.0</span>
+              <span class="hero-stat-label">开源协议</span>
+            </div>
+          </div>
         </div>
 
         <div class="hero-visual">
@@ -159,16 +170,29 @@ const { version } = usePluginVersion()
   color: var(--primary-color);
 }
 
-.hero-meta {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  margin: 0;
-  line-height: 1.6;
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding-top: 0.5rem;
 }
 
-.hero-meta-divider {
-  margin: 0 0.375rem;
-  opacity: 0.6;
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-stat-value {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero-stat-label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
 }
 
 /* Hero visual */
