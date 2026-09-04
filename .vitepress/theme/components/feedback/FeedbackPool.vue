@@ -117,10 +117,11 @@
             ×
           </button>
           <div class="modal-body">
-            <FeedbackForm :api-base="apiBase" :locale="locale" @done="closeForm" />
+            <FeedbackForm ref="formRef" :api-base="apiBase" :locale="locale" embedded @done="closeForm" />
           </div>
           <div class="modal-footer">
             <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
+            <button class="modal-submit" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">{{ t('submitBtn', locale) }}</button>
           </div>
         </div>
       </div>
@@ -177,6 +178,7 @@ const stats = ref({ totalPosts: 0, totalVotes: 0 })
 const statusStats = ref<Array<{ status: number; count: number }>>([])
 const view = ref<'list' | 'board'>('board')
 const showForm = ref(false)
+const formRef = ref<InstanceType<typeof FeedbackForm> | null>(null)
 const filterStatus = ref('')
 const filterType = ref('')
 const sortBy = ref('votes')
@@ -671,10 +673,13 @@ function formatDate(dateStr: string): string {
 
 .modal-footer {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
   margin-top: 0.5rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--vp-c-border);
-  text-align: right;
 }
 
 .modal-cancel {
@@ -691,5 +696,26 @@ function formatDate(dateStr: string): string {
 .modal-cancel:hover {
   border-color: var(--vp-c-brand-1);
   color: var(--vp-c-brand-1);
+}
+
+.modal-submit {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--vp-c-brand-1);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.modal-submit:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.modal-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="feedback-form">
+  <div class="feedback-form" :class="{ embedded }">
     <h3>{{ t('submitTitle', props.locale || 'zh') }}</h3>
 
     <!-- 类型选择 -->
@@ -99,11 +99,6 @@
       </div>
     </div>
 
-    <!-- 提交按钮 -->
-    <button class="submit-btn" :disabled="submitting || !isValid" @click="handleSubmit">
-      {{ submitting ? t('submitting', props.locale || 'zh') : t('submitBtn', props.locale || 'zh') }}
-    </button>
-
     <!-- 成功提示 -->
     <div v-if="success" class="success-msg">
       提交成功！您的反馈编号是 <strong>{{ submittedPostNo }}</strong>
@@ -117,6 +112,7 @@ import { ref, computed, reactive, markRaw } from 'vue'
 const props = defineProps<{
   apiBase: string
   locale?: 'zh' | 'en'
+  embedded?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -285,6 +281,10 @@ const isValid = computed(() =>
   form.description.length >= 10
 )
 
+// 供父级（提交弹窗 footer）读取/调用
+const canSubmit = computed(() => isValid.value && !submitting.value)
+defineExpose({ submit: handleSubmit, canSubmit })
+
 async function handleSubmit() {
   if (!isValid.value || submitting.value) return
   submitting.value = true
@@ -339,6 +339,14 @@ async function handleSubmit() {
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+.feedback-form.embedded {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 0;
 }
 
 .feedback-form h3 {

@@ -4,112 +4,100 @@
   <div v-else-if="error" class="error">{{ error }}</div>
 
   <div v-else-if="post" class="feedback-detail">
-    <!-- Header -->
-    <div class="detail-header">
-      <div class="header-top">
-        <span class="post-no">{{ post.postNo }}</span>
+    <!-- 详情卡片 -->
+    <div class="fd-card fd-header">
+      <div class="fd-header-top">
+        <span class="fd-post-no">{{ post.postNo }}</span>
         <StatusBadge :status="post.status" :locale="locale" />
+        <span v-if="post.typeLabel" class="fd-type-chip">{{ typeIcon(post.type) }} {{ post.typeLabel }}</span>
       </div>
-      <h1 class="detail-title">{{ post.title }}</h1>
-      <div class="detail-meta">
-        <span v-if="post.submitterName">{{ post.submitterName }}</span>
-        <span v-else>匿名</span>
-        <span class="sep">·</span>
+      <h1 class="fd-title">{{ post.title }}</h1>
+      <div class="fd-meta">
+        <span class="fd-author">{{ post.submitterName || '匿名' }}</span>
+        <span class="fd-dot">·</span>
         <span>{{ formatDate(post.createdAt) }}</span>
-        <span v-if="post.category" class="sep">·</span>
-        <span v-if="post.category" class="category-tag">{{ categoryLabel(post.category) }}</span>
+        <template v-if="post.category">
+          <span class="fd-dot">·</span>
+          <span class="fd-category">{{ categoryLabel(post.category) }}</span>
+        </template>
+      </div>
+      <div class="fd-desc">
+        <div class="fd-desc-body" v-html="renderMd(post.description)"></div>
+      </div>
+      <div class="fd-vote">
+        <VoteButton
+          :post-no="post.postNo"
+          :count="post.voteCount"
+          :has-voted="post.hasVoted"
+          :api-base="apiBase"
+          @update="onVoteUpdate"
+        />
       </div>
     </div>
 
-    <!-- Description -->
-    <div class="detail-body">
-      <div class="description" v-html="renderMd(post.description)"></div>
-    </div>
-
-    <!-- Attachments -->
-    <div v-if="post.attachments && post.attachments.length" class="section">
-      <h3>{{ t('attachments', locale) }}</h3>
-      <div class="attachment-list">
+    <!-- 附件卡片 -->
+    <div v-if="post.attachments && post.attachments.length" class="fd-card">
+      <h3 class="fd-section-title">{{ t('attachments', locale) }}</h3>
+      <div class="fd-att-list">
         <a
           v-for="att in post.attachments"
           :key="att.key"
           :href="fileUrl(att.key)"
-          class="attachment-item"
+          class="fd-att"
           :class="{ 'is-image': isImage(att) }"
           target="_blank"
           rel="noopener"
         >
-          <img v-if="isImage(att)" :src="fileUrl(att.key)" :alt="att.fileName" class="att-thumb" loading="lazy" />
-          <span v-if="!isImage(att)" class="att-icon">📎</span>
-          <span class="att-name">{{ att.fileName }}</span>
-          <span class="att-size">{{ formatSize(att.fileSize) }}</span>
+          <img v-if="isImage(att)" :src="fileUrl(att.key)" :alt="att.fileName" class="fd-att-thumb" loading="lazy" />
+          <span v-else class="fd-att-icon">📎</span>
+          <span class="fd-att-name">{{ att.fileName }}</span>
+          <span class="fd-att-size">{{ formatSize(att.fileSize) }}</span>
         </a>
       </div>
     </div>
 
-    <!-- Vote + Actions -->
-    <div class="detail-actions">
-      <VoteButton
-        :post-no="post.postNo"
-        :count="post.voteCount"
-        :has-voted="post.hasVoted"
-        :api-base="apiBase"
-        @update="onVoteUpdate"
-      />
-    </div>
-
-    <!-- Status Timeline -->
-    <div v-if="post.statusLogs && post.statusLogs.length" class="section">
-      <h3>状态历史</h3>
-      <div class="timeline">
-        <div v-for="(log, i) in post.statusLogs" :key="i" class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-status">{{ statusLabel(log.to_status) }}</span>
-            <span v-if="log.reason" class="timeline-reason">{{ log.reason }}</span>
-            <span class="timeline-meta">{{ log.operator }} · {{ formatDate(log.created_at) }}</span>
+    <!-- 状态时间线卡片 -->
+    <div v-if="post.statusLogs && post.statusLogs.length" class="fd-card">
+      <h3 class="fd-section-title">状态历史</h3>
+      <div class="fd-timeline">
+        <div v-for="(log, i) in post.statusLogs" :key="i" class="fd-tl-item">
+          <span class="fd-tl-dot" :style="{ background: statusColor(log.to_status) }"></span>
+          <div class="fd-tl-body">
+            <span class="fd-tl-status">{{ statusLabel(log.to_status) }}</span>
+            <span v-if="log.reason" class="fd-tl-reason">{{ log.reason }}</span>
+            <span class="fd-tl-meta">{{ log.operator }} · {{ formatDate(log.created_at) }}</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Comments -->
-    <div class="section">
-      <h3>评论 ({{ post.comments?.length || 0 }})</h3>
+    <!-- 评论卡片 -->
+    <div class="fd-card">
+      <h3 class="fd-section-title">评论 ({{ post.comments?.length || 0 }})</h3>
 
-      <div v-if="post.comments && post.comments.length" class="comments-list">
-        <div v-for="c in post.comments" :key="c.id" class="comment-item" :class="{ official: c.is_official }">
-          <div class="comment-header">
-            <span class="comment-author">{{ c.author_name }}</span>
-            <span v-if="c.is_official" class="official-badge">官方</span>
-            <span class="comment-date">{{ formatDate(c.created_at) }}</span>
+      <div v-if="post.comments && post.comments.length" class="fd-comments">
+        <div v-for="c in post.comments" :key="c.id" class="fd-comment" :class="{ official: c.is_official }">
+          <div class="fd-comment-head">
+            <span class="fd-comment-author">{{ c.author_name }}</span>
+            <span v-if="c.is_official" class="fd-official">官方</span>
+            <span class="fd-comment-date">{{ formatDate(c.created_at) }}</span>
           </div>
-          <div class="comment-content">{{ c.content }}</div>
+          <div class="fd-comment-content">{{ c.content }}</div>
         </div>
       </div>
+      <div v-else class="fd-empty">暂无评论</div>
 
-      <!-- Comment Form -->
-      <div class="comment-form">
-        <input
-          v-model="commentName"
-          type="text"
-          placeholder="昵称"
-          class="comment-input-name"
-        />
-        <textarea
-          v-model="commentContent"
-          placeholder="写下您的评论..."
-          rows="3"
-          class="comment-input-content"
-        ></textarea>
-        <button :disabled="!commentName || !commentContent.trim()" @click="submitComment">
+      <div class="fd-comment-form">
+        <input v-model="commentName" type="text" placeholder="昵称" class="fd-input fd-input-name" />
+        <textarea v-model="commentContent" placeholder="写下您的评论..." rows="3" class="fd-input fd-textarea"></textarea>
+        <button class="fd-submit" :disabled="!commentName || !commentContent.trim()" @click="submitComment">
           发表评论
         </button>
       </div>
     </div>
 
-    <!-- Back link -->
-    <div class="back-link">
+    <!-- 返回 -->
+    <div class="fd-back">
       <a href="#" @click.prevent="$emit('back')">← 返回列表</a>
     </div>
   </div>
@@ -132,6 +120,20 @@ defineEmits<{
 }>()
 
 const locale = props.locale || 'zh'
+
+const statusColors: Record<number, string> = {
+  1: '#6b7280', 2: '#f59e0b', 3: '#3b82f6', 4: '#8b5cf6', 5: '#10b981', 6: '#ef4444', 7: '#6b7280',
+}
+
+function statusColor(s: number): string {
+  return statusColors[s] || '#6b7280'
+}
+
+const typeIcons: Record<number, string> = { 1: '✨', 2: '🐛', 3: '⚡', 4: '❓' }
+
+function typeIcon(type: number): string {
+  return typeIcons[type] || ''
+}
 
 function statusLabel(s: number): string {
   const keys: Record<number, MessageKey> = {
@@ -260,7 +262,6 @@ function formatDate(dateStr: string): string {
 
 function renderMd(text: string): string {
   if (!text) return ''
-  // Basic markdown rendering
   return text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -290,7 +291,8 @@ function formatSize(bytes: number): string {
 </script>
 
 <style scoped>
-.loading, .error {
+.loading,
+.error {
   text-align: center;
   padding: 2rem;
   color: var(--vp-c-text-2);
@@ -300,44 +302,68 @@ function formatSize(bytes: number): string {
   color: #ef4444;
 }
 
-.detail-header {
-  margin-bottom: 1.5rem;
+.feedback-detail {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.header-top {
+.fd-card {
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.fd-header-top {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  gap: 0.625rem;
+  flex-wrap: wrap;
 }
 
-.post-no {
+.fd-post-no {
   font-family: monospace;
   font-size: 0.8rem;
   color: var(--vp-c-text-3);
 }
 
-.detail-title {
+.fd-type-chip {
+  font-size: 0.75rem;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-border);
+  border-radius: 9999px;
+  padding: 1px 8px;
+  white-space: nowrap;
+}
+
+.fd-title {
   font-size: 1.5rem;
   font-weight: 700;
-  margin: 0 0 0.5rem;
+  margin: 0.625rem 0 0.5rem;
   line-height: 1.3;
 }
 
-.detail-meta {
-  font-size: 0.8rem;
-  color: var(--vp-c-text-3);
+.fd-meta {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
+  font-size: 0.8rem;
+  color: var(--vp-c-text-3);
 }
 
-.sep {
+.fd-author {
+  color: var(--vp-c-text-2);
+  font-weight: 500;
+}
+
+.fd-dot {
   opacity: 0.5;
 }
 
-.category-tag {
+.fd-category {
   padding: 1px 8px;
   border-radius: 4px;
   background: var(--vp-c-brand-soft);
@@ -345,37 +371,41 @@ function formatSize(bytes: number): string {
   font-size: 0.75rem;
 }
 
-.detail-body {
-  margin-bottom: 1.5rem;
+.fd-desc {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--vp-c-border);
 }
 
-.description {
+.fd-desc-body {
   line-height: 1.7;
   color: var(--vp-c-text-1);
   white-space: pre-wrap;
 }
 
-.description :deep(h3) {
+.fd-desc-body :deep(h3) {
   font-size: 1rem;
   margin: 1rem 0 0.5rem;
 }
 
-.detail-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--vp-c-border);
+.fd-vote {
+  margin-top: 1rem;
 }
 
-.attachment-list {
+.fd-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+/* Attachments */
+.fd-att-list {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.attachment-item {
+.fd-att {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -388,19 +418,24 @@ function formatSize(bytes: number): string {
   transition: border-color 0.2s;
 }
 
-.attachment-item:hover {
+.fd-att:hover {
   border-color: var(--vp-c-brand-1);
 }
 
-.attachment-item.is-image {
-  flex-wrap: wrap;
+.fd-att-thumb {
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--vp-c-border);
+  flex-shrink: 0;
 }
 
-.att-icon {
-  font-size: 0.9rem;
+.fd-att-icon {
+  font-size: 1rem;
 }
 
-.att-name {
+.fd-att-name {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -408,113 +443,101 @@ function formatSize(bytes: number): string {
   font-size: 0.875rem;
 }
 
-.att-size {
+.fd-att-size {
   margin-left: auto;
   font-size: 0.75rem;
   color: var(--vp-c-text-3);
   white-space: nowrap;
 }
 
-.att-thumb {
-  width: 4rem;
-  height: 4rem;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid var(--vp-c-border);
-}
-
-.section {
-  margin-bottom: 2rem;
-}
-
-.section h3 {
-  font-size: 1rem;
-  margin: 0 0 1rem;
-}
-
 /* Timeline */
-.timeline {
+.fd-timeline {
   position: relative;
-  padding-left: 1.5rem;
+  padding-left: 1.25rem;
 }
 
-.timeline::before {
+.fd-timeline::before {
   content: '';
   position: absolute;
-  left: 5px;
-  top: 0;
-  bottom: 0;
+  left: 4px;
+  top: 6px;
+  bottom: 6px;
   width: 2px;
   background: var(--vp-c-border);
 }
 
-.timeline-item {
+.fd-tl-item {
   position: relative;
   padding-bottom: 1rem;
 }
 
-.timeline-dot {
-  position: absolute;
-  left: -1.5rem;
-  top: 4px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--vp-c-brand-1);
-  border: 2px solid var(--vp-c-bg);
+.fd-tl-item:last-child {
+  padding-bottom: 0;
 }
 
-.timeline-content {
+.fd-tl-dot {
+  position: absolute;
+  left: -1.25rem;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--vp-c-bg-soft);
+}
+
+.fd-tl-body {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  padding-left: 0.5rem;
 }
 
-.timeline-status {
+.fd-tl-status {
   font-weight: 600;
   font-size: 0.875rem;
 }
 
-.timeline-reason {
+.fd-tl-reason {
   font-size: 0.8rem;
   color: var(--vp-c-text-2);
 }
 
-.timeline-meta {
+.fd-tl-meta {
   font-size: 0.75rem;
   color: var(--vp-c-text-3);
 }
 
 /* Comments */
-.comments-list {
-  margin-bottom: 1.5rem;
+.fd-comments {
+  margin-bottom: 1rem;
 }
 
-.comment-item {
-  padding: 1rem;
+.fd-comment {
+  padding: 0.875rem 1rem;
   border: 1px solid var(--vp-c-border);
   border-radius: 8px;
-  margin-bottom: 0.75rem;
+  background: var(--vp-c-bg);
+  margin-bottom: 0.625rem;
 }
 
-.comment-item.official {
+.fd-comment.official {
   border-color: var(--vp-c-brand-1);
   background: var(--vp-c-brand-soft);
 }
 
-.comment-header {
+.fd-comment-head {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.375rem;
 }
 
-.comment-author {
+.fd-comment-author {
   font-weight: 600;
   font-size: 0.875rem;
 }
 
-.official-badge {
+.fd-official {
   padding: 1px 6px;
   border-radius: 4px;
   background: var(--vp-c-brand-1);
@@ -523,69 +546,87 @@ function formatSize(bytes: number): string {
   font-weight: 600;
 }
 
-.comment-date {
+.fd-comment-date {
   font-size: 0.75rem;
   color: var(--vp-c-text-3);
   margin-left: auto;
 }
 
-.comment-content {
+.fd-comment-content {
   font-size: 0.875rem;
   line-height: 1.6;
   white-space: pre-wrap;
 }
 
-.comment-form {
+.fd-empty {
+  font-size: 0.875rem;
+  color: var(--vp-c-text-3);
+  margin-bottom: 1rem;
+}
+
+.fd-comment-form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.comment-input-name {
-  width: 200px;
-  padding: 0.5rem;
+.fd-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
   border: 1px solid var(--vp-c-border);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
 }
 
-.comment-input-content {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 6px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
+.fd-input:focus {
+  outline: none;
+  border-color: var(--vp-c-brand-1);
+}
+
+.fd-textarea {
   resize: vertical;
 }
 
-.comment-form button {
+.fd-input-name {
+  width: 220px;
+}
+
+.fd-submit {
   align-self: flex-end;
   padding: 0.5rem 1.5rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--vp-c-brand-1);
   color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: opacity 0.2s;
 }
 
-.comment-form button:disabled {
+.fd-submit:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.fd-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.back-link {
-  margin-top: 2rem;
+.fd-back {
+  margin-top: 1.5rem;
 }
 
-.back-link a {
+.fd-back a {
   color: var(--vp-c-brand-1);
   text-decoration: none;
   font-size: 0.875rem;
 }
 
-.back-link a:hover {
+.fd-back a:hover {
   text-decoration: underline;
 }
 </style>
