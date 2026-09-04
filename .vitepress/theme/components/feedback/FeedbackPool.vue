@@ -344,8 +344,7 @@ function formatDate(dateStr: string): string {
 
 <style scoped>
 .feedback-pool {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: none;
 }
 
 .pool-header {
@@ -688,14 +687,9 @@ function formatDate(dateStr: string): string {
 </style>
 
 <style>
-/* 仅需求反馈池页生效（该组件只在此页渲染）。用 !important 覆盖 VitePress 更高/更靠后的规则：
-   收紧文档页顶部留白 + 放宽内容区宽度，让自定义页面更宽、更紧凑 */
-.VPDoc:has(.feedback-pool) {
-  padding-top: 24px !important;
-}
-.VPDoc:has(.feedback-pool) .content-container {
-  max-width: 1180px !important;
-}
+/* 仅需求反馈池页生效（该组件只在此页渲染）。
+   页面级 padding-top / 内容区宽度 / 右侧 aside 的 !important 覆盖已统一到 FeedbackPage.vue
+   （.feedback-page 为整页根节点，列表态与详情态都生效），这里只保留本组件自身的留白收紧 */
 .feedback-page:has(.feedback-pool) {
   padding: 0 !important;
 }

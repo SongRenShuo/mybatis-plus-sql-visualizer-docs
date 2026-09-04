@@ -64,6 +64,15 @@ const messages = {
     // Board
     noItems: '暂无',
     closed: '已关闭',
+    // Activity
+    activity: '需求池动态',
+    activityEmpty: '暂无动态',
+    activityNew: '新增反馈',
+    statusChanged: '状态变更',
+    timeJustNow: '刚刚',
+    timeMinutesAgo: '{n} 分钟前',
+    timeHoursAgo: '{n} 小时前',
+    timeDaysAgo: '{n} 天前',
     // Types
     'type.feature': '功能需求',
     'type.bug': 'Bug',
@@ -146,6 +155,15 @@ const messages = {
     // Board
     noItems: 'None',
     closed: 'Closed',
+    // Activity
+    activity: 'Pool Activity',
+    activityEmpty: 'No activity yet',
+    activityNew: 'New Feedback',
+    statusChanged: 'Status Changed',
+    timeJustNow: 'Just now',
+    timeMinutesAgo: '{n} min ago',
+    timeHoursAgo: '{n} hrs ago',
+    timeDaysAgo: '{n} days ago',
     // Types
     'type.feature': 'Feature',
     'type.bug': 'Bug',
