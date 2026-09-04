@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, markRaw } from 'vue'
 
 const props = defineProps<{
   apiBase: string
@@ -207,16 +207,16 @@ function handleFileSelect(e: Event) {
       uploadError.value = `${file.name}: ${t('fileTypeError', l)}`
       continue
     }
-    const item: UploadItem = {
+    const item = reactive<UploadItem>({
       id: `att-${Date.now()}-${uid++}`,
-      _file: file,
+      _file: markRaw(file),
       key: '',
       fileName: file.name,
       mimeType: file.type || 'application/octet-stream',
       fileSize: file.size,
       status: 'uploading',
       error: '',
-    }
+    })
     items.value.push(item)
     uploadItem(item)
   }

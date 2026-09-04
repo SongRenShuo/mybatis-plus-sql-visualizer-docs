@@ -116,7 +116,9 @@
           <button class="modal-close" :title="t('close', locale)" :aria-label="t('close', locale)" @click="closeForm">
             ×
           </button>
-          <FeedbackForm :api-base="apiBase" :locale="locale" @done="closeForm" />
+          <div class="modal-body">
+            <FeedbackForm :api-base="apiBase" :locale="locale" @done="closeForm" />
+          </div>
           <div class="modal-footer">
             <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
           </div>
@@ -625,15 +627,24 @@ function formatDate(dateStr: string): string {
 
 .modal-dialog {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  max-width: 560px;
+  max-width: 640px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
   border-radius: 12px;
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-border);
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem 1rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.25rem;
 }
 
 .modal-close {
@@ -659,7 +670,10 @@ function formatDate(dateStr: string): string {
 }
 
 .modal-footer {
+  flex-shrink: 0;
   margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--vp-c-border);
   text-align: right;
 }
 
