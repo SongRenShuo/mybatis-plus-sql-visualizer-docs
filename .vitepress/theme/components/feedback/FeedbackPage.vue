@@ -42,22 +42,18 @@ const locale = computed<Locale>(() =>
 </script>
 
 <style scoped>
+/* 页面走 VitePress layout: page：主题自渲染顶栏（VPNavBar，含中英文切换），
+   无 VPDoc 右侧大纲 .aside、无文档顶部留白，容器宽度与留白全部在这里自控 */
 .feedback-page {
-  padding: 1rem 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 24px 64px;
 }
-</style>
 
-<style>
-/* 仅需求反馈页生效（.feedback-page 只在此页渲染）。用 !important 覆盖 VitePress 更高/更靠后的规则：
-   隐藏右侧文档大纲 aside、放宽内容区宽度、收紧顶部留白，让两栏布局居中占满右侧空间 */
-.VPDoc:has(.feedback-page) {
-  padding-top: 20px !important;
-}
-.VPDoc:has(.feedback-page) .content-container {
-  max-width: 1400px !important;
-}
-.VPDoc:has(.feedback-page) .aside {
-  display: none !important;
+@media (max-width: 767px) {
+  .feedback-page {
+    padding: 16px 16px 48px;
+  }
 }
 
 /* 两栏布局：左侧反馈池 + 右侧需求池动态 */
@@ -68,12 +64,10 @@ const locale = computed<Locale>(() =>
   align-items: start;
 }
 
+/* 窄屏折到下方（动态面板排在反馈池之后） */
 @media (max-width: 1024px) {
   .feedback-page-body {
     grid-template-columns: 1fr;
-  }
-  .feedback-activity {
-    display: none;
   }
 }
 </style>

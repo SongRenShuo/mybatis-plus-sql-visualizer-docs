@@ -1,8 +1,7 @@
 ---
 title: 需求反馈池
+layout: page
 sidebar: false
-prev: false
-next: false
 ---
 
 <script setup>

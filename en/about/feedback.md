@@ -1,8 +1,7 @@
 ---
 title: Feedback Pool
+layout: page
 sidebar: false
-prev: false
-next: false
 ---
 
 <script setup>

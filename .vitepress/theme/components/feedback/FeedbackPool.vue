@@ -685,12 +685,3 @@ function formatDate(dateStr: string): string {
   cursor: not-allowed;
 }
 </style>
-
-<style>
-/* 仅需求反馈池页生效（该组件只在此页渲染）。
-   页面级 padding-top / 内容区宽度 / 右侧 aside 的 !important 覆盖已统一到 FeedbackPage.vue
-   （.feedback-page 为整页根节点，列表态与详情态都生效），这里只保留本组件自身的留白收紧 */
-.feedback-page:has(.feedback-pool) {
-  padding: 0 !important;
-}
-</style>
