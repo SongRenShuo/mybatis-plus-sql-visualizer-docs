@@ -67,17 +67,24 @@
 
     <!-- 附件上传 -->
     <div class="form-group">
-      <label for="fb-att">{{ t('addAttachment', props.locale || 'zh') }}</label>
+      <label>{{ t('addAttachment', props.locale || 'zh') }}</label>
       <input
+        ref="fileInput"
         id="fb-att"
         type="file"
         multiple
+        class="file-input-hidden"
         accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,.md"
         @change="handleFileSelect"
       />
+      <button type="button" class="att-picker" @click="fileInput?.click()">
+        <span class="att-picker-plus">＋</span>{{ t('addAttachment', props.locale || 'zh') }}
+      </button>
+      <p class="att-hint">{{ t('maxAttachment', props.locale || 'zh') }}</p>
       <p v-if="uploadError" class="upload-error">{{ uploadError }}</p>
       <div v-if="items.length" class="attachment-list">
         <div v-for="item in items" :key="item.id" class="attachment-item">
+          <img v-if="isImage(item) && item.key" :src="fileUrl(item)" :alt="item.fileName" class="att-thumb" loading="lazy" />
           <span class="att-name" :title="item.fileName">{{ item.fileName }}</span>
           <span v-if="item.status === 'uploading'" class="att-status upload">{{ t('uploading', props.locale || 'zh') }}</span>
           <span v-else-if="item.status === 'success'" class="att-status ok">{{ formatSize(item.fileSize) }}</span>
@@ -172,6 +179,7 @@ interface UploadItem {
 
 const items = ref<UploadItem[]>([])
 const uploadError = ref('')
+const fileInput = ref<HTMLInputElement | null>(null)
 let uid = 0
 
 function isAllowedFile(file: File): boolean {
@@ -255,6 +263,14 @@ function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+function isImage(item: UploadItem): boolean {
+  return item.mimeType.startsWith('image/') || /\.(png|jpe?g|gif|webp)$/i.test(item.fileName)
+}
+
+function fileUrl(item: UploadItem): string {
+  return `${props.apiBase}/feedback/files/${item.key}`
 }
 
 function successfulAttachments() {
@@ -406,6 +422,40 @@ async function handleSubmit() {
   margin: 0 0 1rem;
 }
 
+.file-input-hidden {
+  display: none;
+}
+
+.att-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border: 1px dashed var(--vp-c-brand-1);
+  border-radius: 8px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-brand-1);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.att-picker:hover {
+  background: var(--vp-c-brand-soft);
+}
+
+.att-picker-plus {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.att-hint {
+  margin: 0.375rem 0 0;
+  font-size: 0.75rem;
+  color: var(--vp-c-text-3);
+}
+
 .upload-error {
   font-size: 0.8rem;
   color: #ef4444;
@@ -437,6 +487,16 @@ async function handleSubmit() {
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--vp-c-text-1);
+}
+
+.att-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--vp-c-border);
+  flex-shrink: 0;
+  background: var(--vp-c-bg-soft);
 }
 
 .att-status {
