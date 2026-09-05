@@ -17,9 +17,10 @@
 |------|---------|
 | MyBatis-Plus | Lambda / 字符串版 Wrapper、service 链、逻辑删除、乐观锁 |
 | MyBatis-Plus-Join | `MPJLambdaWrapper` / `MPJQueryWrapper` 联表 |
-| MyBatis | XML 动态 SQL、注解 SQL（含 `<script>` 与 Provider） |
-| Spring Data JPA | 派生方法、`@Query`（JPQL / 原生 SQL）、CriteriaBuilder |
+| MyBatis | XML 动态 SQL、注解 SQL（含 `<script>` 与 Provider）、JdbcTemplate 字符串 SQL |
+| Spring Data JPA | 派生方法、Repository CRUD 写路径（save / findById / delete 家族）、`@Query`（JPQL / 原生 SQL）、`@NamedQuery`、CriteriaBuilder、Specification、QueryByExample、Pageable / Sort 分页排序 |
 | Hibernate | HQL、`.hbm.xml` 映射、命名查询 |
+| 其他 ORM（MVP） | xbatis（原 mybatis-mp）链式 API、Easy-Query（proxy 风格）、MyBatis Dynamic SQL（SelectDSL）、Querydsl（JPAQueryFactory）、Spring Data JDBC / R2DBC（`@Query` / `@Modifying`） |
 
 ## 安装渠道
 

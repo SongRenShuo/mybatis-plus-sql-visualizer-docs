@@ -13,6 +13,14 @@ Sidebar "MyBatis SQL Log" tool window → click "Capture" button to start listen
 
 Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto-restore to complete SQL. Hibernate (`Hibernate:` + `binding parameter`) and Spring JdbcTemplate log formats are also recognized, enabled by default.
 
+### Auto-Open Tool Window
+
+When the setting "Auto-open log window on SQL found" (on by default) is active, capturing the first SQL auto-opens the log tool window — debounced to once per 60 seconds, without stealing editor focus. Behavior notes:
+
+- It only follows SQL capture: if the switch is on but capture has never started ("Auto-capture on startup" also off), nothing opens; clicking "Stop capture" disables auto-open until capture restarts
+- Closing the window manually suppresses auto-open for the rest of the session — no "close and it pops back"; re-enabling the setting or restarting the IDE restores it
+- Users who turned the switch off before the upgrade keep it off, unaffected by the new default
+
 ### Mixed Prefix Matching
 
 Supports multiple log formats:
@@ -45,7 +53,7 @@ Right-click a log entry → "Jump to Source". Three levels of behavior:
    ```
 
    The interceptor captures the real call site on the SQL execution thread and prints a `SQLVIS-SOURCE|relative-path|line` marker to the console (no impact on SQL execution, no performance overhead). The plugin parses it and jumps precisely `file:line` — straight to the Service / Controller line that fired the SQL
-2. **Search by table (default fallback)**: without the interceptor, the plugin extracts table names from the SQL and searches for matching entities / wrappers — works in most cases but may miss
+2. **Search by table (default fallback)**: without the interceptor, the plugin extracts table names from the SQL and searches for matching entities / wrappers — works in most cases but may miss; in multi-module projects or projects with unconventional source roots it matches module content roots one by one for a higher hit rate
 3. **No table name**: statements like `SELECT 1` have no jump target and report as such
 
 ### Dedup & Filter

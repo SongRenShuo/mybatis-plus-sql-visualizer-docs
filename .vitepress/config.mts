@@ -7,7 +7,7 @@ export default defineConfig({
 
   title: 'SQL Visualizer',
   description:
-    'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），控制台日志一键还原，SQL 反向转 Java 代码。',
+    'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），真实 EXPLAIN 执行计划，控制台日志一键还原，SQL 反向转 Java 代码。',
 
   // 默认语言
   lang: 'zh-CN',
@@ -43,7 +43,7 @@ export default defineConfig({
       'operatingSystem': 'Windows, macOS, Linux',
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus / MPJ / JPA / Hibernate 的 SQL 调试利器',
       'url': 'https://sql-visualizer.jvtools.cn',
-      'softwareVersion': '2026.9.2',
+      'softwareVersion': '2026.9.4',
       'offers': {
         '@type': 'Offer',
         'price': '0',
@@ -119,6 +119,7 @@ export default defineConfig({
             items: [
               { text: 'Wrapper → SQL 预览', link: '/features/wrapper-preview' },
               { text: 'XML / HQL 动态 SQL 预览', link: '/features/xml-preview' },
+              { text: 'JPA / Hibernate SQL 预览', link: '/features/jpa-preview' },
               { text: '注解 SQL 预览', link: '/features/annotation-preview' },
               { text: 'SQL → Java 反向转换', link: '/features/sql-to-java' },
               { text: 'SQL 日志工具窗口', link: '/features/sql-log' },
@@ -198,6 +199,7 @@ export default defineConfig({
             items: [
               { text: 'Wrapper → SQL Preview', link: '/en/features/wrapper-preview' },
               { text: 'XML / HQL Dynamic SQL Preview', link: '/en/features/xml-preview' },
+              { text: 'JPA / Hibernate SQL Preview', link: '/en/features/jpa-preview' },
               { text: 'Annotation SQL Preview', link: '/en/features/annotation-preview' },
               { text: 'SQL → Java Reverse Conversion', link: '/en/features/sql-to-java' },
               { text: 'SQL Log Tool Window', link: '/en/features/sql-log' },

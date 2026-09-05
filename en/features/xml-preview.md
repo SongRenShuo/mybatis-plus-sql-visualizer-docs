@@ -51,17 +51,20 @@ ORDER BY create_time DESC
 
 ## HQL / JPQL Preview
 
-Beyond mapper XML, the plugin also previews Hibernate HQL and JPA JPQL statically. All entry points appear as gutter icons in Java source lines:
+The plugin also previews Hibernate HQL and JPA JPQL statically. All entry points appear as gutter icons in Java source lines:
 
 | Entry | Location |
 |-------|----------|
 | Hibernate HQL calls (`session.createQuery(hql)`) | The HQL string line |
-| `@Query("...")` annotations (JPQL) | The annotation line |
-| JPA Repository derived methods (`findByXxx...`) | The method declaration line |
+| `@Query("...")` annotations (JPQL, incl. `@Modifying` DML) | The annotation line |
+| `@NamedQuery` / `@NamedQueries` entity-level queries | The annotation line |
+| JPA Repository derived methods and CRUD calls | Method declaration / call line |
 | JPA CriteriaQuery chains (`cq.from` / `cb.equal` etc.) | The call chain line |
 | Custom DAO HQL query methods (e.g. `commonDao.findByQuery`) | The call line |
 
 HQL strings split across multiple lines with `+`, or concatenated via chained assignments, are recognized as well — the gutter icon still appears.
+
+For the full JPA / Hibernate capability set (Repository CRUD write paths, derived queries, Specification, QueryByExample, pagination & sorting), see [JPA / Hibernate SQL Preview](/en/features/jpa-preview).
 
 ### SELECT Entity Alias Expansion
 

@@ -51,17 +51,20 @@ ORDER BY create_time DESC
 
 ## HQL / JPQL 预览
 
-除 mapper XML 外，插件同样支持 Hibernate HQL 与 JPA JPQL 的静态预览，入口均在 Java 源码行左侧 gutter 图标：
+插件对 Hibernate HQL 与 JPA JPQL 同样提供静态预览，入口均在 Java 源码行左侧 gutter 图标：
 
 | 入口 | 位置 |
 |------|------|
 | `session.createQuery(hql)` 等 Hibernate HQL 调用 | HQL 字符串所在行 |
-| `@Query("...")` 注解（JPQL） | 注解行 |
-| JPA Repository 推导方法（`findByXxx...`） | 方法声明行 |
+| `@Query("...")` 注解（JPQL，含 `@Modifying` DML） | 注解行 |
+| `@NamedQuery` / `@NamedQueries` 实体命名查询 | 注解行 |
+| JPA Repository 派生方法与 CRUD 方法 | 方法声明 / 调用行 |
 | JPA CriteriaQuery 调用链（`cq.from` / `cb.equal` 等） | 调用链所在行 |
 | 自定义 DAO 的 HQL 查询方法（如 `commonDao.findByQuery`） | 调用行 |
 
 HQL 字符串被 `+` 拆分到多行、或经链式赋值拼接时同样可识别，gutter 图标正常出现。
+
+JPA / Hibernate 能力的完整说明（Repository CRUD 写路径、派生查询、Specification、QueryByExample、分页排序等）见 [JPA / Hibernate SQL 预览](./jpa-preview)。
 
 ### SELECT 实体别名自动展开
 

@@ -6,7 +6,7 @@ titleTemplate: false
 hero:
   name: SQL Visualizer
   text: IntelliJ IDEA Plugin
-  tagline: "Wrapper chain, XML/annotation/HQL dynamic SQL live preview (incl. MPJ JOIN), console log restore with precise jump-to-source, SQL to Java reverse conversion. No more log digging."
+  tagline: "Wrapper chain, XML/annotation/HQL dynamic SQL live preview (incl. MPJ JOIN), real EXPLAIN plans, console log restore with precise jump-to-source, SQL to Java reverse conversion. No more log digging."
   image:
     src: /logo.svg
     alt: SQL Visualizer
@@ -120,16 +120,18 @@ ORDER BY t1.create_time DESC
 
 | Feature | Trigger | Scope |
 |---------|---------|-------|
-| Wrapper → SQL | gutter icon / right-click / `Alt+Shift+Q` | `LambdaQueryWrapper` / `LambdaUpdateWrapper` / `LambdaDeleteWrapper` / `QueryWrapper` / `MPJLambdaWrapper` JOIN / `service.lambdaQuery()` chains |
+| Wrapper → SQL | gutter icon (left-click previews, right-click for recent executions) / right-click / `Alt+Shift+Q` | `LambdaQueryWrapper` / `LambdaUpdateWrapper` / `LambdaDeleteWrapper` / `QueryWrapper` / `MPJLambdaWrapper` JOIN / `service.lambdaQuery()` chains |
 | XML Dynamic SQL | gutter icon on `<select>` etc. | `if` / `choose` / `where` / `set` / `foreach` / `bind` / `sql`+`include`; OGNL toggles |
 | Annotation SQL | gutter icon on annotation | `@Select` / `@Update` / `@Delete` / `@Insert` (incl. `<script>` & Provider) |
+| JPA / Hibernate | gutter icon on method / annotation | derived queries, Repository CRUD write paths, `@Query` / `@NamedQuery` (JPQL, `@Modifying`), Criteria chains, Specification, QueryByExample, Pageable / Sort |
+| Other ORM chains | gutter icon on chain call | xbatis / Easy-Query / MyBatis Dynamic SQL / Querydsl / Spring Data JDBC·R2DBC (first batch, MVP) |
 | Parameter Replace | panel input | `?` placeholder → actual value; LIKE auto `%`; type-aware quoting |
 
 ### SQL Log & Reverse
 
 | Feature | Trigger | Description |
 |---------|---------|-------------|
-| Auto Capture | sidebar "Capture" button | Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching |
+| Auto Capture | sidebar "Capture" button | Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats |
 | Log → SQL | sidebar "Log → SQL" tab | Paste entire log for batch restore; multi-statement auto-split |
 | SQL → Java | right-click / `Alt+Shift+J` / sidebar | 4 forms (QueryWrapper / Lambda / Wrappers / MPJ); configurable default |
 
@@ -137,6 +139,9 @@ ORDER BY t1.create_time DESC
 
 | Feature | Description |
 |---------|-------------|
+| Real EXPLAIN Plan | Preview panel button wraps SQL as EXPLAIN per dialect and runs it on the native database console (MySQL / PostgreSQL / KingBase / DM verified; Oracle / SQL Server gracefully declined) |
+| Test Asset Generation | Preview panel button emits a SQL regression script (under `src/test/resources/sql-visualizer/`) or a compilable JUnit test skeleton |
+| JOIN Diagram | IDEA-native Diagrams rendering (zoom / auto layout / fold / export), auto fallback to built-in renderer |
 | SQL Completion | panel + mapper XML/annotation `Ctrl+Space`: table/column names, `#{}` params, XML tags |
 | Logic Delete Injection | `@TableLogic` entity auto appends `AND deleted = value` (configurable) |
 | UPDATE/DELETE Warning | Red warning when no WHERE clause — full-table operation risk |

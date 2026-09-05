@@ -17,9 +17,10 @@
 |------|---------|
 | MyBatis-Plus | Lambda / string Wrappers, service chains, logical delete, optimistic locking |
 | MyBatis-Plus-Join | `MPJLambdaWrapper` / `MPJQueryWrapper` joins |
-| MyBatis | XML dynamic SQL, annotation SQL (including `<script>` and Provider) |
-| Spring Data JPA | Derived queries, `@Query` (JPQL / native SQL), CriteriaBuilder |
+| MyBatis | XML dynamic SQL, annotation SQL (including `<script>` and Provider), JdbcTemplate string SQL |
+| Spring Data JPA | Derived queries, Repository CRUD write paths (save / findById / delete family), `@Query` (JPQL / native SQL), `@NamedQuery`, CriteriaBuilder, Specification, QueryByExample, Pageable / Sort |
 | Hibernate | HQL, `.hbm.xml` mappings, named queries |
+| Other ORM (MVP) | xbatis (formerly mybatis-mp) chain APIs, Easy-Query (proxy style), MyBatis Dynamic SQL (SelectDSL), Querydsl (JPAQueryFactory), Spring Data JDBC / R2DBC (`@Query` / `@Modifying`) |
 
 ## Installation channels
 

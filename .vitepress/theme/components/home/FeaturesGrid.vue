@@ -4,13 +4,13 @@ const cards = [
     icon: 'code',
     color: 'purple',
     title: '多框架支持',
-    description: 'MyBatis-Plus / MPJ 联表 / Spring Boot / XML Mapper / 注解 SQL 全覆盖，无论使用什么技术栈都能轻松集成。',
+    description: 'MyBatis-Plus / MPJ 联表 / JPA·Hibernate / XML Mapper / 注解 SQL，xbatis、Easy-Query、Querydsl 等更多 ORM 持续扩展。',
   },
   {
     icon: 'gauge',
     color: 'blue',
     title: '极致性能',
-    description: '静态解析，轻量级设计，不影响 IDE 性能。快速响应，即使处理大量 Wrapper 链也能保持流畅体验。',
+    description: '静态解析，轻量级设计。执行失败面板内报错不打断、大日志流式渲染不卡顿，长时间开启依然流畅。',
   },
   {
     icon: 'bulb',
@@ -22,7 +22,7 @@ const cards = [
     icon: 'cog',
     color: 'yellow',
     title: '广泛集成',
-    description: '完美集成 MyBatis XML / 注解 SQL / HQL、JPQL / SQL 日志追踪 / 批量操作，打造完整的开发调试生态。',
+    description: 'XML / 注解 / HQL·JPQL / SQL 日志追踪 / 批量操作之外，还支持真实 EXPLAIN 执行计划与测试资产一键生成。',
   },
   {
     icon: 'shield',

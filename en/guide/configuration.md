@@ -36,7 +36,7 @@ No IDE restart needed: re-trigger preview to apply new settings.
 |---------|---------|-------------|
 | SQL / Param Prefix | `Preparing:` / `Parameters:` | Console log recognition prefix |
 | Auto Capture | Off | Auto-start listening on IDE launch |
-| Auto-Open Window on SQL Found | Off | Auto-open log window when SQL captured |
+| Auto-Open Window on SQL Found | On | Auto-open log window when SQL captured (60s debounce, never steals focus); closing the window manually suppresses auto-open for the session |
 | Timestamp Display | On | Show capture time in entry list |
 | Dedup Window | 60000 ms | Same SQL doesn't reappear within window; toggling "Remove duplicate SQL" trims existing duplicates immediately |
 | Duration Prefix | `Time:` | Custom prefix for parsing execution time from logs (supports p6spy / MyBatis-Plus timing output) |
@@ -54,8 +54,9 @@ History SQL and execution temp files live under `.idea/sql-visualizer/` in your 
 | Setting | Default | Description |
 |---------|---------|-------------|
 | Show Preview SQL Icon in Gutter | On | Wrapper anchor line gutter icon |
+| Render JOIN Diagram with IDE-Native Graph Framework | On | JOIN diagrams use IDEA's native Diagrams engine (zoom / auto layout / fold / export); falls back to the built-in renderer when the Diagrams plugin is absent or rendering fails |
 | UI Language | Simplified Chinese | Plugin UI language (English / Follow System) |
-| Shortcuts | `Alt+Shift+Q` / `Alt+Shift+J` | Wrapper → SQL / SQL → Java respectively |
+| Shortcuts | `Alt+Shift+Q` / `Alt+Shift+J` | SQL preview / SQL → Java respectively |
 
 ## Update & Diagnostics
 
