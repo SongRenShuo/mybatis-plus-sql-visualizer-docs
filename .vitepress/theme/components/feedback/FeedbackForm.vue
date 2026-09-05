@@ -281,10 +281,14 @@ function successfulAttachments() {
     .map(it => ({ key: it.key, fileName: it.fileName, mimeType: it.mimeType, fileSize: it.fileSize }))
 }
 
+// 邮箱选填，但填了必须是合法格式（与后端 POST /posts 校验一致）
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 const isValid = computed(() =>
   form.title.length >= 5 &&
   form.title.length <= 200 &&
-  form.description.length >= 10
+  form.description.length >= 10 &&
+  (!form.submitterEmail.trim() || EMAIL_RE.test(form.submitterEmail.trim()))
 )
 
 // 字数计数器（label 右侧）的达标态
@@ -299,6 +303,7 @@ const invalidTips = computed(() => {
   if (form.title.trim().length < 5) tips.push(t('tipTitleMin', l))
   if (form.title.length > 200) tips.push(t('tipTitleMax', l))
   if (form.description.trim().length < 10) tips.push(t('tipDescMin', l))
+  if (form.submitterEmail.trim() && !EMAIL_RE.test(form.submitterEmail.trim())) tips.push(t('tipEmailInvalid', l))
   return tips
 })
 defineExpose({ submit: handleSubmit, canSubmit, invalidTips })
@@ -414,7 +419,7 @@ async function handleSubmit() {
   border-radius: 8px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
-  font-size: 0.875rem;
+  font-size: 1rem;
   transition: border-color 0.2s;
 }
 
@@ -593,7 +598,9 @@ async function handleSubmit() {
   color: var(--vp-c-text-3);
   cursor: pointer;
   font-size: 0.75rem;
-  padding: 0;
+  /* 负 margin 抵消 padding，布局不变但触控目标 ≥32px */
+  padding: 0.5rem;
+  margin: -0.5rem;
   white-space: nowrap;
 }
 
