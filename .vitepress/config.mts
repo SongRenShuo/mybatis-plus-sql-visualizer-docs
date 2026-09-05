@@ -89,7 +89,8 @@ export default defineConfig({
           }
         },
         '/api/v1': {
-          target: 'https://sql-visualizer-admin.3064597532.workers.dev',
+          // 本地联调可指向 sql-visualizer-admin 的 mock：FEEDBACK_API_TARGET=http://localhost:8787 npx vitepress dev
+          target: process.env.FEEDBACK_API_TARGET || 'https://sql-visualizer-admin.3064597532.workers.dev',
           changeOrigin: true
         }
       }

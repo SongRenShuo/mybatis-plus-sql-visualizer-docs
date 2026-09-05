@@ -15,7 +15,14 @@
           @click="$emit('select', post.postNo)"
         >
           <div class="card-top">
-            <span class="card-votes">👍 {{ post.voteCount }}</span>
+            <VoteButton
+              size="sm"
+              :post-no="post.postNo"
+              :count="post.voteCount"
+              :has-voted="post.hasVoted"
+              :api-base="apiBase"
+              @update="(c, v) => $emit('vote', post.postNo, c, v)"
+            />
             <span v-if="post.isPinned" class="card-pin" title="置顶">📌</span>
           </div>
           <div class="card-title">{{ post.title }}</div>
@@ -37,6 +44,7 @@
 <script setup lang="ts">
 import type { Locale, MessageKey } from './i18n'
 import { t } from './i18n'
+import VoteButton from './VoteButton.vue'
 
 const props = defineProps<{
   posts: Array<{
@@ -50,12 +58,16 @@ const props = defineProps<{
     commentCount: number
     category: string
     isPinned: boolean
+    hasVoted: boolean
   }>
+  apiBase: string
   locale?: Locale
 }>()
 
 defineEmits<{
   (e: 'select', postNo: string): void
+  /** 卡片直接点赞/取消：透传给 FeedbackPool 回写共享的 posts 状态 */
+  (e: 'vote', postNo: string, count: number, hasVoted: boolean): void
 }>()
 
 const locale = props.locale || 'zh'
@@ -182,11 +194,6 @@ function categoryLabel(category: string): string {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.25rem;
-}
-
-.card-votes {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-2);
 }
 
 .card-pin {

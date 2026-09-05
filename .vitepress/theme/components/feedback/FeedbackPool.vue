@@ -97,7 +97,13 @@
           {{ statusLabel(s.status) }} {{ s.count }}
         </span>
       </div>
-      <RoadmapBoard :posts="postsForBoard" :locale="locale" @select="selectPost" />
+      <RoadmapBoard
+        :posts="postsForBoard"
+        :api-base="apiBase"
+        :locale="locale"
+        @select="selectPost"
+        @vote="onVoteUpdate"
+      />
     </div>
 
     <!-- Submit modal -->
@@ -256,6 +262,7 @@ const postsForBoard = computed(() =>
     commentCount: p.commentCount,
     category: p.category,
     isPinned: !!p.isPinned,
+    hasVoted: !!p.hasVoted,
   }))
 )
 

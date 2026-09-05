@@ -24,6 +24,9 @@ export async function onRequest(context: {
   // set() 会覆盖客户端自带的伪造值；限流/审计/告警的按访客粒度全靠它
   const clientIp = request.headers.get('cf-connecting-ip')
   if (clientIp) headers.set('x-client-ip', clientIp)
+  // 透传 UA：投票指纹 = 访客 IP + UA，不透传则 Worker 侧所有访客 UA 相同、指纹退化为全站单指纹
+  const userAgent = request.headers.get('user-agent')
+  if (userAgent) headers.set('user-agent', userAgent)
 
   const init: RequestInit = {
     method: request.method,
