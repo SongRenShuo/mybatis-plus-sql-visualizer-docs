@@ -179,7 +179,7 @@ onMounted(async () => {
 
 .activity-label {
   flex-shrink: 0;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 4px;
@@ -211,7 +211,7 @@ onMounted(async () => {
   align-items: center;
   gap: 0.375rem 0.5rem;
   margin: 0.125rem 0 0;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--vp-c-text-3);
 }
 

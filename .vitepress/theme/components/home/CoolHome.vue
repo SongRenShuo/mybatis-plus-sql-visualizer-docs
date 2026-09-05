@@ -39,6 +39,8 @@ import CtaSection from './CtaSection.vue'
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.3s, color 0.3s;
+  /* 裁剪 hero 装饰光斑等绝对定位元素造成的横向溢出 */
+  overflow-x: clip;
 }
 
 .mp-footer {

@@ -100,6 +100,23 @@ function categoryLabel(category: string): string {
   align-items: start;
 }
 
+/* 窄屏改为横向滚动看板，避免 6 列纵向堆叠成超长列表 */
+@media (max-width: 767px) {
+  .roadmap-board {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    /* 底部留白，横向滚动条不遮住卡片内容 */
+    padding-bottom: 0.5rem;
+  }
+
+  .roadmap-col {
+    min-width: 260px;
+    scroll-snap-align: start;
+  }
+}
+
 .roadmap-col {
   background: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-border);

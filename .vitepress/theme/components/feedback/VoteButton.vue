@@ -57,6 +57,7 @@ async function handleVote() {
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
+  min-height: 40px;
   border: 1px solid var(--vp-c-border);
   border-radius: 8px;
   background: var(--vp-c-bg);

@@ -167,7 +167,9 @@ const loading = ref(true)
 const posts = ref<Post[]>([])
 const stats = ref({ totalPosts: 0, totalVotes: 0 })
 const statusStats = ref<Array<{ status: number; count: number }>>([])
-const view = ref<'list' | 'board'>('board')
+const view = ref<'list' | 'board'>(
+  typeof window !== 'undefined' && window.innerWidth < 768 ? 'list' : 'board'
+)
 const showForm = ref(false)
 const formRef = ref<InstanceType<typeof FeedbackForm> | null>(null)
 const filterStatus = ref('')
@@ -600,6 +602,8 @@ function formatDate(dateStr: string): string {
   border: 1px solid var(--vp-c-border);
   padding: 1.25rem 1.5rem 1rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  /* 配合 overlay 滚动：内容超高时从顶部开始而非垂直居中被裁剪 */
+  margin: auto;
 }
 
 .modal-body {
@@ -634,6 +638,7 @@ function formatDate(dateStr: string): string {
 .modal-footer {
   flex-shrink: 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
   gap: 0.75rem;
@@ -684,5 +689,28 @@ function formatDate(dateStr: string): string {
 .modal-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  /* <16px 的输入控件聚焦会触发 iOS Safari 自动放大页面 */
+  .filter-group select,
+  .filter-search input {
+    font-size: 1rem;
+    min-height: 38px;
+  }
+
+  .filter-search {
+    flex: 1 1 100%;
+  }
+
+  .filter-search input {
+    width: 100%;
+  }
+
+  /* 校验提示独占一行，不挤占取消/提交按钮 */
+  .modal-hint {
+    flex-basis: 100%;
+    margin-right: 0;
+  }
 }
 </style>

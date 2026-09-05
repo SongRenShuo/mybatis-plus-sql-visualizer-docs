@@ -577,7 +577,7 @@ function formatSize(bytes: number): string {
   border-radius: 8px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
-  font-size: 0.875rem;
+  font-size: 1rem;
   transition: border-color 0.2s;
 }
 
@@ -591,7 +591,8 @@ function formatSize(bytes: number): string {
 }
 
 .fd-input-name {
-  width: 220px;
+  width: 100%;
+  max-width: 220px;
 }
 
 .fd-submit {

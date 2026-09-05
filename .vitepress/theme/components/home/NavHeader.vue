@@ -5,6 +5,7 @@ import { useData } from 'vitepress'
 const { isDark } = useData()
 
 const scrolled = ref(false)
+const mobileOpen = ref(false)
 
 let scrollHandler = null
 
@@ -71,8 +72,28 @@ onUnmounted(() => {
           >
             免费下载
           </a>
+          <button
+            class="nav-hamburger"
+            :class="{ open: mobileOpen }"
+            :aria-expanded="mobileOpen"
+            aria-label="导航菜单"
+            @click="mobileOpen = !mobileOpen"
+          >
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+          </button>
         </div>
       </div>
+    </div>
+
+    <div v-if="mobileOpen" class="mobile-menu">
+      <nav class="mobile-links">
+        <a href="/features/wrapper-preview" class="mobile-link" @click="mobileOpen = false">功能详解</a>
+        <a href="/guide/getting-started" class="mobile-link" @click="mobileOpen = false">使用指南</a>
+        <a href="/about/feedback" class="mobile-link" @click="mobileOpen = false">需求池</a>
+        <a href="/about/" class="mobile-link" @click="mobileOpen = false">关于</a>
+      </nav>
     </div>
   </header>
 </template>
@@ -206,5 +227,97 @@ onUnmounted(() => {
 
 .btn-primary:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* 移动端汉堡导航（桌面端保持原有顶栏，不渲染任何新元素） */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 9999px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.hamburger-bar {
+  display: block;
+  width: 1.125rem;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--text-secondary);
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.nav-hamburger.open .hamburger-bar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-hamburger.open .hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-hamburger.open .hamburger-bar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* 桌面端兜底隐藏：菜单展开状态下拉大视口时不残留 */
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 767px) {
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .mobile-menu {
+    display: flex;
+  }
+}
+
+.mobile-link {
+  display: block;
+  padding: 0.75rem 0;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.mobile-link:last-child {
+  border-bottom: none;
+}
+
+.mobile-link:hover {
+  color: var(--primary-color);
+}
+
+/* 小屏收紧：320px 视口顶栏不溢出不重叠 */
+@media (max-width: 480px) {
+  .logo-text {
+    display: none;
+  }
+
+  .nav-actions {
+    gap: 0.5rem;
+  }
+
+  .btn-primary {
+    padding: 0.375rem 0.75rem;
+  }
 }
 </style>
