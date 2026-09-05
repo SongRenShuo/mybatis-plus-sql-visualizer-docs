@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useData } from 'vitepress'
 import type { Locale } from './i18n'
 import FeedbackPool from './FeedbackPool.vue'
@@ -39,6 +39,23 @@ const { lang } = useData()
 const locale = computed<Locale>(() =>
   (lang.value || 'zh-CN').toLowerCase().startsWith('en') ? 'en' : 'zh'
 )
+
+// 邮件「查看详情」等外链深链：?postNo=FR-xxxx 直开详情页
+function readQueryPost(): string | null {
+  const q = new URLSearchParams(window.location.search).get('postNo')
+  return q && /^FR-\d{1,6}$/.test(q) ? q : null
+}
+onMounted(() => {
+  selectedPost.value = readQueryPost()
+})
+
+// 打开/返回详情时同步查询串：保持链接可分享，返回列表后刷新不再落回详情
+watch(selectedPost, (v) => {
+  const url = new URL(window.location.href)
+  if (v) url.searchParams.set('postNo', v)
+  else url.searchParams.delete('postNo')
+  window.history.replaceState(null, '', url)
+})
 </script>
 
 <style scoped>
