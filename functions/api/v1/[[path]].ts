@@ -11,7 +11,9 @@ export async function onRequest(context: {
   const { request, params } = context
   const segments = params.path || []
   const path = segments.join('/')
-  const url = `${UPSTREAM}${path ? '/' + path : ''}`
+  // 查询串必须透传：反馈池列表的状态/分类/关键词筛选参数全靠它
+  const search = new URL(request.url).search
+  const url = `${UPSTREAM}${path ? '/' + path : ''}${search}`
 
   const headers = new Headers()
   const auth = request.headers.get('authorization')
