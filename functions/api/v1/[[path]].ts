@@ -20,6 +20,10 @@ export async function onRequest(context: {
   if (auth) headers.set('authorization', auth)
   const contentType = request.headers.get('content-type')
   if (contentType) headers.set('content-type', contentType)
+  // 透传真实访客 IP：Worker 侧看到的 cf-connecting-ip 是代理出口的共享 IP，
+  // set() 会覆盖客户端自带的伪造值；限流/审计/告警的按访客粒度全靠它
+  const clientIp = request.headers.get('cf-connecting-ip')
+  if (clientIp) headers.set('x-client-ip', clientIp)
 
   const init: RequestInit = {
     method: request.method,
