@@ -1,42 +1,6 @@
 <script setup>
-const cards = [
-  {
-    icon: 'code',
-    color: 'purple',
-    title: '多框架支持',
-    description: 'MyBatis-Plus / MPJ 联表 / JPA·Hibernate / XML Mapper / 注解 SQL，xbatis、Easy-Query、Querydsl 等更多 ORM 持续扩展。',
-  },
-  {
-    icon: 'gauge',
-    color: 'blue',
-    title: '极致性能',
-    description: '静态解析，轻量级设计。执行失败面板内报错不打断、大日志流式渲染不卡顿，长时间开启依然流畅。',
-  },
-  {
-    icon: 'bulb',
-    color: 'green',
-    title: '智能识别',
-    description: '自动扫描项目中的 Wrapper 端点，智能解析参数类型。无需手动配置，开箱即用。',
-  },
-  {
-    icon: 'cog',
-    color: 'yellow',
-    title: '广泛集成',
-    description: 'XML / 注解 / HQL·JPQL / SQL 日志追踪 / 批量操作之外，还支持真实 EXPLAIN 执行计划与测试资产一键生成。',
-  },
-  {
-    icon: 'shield',
-    color: 'orange',
-    title: '安全防护',
-    description: 'UPDATE / DELETE 无 WHERE 条件红色警示，逻辑删除与乐观锁条件自动注入，远离全表误操作。',
-  },
-  {
-    icon: 'history',
-    color: 'indigo',
-    title: '历史记录',
-    description: '自动保存所有预览历史和反向转换结果，历史面板两级导航、SQL 带高亮与耗时，可精确跳转回源码。让每一次调试都有迹可循。',
-  },
-]
+// 卡片数据来自中英首页宣传点唯一数据源（改文案只改 data/homeHighlights.js）
+import { coolCards } from '../../data/homeHighlights.js'
 </script>
 
 <template>
@@ -51,7 +15,7 @@ const cards = [
       </div>
 
       <div class="features-grid">
-        <div v-for="(card, index) in cards" :key="index" class="feature-card">
+        <div v-for="(card, index) in coolCards" :key="index" class="feature-card">
           <div class="feature-icon" :class="card.color">
             <svg v-if="card.icon === 'code'" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
               <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>

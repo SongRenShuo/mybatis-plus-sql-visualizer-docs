@@ -57,14 +57,11 @@ ORDER BY create_time DESC
 |------|------|
 | `session.createQuery(hql)` 等 Hibernate HQL 调用 | HQL 字符串所在行 |
 | `@Query("...")` 注解（JPQL，含 `@Modifying` DML） | 注解行 |
-| `@NamedQuery` / `@NamedQueries` 实体命名查询 | 注解行 |
 | JPA Repository 派生方法与 CRUD 方法 | 方法声明 / 调用行 |
-| JPA CriteriaQuery 调用链（`cq.from` / `cb.equal` 等） | 调用链所在行 |
-| 自定义 DAO 的 HQL 查询方法（如 `commonDao.findByQuery`） | 调用行 |
 
 HQL 字符串被 `+` 拆分到多行、或经链式赋值拼接时同样可识别，gutter 图标正常出现。
 
-JPA / Hibernate 能力的完整说明（Repository CRUD 写路径、派生查询、Specification、QueryByExample、分页排序等）见 [JPA / Hibernate SQL 预览](./jpa-preview)。
+其余入口（`@NamedQuery` 命名查询、JPA CriteriaQuery 调用链、自定义 DAO 的 HQL 查询方法、`.hbm.xml` 映射实体）同样触发预览。完整触发面与能力说明（Repository CRUD 写路径、派生查询、Specification、QueryByExample、分页排序等）见 [JPA / Hibernate SQL 预览](./jpa-preview)。
 
 ### SELECT 实体别名自动展开
 
@@ -82,4 +79,5 @@ SELECT u.id, u.name, u.status, ... FROM user u WHERE u.status = 1
 - 没有 SELECT 子句时自动补列清单
 - JOIN 副表或实体元数据缺失时降级为 `alias.*`
 
+> 对这个功能有建议或遇到问题？[直达需求反馈池](/about/feedback?category=xml)
 

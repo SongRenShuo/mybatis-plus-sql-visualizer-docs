@@ -44,6 +44,17 @@ export default defineConfig({
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus / MPJ / JPA / Hibernate 的 SQL 调试利器',
       'url': 'https://sql-visualizer.jvtools.cn',
       'softwareVersion': '2026.9.4',
+      'featureList': [
+        'Wrapper chain to SQL live preview',
+        'XML / annotation / HQL dynamic SQL preview',
+        'Real EXPLAIN execution plans',
+        'Test asset generation (SQL regression script / JUnit skeleton)',
+        'SQL to Java reverse conversion',
+        'Console log restore with parameters',
+        'JPA / Hibernate derived query and CRUD preview',
+        'MPJ join query live preview',
+        '9-dialect pagination rendering'
+      ],
       'offers': {
         '@type': 'Offer',
         'price': '0',
@@ -74,7 +85,11 @@ export default defineConfig({
   // 开发服务器代理：/api/changelog → JetBrains Marketplace
   vite: {
     // 构建产物生成 llms.txt / llms-full.txt（AI 搜索友好）
-    plugins: [llmstxt()],
+    // docs/ 为内部文档（开发计划、发行说明、开发笔记、需求文档、SQL文件等），不进 llms 索引，页面仍正常构建可访问。
+    // ignoreFiles 为 minimatch 模式，匹配相对 srcDir 的路径；`docs/**` 递归排除 docs/ 下所有层级文件
+    plugins: [llmstxt({
+      ignoreFiles: ['docs/**']
+    })],
     server: {
       proxy: {
         '/api/changelog': {

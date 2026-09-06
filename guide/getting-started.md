@@ -52,6 +52,8 @@ WHERE id = 1001
 </div>
 </code-group>
 
+看到 SQL 之后还可以再走一步：点预览面板的「EXPLAIN」按钮，插件把当前 SQL 按方言包装成 EXPLAIN 语句提交原生数据库控制台，查看真实执行计划（需 IntelliJ IDEA Ultimate 且已配置数据源）；也可以点「生成测试」，一键产出 SQL 回归脚本或 JUnit 用例骨架，方便留作回归测试的起点。
+
 ## 下一步
 
 - [配置详解](./configuration.md) — 了解所有可配置项

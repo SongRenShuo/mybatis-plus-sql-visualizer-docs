@@ -78,3 +78,5 @@
 - **返回**：顶部「← 返回」回到文件列表；切换 tab 自动刷新，正在浏览的文件仍存在时不打断浏览
 
 历史文件默认保存在项目 `.idea/sql-visualizer/sql-history/` 目录（v2026.9.2 起目录名由 `mybatis-plus-sql-visualizer` 改为 `sql-visualizer`，旧目录数据不再读取），保存目录与文件名模板均可在设置页自定义。
+
+> 对日志功能有建议或遇到问题？[直达需求反馈池](/about/feedback?category=sql-log)

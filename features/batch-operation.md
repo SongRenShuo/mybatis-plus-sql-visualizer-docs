@@ -42,3 +42,4 @@ Wrapper 锚点涉及批量操作时，弹窗自动切换到批量参数面板。
 | SQL Server | `MERGE INTO` |
 | Oracle | `MERGE INTO` |
 
+> 对批量操作面板有建议或遇到问题？[直达需求反馈池](/about/feedback?category=batch)

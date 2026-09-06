@@ -19,3 +19,4 @@ mapper XML 与 Java SQL 注解字符串内 `Ctrl+Space` 补全。
 | XML 动态标签 | `<if>` / `<where>` / `<foreach>` 等 |
 | OGNL 表达式 | `<if test="...">` 内的属性名 |
 
+> 对补全功能有建议或遇到问题？[直达需求反馈池](/about/feedback?category=completion)

@@ -52,6 +52,8 @@ WHERE id = 1001
 </div>
 </code-group>
 
+Once you can see the SQL, there is a bit more to try in the preview panel: the "EXPLAIN" button wraps the SQL into an EXPLAIN statement for the current dialect and submits it to the native database console, showing the real execution plan (requires IntelliJ IDEA Ultimate with a configured data source); the "Generate Test" button produces a SQL regression script or a JUnit test skeleton in one click, handy as a starting point for regression testing.
+
 ## Next Steps
 
 - [Configuration](./configuration.md) — Learn all configurable options

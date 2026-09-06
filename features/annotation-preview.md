@@ -28,3 +28,4 @@ Java Mapper 接口中的 `@Select` / `@Update` / `@Delete` / `@Insert` 注解同
 List<User> selectByCondition(@Param("name") String name, @Param("status") Integer status);
 ```
 
+> 对这个功能有建议或遇到问题？[直达需求反馈池](/about/feedback?category=annotation)

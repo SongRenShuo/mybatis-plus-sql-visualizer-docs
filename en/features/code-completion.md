@@ -6,7 +6,7 @@
 ## Trigger Locations
 
 - SQL strings in mapper XML files
-- `@Select` / `@Update` annotation strings in Java Mapper interfaces
+- `@Select` / `@Update` and other annotation strings in Java Mapper interfaces
 - Preview dialog input fields
 
 ## Completion Types
@@ -18,4 +18,6 @@
 | `#{}` param names | Java entity property names |
 | XML dynamic tags | `<if>` / `<where>` / `<foreach>` etc. |
 | OGNL expressions | Property names in `<if test="...">` |
+
+> Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=completion)
 

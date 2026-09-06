@@ -13,7 +13,7 @@ Gutter icon at the annotation line. Click to preview.
 |------|-------------|
 | `@Select("...")` | Direct SQL string |
 | `@Select("<script>...</script>")` | Dynamic SQL with `<script>` tags |
-| `@SelectProvider` / `@UpdateProvider` etc. | Provider annotations |
+| `@SelectProvider` / `@UpdateProvider` etc. | Provider annotations (dynamic SQL building) |
 
 ## Example
 
@@ -27,4 +27,6 @@ Gutter icon at the annotation line. Click to preview.
         "</script>")
 List<User> selectByCondition(@Param("name") String name, @Param("status") Integer status);
 ```
+
+> Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=annotation)
 

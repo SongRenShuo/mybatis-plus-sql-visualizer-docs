@@ -59,3 +59,4 @@ MPJLambdaWrapper<DeviceInfoEntity> wrapper = new MPJLambdaWrapper<DeviceInfoEnti
     .orderByDesc(StationInfoEntity::getCreateTime);
 ```
 
+> 对这个功能有建议或遇到问题？[直达需求反馈池](/about/feedback?category=sql-to-java)

@@ -120,3 +120,5 @@ FROM device_info_entity
 WHERE id = 1001
     AND station_id IS NOT NULL
 ```
+
+> 对这个功能有建议或遇到问题？[直达需求反馈池](/about/feedback?category=wrapper)

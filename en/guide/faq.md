@@ -19,6 +19,10 @@ Ensure the cursor is at one of these positions. If still not showing, check "Sho
 
 Yes. `MPJLambdaWrapper` and `MPJQueryWrapper` JOIN preview, as well as MPJ-form SQL → Java reverse conversion are all implemented. When selecting MPJ form for reverse conversion, the project needs `mybatis-plus-join` dependency (1.5.6+).
 
+## Why doesn't `findAllById` get a preview?
+
+The first batch of JPA derived queries doesn't include `findAllById`-style IN expansion yet, so there is no preview for now. It will be filled in a later version — see the [roadmap](../about/roadmap.md).
+
 ## Is there a difference between preview SQL and actual runtime SQL?
 
 The preview aims to align with MP runtime semantics. The following differences are inherent to static evaluation — semantically equivalent, textually different:
@@ -33,6 +37,10 @@ The preview aims to align with MP runtime semantics. The following differences a
 
 Yes. The left panel input supports comma-separated multi-value fill-in (input `1,2,3` → renders `(1, 2, 3)`). LIKE params auto-append `%`. Quote wrapping is type-aware. "Replace `?` placeholders" is enabled by default; turning off renders variables as `?` too.
 
+## EXPLAIN click fails or does nothing?
+
+The most common cause is a missing data source: like "Execute SQL", "EXPLAIN" relies on the Database tool window of IntelliJ IDEA Ultimate — configure a data source there first. Oracle / SQL Server don't support EXPLAIN yet; clicking shows a hint in the panel. Execution errors are reported inline in the panel, never as a popup dialog.
+
 ## SQL log not capturing SQL?
 
 Troubleshooting steps:
@@ -43,9 +51,17 @@ Troubleshooting steps:
 4. Check if hit by "Remove lines containing" filter rule
 5. Confirm logs output to run console (not separate log file)
 
+## The gutter right-click "Recent Executions" item is empty?
+
+"Recent Executions" looks up executions near that spot from logs captured this session, which requires log capture to be on and to have captured executions at that spot before. An empty menu item right after a fresh session start — no SQL run yet — is normal. If logs aren't being captured at all, go through the steps in the previous section.
+
 ## "Jump to Source" in realtime logs misses — how to fix?
 
 SQL logs contain no call-site info, so without configuration the plugin does an approximate search by table name, which may miss. To jump precisely to the Service / Controller line that fired the SQL, copy the self-contained `SqlSourceInterceptor` shipped with the plugin (see `docs/instrumentation/SqlSourceInterceptor.kt` in the plugin repository) into your project and register it as a MyBatis-Plus `InnerInterceptor` — see [Features · Jump to Source](../features/sql-log.md#jump-to-source). Nothing else is affected without it.
+
+## Can the auto-opened log window be turned off for good?
+
+Yes. "Auto-open log window on SQL found" is on by default: capturing the first SQL auto-expands the log window. Once you close it manually, it won't auto-open again in the current session. To disable it permanently, turn off "Auto-open log window on SQL found" in settings; re-enabling the switch or restarting the IDE restores auto-open.
 
 ## Where did my SQL history go after upgrading?
 

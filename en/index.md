@@ -18,39 +18,14 @@ hero:
       text: "View Docs"
       link: /en/guide/getting-started
 
-features:
-  - icon: ⚡
-    title: Wrapper → SQL Live Preview
-    details: Full static parsing of LambdaQueryWrapper / MPJLambdaWrapper without launching the project. Toggle dynamic conditions, fill parameters, 9 database dialects
-    link: /en/features/wrapper-preview
-  - icon: 📄
-    title: XML / Annotation Dynamic SQL Preview
-    details: mapper XML dynamic tags (if / choose / foreach) rendered per MyBatis semantics. @Select / @Update annotations fully supported with OGNL toggles
-    link: /en/features/xml-preview
-  - icon: 🔗
-    title: MPJ JOIN Reverse Parsing
-    details: Complete MPJLambdaWrapper support — 8 JOIN forms, selectAll / selectAs / union, main-table logic-delete auto injection
-    link: /en/features/wrapper-preview
-  - icon: 🔄
-    title: SQL → Java Reverse Conversion
-    details: One-click SQL to compilable MyBatis-Plus code (QueryWrapper / Lambda / Wrappers / MPJ). Supports CRUD and multi-table JOIN
-    link: /en/features/sql-to-java
-  - icon: 🪵
-    title: Console Log One-Click Restore
-    details: Auto-capture Preparing / Parameters logs from run console, restore executable SQL. Paste entire log blocks for batch restore
-    link: /en/features/sql-log
-  - icon: 📊
-    title: Batch Operation Panel
-    details: save / updateBatchById SQL expanded by column with per-column toggles. saveOrUpdate conflict clause rendered per dialect (MySQL ON DUPLICATE KEY / PG ON CONFLICT)
-    link: /en/features/batch-operation
-
-style:
-  padding: 48px 0
+# Feature cards moved to .vitepress/theme/data/homeHighlights.js (enCards), rendered by EnHomeFeatures
 ---
 
 <script setup>
 import BadgeBar from '../.vitepress/theme/components/BadgeBar.vue'
 import CodeTabs from '../.vitepress/theme/components/CodeTabs.vue'
+import EnHomeFeatures from '../.vitepress/theme/components/home/EnHomeFeatures.vue'
+import EnFeatureMatrix from '../.vitepress/theme/components/home/EnFeatureMatrix.vue'
 
 const codeExamples = [
   {
@@ -110,42 +85,17 @@ ORDER BY t1.create_time DESC
 ]
 </script>
 
+<!-- Feature cards render before the badge bar, matching the original home layout order (VPFeatures preceded all body content) -->
+<EnHomeFeatures />
+
 <BadgeBar />
 
 <CodeTabs :tabs="codeExamples" />
 
 ## Feature Matrix
 
-### SQL Preview
-
-| Feature | Trigger | Scope |
-|---------|---------|-------|
-| Wrapper → SQL | gutter icon (left-click previews, right-click for recent executions) / right-click / `Alt+Shift+Q` | `LambdaQueryWrapper` / `LambdaUpdateWrapper` / `LambdaDeleteWrapper` / `QueryWrapper` / `MPJLambdaWrapper` JOIN / `service.lambdaQuery()` chains |
-| XML Dynamic SQL | gutter icon on `<select>` etc. | `if` / `choose` / `where` / `set` / `foreach` / `bind` / `sql`+`include`; OGNL toggles |
-| Annotation SQL | gutter icon on annotation | `@Select` / `@Update` / `@Delete` / `@Insert` (incl. `<script>` & Provider) |
-| JPA / Hibernate | gutter icon on method / annotation | derived queries, Repository CRUD write paths, `@Query` / `@NamedQuery` (JPQL, `@Modifying`), Criteria chains, Specification, QueryByExample, Pageable / Sort |
-| Other ORM chains | gutter icon on chain call | xbatis / Easy-Query / MyBatis Dynamic SQL / Querydsl / Spring Data JDBC·R2DBC (first batch, MVP) |
-| Parameter Replace | panel input | `?` placeholder → actual value; LIKE auto `%`; type-aware quoting |
-
-### SQL Log & Reverse
-
-| Feature | Trigger | Description |
-|---------|---------|-------------|
-| Auto Capture | sidebar "Capture" button | Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats |
-| Log → SQL | sidebar "Log → SQL" tab | Paste entire log for batch restore; multi-statement auto-split |
-| SQL → Java | right-click / `Alt+Shift+J` / sidebar | 4 forms (QueryWrapper / Lambda / Wrappers / MPJ); configurable default |
-
-### Other
-
-| Feature | Description |
-|---------|-------------|
-| Real EXPLAIN Plan | Preview panel button wraps SQL as EXPLAIN per dialect and runs it on the native database console (MySQL / PostgreSQL / KingBase / DM verified; Oracle / SQL Server gracefully declined) |
-| Test Asset Generation | Preview panel button emits a SQL regression script (under `src/test/resources/sql-visualizer/`) or a compilable JUnit test skeleton |
-| JOIN Diagram | IDEA-native Diagrams rendering (zoom / auto layout / fold / export), auto fallback to built-in renderer |
-| SQL Completion | panel + mapper XML/annotation `Ctrl+Space`: table/column names, `#{}` params, XML tags |
-| Logic Delete Injection | `@TableLogic` entity auto appends `AND deleted = value` (configurable) |
-| UPDATE/DELETE Warning | Red warning when no WHERE clause — full-table operation risk |
-| Update Check | Settings page one-click check, background download & install |
+<!-- Three matrix groups (SQL Preview / SQL Log & Reverse / Other) come from homeHighlights.js (enFeatureMatrix) -->
+<EnFeatureMatrix />
 
 ---
 

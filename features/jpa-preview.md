@@ -61,3 +61,5 @@
 - 异步返回（`CompletableFuture`）与 Repository 实现类 SPI（如 Envers 审计）不在预览范围
 
 相关页面：[Wrapper → SQL 预览](./wrapper-preview)、[SQL 日志工具窗口](./sql-log)（Hibernate / JdbcTemplate 日志捕获）。
+
+> 对这个功能有建议或遇到问题？[直达需求反馈池](/about/feedback)

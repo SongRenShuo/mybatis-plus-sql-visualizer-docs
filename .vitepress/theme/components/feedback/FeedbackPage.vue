@@ -18,22 +18,52 @@
         :locale="locale"
       />
     </div>
+
+    <!-- 深链 ?category=xxx 直开提交表单（与反馈池内「提交反馈」弹窗同款交互） -->
+    <Teleport to="body">
+      <div v-if="deepLinkCategory" class="modal-overlay" @mousedown.self="closeForm">
+        <div class="modal-dialog" role="dialog" aria-modal="true">
+          <button class="modal-close" :title="t('close', locale)" :aria-label="t('close', locale)" @click="closeForm">
+            ×
+          </button>
+          <div class="modal-body">
+            <FeedbackForm
+              ref="formRef"
+              :api-base="apiBase"
+              :locale="locale"
+              :initial-category="deepLinkCategory || undefined"
+              embedded
+              @done="closeForm"
+            />
+          </div>
+          <div class="modal-footer">
+            <span v-if="!formRef?.canSubmit" class="modal-hint">⚠ {{ (formRef?.invalidTips || []).join('，') }}</span>
+            <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
+            <button class="modal-submit" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">{{ t('submitBtn', locale) }}</button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useData } from 'vitepress'
-import type { Locale } from './i18n'
+import { t, type Locale } from './i18n'
 import FeedbackPool from './FeedbackPool.vue'
 import FeedbackDetail from './FeedbackDetail.vue'
 import FeedbackActivity from './FeedbackActivity.vue'
+import FeedbackForm from './FeedbackForm.vue'
 
 const props = defineProps<{
   apiBase: string
 }>()
 
 const selectedPost = ref<string | null>(null)
+// 深链 ?category= 直开提交表单：非空即弹窗打开，关闭时清空（一次性动作，不作为常驻状态）
+const deepLinkCategory = ref<string | null>(null)
+const formRef = ref<InstanceType<typeof FeedbackForm> | null>(null)
 // 跟随文档站全局中英文切换（VitePress useData().lang），页内不再单独切换
 const { lang } = useData()
 const locale = computed<Locale>(() =>
@@ -45,8 +75,29 @@ function readQueryPost(): string | null {
   const q = new URLSearchParams(window.location.search).get('postNo')
   return q && /^FR-\d{1,6}$/.test(q) ? q : null
 }
+
+// 文档功能页「直达需求反馈池」深链：?category=xxx 预填分类并自动打开提交表单
+// 仅接受合法 slug（与 FeedbackForm 的 categorySlugs 同一份枚举），非法值静默忽略
+const CATEGORY_SLUGS = [
+  'wrapper', 'xml', 'annotation', 'sql-to-java',
+  'sql-log', 'batch', 'completion', 'other',
+]
+function readQueryCategory(): string | null {
+  const q = new URLSearchParams(window.location.search).get('category')
+  return q && CATEGORY_SLUGS.includes(q) ? q : null
+}
 onMounted(() => {
   selectedPost.value = readQueryPost()
+  deepLinkCategory.value = readQueryCategory()
+  window.addEventListener('keydown', onKeydown)
+  // 深链处理完即从地址栏清理，刷新不再弹窗；category 与 postNo 同在时一并清，
+  // 合法 postNo 已打开详情，其下方 watch 会重新写入 postNo 保持链接可分享
+  if (new URLSearchParams(window.location.search).has('category')) {
+    const url = new URL(window.location.href)
+    url.searchParams.delete('category')
+    url.searchParams.delete('postNo')
+    window.history.replaceState(null, '', url)
+  }
 })
 
 // 打开/返回详情时同步查询串：保持链接可分享，返回列表后刷新不再落回详情
@@ -56,6 +107,17 @@ watch(selectedPost, (v) => {
   else url.searchParams.delete('postNo')
   window.history.replaceState(null, '', url)
 })
+
+// 关闭深链弹窗：清空即卸载表单，下次深链重新挂载取回预填分类
+function closeForm() {
+  deepLinkCategory.value = null
+}
+
+// Esc 关闭弹窗（与反馈池内提交弹窗一致）
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && deepLinkCategory.value) closeForm()
+}
+onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 </script>
 
 <style scoped>
@@ -85,6 +147,129 @@ watch(selectedPost, (v) => {
 @media (max-width: 1024px) {
   .feedback-page-body {
     grid-template-columns: 1fr;
+  }
+}
+
+/* 深链直开的提交表单弹窗（与 FeedbackPool 内提交弹窗同款样式，scoped 各自隔离） */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.55);
+  overflow-y: auto;
+}
+
+.modal-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 880px;
+  max-height: 90vh;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-border);
+  padding: 1.25rem 1.5rem 1rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  /* 配合 overlay 滚动：内容超高时从顶部开始而非垂直居中被裁剪 */
+  margin: auto;
+}
+
+.modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--vp-c-text-3);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 1;
+}
+
+.modal-close:hover {
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+}
+
+.modal-footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--vp-c-border);
+}
+
+.modal-hint {
+  margin-right: auto;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #d97706;
+}
+
+.modal-cancel {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 8px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-2);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-cancel:hover {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+
+.modal-submit {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--vp-c-brand-1);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.modal-submit:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.modal-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 校验提示独占一行，不挤占取消/提交按钮 */
+@media (max-width: 768px) {
+  .modal-hint {
+    flex-basis: 100%;
+    margin-right: 0;
   }
 }
 </style>

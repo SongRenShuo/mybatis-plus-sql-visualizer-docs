@@ -120,3 +120,5 @@ WHERE id = 1001
     AND station_id IS NOT NULL
 ```
 
+> Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=wrapper)
+

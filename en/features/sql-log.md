@@ -78,3 +78,5 @@ Enable "Auto-save SQL history" in settings (off by default) and entries evicted 
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically without interrupting browsing
 
 History files are saved under `.idea/sql-visualizer/sql-history/` in your project by default (renamed from `mybatis-plus-sql-visualizer` in v2026.9.2 — old directories are no longer read). Save location and file name pattern are configurable in settings.
+
+> Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=sql-log)

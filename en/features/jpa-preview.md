@@ -61,3 +61,5 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 - Async returns (`CompletableFuture`) and Repository SPI implementations (e.g. Envers auditing) are out of preview scope
 
 Related pages: [Wrapper → SQL Preview](/en/features/wrapper-preview), [SQL Log Tool Window](/en/features/sql-log) (Hibernate / JdbcTemplate log capture).
+
+> Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback)

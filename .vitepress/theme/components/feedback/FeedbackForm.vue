@@ -119,6 +119,8 @@ const props = defineProps<{
   apiBase: string
   locale?: 'zh' | 'en'
   embedded?: boolean
+  // 深链 ?category= 预填的功能分类（合法 slug），不传时保持 other
+  initialCategory?: string
 }>()
 
 const emit = defineEmits<{
@@ -155,7 +157,8 @@ const form = reactive({
   title: '',
   description: '',
   type: 1,
-  category: 'other',
+  // 深链预填分类：仅接受合法 slug，否则回落 other；用户进表单后仍可随意切换
+  category: props.initialCategory && categorySlugs.includes(props.initialCategory) ? props.initialCategory : 'other',
   submitterName: '',
   submitterEmail: '',
 })
