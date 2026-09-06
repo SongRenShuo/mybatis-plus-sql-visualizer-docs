@@ -78,7 +78,7 @@
       <div v-if="post.comments && post.comments.length" class="fd-comments">
         <div v-for="c in post.comments" :key="c.id" class="fd-comment" :class="{ official: c.is_official }">
           <div class="fd-comment-head">
-            <span class="fd-comment-author">{{ c.author_name }}</span>
+            <span class="fd-comment-author">{{ c.author_name || '匿名' }}</span>
             <span v-if="c.is_official" class="fd-official">官方</span>
             <span class="fd-comment-date">{{ formatDate(c.created_at) }}</span>
           </div>
@@ -88,9 +88,9 @@
       <div v-else class="fd-empty">暂无评论</div>
 
       <div class="fd-comment-form">
-        <input v-model="commentName" type="text" placeholder="昵称" class="fd-input fd-input-name" />
+        <input v-model="commentName" type="text" :placeholder="t('formName', locale)" class="fd-input fd-input-name" />
         <textarea v-model="commentContent" placeholder="写下您的评论..." rows="3" class="fd-input fd-textarea"></textarea>
-        <button class="fd-submit" :disabled="!commentName || !commentContent.trim()" @click="submitComment">
+        <button class="fd-submit" :disabled="!commentContent.trim()" @click="submitComment">
           发表评论
         </button>
       </div>
@@ -234,7 +234,7 @@ function onVoteUpdate(count: number, hasVoted: boolean) {
 }
 
 async function submitComment() {
-  if (!commentName.value || !commentContent.value.trim()) return
+  if (!commentContent.value.trim()) return
 
   try {
     const res = await fetch(`${props.apiBase}/feedback/posts/${props.postNo}/comments`, {
@@ -242,7 +242,7 @@ async function submitComment() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         content: commentContent.value,
-        authorName: commentName.value,
+        authorName: commentName.value.trim() || undefined,
       }),
     })
     const data = await res.json()
