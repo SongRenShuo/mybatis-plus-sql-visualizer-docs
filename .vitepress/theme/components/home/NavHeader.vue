@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
+import PagefindSearch from '../PagefindSearch.vue'
 
 const { isDark } = useData()
 
@@ -41,6 +42,7 @@ onUnmounted(() => {
         </nav>
 
         <div class="nav-actions">
+          <PagefindSearch compact />
           <button
             class="theme-toggle"
             :title="isDark ? '切换到亮色' : '切换到暗色'"

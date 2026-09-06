@@ -1,34 +1,6 @@
 import { defineConfig } from 'vitepress'
 import llmstxt from 'vitepress-plugin-llms'
 
-// 中文按双字（bigram）滑动窗口切分、单字收尾；非中文段按原空白/标点切。
-// MiniSearch 默认整句成单 token，prefix 只救左前缀，"删除"查不到"逻辑删除"；
-// bigram 让词中子串可命中（构建期与客户端经 serializeFunctions 同生效）。
-function cjkTokenize(text: string): string[] {
-  const tokens: string[] = []
-  const isCjk = (ch: string) => /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/.test(ch)
-  for (const seg of text.split(/[\n\r\p{Z}\p{P}]+/u)) {
-    if (!seg) continue
-    let buf = ''
-    const flush = () => {
-      if (!buf) return
-      if (isCjk(buf[0])) {
-        if (buf.length === 1) tokens.push(buf)
-        else for (let i = 0; i + 1 < buf.length; i++) tokens.push(buf.slice(i, i + 2))
-      } else {
-        tokens.push(buf)
-      }
-      buf = ''
-    }
-    for (const ch of seg) {
-      if (buf && isCjk(buf[0]) !== isCjk(ch)) flush()
-      buf += ch
-    }
-    flush()
-  }
-  return tokens
-}
-
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   // 忽略死链接（开发计划中的 localhost 链接）
@@ -207,18 +179,6 @@ export default defineConfig({
         },
         lastUpdated: {
           text: '最后更新于'
-        },
-        search: {
-          options: {
-            translations: {
-              button: { buttonText: '搜索文档', buttonAriaLabel: '搜索' },
-              modal: {
-                noResultsText: '无法找到相关结果',
-                resetButtonTitle: '清除查询条件',
-                footerText: { selectText: '选择', navigateText: '切换' }
-              }
-            }
-          }
         }
       }
     },
@@ -286,18 +246,6 @@ export default defineConfig({
         },
         lastUpdated: {
           text: 'Last updated'
-        },
-        search: {
-          options: {
-            translations: {
-              button: { buttonText: 'Search docs', buttonAriaLabel: 'Search' },
-              modal: {
-                noResultsText: 'No results found',
-                resetButtonTitle: 'Reset query',
-                footerText: { selectText: 'Select', navigateText: 'Switch', closeText: 'Close' }
-              }
-            }
-          }
         }
       }
     }
@@ -310,18 +258,7 @@ export default defineConfig({
     socialLinks: [],
 
     // 外部链接
-    externalLinkIcon: true,
-
-    // search 必须在顶层 themeConfig——VitePress 编译期以 site.themeConfig 判定是否生成索引，
-    // 写在 locales.*.themeConfig 里会导致整站无搜索按钮、无索引（各 locale 的 translations 运行时合并生效）
-    search: {
-      provider: 'local',
-      options: {
-        miniSearch: {
-          options: { tokenize: cjkTokenize }
-        }
-      }
-    }
+    externalLinkIcon: true
   },
 
   // sitemap
