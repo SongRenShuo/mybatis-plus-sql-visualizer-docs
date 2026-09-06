@@ -88,9 +88,33 @@ function closeModal() {
   if (!open.value) return
   open.value = false
   document.body.style.overflow = ''
-  ui.value?.destroy?.()
+  try {
+    ui.value?.destroy?.()
+  } catch {
+    // 结果渲染与销毁竞态时 pagefind 内部会抛 "worker terminated"，窗口已关可忽略
+  }
   ui.value = null
   if (container.value) container.value.innerHTML = ''
+}
+
+// 官方 pagefind-ui 的 <a> 只包标题行，摘要 <p> 在链接外，点摘要区不会跳转。
+// 在容器上做点击委托：落点不在 <a> 内时，找最近的子结果块（优先）或整卡，
+// 触发其标题链接（同页锚点/跨页 SPA 均走浏览器默认导航）。
+// 命中即关窗：SPA 链接点击走 pushState 不触发 popstate，而组件内 watch
+// route.data 实测不回调（VitePress 路由反应性在此场景不可靠），故在事件派发
+// 完成后的下一个宏任务关窗——不能在派发中同步移除 <a>，那会取消默认导航。
+// 注意不能以 defaultPrevented 作短路条件：键盘 Enter 触发的合成 click 在捕获
+// 阶段即为 prevented（导航照样发生），只排除中键与修饰键（新标签页语义）。
+function onResultClick(e) {
+  if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+  let link = e.target.closest('a')
+  if (!link) {
+    const block =
+      e.target.closest('.pagefind-ui__result-nested') || e.target.closest('.pagefind-ui__result-inner')
+    link = block?.querySelector('a.pagefind-ui__result-link')
+    link?.click()
+  }
+  if (link) window.setTimeout(closeModal, 0)
 }
 
 function onKeydown(e) {
@@ -104,6 +128,28 @@ function onKeydown(e) {
     closeModal()
     return
   }
+  // ↑↓ 在结果链接间循环移动焦点。pagefind-ui 1.5.2 自身没有方向键导航，
+  // 链接本身是可 Tab 的 <a>，此处补键盘选择；Enter 在焦点链接上为原生导航，
+  // click 冒泡进 onResultClick 完成关窗。
+  if (open.value && (key === 'arrowdown' || key === 'arrowup') && container.value) {
+    const links = [...container.value.querySelectorAll('.pagefind-ui__result-link')]
+    if (!links.length) return
+    e.preventDefault()
+    const cur = links.indexOf(document.activeElement)
+    if (key === 'arrowup' && cur <= 0) {
+      container.value.querySelector('input')?.focus()
+      return
+    }
+    const next =
+      key === 'arrowdown'
+        ? cur < 0
+          ? links[0]
+          : links[Math.min(cur + 1, links.length - 1)]
+        : links[Math.max(cur - 1, 0)]
+    next.focus()
+    next.scrollIntoView({ block: 'nearest' })
+    return
+  }
   if (key === '/' && !open.value) {
     const el = document.activeElement
     const tag = (el?.tagName || '').toLowerCase()
@@ -113,7 +159,7 @@ function onKeydown(e) {
   }
 }
 
-// 点击结果跳转后路由变化：关闭弹窗（SPA 内导航不会重载页面）
+// 浏览器前进/后退兜底关窗（SPA 结果点击关窗见 onResultClick）
 function onRouteChange() {
   if (open.value) closeModal()
 }
@@ -171,7 +217,7 @@ const modKey = computed(() => {
   <Teleport to="body">
     <div v-if="open" class="pf-modal-mask" @click.self="closeModal()">
       <div ref="modalEl" class="pf-modal" role="dialog" :aria-label="modalAria">
-        <div ref="container" class="pf-modal-body"></div>
+        <div ref="container" class="pf-modal-body" @click="onResultClick"></div>
         <div class="pf-modal-hint">
           <template v-if="isZh">Esc 关闭 · ↑↓ 选择 · Enter 打开</template>
           <template v-else>esc to close · ↑↓ to navigate · Enter to open</template>
@@ -310,6 +356,19 @@ const modKey = computed(() => {
 
 .pf-modal .pagefind-ui__result-nested {
   padding-left: 12px;
+}
+
+/* 整卡可点（点击委托见 onResultClick），手型提示可达 */
+.pf-modal .pagefind-ui__result-inner,
+.pf-modal .pagefind-ui__result-nested {
+  cursor: pointer;
+}
+
+/* ↑↓ 键盘选择时的焦点环 */
+.pf-modal .pagefind-ui__result-link:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: -2px;
+  border-radius: 4px;
 }
 
 .pf-modal .pagefind-ui__result-links {
