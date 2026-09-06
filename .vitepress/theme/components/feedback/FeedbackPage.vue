@@ -9,11 +9,14 @@
     />
     <div v-else class="feedback-page-body">
       <FeedbackPool
+        ref="poolRef"
         :api-base="apiBase"
         :locale="locale"
         @select-post="selectedPost = $event"
+        @submitted="onPoolSubmitted"
       />
       <FeedbackActivity
+        ref="activityRef"
         :api-base="apiBase"
         :locale="locale"
       />
@@ -33,7 +36,7 @@
               :locale="locale"
               :initial-category="deepLinkCategory || undefined"
               embedded
-              @done="closeForm"
+              @done="onDeepLinkSubmitted"
             />
           </div>
           <div class="modal-footer">
@@ -64,6 +67,9 @@ const selectedPost = ref<string | null>(null)
 // 深链 ?category= 直开提交表单：非空即弹窗打开，关闭时清空（一次性动作，不作为常驻状态）
 const deepLinkCategory = ref<string | null>(null)
 const formRef = ref<InstanceType<typeof FeedbackForm> | null>(null)
+// 反馈池/动态面板的实例引用：提交成功后联动刷新两侧数据
+const poolRef = ref<InstanceType<typeof FeedbackPool> | null>(null)
+const activityRef = ref<InstanceType<typeof FeedbackActivity> | null>(null)
 // 跟随文档站全局中英文切换（VitePress useData().lang），页内不再单独切换
 const { lang } = useData()
 const locale = computed<Locale>(() =>
@@ -111,6 +117,18 @@ watch(selectedPost, (v) => {
 // 关闭深链弹窗：清空即卸载表单，下次深链重新挂载取回预填分类
 function closeForm() {
   deepLinkCategory.value = null
+}
+
+// 反馈池内提交成功：池子自己已刷新，这里联动刷新动态面板
+function onPoolSubmitted() {
+  activityRef.value?.reload()
+}
+
+// 深链弹窗提交成功：关弹窗后刷新反馈池与动态面板
+function onDeepLinkSubmitted() {
+  closeForm()
+  poolRef.value?.reload()
+  activityRef.value?.reload()
 }
 
 // Esc 关闭弹窗（与反馈池内提交弹窗一致）

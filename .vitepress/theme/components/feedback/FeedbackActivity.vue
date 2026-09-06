@@ -87,7 +87,9 @@ function relativeTime(dateStr: string): string {
   return d.toLocaleDateString(dateLocale, { year: 'numeric', month: '2-digit', day: '2-digit' })
 }
 
-onMounted(async () => {
+onMounted(loadActivity)
+
+async function loadActivity() {
   try {
     const res = await fetch(`${props.apiBase}/feedback/activity?limit=20`)
     const data = await res.json()
@@ -99,7 +101,10 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
+
+// 供父组件在反馈池提交成功后刷新动态
+defineExpose({ reload: loadActivity })
 </script>
 
 <style scoped>

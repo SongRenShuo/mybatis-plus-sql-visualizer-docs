@@ -8,15 +8,20 @@
       </div>
     </div>
 
-    <!-- Toolbar: 列表/看板切换(左) + 新增反馈(右) -->
+    <!-- Toolbar: 列表/看板切换(左) + 刷新/新增反馈(右) -->
     <div class="pool-toolbar">
       <div class="view-toggle">
         <button :class="{ active: view === 'list' }" @click="view = 'list'">{{ t('list', locale) }}</button>
         <button :class="{ active: view === 'board' }" @click="view = 'board'">{{ t('board', locale) }}</button>
       </div>
-      <button class="submit-open-btn" @click="showForm = true">
-        <span class="submit-plus">＋</span>{{ t('submitNew', locale) }}
-      </button>
+      <div class="pool-actions">
+        <button class="pool-refresh-btn" :disabled="loading" @click="loadData">
+          <span class="refresh-icon" :class="{ spinning: loading }">↻</span>{{ t('refresh', locale) }}
+        </button>
+        <button class="submit-open-btn" @click="showForm = true">
+          <span class="submit-plus">＋</span>{{ t('submitNew', locale) }}
+        </button>
+      </div>
     </div>
 
     <!-- List View -->
@@ -122,7 +127,7 @@
             ×
           </button>
           <div class="modal-body">
-            <FeedbackForm ref="formRef" :api-base="apiBase" :locale="locale" embedded @done="closeForm" />
+            <FeedbackForm ref="formRef" :api-base="apiBase" :locale="locale" embedded @done="onSubmitted" />
           </div>
           <div class="modal-footer">
             <span v-if="!formRef?.canSubmit" class="modal-hint">⚠ {{ (formRef?.invalidTips || []).join('，') }}</span>
@@ -158,6 +163,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'select-post', postNo: string): void
+  (e: 'submitted'): void
 }>()
 
 interface Post {
@@ -286,6 +292,13 @@ function closeForm() {
   showForm.value = false
 }
 
+// 提交成功：关弹窗后立刻刷新列表/统计，并通知父级联动刷新动态
+function onSubmitted() {
+  closeForm()
+  loadData()
+  emit('submitted')
+}
+
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape' && showForm.value) {
     closeForm()
@@ -326,6 +339,9 @@ async function loadData() {
     loading.value = false
   }
 }
+
+// 供父组件在深链弹窗提交成功后刷新本池数据
+defineExpose({ reload: loadData })
 
 function selectPost(postNo: string) {
   emit('select-post', postNo)
@@ -390,6 +406,12 @@ function formatDate(dateStr: string): string {
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1.5rem;
+}
+
+.pool-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .view-toggle {
@@ -613,6 +635,50 @@ function formatDate(dateStr: string): string {
   line-height: 1;
 }
 
+.pool-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 8px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-2);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.pool-refresh-btn:hover:not(:disabled) {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+
+.pool-refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.refresh-icon {
+  display: inline-block;
+  line-height: 1;
+}
+
+.refresh-icon.spinning {
+  animation: refresh-spin 0.8s linear infinite;
+}
+
+@keyframes refresh-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Modal */
 .modal-overlay {
   position: fixed;
@@ -735,6 +801,16 @@ function formatDate(dateStr: string): string {
   .board-search input {
     font-size: 1rem;
     min-height: 38px;
+  }
+
+  /* 窄屏工具栏按钮换行，避免挤压 */
+  .pool-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .pool-actions {
+    flex: 1 1 100%;
+    justify-content: flex-end;
   }
 
   .board-search {
