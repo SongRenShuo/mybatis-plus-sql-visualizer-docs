@@ -1,3 +1,7 @@
+---
+search: false
+---
+
 # Cloudflare Worker 跨域 CORS 配置
 
 - 记录时间：2026-09-03 13:00

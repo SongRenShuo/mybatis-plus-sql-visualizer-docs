@@ -2,6 +2,41 @@
 import { h, onMounted, onUnmounted } from 'vue'
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
+import MiniSearch from 'minisearch'
+
+// 生产构建下 siteConfig 经 window.__VP_SITE_DATA__（纯 JSON）内联，config.mts 里
+// miniSearch.options.tokenize 函数到不了客户端，查询分词退回"整句一个 token"，
+// 3 字以上中文查询会因 AND 不命中而空结果。这里在客户端包装 MiniSearch.loadJSON，
+// 补上与构建期索引一致的 bigram 分词。注意：分词逻辑须与 .vitepress/config.mts 的
+// cjkTokenize 保持一致（改动时两处同步）。
+const cjkTokenizeClient = (text: string): string[] => {
+  const tokens: string[] = []
+  const isCjk = (ch: string) => /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/.test(ch)
+  for (const seg of text.split(/[\n\r\p{Z}\p{P}]+/u)) {
+    if (!seg) continue
+    let buf = ''
+    const flush = () => {
+      if (!buf) return
+      if (isCjk(buf[0])) {
+        if (buf.length === 1) tokens.push(buf)
+        else for (let i = 0; i + 1 < buf.length; i++) tokens.push(buf.slice(i, i + 2))
+      } else {
+        tokens.push(buf)
+      }
+      buf = ''
+    }
+    for (const ch of seg) {
+      if (buf && isCjk(buf[0]) !== isCjk(ch)) flush()
+      buf += ch
+    }
+    flush()
+  }
+  return tokens
+}
+
+const origLoadJSON = MiniSearch.loadJSON.bind(MiniSearch)
+;(MiniSearch as any).loadJSON = (json: string, options: any) =>
+  origLoadJSON(json, { ...options, tokenize: cjkTokenizeClient })
 
 // 自定义组件
 import GifPlayer from './components/GifPlayer.vue'

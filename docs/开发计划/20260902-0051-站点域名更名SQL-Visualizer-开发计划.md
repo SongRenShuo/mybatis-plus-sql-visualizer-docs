@@ -1,3 +1,7 @@
+---
+search: false
+---
+
 # 站点域名更名 SQL Visualizer — 开发计划
 
 > 创建：2026-09-02

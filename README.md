@@ -1,3 +1,7 @@
+---
+search: false
+---
+
 # SQL Visualizer — 官网文档站
 
 SQL Visualizer 插件的官网与文档站，基于 [VitePress](https://vitepress.dev/) 构建。
