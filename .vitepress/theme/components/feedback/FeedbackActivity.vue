@@ -36,6 +36,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { t, type Locale, type MessageKey } from './i18n'
+import { parseUtcDate } from './dateTime'
 
 const props = defineProps<{
   apiBase: string
@@ -72,9 +73,8 @@ function statusLabel(backendLabel: string | undefined, status: number | undefine
 }
 
 function relativeTime(dateStr: string): string {
-  if (!dateStr) return ''
-  const d = new Date(dateStr.replace(' ', 'T'))
-  if (isNaN(d.getTime())) return dateStr
+  const d = parseUtcDate(dateStr)
+  if (!d) return dateStr || ''
   const diff = Date.now() - d.getTime()
   const minutes = Math.floor(diff / 60000)
   if (minutes < 1) return t('timeJustNow', props.locale)

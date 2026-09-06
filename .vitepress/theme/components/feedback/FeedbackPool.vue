@@ -91,6 +91,14 @@
 
     <!-- Board View -->
     <div v-else>
+      <div class="board-search">
+        <input
+          v-model="searchKeyword"
+          type="text"
+          :placeholder="t('search', locale)"
+          @keyup.enter="applySearch"
+        />
+      </div>
       <div v-if="statusStats.length" class="board-stats">
         <span v-for="s in statusStats" :key="s.status" class="board-stat">
           <span class="board-stat-dot" :style="{ background: statusColor(s.status) }"></span>
@@ -141,6 +149,7 @@ import VoteButton from './VoteButton.vue'
 import FeedbackForm from './FeedbackForm.vue'
 import RoadmapBoard from './RoadmapBoard.vue'
 import { t, type Locale, type MessageKey } from './i18n'
+import { parseUtcDate } from './dateTime'
 
 const props = defineProps<{
   apiBase: string
@@ -336,18 +345,18 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
 }
 
 function formatDate(dateStr: string): string {
-  if (!dateStr) return ''
-  const d = new Date(dateStr.replace(' ', 'T'))
-  if (isNaN(d.getTime())) return dateStr
-  const now = new Date()
-  const diff = now.getTime() - d.getTime()
-  const days = Math.floor(diff / 86400000)
+  const d = parseUtcDate(dateStr)
+  if (!d) return dateStr || ''
+  const days = Math.floor((Date.now() - d.getTime()) / 86400000)
 
-  if (days === 0) return '今天'
-  if (days === 1) return '昨天'
-  if (days < 7) return `${days} 天前`
-  if (days < 30) return `${Math.floor(days / 7)} 周前`
-  return d.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' })
+  if (days === 0) return t('timeToday', props.locale)
+  if (days === 1) return t('timeYesterday', props.locale)
+  if (days < 7) return t('timeDaysAgo', props.locale, { n: days })
+  if (days < 30) return t('timeWeeksAgo', props.locale, { n: Math.floor(days / 7) })
+  return d.toLocaleDateString(props.locale === 'zh' ? 'zh-CN' : 'en-US', {
+    month: '2-digit',
+    day: '2-digit',
+  })
 }
 </script>
 
@@ -531,6 +540,27 @@ function formatDate(dateStr: string): string {
   gap: 0.5rem;
 }
 
+.board-search {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.board-search input {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 6px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-size: 0.8rem;
+  width: 240px;
+}
+
+.board-search input:focus {
+  outline: none;
+  border-color: var(--vp-c-brand-1);
+}
+
 .board-stats {
   display: flex;
   flex-wrap: wrap;
@@ -701,9 +731,18 @@ function formatDate(dateStr: string): string {
 @media (max-width: 768px) {
   /* <16px 的输入控件聚焦会触发 iOS Safari 自动放大页面 */
   .filter-group select,
-  .filter-search input {
+  .filter-search input,
+  .board-search input {
     font-size: 1rem;
     min-height: 38px;
+  }
+
+  .board-search {
+    width: 100%;
+  }
+
+  .board-search input {
+    width: 100%;
   }
 
   .filter-search {

@@ -108,6 +108,7 @@ import { ref, onMounted } from 'vue'
 import StatusBadge from './StatusBadge.vue'
 import VoteButton from './VoteButton.vue'
 import { t, type Locale, type MessageKey } from './i18n'
+import { parseUtcDate } from './dateTime'
 
 const props = defineProps<{
   postNo: string
@@ -255,9 +256,13 @@ async function submitComment() {
 }
 
 function formatDate(dateStr: string): string {
-  if (!dateStr) return ''
-  const d = new Date(dateStr + (dateStr.includes('T') ? '' : 'T00:00:00'))
-  return d.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })
+  const d = parseUtcDate(dateStr)
+  if (!d) return dateStr || ''
+  return d.toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  })
 }
 
 function renderMd(text: string): string {

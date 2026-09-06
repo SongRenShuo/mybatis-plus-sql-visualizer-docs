@@ -74,6 +74,9 @@ const messages = {
     timeMinutesAgo: '{n} 分钟前',
     timeHoursAgo: '{n} 小时前',
     timeDaysAgo: '{n} 天前',
+    timeToday: '今天',
+    timeYesterday: '昨天',
+    timeWeeksAgo: '{n} 周前',
     // Types
     'type.feature': '功能需求',
     'type.bug': 'Bug',
@@ -166,6 +169,9 @@ const messages = {
     timeMinutesAgo: '{n} min ago',
     timeHoursAgo: '{n} hrs ago',
     timeDaysAgo: '{n} days ago',
+    timeToday: 'Today',
+    timeYesterday: 'Yesterday',
+    timeWeeksAgo: '{n} wk ago',
     // Types
     'type.feature': 'Feature',
     'type.bug': 'Bug',
