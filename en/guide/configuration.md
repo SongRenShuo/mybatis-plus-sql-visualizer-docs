@@ -35,7 +35,7 @@ No IDE restart needed: re-trigger preview to apply new settings.
 | Setting | Default | Description |
 |---------|---------|-------------|
 | SQL / Param Prefix | `Preparing:` / `Parameters:` | Console log recognition prefix |
-| Auto Capture | Off | Auto-start listening on IDE launch |
+| Auto-start Listening on Project Launch | Off | Starts capture automatically when the project opens or runs (same as clicking "Capture"); a manual stop suppresses auto-start for the session, the next project run resumes it |
 | Auto-Open Window on SQL Found | On | Auto-open log window when SQL captured (60s debounce, never steals focus); closing the window manually suppresses auto-open for the session |
 | Timestamp Display | On | Show capture time in entry list |
 | Dedup Window | 60000 ms | Same SQL doesn't reappear within window; toggling "Remove duplicate SQL" trims existing duplicates immediately |

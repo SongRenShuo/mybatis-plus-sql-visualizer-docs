@@ -19,7 +19,7 @@
 | MyBatis-Plus-Join | `MPJLambdaWrapper` / `MPJQueryWrapper` joins |
 | MyBatis | XML dynamic SQL, annotation SQL (including `<script>` and Provider), JdbcTemplate string SQL |
 | Spring Data JPA | Derived queries, Repository CRUD write paths (save / findById / delete family), `@Query` (JPQL / native SQL), `@NamedQuery`, CriteriaBuilder, Specification, QueryByExample, Pageable / Sort |
-| Hibernate | HQL, `.hbm.xml` mappings, named queries |
+| Hibernate | HQL, `.hbm.xml` mappings and `<query>` / `<sql-query>` named queries |
 | Other ORM (MVP) | xbatis (formerly mybatis-mp) chain APIs, Easy-Query (proxy style), MyBatis Dynamic SQL (SelectDSL), Querydsl (JPAQueryFactory), Spring Data JDBC / R2DBC (`@Query` / `@Modifying`) |
 
 ## Installation channels

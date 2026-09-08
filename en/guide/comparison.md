@@ -14,7 +14,6 @@ For the same problem — seeing what SQL MyBatis actually produces — there are
 | JPA / Hibernate (derived queries, CRUD write paths, JPQL, HQL, Criteria, Specification, QBE) | Yes | N/A | Manual |
 | Other ORM chain frameworks (xbatis / Easy-Query / MyBatis Dynamic SQL / Querydsl …) | Yes | N/A | Manual |
 | Real EXPLAIN plans (dialect-wrapped, run on the database) | Yes | No | Manual |
-| Regression script / JUnit skeleton generation from previewed SQL | Yes | No | No |
 | Restore full SQL from console logs with parameters filled in | Yes | Yes | Manual |
 | Jump from restored SQL back to source location | Yes | Partial | No |
 | Reverse-convert SQL to Wrapper Java code | Yes | No | No |

@@ -15,6 +15,7 @@ Static SQL preview for Spring Data JPA and Hibernate projects — Repository met
 | `session.createQuery(hql)` and other Hibernate HQL calls | HQL string line |
 | Custom DAO HQL query methods (e.g. `commonDao.findByQuery`) | call line |
 | `.hbm.xml` mapped entities | resolved automatically |
+| `.hbm.xml` named queries (`<query>` / `<sql-query>`) | query-name line |
 
 The preview shortcut `Alt+Shift+Q` works on all of the above (cursor on the target line, same effect as clicking the icon).
 
@@ -26,6 +27,7 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 |--------|-----------|
 | `save` / `saveAll` / `saveAndFlush` | INSERT for new entities, UPDATE for entities with an id (isNew check) |
 | `findById` / `existsById` | primary-key equality / `SELECT 1 ... LIMIT 1` |
+| `findAllById` | primary-key `IN (?, ?, ...)` expansion |
 | `findAll` / `count` | full SELECT / `SELECT COUNT(*)` |
 | `deleteById` / `delete` / `deleteAll` | per-entity `em.remove` semantics (select-then-delete, not bulk DELETE) |
 | `deleteAllInBatch` variants | the one bulk DELETE shape (no cascading, no callbacks) |
@@ -54,9 +56,14 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 - Subqueries, aggregates, `UPDATE` / `DELETE` JPQL (incl. `@Modifying`) fully supported
 - Bare entity alias in `SELECT u` auto-expands to the column list (see [XML / HQL Dynamic SQL Preview](/en/features/xml-preview))
 
+## hbm Named Queries
+
+Named queries in Hibernate XML mappings (`.hbm.xml`) preview the same way: `<query>` (HQL) converts through the entity-to-table mapping, `<sql-query>` (native SQL) fills `:param` named parameters back as `?` placeholders. The query-name line gets a gutter icon — click it or use the shortcut to preview.
+
+Java-side `session.createNamedQuery("Entity.method")` calls that don't match a `@NamedQuery` annotation automatically fall back to the same-named definition in `.hbm.xml`, so both HQL and native SQL get a preview.
+
 ## Known Limits
 
-- `findAllById` (IN expansion) not yet supported, coming in a later version
 - `JpaSort.unsafe` function-injection shapes are not converted (safety boundary, annotated)
 - Async returns (`CompletableFuture`) and Repository SPI implementations (e.g. Envers auditing) are out of preview scope
 

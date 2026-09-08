@@ -28,7 +28,7 @@
 | 写法 | 示例 |
 |------|------|
 | JdbcTemplate 字符串 SQL | `jdbcTemplate.queryForList("select * from user where id = ?", 1L)`，命名参数 `:name` 按名回填，`StringBuilder` 拼接自动聚合 |
-| 自研 DAO 字符串 SQL | `beanCruder.selectList(User.class, "select ...")` 等字符串实参 |
+| 自研 DAO 字符串 SQL | `beanCruder.selectList(User.class, "select ...")` 等字符串实参调用行出图标；方法定义名行（方法体内有此类调用）同样出图标 |
 | xbatis（原 mybatis-mp） | `QueryChain.of(userDao, UserEntity.class).eq(UserEntity::getStatus, 1).toList()` |
 | Easy-Query（proxy 风格） | `easyEntityQuery.queryable(Topic.class).where(o -> o.id().eq("123")).toList()` |
 | MyBatis Dynamic SQL | `SelectDSL.select(...).from(userTable).where(id, isEqualTo(1)).build().render(...)` |
@@ -75,7 +75,7 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 
 ### EXPLAIN 真实执行计划
 
-预览面板按钮行的「EXPLAIN」按钮：选中数据源后点击，插件按当前方言把 SQL 包装成 EXPLAIN 语句提交原生数据库控制台执行，真实执行计划与面板顶部的静态性能规则标注同屏对照。EXPLAIN 属免确认类操作，无 DML 二次确认弹窗。
+预览面板按钮行的「执行计划」（英文界面 EXPLAIN）按钮：选中数据源后点击，插件按当前方言把 SQL 包装成 EXPLAIN 语句提交原生数据库控制台执行，真实执行计划与面板顶部的静态性能规则标注同屏对照。EXPLAIN 属免确认类操作，无 DML 二次确认弹窗。
 
 | 方言 | 渲染形态 | 验证程度 |
 |------|----------|----------|
@@ -87,16 +87,7 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | 引擎级单测 |
 | Oracle / SQL Server | 暂不支持，点击后提示降级 | — |
 
-「EXPLAIN」与「执行 SQL」一样依赖已配置的数据源（Ultimate 的 Database 工具窗），未配置时会提示先配置。
-
-### 生成测试资产
-
-预览面板按钮行的「生成测试」按钮，两种形态二选一：
-
-1. **SQL 回归脚本**：生成含目标 SQL 与断言查询骨架的 `.sql` 文件，落盘到项目 `src/test/resources/sql-visualizer/`（文件名带时间戳），直接纳入版本管理做回归基线；
-2. **JUnit 用例骨架**：生成可编译的 `@Test` 方法（内嵌 SQL 常量 + 断言占位），弹窗展示，复制到自己的测试类补断言即可。
-
-两种形态都不生成业务 Java 代码，也不自动推导 INSERT 前置数据，断言部分需自行补充。
+「执行计划」与「执行 SQL」一样依赖已配置的数据源（Ultimate 的 Database 工具窗），未配置时会提示先配置。
 
 ### 最近执行记录
 

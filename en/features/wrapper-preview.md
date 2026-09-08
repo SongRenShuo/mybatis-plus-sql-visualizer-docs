@@ -27,7 +27,7 @@ Also triggered by inline gutter icons, with the same preview experience:
 | Style | Example |
 |-------|---------|
 | JdbcTemplate string SQL | `jdbcTemplate.queryForList("select * from user where id = ?", 1L)` — named params `:name` filled by name, `StringBuilder` chains aggregated |
-| Custom DAO string SQL | `beanCruder.selectList(User.class, "select ...")` and other string arguments |
+| Custom DAO string SQL | gutter icon on call lines like `beanCruder.selectList(User.class, "select ...")`; method-name lines whose body contains such calls show one too |
 | xbatis (formerly mybatis-mp) | `QueryChain.of(userDao, UserEntity.class).eq(UserEntity::getStatus, 1).toList()` |
 | Easy-Query (proxy style) | `easyEntityQuery.queryable(Topic.class).where(o -> o.id().eq("123")).toList()` |
 | MyBatis Dynamic SQL | `SelectDSL.select(...).from(userTable).where(id, isEqualTo(1)).build().render(...)` |
@@ -87,15 +87,6 @@ The "EXPLAIN" button in the preview panel button row: pick a data source, click,
 | Oracle / SQL Server | not supported yet; clicking shows a fallback hint | — |
 
 Like "Execute SQL", EXPLAIN requires a configured data source (Ultimate's Database tool window); without one you'll be asked to configure it first.
-
-### Test Asset Generation
-
-The "Generate Test" button in the preview panel button row, two shapes to choose from:
-
-1. **SQL regression script**: a `.sql` file with the target SQL and an assertion-query skeleton, written to `<project>/src/test/resources/sql-visualizer/` with a timestamped name — commit it as a regression baseline;
-2. **JUnit test skeleton**: a compilable `@Test` method (embedded SQL constant + assertion placeholders) shown in a dialog; copy it into your test class and fill in assertions.
-
-Neither shape generates business Java code or INSERT fixture data; assertions are yours to complete.
 
 ### Recent Executions
 

@@ -6,7 +6,7 @@ Windows / Linux 与 macOS 的默认键位，以及各功能的入口方式。
 
 | 功能 | Windows / Linux | macOS |
 |------|-----------------|-------|
-| SQL 预览（Wrapper / XML / 注解 / HQL·JPQL / 自定义 DAO HQL / JdbcTemplate / `@NamedQuery`） | `Alt+Shift+Q` | `Option+Shift+Q` |
+| SQL 预览（Wrapper / XML / 注解 / HQL·JPQL / 自定义 DAO HQL / JdbcTemplate / `@NamedQuery` / `.hbm.xml` 命名查询 / 方法体内字符串 SQL） | `Alt+Shift+Q` | `Option+Shift+Q` |
 | SQL → Java 反向转换 | `Alt+Shift+J` | `Cmd+Shift+J` |
 | 预览弹窗中执行 SQL（Ultimate + Database 插件） | `Ctrl+Enter` | `Cmd+Enter` |
 
@@ -18,10 +18,10 @@ Windows / Linux 与 macOS 的默认键位，以及各功能的入口方式。
 |------|------|
 | SQL 预览 | 光标置于 Wrapper 链 / mapper 语句上 → 右键 `Convert to SQL`；或行首 gutter 图标（Wrapper 锚点左键直接预览、右键可选「最近执行记录」） |
 | 注解 SQL 预览 | `@Select` / `@Update` 等注解行的 gutter 图标 |
-| JPA / Hibernate 预览 | 派生方法 / CRUD 调用 / `@Query` / `@NamedQuery` / Criteria 链所在行的 gutter 图标 |
-| EXPLAIN 执行计划 / 生成测试资产 | 预览面板按钮行「EXPLAIN」「生成测试」按钮 |
+| JPA / Hibernate 预览 | 派生方法 / CRUD 调用 / `@Query` / `@NamedQuery` / Criteria 链 / `.hbm.xml` 命名查询所在行的 gutter 图标 |
+| EXPLAIN 执行计划 | 预览面板按钮行「执行计划」按钮（英文界面 EXPLAIN） |
 | SQL → Java | 选中 SQL 文本 → 右键菜单；或工具窗口侧边栏 tab |
-| SQL 日志工具窗口 | 底部工具窗口栏；自动捕获控制台 MyBatis 日志 |
+| SQL 日志工具窗口 | 底部工具窗口栏；自动捕获控制台 MyBatis 日志，可开启「项目启动时自动开始监听」 |
 | 批量操作参数面板 | 预览弹窗内的参数面板 |
 
 ## 使用提示

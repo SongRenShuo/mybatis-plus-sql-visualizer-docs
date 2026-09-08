@@ -15,6 +15,7 @@
 | `session.createQuery(hql)` 等 Hibernate HQL 调用 | HQL 字符串所在行 |
 | 自定义 DAO 的 HQL 查询方法（如 `commonDao.findByQuery`） | 调用行 |
 | `.hbm.xml` 映射实体 | 映射解析自动参与 |
+| `.hbm.xml` 命名查询（`<query>` / `<sql-query>`） | 查询名所在行 |
 
 预览快捷键 `Alt+Shift+Q` 对上述入口全部生效（光标置于目标行按快捷键，效果同点击图标）。
 
@@ -26,6 +27,7 @@
 |------|------|
 | `save` / `saveAll` / `saveAndFlush` | 新实体出 INSERT，有主键实体出 UPDATE（isNew 判定） |
 | `findById` / `existsById` | 主键等值查询 / `SELECT 1 ... LIMIT 1` |
+| `findAllById` | 主键 `IN (?, ?, ...)` 集合展开 |
 | `findAll` / `count` | 全表 SELECT / `SELECT COUNT(*)` |
 | `deleteById` / `delete` / `deleteAll` | 逐实体 `em.remove` 语义（先查后删，非 bulk DELETE） |
 | `deleteAllInBatch` 及变体 | 唯一 bulk DELETE 形态（无级联、不触发回调） |
@@ -54,9 +56,14 @@
 - 子查询、聚合、`UPDATE` / `DELETE` JPQL（含 `@Modifying`）完整支持
 - `SELECT u` 裸实体别名自动展开为列清单（详见 [XML / HQL 动态 SQL 预览](./xml-preview)）
 
+## hbm 命名查询
+
+Hibernate XML 映射（`.hbm.xml`）里的命名查询同样可预览：`<query>`（HQL）按实体到表的映射转换出 SQL，`<sql-query>`（原生 SQL）把 `:param` 命名参数回填为 `?` 占位。查询名所在行左侧出 gutter 图标，点击或按快捷键预览。
+
+Java 侧 `session.createNamedQuery("实体.方法名")` 在 `@NamedQuery` 注解里未命中时，自动回落到 `.hbm.xml` 里的同名定义，HQL 与原生 SQL 都能出预览。
+
 ## 已知边界
 
-- `findAllById`（IN 展开）暂未支持，后续版本补齐
 - `JpaSort.unsafe` 函数注入形态不做转换（安全边界，标注提示）
 - 异步返回（`CompletableFuture`）与 Repository 实现类 SPI（如 Envers 审计）不在预览范围
 

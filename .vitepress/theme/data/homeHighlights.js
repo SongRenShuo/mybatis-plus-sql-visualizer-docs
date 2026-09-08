@@ -30,7 +30,7 @@ export const coolCards = [
     icon: 'cog',
     color: 'yellow',
     title: '广泛集成',
-    description: 'XML / 注解 / HQL·JPQL / SQL 日志追踪 / 批量操作之外，还支持真实 EXPLAIN 执行计划与测试资产一键生成。',
+    description: 'XML / 注解 / HQL·JPQL / .hbm.xml 命名查询 / SQL 日志追踪 / 批量操作之外，还支持真实 EXPLAIN 执行计划与项目启动自动监听。',
   },
   {
     icon: 'shield',
@@ -113,7 +113,7 @@ export const enFeatureMatrix = [
       [
         'JPA / Hibernate',
         'gutter icon on method / annotation',
-        'derived queries, Repository CRUD write paths, `@Query` / `@NamedQuery` (JPQL, `@Modifying`), Criteria chains, Specification, QueryByExample, Pageable / Sort',
+        'derived queries, Repository CRUD write paths, `@Query` / `@NamedQuery` (JPQL, `@Modifying`), `.hbm.xml` named queries (`<query>` / `<sql-query>`), Criteria chains, Specification, QueryByExample, Pageable / Sort',
       ],
       [
         'Other ORM chains',
@@ -134,7 +134,7 @@ export const enFeatureMatrix = [
     rows: [
       [
         'Auto Capture',
-        'sidebar "Capture" button',
+        'sidebar "Capture" button; auto-starts on project open / run with the matching setting enabled',
         'Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats',
       ],
       [
@@ -157,10 +157,6 @@ export const enFeatureMatrix = [
       [
         'Real EXPLAIN Plan',
         'Preview panel button wraps SQL as EXPLAIN per dialect and runs it on the native database console (MySQL / PostgreSQL / KingBase / DM verified; Oracle / SQL Server gracefully declined)',
-      ],
-      [
-        'Test Asset Generation',
-        'Preview panel button emits a SQL regression script (under `src/test/resources/sql-visualizer/`) or a compilable JUnit test skeleton',
       ],
       [
         'JOIN Diagram',

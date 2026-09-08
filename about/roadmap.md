@@ -16,11 +16,12 @@ next: false
 - [x] Wrapper → SQL 静态解析（Lambda / 字符串 / MPJ 联表 / Kotlin）
 - [x] XML / 注解动态 SQL 预览（OGNL 面板、`maintainPage` XML）
 - [x] HQL / JPQL / JPA Criteria 预览，HQL `SELECT 实体别名` 自动展开为列清单
-- [x] JPA Repository CRUD 写路径预览（save / findById / delete 家族 / flush 语义），派生查询深化（六前缀、Pageable / Sort、Page / Slice / Stream 返回），Specification 与 QueryByExample
+- [x] `.hbm.xml` 命名查询预览（`<query>` / `<sql-query>`，`createNamedQuery` 自动回落 hbm 定义）
+- [x] JPA Repository CRUD 写路径预览（save / findById / findAllById / delete 家族 / flush 语义），派生查询深化（六前缀、Pageable / Sort、Page / Slice / Stream 返回），Specification 与 QueryByExample
 - [x] 其他 ORM 链式框架预览第一批：xbatis、Easy-Query、MyBatis Dynamic SQL、Querydsl、Spring Data JDBC / R2DBC
+- [x] 自研 DAO 字符串 SQL 方法定义锚点（方法名行 gutter 图标，快捷键在方法定义处生效）
 - [x] gutter 锚点左键直接预览、右键反查最近执行记录
 - [x] 真实 EXPLAIN 执行计划（按方言包装提交原生数据库控制台，MySQL / PostgreSQL / 金仓 / 达梦真机验证）
-- [x] 测试资产生成（SQL 回归脚本 / JUnit 用例骨架）
 - [x] JOIN 关系可视化图（IDEA 原生 Diagrams 引擎渲染，Diagrams 缺席自动回退自绘；数据源可用时列类型 / 注释取 DB 真实值）
 - [x] SQL 性能分析建议（索引缺失 / 全表扫描等 20 条规则）
 - [x] Wrapper 链复杂度评分
@@ -40,6 +41,7 @@ next: false
 - [x] 耗时显示与慢查询检测（阈值着色、按耗时排序）
 - [x] 精确跳转源码——运行期 `InnerInterceptor` 标记调用点，精确 `file:line` 跳转；支持设置页一键自动注入拦截器；多模块源根跳转容错
 - [x] 首条 SQL 自动展开日志工具窗（默认开、防抖不抢焦点，手动关闭后本会话抑制）
+- [x] 项目启动时自动开始监听（打开项目 / 运行项目自动捕捉，手动停止后再次运行项目自动恢复）
 - [x] SQL 历史两级导航 + 收藏（文件列表 → 逐条 SQL，自动保存）
 - [x] 日志捕捉链路性能优化（EDT 开销治理）
 - [x] 性能红线全面治理（执行失败面板内报错、日志流式增量渲染、参数输入防抖、历史大文件后台读取、内存泄漏清理）
@@ -53,13 +55,13 @@ next: false
 - [x] 帮助页面本地 HTML（零网络依赖，暗色模式适配）
 - [x] 插件更名 SQL Visualizer（MyBatis-Plus / MPJ / JPA / Hibernate 全面支持不变）
 
-> 以上 M37 竞品融合、JPA 深化、其他 ORM 第一批、性能红线治理均已合入 dev 分支（全量测试通过），随下个发行版提供。
+> 以上 M37 竞品融合、JPA 深化、其他 ORM 第一批、性能红线治理、hbm 命名查询与项目启动自动监听均已合入 dev 分支（全量测试通过），随下个发行版提供。
 
 ## 💡 待立项
 
 - [ ] MPJ `fill` 关联填充渲染
 - [ ] 其他 ORM 支持第二批（候选：jOOQ / Jimmer / Fluent MyBatis / dbVisitor，调研矩阵已备）
-- [ ] JPA 补全收尾（`findAllById` IN 展开等派生查询残余形态）
+- [ ] JPA 派生查询长尾形态收尾
 - [ ] 大型 Wrapper 链解析性能持续优化
 - [ ] MyBatis-Flex 支持（调研已暂缓，视生态需求再评估）
 

@@ -14,8 +14,8 @@
 | Type | Description |
 |------|-------------|
 | Table names | Inferred from project entity classes |
-| Column names | Smart suggestions by clause position (SELECT → column names, WHERE → condition columns) |
-| `#{}` param names | Java entity property names |
+| Column names | Suggestions by clause position: table names after FROM / JOIN, column names everywhere else; an `alias.` prefix suggests the aliased entity's columns, with comments searchable |
+| `#{}` param names | Method parameter names (`@Param` values first, param1..N as fallback) |
 | XML dynamic tags | `<if>` / `<where>` / `<foreach>` etc. |
 | OGNL expressions | Property names in `<if test="...">` |
 

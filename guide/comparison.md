@@ -14,7 +14,6 @@
 | JPA / Hibernate（派生方法、CRUD 写路径、JPQL、HQL、Criteria、Specification、QBE） | 支持 | 不涉及 | 手工 |
 | 其他 ORM 链式框架预览（xbatis / Easy-Query / MyBatis Dynamic SQL / Querydsl 等） | 支持 | 不涉及 | 手工 |
 | 真实 EXPLAIN 执行计划（按方言包装提交数据库） | 支持 | 不支持 | 手工 |
-| 从预览 SQL 生成回归脚本 / JUnit 用例骨架 | 支持 | 不支持 | 手工 |
 | 控制台日志还原 SQL 并回填参数 | 支持 | 支持 | 手工 |
 | 日志 SQL 跳转回源码位置 | 支持 | 部分 | 不支持 |
 | SQL 反向转 Wrapper Java 代码 | 支持 | 不支持 | 不支持 |

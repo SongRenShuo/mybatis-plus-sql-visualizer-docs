@@ -7,6 +7,8 @@ Auto-capture `Preparing:` / `Parameters:` logs from the run console, restore to 
 
 Sidebar "MyBatis SQL Log" tool window → click "Capture" button to start listening.
 
+With the setting "Auto-start listening on project launch" enabled, no button click is needed: opening the project or running / debugging it starts capture automatically. Clicking "Stop capture" suppresses auto-start for the session — it will not pop back on its own; as long as the switch stays on, the next project run starts capture again.
+
 ## Features
 
 ### Auto Capture
@@ -17,7 +19,7 @@ Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto
 
 When the setting "Auto-open log window on SQL found" (on by default) is active, capturing the first SQL auto-opens the log tool window — debounced to once per 60 seconds, without stealing editor focus. Behavior notes:
 
-- It only follows SQL capture: if the switch is on but capture has never started ("Auto-capture on startup" also off), nothing opens; clicking "Stop capture" disables auto-open until capture restarts
+- It only follows SQL capture: if the switch is on but capture has never started ("Auto-start listening on project launch" also off), nothing opens; clicking "Stop capture" disables auto-open until capture restarts
 - Closing the window manually suppresses auto-open for the rest of the session — no "close and it pops back"; re-enabling the setting or restarting the IDE restores it
 - Users who turned the switch off before the upgrade keep it off, unaffected by the new default
 
