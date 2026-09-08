@@ -49,7 +49,7 @@ export default defineConfig({
         'Wrapper chain to SQL live preview',
         'XML / annotation / HQL dynamic SQL preview',
         'Real EXPLAIN execution plans',
-        'Test asset generation (SQL regression script / JUnit skeleton)',
+        '.hbm.xml named query preview',
         'SQL to Java reverse conversion',
         'Console log restore with parameters',
         'JPA / Hibernate derived query and CRUD preview',
