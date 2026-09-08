@@ -51,10 +51,8 @@
 
     <!-- 功能分类 -->
     <div class="form-group">
-      <label for="fb-category">{{ t('formCategory', props.locale || 'zh') }}</label>
-      <select id="fb-category" v-model="form.category">
-        <option v-for="c in categories" :key="c.value" :value="c.value">{{ c.label }}</option>
-      </select>
+      <label>{{ t('formCategory', props.locale || 'zh') }}</label>
+      <FilterSelect v-model="form.category" :options="categories" />
     </div>
 
     <!-- 昵称和邮箱 -->
@@ -128,6 +126,7 @@ const emit = defineEmits<{
 }>()
 
 import { t, type MessageKey } from './i18n'
+import FilterSelect from './FilterSelect.vue'
 
 const types = computed<Array<{ value: number; label: string; icon: string; color: string }>>(() => {
   const l = props.locale || 'zh'
@@ -413,9 +412,16 @@ async function handleSubmit() {
   color: #10b981;
 }
 
+.form-group :deep(.fs-trigger) {
+  width: 100%;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
 .form-group input,
-.form-group textarea,
-.form-group select {
+.form-group textarea {
   width: 100%;
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--vp-c-border);
@@ -427,22 +433,11 @@ async function handleSubmit() {
 }
 
 .form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
+.form-group textarea:focus {
   outline: none;
   border-color: var(--vp-c-brand-1);
 }
 
-.form-group select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding-right: 2.25rem;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  cursor: pointer;
-}
 
 .form-row {
   display: grid;

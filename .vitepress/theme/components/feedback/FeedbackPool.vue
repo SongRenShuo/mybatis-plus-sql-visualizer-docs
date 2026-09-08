@@ -30,24 +30,15 @@
       <div class="filters">
         <div class="filter-group">
           <label>{{ t('filterStatus', locale) }}</label>
-          <select v-model="filterStatus">
-            <option value="">{{ locale === 'zh' ? '全部' : 'All' }}</option>
-            <option v-for="s in statusOptions" :key="s.value" :value="s.value">{{ s.label }}</option>
-          </select>
+          <FilterSelect v-model="filterStatus" :options="statusOptions" />
         </div>
         <div class="filter-group">
           <label>{{ t('filterType', locale) }}</label>
-          <select v-model="filterType">
-            <option value="">{{ locale === 'zh' ? '全部' : 'All' }}</option>
-            <option v-for="t in typeOptions" :key="t.value" :value="t.value">{{ t.icon }} {{ t.label }}</option>
-          </select>
+          <FilterSelect v-model="filterType" :options="typeOptions" />
         </div>
         <div class="filter-group">
           <label>{{ t('filterSort', locale) }}</label>
-          <select v-model="sortBy">
-            <option value="votes">{{ t('sortVotes', locale) }}</option>
-            <option value="newest">{{ t('sortNewest', locale) }}</option>
-          </select>
+          <FilterSelect v-model="sortBy" :options="sortOptions" />
         </div>
         <div class="filter-group filter-search">
           <input
@@ -150,6 +141,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import StatusBadge from './StatusBadge.vue'
+import FilterSelect from './FilterSelect.vue'
 import VoteButton from './VoteButton.vue'
 import FeedbackForm from './FeedbackForm.vue'
 import RoadmapBoard from './RoadmapBoard.vue'
@@ -201,15 +193,22 @@ const sortBy = ref('votes')
 const searchKeyword = ref('')
 
 // 状态筛选下拉：4 个归并组（值=STATUS_GROUPS 下标）
-const statusOptions = computed(() =>
-  STATUS_GROUPS.map((g, i) => ({ value: String(i), label: t(g.key, props.locale) })),
-)
+const statusOptions = computed(() => [
+  { value: '', label: props.locale === 'zh' ? '全部' : 'All' },
+  ...STATUS_GROUPS.map((g, i) => ({ value: String(i), label: t(g.key, props.locale) })),
+])
 
 const typeOptions = computed(() => [
-  { value: 1, label: t('type.feature', props.locale), icon: '✨' },
-  { value: 2, label: t('type.bug', props.locale), icon: '🐛' },
-  { value: 3, label: t('type.improvement', props.locale), icon: '⚡' },
-  { value: 4, label: t('type.question', props.locale), icon: '❓' },
+  { value: '', label: props.locale === 'zh' ? '全部' : 'All' },
+  { value: '1', label: `✨ ${t('type.feature', props.locale)}` },
+  { value: '2', label: `🐛 ${t('type.bug', props.locale)}` },
+  { value: '3', label: `⚡ ${t('type.improvement', props.locale)}` },
+  { value: '4', label: `❓ ${t('type.question', props.locale)}` },
+])
+
+const sortOptions = computed(() => [
+  { value: 'votes', label: t('sortVotes', props.locale) },
+  { value: 'newest', label: t('sortNewest', props.locale) },
 ])
 
 const typeIcons: Record<number, string> = { 1: '✨', 2: '🐛', 3: '⚡', 4: '❓' }
@@ -435,16 +434,6 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
   font-size: 0.8rem;
   color: var(--vp-c-text-3);
   white-space: nowrap;
-}
-
-.filter-group select {
-  padding: 0.375rem 0.75rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 6px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
-  font-size: 0.8rem;
-  cursor: pointer;
 }
 
 .filter-search input {
@@ -776,7 +765,7 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
 
 @media (max-width: 768px) {
   /* <16px 的输入控件聚焦会触发 iOS Safari 自动放大页面 */
-  .filter-group select,
+  .fs-trigger,
   .filter-search input,
   .board-search input {
     font-size: 1rem;
