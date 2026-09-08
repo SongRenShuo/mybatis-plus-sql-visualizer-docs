@@ -2,6 +2,9 @@
   <div class="feedback-form" :class="{ embedded }">
     <h3>{{ t('submitTitle', props.locale || 'zh') }}</h3>
 
+    <!-- T-ErrReport：IDE 插件一键报告直达时自动携带的环境徽标（?source=ide&ideVersion=…&pluginVersion=…） -->
+    <p v-if="ideContext" class="ide-badge">{{ fromIdeLabel }}</p>
+
     <!-- 类型选择 -->
     <div class="form-group">
       <label>{{ t('formType', props.locale || 'zh') }} *</label>
@@ -160,6 +163,26 @@ const form = reactive({
   category: props.initialCategory && categorySlugs.includes(props.initialCategory) ? props.initialCategory : 'other',
   submitterName: '',
   submitterEmail: '',
+})
+
+// T-ErrReport：IDE 插件错误对话框的浏览器兜底链接带 ?source=ide&ideVersion=…&pluginVersion=…，
+// 表单读取后仅作展示与随帖提交（SSG 构建期无 window，守卫返回 null）
+const ideContext = (() => {
+  if (typeof window === 'undefined') return null
+  const q = new URLSearchParams(window.location.search)
+  if (q.get('source') !== 'ide') return null
+  return {
+    ideVersion: q.get('ideVersion') || '',
+    pluginVersion: q.get('pluginVersion') || '',
+  }
+})()
+
+const fromIdeLabel = computed(() => {
+  const l = props.locale || 'zh'
+  const env = [ideContext?.ideVersion, ideContext?.pluginVersion ? `v${ideContext.pluginVersion}` : '']
+    .filter(Boolean)
+    .join(' · ')
+  return env ? `${t('formFromIde', l)} ${env}` : t('formFromIde', l)
 })
 
 const submitting = ref(false)
@@ -327,6 +350,10 @@ async function handleSubmit() {
         submitterName: form.submitterName || undefined,
         submitterEmail: form.submitterEmail || undefined,
         isAnonymous: !form.submitterName,
+        // T-ErrReport：IDE 兜底链路携带来源与环境（后端 fb_posts 已有这三列）
+        source: ideContext ? 'ide' : undefined,
+        ideVersion: ideContext?.ideVersion || undefined,
+        pluginVersion: ideContext?.pluginVersion || undefined,
         attachments: successfulAttachments(),
       }),
     })
@@ -481,6 +508,17 @@ async function handleSubmit() {
   font-size: 0.75rem;
   color: var(--vp-c-text-3);
   margin: 0 0 1rem;
+}
+
+.ide-badge {
+  display: inline-block;
+  margin: -0.5rem 0 1rem;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--vp-c-brand-1) 8%, var(--vp-c-bg));
+  color: var(--vp-c-text-2);
+  font-size: 0.75rem;
 }
 
 .file-input-hidden {
