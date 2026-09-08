@@ -31,7 +31,11 @@
             <span v-if="post.category" class="card-category">{{ categoryLabel(post.category) }}</span>
             <span v-if="post.commentCount > 0" class="card-comments">💬 {{ post.commentCount }}</span>
           </div>
-          <div class="card-no">{{ post.postNo }}</div>
+          <!-- 与列表卡片同款时间（MM-DD HH:mm），看板此前完全没有时间 -->
+          <div class="card-footer">
+            <span class="card-no">{{ post.postNo }}</span>
+            <span v-if="post.createdAt" class="card-date">{{ formatDateTime(post.createdAt) }}</span>
+          </div>
         </div>
         <div v-if="!getStatusPosts(col.statuses).length" class="col-empty">
           {{ t('noItems', locale) }}
@@ -45,6 +49,8 @@
 import type { Locale, MessageKey } from './i18n'
 import { t } from './i18n'
 import VoteButton from './VoteButton.vue'
+import { formatDateTime } from './dateTime'
+import { STATUS_GROUPS, type StatusGroup } from './status'
 
 const props = defineProps<{
   posts: Array<{
@@ -59,6 +65,7 @@ const props = defineProps<{
     category: string
     isPinned: boolean
     hasVoted: boolean
+    createdAt?: string
   }>
   apiBase: string
   locale?: Locale
@@ -72,21 +79,8 @@ defineEmits<{
 
 const locale = props.locale || 'zh'
 
-interface Column {
-  key: string
-  labelKey: MessageKey
-  color: string
-  statuses: number[]
-}
-
-const columns: Column[] = [
-  { key: 'submitted', labelKey: 'status.1', color: '#6b7280', statuses: [1] },
-  { key: 'review', labelKey: 'status.2', color: '#f59e0b', statuses: [2] },
-  { key: 'planned', labelKey: 'status.3', color: '#3b82f6', statuses: [3] },
-  { key: 'progress', labelKey: 'status.4', color: '#8b5cf6', statuses: [4] },
-  { key: 'completed', labelKey: 'status.5', color: '#10b981', statuses: [5] },
-  { key: 'closed', labelKey: 'closed', color: '#6b7280', statuses: [6, 7] },
-]
+// 公开侧状态归并为 4 列（库内 1~7 不变），列序随 STATUS_GROUPS
+const columns: StatusGroup[] = STATUS_GROUPS
 
 function getStatusPosts(statuses: number[]) {
   return props.posts
@@ -237,6 +231,20 @@ function categoryLabel(category: string): string {
   font-family: monospace;
   font-size: 0.7rem;
   color: var(--vp-c-text-3);
+}
+
+/* 卡片底部：编号 + 时间（与列表 meta 同款时分格式） */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.card-date {
+  font-size: 0.7rem;
+  color: var(--vp-c-text-3);
+  white-space: nowrap;
 }
 
 .col-empty {

@@ -86,7 +86,7 @@
             <div class="card-meta">
               <span class="meta-type">{{ post.typeIcon }} {{ typeLabel(post.type) }}</span>
               <span v-if="post.category" class="meta-category">{{ categoryLabel(post.category) }}</span>
-              <span class="meta-date">{{ formatDate(post.createdAt) }}</span>
+              <span class="meta-date">{{ formatDateTime(post.createdAt) }}</span>
               <span class="meta-comments">💬 {{ post.commentCount }}</span>
             </div>
           </div>
@@ -104,10 +104,10 @@
           @keyup.enter="applySearch"
         />
       </div>
-      <div v-if="statusStats.length" class="board-stats">
-        <span v-for="s in statusStats" :key="s.status" class="board-stat">
-          <span class="board-stat-dot" :style="{ background: statusColor(s.status) }"></span>
-          {{ statusLabel(s.status) }} {{ s.count }}
+      <div v-if="boardStats.length" class="board-stats">
+        <span v-for="s in boardStats" :key="s.key" class="board-stat">
+          <span class="board-stat-dot" :style="{ background: s.color }"></span>
+          {{ t(s.key, locale) }} {{ s.count }}
         </span>
       </div>
       <RoadmapBoard
@@ -154,7 +154,8 @@ import VoteButton from './VoteButton.vue'
 import FeedbackForm from './FeedbackForm.vue'
 import RoadmapBoard from './RoadmapBoard.vue'
 import { t, type Locale, type MessageKey } from './i18n'
-import { parseUtcDate } from './dateTime'
+import { formatDateTime } from './dateTime'
+import { STATUS_GROUPS } from './status'
 
 const props = defineProps<{
   apiBase: string
@@ -193,20 +194,16 @@ const view = ref<'list' | 'board'>(
 )
 const showForm = ref(false)
 const formRef = ref<InstanceType<typeof FeedbackForm> | null>(null)
+// 状态筛选用归并组（值=组序号），库内 1~7 状态对用户隐藏
 const filterStatus = ref('')
 const filterType = ref('')
 const sortBy = ref('votes')
 const searchKeyword = ref('')
 
-const statusOptions = computed(() => [
-  { value: 1, label: t('status.1', props.locale) },
-  { value: 2, label: t('status.2', props.locale) },
-  { value: 3, label: t('status.3', props.locale) },
-  { value: 4, label: t('status.4', props.locale) },
-  { value: 5, label: t('status.5', props.locale) },
-  { value: 6, label: t('status.6', props.locale) },
-  { value: 7, label: t('status.7', props.locale) },
-])
+// 状态筛选下拉：4 个归并组（值=STATUS_GROUPS 下标）
+const statusOptions = computed(() =>
+  STATUS_GROUPS.map((g, i) => ({ value: String(i), label: t(g.key, props.locale) })),
+)
 
 const typeOptions = computed(() => [
   { value: 1, label: t('type.feature', props.locale), icon: '✨' },
@@ -217,10 +214,6 @@ const typeOptions = computed(() => [
 
 const typeIcons: Record<number, string> = { 1: '✨', 2: '🐛', 3: '⚡', 4: '❓' }
 
-const statusColors: Record<number, string> = {
-  1: '#6b7280', 2: '#f59e0b', 3: '#3b82f6', 4: '#8b5cf6', 5: '#10b981', 6: '#ef4444', 7: '#6b7280',
-}
-
 const typeKeys: Record<number, MessageKey> = {
   1: 'type.feature', 2: 'type.bug', 3: 'type.improvement', 4: 'type.question',
 }
@@ -229,16 +222,16 @@ function typeLabel(type: number): string {
   return typeKeys[type] ? t(typeKeys[type], props.locale) : ''
 }
 
-function statusLabel(s: number): string {
-  const keys: Record<number, MessageKey> = {
-    1: 'status.1', 2: 'status.2', 3: 'status.3', 4: 'status.4', 5: 'status.5', 6: 'status.6', 7: 'status.7',
-  }
-  return keys[s] ? t(keys[s], props.locale) : String(s)
-}
-
-function statusColor(s: number): string {
-  return statusColors[s] || '#6b7280'
-}
+// 看板顶部统计条：原始状态计数按归并组聚合（顺序随 STATUS_GROUPS，零计数组不显示）
+const boardStats = computed(() =>
+  STATUS_GROUPS.map(g => ({
+    key: g.key,
+    color: g.color,
+    count: (statusStats.value || [])
+      .filter(s => g.statuses.includes(s.status))
+      .reduce((sum, s) => sum + s.count, 0),
+  })).filter(s => s.count > 0),
+)
 
 function categoryLabel(category: string): string {
   const key = `cat.${category}`
@@ -249,8 +242,9 @@ function categoryLabel(category: string): string {
 const filteredPosts = computed(() => {
   let result = posts.value
 
-  if (filterStatus.value) {
-    result = result.filter(p => p.status === Number(filterStatus.value))
+  if (filterStatus.value !== '') {
+    const group = STATUS_GROUPS[Number(filterStatus.value)]
+    if (group) result = result.filter(p => group.statuses.includes(p.status))
   }
   if (filterType.value) {
     result = result.filter(p => p.type === Number(filterType.value))
@@ -278,6 +272,7 @@ const postsForBoard = computed(() =>
     category: p.category,
     isPinned: !!p.isPinned,
     hasVoted: !!p.hasVoted,
+    createdAt: p.createdAt,
   }))
 )
 
@@ -358,21 +353,6 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
       ? stats.value.totalVotes + 1
       : stats.value.totalVotes - 1
   }
-}
-
-function formatDate(dateStr: string): string {
-  const d = parseUtcDate(dateStr)
-  if (!d) return dateStr || ''
-  const days = Math.floor((Date.now() - d.getTime()) / 86400000)
-
-  if (days === 0) return t('timeToday', props.locale)
-  if (days === 1) return t('timeYesterday', props.locale)
-  if (days < 7) return t('timeDaysAgo', props.locale, { n: days })
-  if (days < 30) return t('timeWeeksAgo', props.locale, { n: Math.floor(days / 7) })
-  return d.toLocaleDateString(props.locale === 'zh' ? 'zh-CN' : 'en-US', {
-    month: '2-digit',
-    day: '2-digit',
-  })
 }
 </script>
 

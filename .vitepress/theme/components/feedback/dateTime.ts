@@ -26,3 +26,15 @@ export function parseUtcDate(dateStr: string | null | undefined): Date | null {
   const d = new Date(iso)
   return isNaN(d.getTime()) ? null : d
 }
+
+/**
+ * 格式化为「MM-DD HH:mm」（当年），跨年补年份「YYYY-MM-DD HH:mm」。
+ * 需求池列表/看板/详情统一用这个：此前只显示日期，用户希望精确到时分。
+ */
+export function formatDateTime(dateStr: string | null | undefined): string {
+  const d = parseUtcDate(dateStr)
+  if (!d) return dateStr || ''
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const time = `${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
+  return d.getFullYear() === new Date().getFullYear() ? time : `${d.getFullYear()}-${time}`
+}

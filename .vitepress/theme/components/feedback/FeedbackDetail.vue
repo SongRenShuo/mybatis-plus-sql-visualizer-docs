@@ -83,13 +83,28 @@
             <span class="fd-comment-date">{{ formatDate(c.created_at) }}</span>
           </div>
           <div class="fd-comment-content">{{ c.content }}</div>
+          <!-- 楼中楼回复（官方回复常挂在这层）：两层结构，回复统一挂在顶层评论下 -->
+          <div v-if="c.replies && c.replies.length" class="fd-reply-list">
+            <div v-for="r in c.replies" :key="r.id" class="fd-reply">
+              <div class="fd-comment-head">
+                <span class="fd-comment-author">{{ r.author_name || '匿名' }}</span>
+                <span v-if="r.is_official" class="fd-official">官方</span>
+                <span class="fd-comment-date">{{ formatDate(r.created_at) }}</span>
+              </div>
+              <div class="fd-comment-content">{{ r.content }}</div>
+            </div>
+          </div>
         </div>
       </div>
       <div v-else class="fd-empty">暂无评论</div>
 
       <div class="fd-comment-form">
-        <input v-model="commentName" type="text" :placeholder="t('formName', locale)" class="fd-input fd-input-name" />
+        <div class="fd-form-row">
+          <input v-model="commentName" type="text" :placeholder="t('formName', locale)" class="fd-input fd-input-name" />
+          <input v-model="commentEmail" type="email" :placeholder="t('commentEmailPlaceholder', locale)" class="fd-input fd-input-email" />
+        </div>
         <textarea v-model="commentContent" placeholder="写下您的评论..." rows="3" class="fd-input fd-textarea"></textarea>
+        <span v-if="commentError" class="fd-form-error">{{ commentError }}</span>
         <button class="fd-submit" :disabled="!commentContent.trim()" @click="submitComment">
           发表评论
         </button>
@@ -108,7 +123,7 @@ import { ref, onMounted } from 'vue'
 import StatusBadge from './StatusBadge.vue'
 import VoteButton from './VoteButton.vue'
 import { t, type Locale, type MessageKey } from './i18n'
-import { parseUtcDate } from './dateTime'
+import { formatDateTime } from './dateTime'
 
 const props = defineProps<{
   postNo: string
@@ -169,6 +184,8 @@ interface Comment {
   author_name: string
   is_official: number
   created_at: string
+  /** 楼中楼回复（公开详情返回嵌套在顶层评论下，两层结构） */
+  replies?: Comment[]
 }
 
 interface AttachmentFile {
@@ -203,7 +220,9 @@ const loading = ref(true)
 const error = ref('')
 const post = ref<Post | null>(null)
 const commentName = ref('')
+const commentEmail = ref('')
 const commentContent = ref('')
+const commentError = ref('')
 
 onMounted(loadDetail)
 
@@ -235,6 +254,14 @@ function onVoteUpdate(count: number, hasVoted: boolean) {
 
 async function submitComment() {
   if (!commentContent.value.trim()) return
+  commentError.value = ''
+
+  // 邮箱选填，但填了先做轻校验（后端同规则兜底）；留邮箱后官方回复会推送通知
+  const email = commentEmail.value.trim()
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    commentError.value = locale === 'zh' ? '邮箱格式不正确，请检查后重试' : 'Invalid email address'
+    return
+  }
 
   try {
     const res = await fetch(`${props.apiBase}/feedback/posts/${props.postNo}/comments`, {
@@ -243,26 +270,26 @@ async function submitComment() {
       body: JSON.stringify({
         content: commentContent.value,
         authorName: commentName.value.trim() || undefined,
+        authorEmail: email || undefined,
       }),
     })
     const data = await res.json()
     if (data.code === 0) {
       commentContent.value = ''
+      commentError.value = ''
       loadDetail() // Reload to show new comment
+    } else {
+      commentError.value = data.message || (locale === 'zh' ? '提交失败' : 'Failed')
     }
   } catch (err) {
+    commentError.value = locale === 'zh' ? '提交失败，请稍后重试' : 'Failed, please retry'
     console.error('Comment failed:', err)
   }
 }
 
 function formatDate(dateStr: string): string {
-  const d = parseUtcDate(dateStr)
-  if (!d) return dateStr || ''
-  return d.toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  })
+  // 统一换共享工具：当年 MM-DD HH:mm，跨年带年份（此前只显示日期）
+  return formatDateTime(dateStr)
 }
 
 function renderMd(text: string): string {
@@ -598,6 +625,42 @@ function formatSize(bytes: number): string {
 .fd-input-name {
   width: 100%;
   max-width: 220px;
+}
+
+/* 昵称 + 邮箱同行：邮箱占剩余宽度，窄屏回落纵向 */
+.fd-form-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.fd-input-email {
+  flex: 1;
+  min-width: 0;
+}
+
+.fd-form-error {
+  font-size: 0.8125rem;
+  color: #ef4444;
+}
+
+/* 楼中楼回复：缩进浅底，与顶层评论区分 */
+.fd-reply-list {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--vp-c-divider);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fd-reply {
+  padding: 0.25rem 0;
+}
+
+@media (max-width: 640px) {
+  .fd-form-row {
+    flex-direction: column;
+  }
 }
 
 .fd-submit {
