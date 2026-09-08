@@ -3,7 +3,7 @@
     <div v-for="col in columns" :key="col.key" class="roadmap-col">
       <div class="col-header">
         <span class="col-dot" :style="{ background: col.color }"></span>
-        <span class="col-title">{{ t(col.labelKey, locale) }}</span>
+        <span class="col-title">{{ t(col.key, locale) }}</span>
         <span class="col-count">{{ getStatusPosts(col.statuses).length }}</span>
       </div>
       <div class="col-body">
