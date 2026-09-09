@@ -18,44 +18,46 @@ const modalAria = computed(() => (isZh.value ? '站内搜索' : 'Site search'))
 
 // ---- 模块级共享：弹窗状态、UI 脚本加载、快捷键只绑一次 ----
 let sharedOpen = ref(false)
-let uiLoadPromise = null
+let uiLoadAttempted = false // 是否已尝试加载 pagefind-ui（区分「未加载」与「加载失败」）
 let shortcutsBound = false
 
 function loadPagefindUI() {
   if (typeof window !== 'undefined' && window.PagefindUI) return Promise.resolve()
-  if (!uiLoadPromise) {
-    uiLoadPromise = new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = '/pagefind/pagefind-ui.css'
-      document.head.appendChild(link)
-      const script = document.createElement('script')
-      script.src = '/pagefind/pagefind-ui.js'
-      script.onload = resolve
-      script.onerror = () => {
-        uiLoadPromise = null
-        reject(new Error('pagefind-ui 加载失败'))
-      }
-      document.head.appendChild(script)
-    })
-  }
-  return uiLoadPromise
+  // 已失败过一次：直接拒绝，避免 onerror 反复触发重复挂 script
+  if (uiLoadAttempted) return Promise.reject(new Error('pagefind-ui 加载失败'))
+  uiLoadAttempted = true
+  return new Promise((resolve, reject) => {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = '/pagefind/pagefind-ui.css'
+    document.head.appendChild(link)
+    const script = document.createElement('script')
+    script.src = '/pagefind/pagefind-ui.js'
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error('pagefind-ui 加载失败'))
+    document.head.appendChild(script)
+  })
 }
 
 const open = sharedOpen
 const container = ref(null)
 const modalEl = ref(null)
 const ui = shallowRef(null)
+const uiLoadFailed = ref(false)
 
 async function openModal() {
   if (open.value) return
   open.value = true
+  uiLoadFailed.value = false
   document.body.style.overflow = 'hidden'
   await nextTick()
   try {
     await loadPagefindUI()
   } catch {
-    closeModal()
+    // UI 脚本加载失败是「闪现即关」的直接原因（修正前在此直接 closeModal）。
+    // 改为弹窗内落地降级提示，不再瞬间关窗，给用户明确反馈。
+    uiLoadFailed.value = true
+    document.body.style.overflow = ''
     return
   }
   if (!container.value) return
@@ -88,6 +90,7 @@ function closeModal() {
   if (!open.value) return
   open.value = false
   document.body.style.overflow = ''
+  uiLoadFailed.value = false
   try {
     ui.value?.destroy?.()
   } catch {
@@ -217,6 +220,10 @@ const modKey = computed(() => {
   <Teleport to="body">
     <div v-if="open" class="pf-modal-mask" @click.self="closeModal()">
       <div ref="modalEl" class="pf-modal" role="dialog" :aria-label="modalAria">
+        <div v-if="uiLoadFailed" class="pf-modal-error">
+          <template v-if="isZh">搜索组件加载失败，请刷新页面后重试。</template>
+          <template v-else>Search failed to load. Please refresh the page and try again.</template>
+        </div>
         <div ref="container" class="pf-modal-body" @click="onResultClick"></div>
         <div class="pf-modal-hint">
           <template v-if="isZh">Esc 关闭 · ↑↓ 选择 · Enter 打开</template>
@@ -335,6 +342,13 @@ const modKey = computed(() => {
   font-size: 12px;
   color: var(--vp-c-text-3);
   text-align: right;
+}
+
+.pf-modal-error {
+  padding: 12px 0;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+  text-align: center;
 }
 </style>
 
