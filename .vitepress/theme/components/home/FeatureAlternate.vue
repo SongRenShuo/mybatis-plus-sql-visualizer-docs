@@ -1,4 +1,12 @@
 <script setup>
+/** GIF 加载失败时一次性降级为该项 poster 静态图，dataset 标记防止 onerror 死循环 */
+function onImgError(e, item) {
+  const img = e.target
+  if (img.dataset.fallback || !item.poster) return
+  img.dataset.fallback = '1'
+  img.src = item.poster
+}
+
 const features = [
   {
     badge: 'Wrapper 预览',
@@ -9,7 +17,8 @@ const features = [
       { title: '动态条件勾选', description: 'if / choose / where 等标签按需渲染' },
       { title: '9 种方言分页', description: 'MySQL / PG / Oracle 等全方言分页语法' },
     ],
-    imageSrc: '/demo/wrapper-preview.png',
+    imageSrc: '/demo/wrapper-preview.gif',
+    poster: '/demo/wrapper-preview.png',
   },
   {
     badge: '日志还原',
@@ -20,7 +29,8 @@ const features = [
       { title: '批量还原', description: '粘贴整段日志，多组语句自动分隔' },
       { title: '混合前缀匹配', description: '宽容匹配各种日志前缀格式' },
     ],
-    imageSrc: '/demo/sql-log.png',
+    imageSrc: '/demo/sql-log.gif',
+    poster: '/demo/sql-log.png',
     reverse: true,
   },
   {
@@ -32,7 +42,8 @@ const features = [
       { title: '增删改查全覆盖', description: 'SELECT / INSERT / UPDATE / DELETE 全支持' },
       { title: '多表 JOIN', description: '联表查询自动生成 MPJLambdaWrapper' },
     ],
-    imageSrc: '/demo/sql-to-java.png',
+    imageSrc: '/demo/sql-to-java.gif',
+    poster: '/demo/sql-to-java.png',
   },
   {
     badge: '多框架支持',
@@ -43,7 +54,8 @@ const features = [
       { title: '注解 SQL', description: '@Select / @Update / @Delete / @Insert' },
       { title: 'OGNL 表达式', description: '面板勾选动态条件，实时预览结果' },
     ],
-    imageSrc: '/demo/xml-preview.png',
+    imageSrc: '/demo/xml-preview.gif',
+    poster: '/demo/xml-preview.png',
     reverse: true,
   },
 ]
@@ -72,6 +84,7 @@ const features = [
               :alt="item.title"
               loading="lazy"
               class="feature-video"
+              @error="onImgError($event, item)"
             />
           </div>
 

@@ -1,5 +1,5 @@
 # SQL Code Completion
-<GifPlayer src="/demo/code-completion.svg" alt="SQL Code Completion Demo" />
+<GifPlayer src="/demo/code-completion.gif" poster="/demo/code-completion.png" alt="SQL Code Completion Demo" />
 
 `Ctrl+Space` completion in mapper XML and Java SQL annotation strings.
 

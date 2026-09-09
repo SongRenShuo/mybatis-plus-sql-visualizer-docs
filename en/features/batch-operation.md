@@ -1,5 +1,5 @@
 # Batch Operation Panel
-<GifPlayer src="/demo/batch-operation.svg" alt="Batch Operation Panel Demo" />
+<GifPlayer src="/demo/batch-operation.gif" poster="/demo/batch-operation.png" alt="Batch Operation Panel Demo" />
 
 `save` / `updateBatchById` / `saveOrUpdate` etc. — batch SQL expanded by column, with per-column parameter toggles.
 

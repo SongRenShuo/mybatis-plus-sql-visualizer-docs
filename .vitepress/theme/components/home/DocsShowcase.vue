@@ -1,4 +1,11 @@
 <script setup>
+/** GIF 加载失败时一次性降级为同名静态图，dataset 标记防止 onerror 死循环 */
+function onImgError(e) {
+  const img = e.target
+  if (img.dataset.fallback) return
+  img.dataset.fallback = '1'
+  img.src = '/demo/wrapper-preview.png'
+}
 </script>
 
 <template>
@@ -54,10 +61,11 @@
 
         <div class="docs-showcase-video-wrap">
           <img
-            src="/demo/wrapper-preview.png"
+            src="/demo/wrapper-preview.gif"
             alt="Wrapper → SQL 预览演示"
             loading="lazy"
             class="docs-showcase-video"
+            @error="onImgError"
           />
         </div>
       </div>

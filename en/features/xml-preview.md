@@ -1,5 +1,5 @@
 # XML / HQL Dynamic SQL Preview
-<GifPlayer src="/demo/xml-preview.png" alt="XML Dynamic SQL Preview Demo" />
+<GifPlayer src="/demo/xml-preview.gif" poster="/demo/xml-preview.png" alt="XML Dynamic SQL Preview Demo" />
 
 Complete preview of dynamic SQL in mapper XML — rendered per MyBatis semantics with OGNL expression toggles. Hibernate HQL and JPA JPQL previews are supported as well (see below).
 

@@ -1,5 +1,5 @@
 # SQL → Java 反向转换
-<GifPlayer src="/demo/sql-to-java.png" alt="SQL → Java 反向转换演示" />
+<GifPlayer src="/demo/sql-to-java.gif" poster="/demo/sql-to-java.png" alt="SQL → Java 反向转换演示" />
 
 选中 SQL 文本一键生成可编译的 MyBatis-Plus 代码——支持四种 Wrapper 形态。
 

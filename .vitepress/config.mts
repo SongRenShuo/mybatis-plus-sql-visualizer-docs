@@ -92,6 +92,8 @@ export default defineConfig({
       ignoreFiles: ['docs/**']
     })],
     server: {
+      // 本地 dev 关闭 HMR 错误遮罩：缺静的 GIF（录制中）触发 import-analysis 全遮罩，妨碍调试与页面验收
+      hmr: { overlay: false },
       proxy: {
         '/api/changelog': {
           target: 'https://plugins.jetbrains.com/api/plugins/33633/updates',

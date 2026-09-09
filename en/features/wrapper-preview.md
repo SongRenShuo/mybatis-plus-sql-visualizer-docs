@@ -1,5 +1,5 @@
 # Wrapper → SQL Preview
-<GifPlayer src="/demo/wrapper-preview.png" alt="Wrapper → SQL Preview Demo" />
+<GifPlayer src="/demo/wrapper-preview.gif" poster="/demo/wrapper-preview.png" alt="Wrapper → SQL Preview Demo" />
 
 Statically parse MyBatis-Plus / MPJ calls in Java source code into previewable SQL — no need to launch the project or connect to a database.
 

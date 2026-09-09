@@ -1,5 +1,5 @@
 # SQL → Java Reverse Conversion
-<GifPlayer src="/demo/sql-to-java.png" alt="SQL → Java Reverse Conversion Demo" />
+<GifPlayer src="/demo/sql-to-java.gif" poster="/demo/sql-to-java.png" alt="SQL → Java Reverse Conversion Demo" />
 
 Select SQL text and one-click generate compilable MyBatis-Plus code — supports four Wrapper forms.
 
