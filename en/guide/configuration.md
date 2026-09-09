@@ -13,6 +13,10 @@ No IDE restart needed: re-trigger preview to apply new settings.
 | Formatted Output | On | Multi-line indent (Off = single line) |
 | Logic Delete Injection | On | `@TableLogic` auto appends `AND deleted = value` |
 | Logic Delete Value | 0 | Value for logic delete condition |
+| Tenant Injection | Off | Entity SELECT / UPDATE / DELETE auto appends `AND tenant_id = ?` (preview simulation, aligned with MP's tenant interceptor semantics) |
+| Tenant Column Name | `tenant_id` | Column name used for tenant injection, adjustable per business (e.g. `org_id` / `shop_id`) |
+| Tenant Column Default | 1 | Literal default appended to UPDATE SET / INSERT tenant columns |
+| Append Tenant Column on INSERT | On | Sub-switch: INSERT column list gets the tenant column (aligned with MP `TenantLineInnerInterceptor` INSERT semantics); INSERT only — requires Tenant Injection to be on, UPDATE / DELETE unaffected |
 
 ## Table Name Mapping
 
@@ -35,10 +39,12 @@ No IDE restart needed: re-trigger preview to apply new settings.
 | Setting | Default | Description |
 |---------|---------|-------------|
 | SQL / Param Prefix | `Preparing:` / `Parameters:` | Console log recognition prefix |
-| Auto-start Listening on Project Launch | Off | Starts capture automatically when the project opens or runs (same as clicking "Capture"); a manual stop suppresses auto-start for the session, the next project run resumes it |
-| Auto-Open Window on SQL Found | On | Auto-open log window when SQL captured (60s debounce, never steals focus); closing the window manually suppresses auto-open for the session |
+| Auto-start Listening on Project Launch | Off | Starts capture automatically when the project opens or runs (same as clicking "Capture"); enabling the setting itself does not start listening immediately — it triggers on the project run. A manual stop suppresses auto-start for the session, the next project run resumes it |
+| Auto-Open Window on SQL Found | On | Auto-open log window when SQL captured (60s debounce, never steals focus); a manual close suppresses auto-open for the session, restored by re-enabling the setting, restarting the IDE, or (with auto-start listening on) running the project again |
+| Stop Capture on Tool Window Close | Off | Automatically stops capture when the log tool window is closed |
+| Auto-Inject Source-Capture Interceptor | Off | Trigger-style switch: checking it immediately generates the `SqlSourceInterceptor` and config class in your project once (skipped if already present); after restarting your app, live logs carry the call site — precise jumps without manually copying interceptor files |
 | Timestamp Display | On | Show capture time in entry list |
-| Dedup Window | 60000 ms | Same SQL doesn't reappear within window; toggling "Remove duplicate SQL" trims existing duplicates immediately |
+| Dedup Window | 60000 ms | Same SQL (whitespace-insensitive) doesn't reappear within window; toggling "Remove duplicate SQL" trims existing duplicates immediately |
 | Duration Prefix | `Time:` | Custom prefix for parsing execution time from logs (supports p6spy / MyBatis-Plus timing output) |
 | Slow Query Threshold | 1000 ms | Durations at or above this are flagged as slow queries in red |
 | Auto-Save SQL History | Off | Entries evicted from the list are written to files for the "History" tab |
@@ -65,5 +71,6 @@ History SQL and execution temp files live under `.idea/sql-visualizer/` in your 
 | Auto-Check on Startup | Off | When enabled, silent check of the Gitee early-access channel on launch with update notifications; when off, stable updates come from JetBrains Marketplace |
 | Ignore This Version | - | Notification action to skip startup reminders for the current version (persisted across restarts); manual checks in settings are unaffected |
 | Check Update / Download & Install | - | Manual check, one-click download & install |
-| Plugin Cache | - | Show cache size, one-click clear |
+| Plugin Cache | - | Show cache size and entry count (lookup / resolution / Wrapper preview, all scopes), one-click clear |
 | Internal Build Number | - | Unique per build, one-click copy for bug reports |
+| Settings Import / Export | - | Import / export settings as JSON; the result is shown inline next to the buttons |

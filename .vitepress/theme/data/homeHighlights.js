@@ -135,7 +135,12 @@ export const enFeatureMatrix = [
       [
         'Auto Capture',
         'sidebar "Capture" button; auto-starts on project open / run with the matching setting enabled',
-        'Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats',
+        'Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats (multi-line statements included); `#N` per-session entry numbers',
+      ],
+      [
+        'Click Preview',
+        'single-click a log entry / double-click for the full dialog',
+        'Lightweight popup: syntax-highlighted SQL, editable inline, copy button with check-mark feedback; consistent across log list and history views',
       ],
       [
         'Log → SQL',

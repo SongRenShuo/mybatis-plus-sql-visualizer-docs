@@ -7,20 +7,20 @@ Auto-capture `Preparing:` / `Parameters:` logs from the run console, restore to 
 
 Sidebar "MyBatis SQL Log" tool window → click "Capture" button to start listening.
 
-With the setting "Auto-start listening on project launch" enabled, no button click is needed: opening the project or running / debugging it starts capture automatically. Clicking "Stop capture" suppresses auto-start for the session — it will not pop back on its own; as long as the switch stays on, the next project run starts capture again.
+With the setting "Auto-start listening on project launch" enabled, no button click is needed: opening the project or running / debugging it starts capture automatically. Enabling the setting itself does not start listening immediately — it triggers when the project runs. Clicking "Stop capture" suppresses auto-start for the session — it will not pop back on its own; as long as the switch stays on, the next project run starts capture again.
 
 ## Features
 
 ### Auto Capture
 
-Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto-restore to complete SQL. Hibernate (`Hibernate:` + `binding parameter`) and Spring JdbcTemplate log formats are also recognized, enabled by default.
+Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto-restore to complete SQL. Hibernate (`Hibernate:` + `binding parameter`) and Spring JdbcTemplate log formats are also recognized — statements wrapped across multiple lines are collected in full, and brackets inside string literals don't cause premature closing — enabled by default.
 
 ### Auto-Open Tool Window
 
 When the setting "Auto-open log window on SQL found" (on by default) is active, capturing the first SQL auto-opens the log tool window — debounced to once per 60 seconds, without stealing editor focus. Behavior notes:
 
 - It only follows SQL capture: if the switch is on but capture has never started ("Auto-start listening on project launch" also off), nothing opens; clicking "Stop capture" disables auto-open until capture restarts
-- Closing the window manually suppresses auto-open for the rest of the session — no "close and it pops back"; re-enabling the setting or restarting the IDE restores it
+- Closing the window manually suppresses auto-open for the rest of the session — no "close and it pops back"; re-enabling the setting, restarting the IDE, or (with "Auto-start listening on project launch" on) running the project again restores it
 - Users who turned the switch off before the upgrade keep it off, unaffected by the new default
 
 ### Mixed Prefix Matching
@@ -36,6 +36,14 @@ Supports multiple log formats:
 - Execution time is parsed from the log, supporting p6spy `elapsed`, MyBatis-Plus `Time:` output and a custom time prefix (configurable in settings, default `Time:`)
 - Duration is colored by threshold: gray under 100ms, orange at 100ms+, red once the slow-query threshold is reached (default 1000ms, adjustable)
 - Click the sort button to order entries by duration; a slow-query counter appears when slow queries are detected
+
+### Entry Sequence Numbers
+
+Each list entry shows a `#N` number at the front of its meta line — the Nth SQL captured in this session, handy for referring to "entry N":
+
+- Counting restarts from 1 on every project run; clearing the list manually also resets it
+- SQL dropped by dedup, capture pause or keyword filter takes no number, so the list never skips
+- Numbers stay readable when sorted by duration, preserving the original capture order; entries read back from history files carry no number
 
 ### Jump to Source
 
@@ -62,21 +70,26 @@ Right-click a log entry → "Jump to Source". Three levels of behavior:
 
 | Feature | Description |
 |---------|-------------|
-| Dedup window | Same SQL doesn't reappear within window (default 60000ms, adjustable) |
+| Dedup window | Same SQL doesn't reappear within window (default 60000ms, adjustable; dedup ignores leading / trailing and repeated whitespace differences — different parameters still count as different statements) |
 | Instant dedup | Toggling "Remove duplicate SQL" immediately trims existing duplicates in the window and shows a `⨉N` badge with the dropped count |
 | Keyword filter | Remove log lines containing specified keywords |
 | Timestamp display | Entry list shows capture time |
 
-### Double-Click Preview
+### Single-Click Preview & Double-Click Dialog
 
-Double-click a log entry → opens SQL preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The preview dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it.
+List entries use two-level previewing, consistent across the SQL log list, the History tab's second-level list and the history tool window:
+
+- **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; the "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, and there is a "Close" button; the popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately
+- **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it; with no data source configured, preview prepares silently — it no longer raises the Database tool window over the sidebar, and only an explicit run guides you through configuration
+
+List rows have a fixed height and no longer wrap by SQL content — for long SQL, view the full text via single-click preview or the double-click dialog.
 
 ## SQL History
 
 Enable "Auto-save SQL history" in settings (off by default) and entries evicted from the list are written to history files, browsable any time in the History tab:
 
 - **Level 1 (default view)**: file list — each row shows file name, size and SQL count; search box filters by file name
-- **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info); double-click an entry to preview, right-click to copy SQL or jump to source; search box filters by SQL content / source file
+- **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info); single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL or jump to source; search box filters by SQL content / source file
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically without interrupting browsing
 
 History files are saved under `.idea/sql-visualizer/sql-history/` in your project by default (renamed from `mybatis-plus-sql-visualizer` in v2026.9.2 — old directories are no longer read). Save location and file name pattern are configurable in settings.

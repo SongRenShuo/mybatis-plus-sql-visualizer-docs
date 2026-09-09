@@ -37,11 +37,14 @@ Planned features and progress.
 
 ### Log & History
 
-- [x] SQL log tool window (MyBatis / Hibernate / JdbcTemplate capture, Log → SQL batch restore)
+- [x] SQL log tool window (MyBatis / Hibernate / JdbcTemplate capture incl. multi-line statements, Log → SQL batch restore)
 - [x] Duration display & slow-query detection (threshold coloring, sort by duration)
 - [x] Precise jump to source — runtime `InnerInterceptor` marks the call site for exact `file:line` jumps; one-click interceptor injection from settings; multi-module source-root fallback
-- [x] Auto-open log tool window on first captured SQL (on by default, debounced and focus-friendly, suppressed for the session after a manual close)
+- [x] Auto-open log tool window on first captured SQL (on by default, debounced and focus-friendly, suppressed for the session after a manual close — lifted again on the next project run)
 - [x] Auto-start listening on project launch (captures on project open / run, resumes automatically on the next run after a manual stop)
+- [x] SQL log entry sequence numbers (`#N` per-session capture order, reset on each project run)
+- [x] Click preview (lightweight syntax-highlighted popup, editable inline, copy button with check-mark feedback; double-click still opens the full dialog)
+- [x] Stop capture when the log tool window closes
 - [x] SQL history two-level navigation + favorites (file list → entries, auto-save)
 - [x] Log capture pipeline performance optimization (EDT overhead reduction)
 - [x] Performance red-line hardening (inline error reporting instead of modal dialogs, streaming log rendering, parameter-input debounce, backgrounded large-file reads, memory-leak cleanup)
@@ -55,7 +58,7 @@ Planned features and progress.
 - [x] Local HTML help page (zero network dependency, dark mode)
 - [x] Renamed to SQL Visualizer (full MyBatis-Plus / MPJ / JPA / Hibernate support unchanged)
 
-> The M37 competitor-best fusion, JPA deepening, first batch of other ORM frameworks, the performance red-line hardening, hbm named queries and auto-start listening above are all merged into the dev branch (full test suite green) and ship with the next release.
+> Everything above has shipped with v2026.9.8 / v2026.9.9 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details.
 
 ## 💡 Under Consideration
 
