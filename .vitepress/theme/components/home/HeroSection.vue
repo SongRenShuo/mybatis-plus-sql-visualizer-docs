@@ -77,8 +77,17 @@ const { version } = usePluginVersion()
 
 <style scoped>
 .hero-section {
+  min-height: 100vh;
+  /* 移动端地址栏收放时按小视口高计算，避免首屏溢出 */
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
   padding-top: 8rem;
   padding-bottom: 5rem;
+}
+
+.hero-section .container {
+  width: 100%;
 }
 
 .hero-grid {
