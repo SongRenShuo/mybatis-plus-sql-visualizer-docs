@@ -9,7 +9,7 @@ next: false
 
 Planned features and progress.
 
-## ✅ Completed
+## Completed
 
 ### Preview & Diagnostics
 
@@ -60,13 +60,22 @@ Planned features and progress.
 
 > Everything above has shipped with v2026.9.8 / v2026.9.9 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details.
 
-## 💡 Under Consideration
+## In Progress
 
-- [ ] MPJ `fill` association rendering
-- [ ] Second batch of other ORM support (candidates: jOOQ / Jimmer / Fluent MyBatis / dbVisitor — research matrix ready)
-- [ ] Remaining long-tail JPA derived-query shapes
-- [ ] Ongoing performance optimization for large Wrapper chain parsing
-- [ ] MyBatis-Flex support (research on hold, re-evaluate on demand)
+The following features have landed on the dev branch with the full test suite green, and are planned to merge into master for the next release.
+
+- One-click error reporting to the website feedback pool — submit exceptions with environment details straight from the IDE to the [feedback pool](./feedback), no manual copy-paste
+- Three display modes for the SQL log / history list (single line / keyword wrap / formatted, keyword wrap by default) and per-entry meta line
+
+## Planned
+
+- Rollback SQL — generate rollback statements from a pre-execution snapshot in the preview window, INSERT derivation first
+- Agent bytecode enhancement — non-intrusive JDBC-level hooks covering 9 framework families (proof of concept first)
+- MPJ `fill` association rendering
+- Second batch of other ORM support (candidates: jOOQ / Jimmer / Fluent MyBatis / dbVisitor — research matrix ready)
+- Remaining long-tail JPA derived-query shapes
+- Ongoing performance work on large Wrapper chain parsing and log rendering
+- MyBatis-Flex support (research on hold, re-evaluate on demand)
 
 ---
 

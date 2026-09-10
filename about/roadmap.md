@@ -9,7 +9,7 @@ next: false
 
 插件功能的计划与进度。
 
-## ✅ 已完成
+## 已完成
 
 ### 预览与诊断
 
@@ -60,13 +60,22 @@ next: false
 
 > 以上功能已随 v2026.9.8 / v2026.9.9 正式发行，可在 JetBrains Marketplace 更新获取；版本明细见[更新日志](./changelog)。
 
-## 💡 待立项
+## 进行中
 
-- [ ] MPJ `fill` 关联填充渲染
-- [ ] 其他 ORM 支持第二批（候选：jOOQ / Jimmer / Fluent MyBatis / dbVisitor，调研矩阵已备）
-- [ ] JPA 派生查询长尾形态收尾
-- [ ] 大型 Wrapper 链解析性能持续优化
-- [ ] MyBatis-Flex 支持（调研已暂缓，视生态需求再评估）
+以下特性已在 dev 分支落地并通过全量测试，计划并入 master 随下一版发行。
+
+- 错误一键上报官网需求池——IDE 内把异常与环境信息直接提交到[需求反馈池](./feedback)，无需手动复制粘贴
+- SQL 日志 / 历史列表三种显示模式（单行 / 关键字换行 / 格式化，默认关键字换行）与条目元信息行
+
+## 规划中
+
+- 回滚 SQL——预览窗口按执行前快照生成回滚语句，先支持 INSERT 推导
+- Agent 字节码增强捕获——JDBC 层无侵入 hook，覆盖 9 大框架族（概念验证先行）
+- MPJ `fill` 关联填充渲染
+- 其他 ORM 支持第二批（候选：jOOQ / Jimmer / Fluent MyBatis / dbVisitor，调研矩阵已备）
+- JPA 派生查询长尾形态收尾
+- 大型 Wrapper 链解析与日志渲染性能持续优化
+- MyBatis-Flex 支持（调研已暂缓，视生态需求再评估）
 
 ---
 
