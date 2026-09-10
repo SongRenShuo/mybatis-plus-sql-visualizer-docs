@@ -38,6 +38,7 @@ next:
 .qr-cards {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 1.25rem;
   margin-top: 1.5rem;
 }

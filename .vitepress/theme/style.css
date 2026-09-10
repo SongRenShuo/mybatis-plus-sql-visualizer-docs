@@ -341,15 +341,16 @@
 }
 
 /* ---------- 表格样式 ---------- */
+/* display:table 才能让 width:100% 撑满内容列；block 下表格网格按内容收缩，右侧留白 */
 .vp-doc table {
   width: 100%;
   min-width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin: 24px 0;
   border-radius: 12px;
   border: 1px solid var(--border-color);
-  display: block;
-  overflow-x: auto;
+  display: table;
   table-layout: auto;
 }
 
@@ -377,7 +378,30 @@
   background: var(--bg-hover);
 }
 
+/* 圆角边框下首末行单元格背景各自倒角，避免方角溢出圆框 */
+.vp-doc table tr:first-child th:first-child {
+  border-top-left-radius: 11px;
+}
+
+.vp-doc table tr:first-child th:last-child {
+  border-top-right-radius: 11px;
+}
+
+.vp-doc table tr:last-child td:first-child {
+  border-bottom-left-radius: 11px;
+}
+
+.vp-doc table tr:last-child td:last-child {
+  border-bottom-right-radius: 11px;
+}
+
 @media (max-width: 768px) {
+  /* 窄屏退回块级+横向滚动，宽表不挤压 */
+  .vp-doc table {
+    display: block;
+    overflow-x: auto;
+  }
+
   .vp-doc table th,
   .vp-doc table td {
     padding: 10px 12px !important;
@@ -386,12 +410,6 @@
   .vp-doc table th {
     white-space: normal;
   }
-}
-
-/* 确保表格容器不会截断 */
-.vp-doc :where(h2, h3, h4, p):has(+ table) + table,
-.vp-doc table:first-of-type {
-  width: 100% !important;
 }
 
 /* ---------- 代码块 ---------- */
