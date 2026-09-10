@@ -1,13 +1,12 @@
 <script setup>
-/** GIF 加载失败时一次性降级为该项 poster 静态图，dataset 标记防止 onerror 死循环 */
+import { reactive } from 'vue'
+
+/** GIF 加载失败时置 gifError 摘除 GIF 叠层，poster 常驻兜底 */
 function onImgError(e, item) {
-  const img = e.target
-  if (img.dataset.fallback || !item.poster) return
-  img.dataset.fallback = '1'
-  img.src = item.poster
+  item.gifError = true
 }
 
-const features = [
+const features = reactive([
   {
     badge: 'Wrapper 预览',
     title: 'Wrapper → SQL 实时预览',
@@ -19,6 +18,8 @@ const features = [
     ],
     imageSrc: '/demo/wrapper-preview.gif',
     poster: '/demo/wrapper-preview.png',
+    gifReady: false,
+    gifError: false,
   },
   {
     badge: '日志还原',
@@ -31,6 +32,8 @@ const features = [
     ],
     imageSrc: '/demo/sql-log.gif',
     poster: '/demo/sql-log.png',
+    gifReady: false,
+    gifError: false,
     reverse: true,
   },
   {
@@ -44,6 +47,8 @@ const features = [
     ],
     imageSrc: '/demo/sql-to-java.gif',
     poster: '/demo/sql-to-java.png',
+    gifReady: false,
+    gifError: false,
   },
   {
     badge: '多框架支持',
@@ -56,9 +61,11 @@ const features = [
     ],
     imageSrc: '/demo/xml-preview.gif',
     poster: '/demo/xml-preview.png',
+    gifReady: false,
+    gifError: false,
     reverse: true,
   },
-]
+])
 </script>
 
 <template>
@@ -80,10 +87,19 @@ const features = [
         >
           <div class="feature-video-wrapper" :class="{ reverse: item.reverse }">
             <img
-              :src="item.imageSrc"
+              :src="item.poster"
               :alt="item.title"
               loading="lazy"
               class="feature-video"
+            />
+            <img
+              v-if="!item.gifError"
+              :src="item.imageSrc"
+              :alt="item.title"
+              loading="lazy"
+              class="feature-video feature-video--gif"
+              :class="{ 'feature-video--gif-ready': item.gifReady }"
+              @load="item.gifReady = true"
               @error="onImgError($event, item)"
             />
           </div>
@@ -178,6 +194,19 @@ const features = [
 
 .feature-video-wrapper.reverse {
   order: 1;
+}
+
+/* GIF 叠层：poster 常驻底层撑布局，GIF 就绪后淡入覆盖（T9c 弱网体验） */
+.feature-video--gif {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.feature-video--gif-ready {
+  opacity: 1;
 }
 
 @media (min-width: 768px) {

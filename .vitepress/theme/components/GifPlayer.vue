@@ -14,8 +14,9 @@ const container = ref<HTMLElement>()
 const loaded = ref(false)
 const playing = ref(true)
 const videoEl = ref<HTMLVideoElement>()
-/** GIF 加载状态：pending 加载中 / loaded 就绪 / error 加载失败（永久回落 poster） */
-const gifState = ref<'pending' | 'loaded' | 'error'>('pending')
+/** GIF 就绪后淡入覆盖 poster；失败则摘除 GIF 叠层，poster 常驻兜底（T9c） */
+const gifReady = ref(false)
+const gifError = ref(false)
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
@@ -36,16 +37,16 @@ onUnmounted(() => {
   observer?.disconnect()
 })
 
-/** 仅当加载目标是 GIF 本身时才推进状态；poster 兜底图自己的 load/error 不参与判断 */
+/** GIF 加载完成 → 淡入覆盖 poster（无 poster 时 GIF 直接常驻文档流） */
 function onImgLoad() {
   if (props.poster && playing.value) {
-    gifState.value = 'loaded'
+    gifReady.value = true
   }
 }
 
 function onImgError() {
   if (props.poster && playing.value) {
-    gifState.value = 'error'
+    gifError.value = true
   }
 }
 
@@ -79,20 +80,20 @@ function togglePlay() {
       preload="metadata"
     ></video>
     <template v-else-if="loaded">
-      <!-- 主 img 始终绑定真实 GIF 地址，load/error 事件归属 GIF 本身 -->
+      <!-- T9c：poster 常驻文档流撑起容器（弱网下第一时间有内容），GIF 叠层就绪后淡入覆盖；
+           GIF 加载失败摘除叠层，poster 永久兜底。暂停态直接显示 poster 静帧 -->
       <img
+        v-if="(playing || !poster) && !gifError"
         class="mp-gif-player__gif"
-        :class="{ 'mp-gif-player__gif--covered': poster && gifState !== 'loaded' }"
-        :src="playing ? src : poster || src"
+        :class="{ 'mp-gif-player__gif--ready': gifReady, 'mp-gif-player__gif--covered': !!poster }"
+        :src="src"
         :alt="alt || ''"
         loading="lazy"
         @load="onImgLoad"
         @error="onImgError"
       />
-      <!-- GIF 未就绪（加载中/失败）时由 poster 占位：poster 在文档流中撑起容器，
-           GIF img 退为底层叠层，避免加载期间容器塌陷破坏布局 -->
       <img
-        v-if="poster && gifState !== 'loaded'"
+        v-if="poster"
         class="mp-gif-player__poster"
         :src="poster"
         :alt="alt || ''"
@@ -110,12 +111,24 @@ function togglePlay() {
 </template>
 
 <style scoped>
-/* GIF 未就绪时退出文档流（仍持续加载并触发 load/error），由上层 poster 撑起布局；
+/* 有 poster 时 GIF 退为绝对定位叠层；就绪后 0.6s 淡入覆盖 poster（T9c 弱网体验）。
    .mp-gif-player 本身已带 position: relative + overflow: hidden + 圆角，叠层不会溢出 */
 .mp-gif-player__gif--covered {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.mp-gif-player__gif--ready.mp-gif-player__gif--covered {
+  opacity: 1;
+}
+
+/* 暂停态的 poster 静帧铺满容器 */
+.mp-gif-player__poster {
+  width: 100%;
+  display: block;
 }
 </style>

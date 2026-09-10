@@ -1,11 +1,9 @@
 <script setup>
-/** GIF 加载失败时一次性降级为同名静态图，dataset 标记防止 onerror 死循环 */
-function onImgError(e) {
-  const img = e.target
-  if (img.dataset.fallback) return
-  img.dataset.fallback = '1'
-  img.src = '/demo/wrapper-preview.png'
-}
+import { ref } from 'vue'
+
+/** T9c：poster 常驻底层，GIF 就绪后淡入覆盖；失败摘除 GIF 叠层，poster 永久兜底 */
+const gifReady = ref(false)
+const gifError = ref(false)
 </script>
 
 <template>
@@ -61,11 +59,19 @@ function onImgError(e) {
 
         <div class="docs-showcase-video-wrap">
           <img
+            src="/demo/wrapper-preview.png"
+            alt="Wrapper → SQL 预览演示"
+            class="docs-showcase-video"
+          />
+          <img
+            v-if="!gifError"
             src="/demo/wrapper-preview.gif"
             alt="Wrapper → SQL 预览演示"
             loading="lazy"
-            class="docs-showcase-video"
-            @error="onImgError"
+            class="docs-showcase-video docs-showcase-video--gif"
+            :class="{ 'docs-showcase-video--gif-ready': gifReady }"
+            @load="gifReady = true"
+            @error="gifError = true"
           />
         </div>
       </div>
@@ -209,5 +215,17 @@ function onImgError(e) {
   height: 100%;
   display: block;
   object-fit: cover;
+}
+
+/* GIF 叠层：poster 常驻底层，GIF 就绪后淡入覆盖（T9c 弱网体验） */
+.docs-showcase-video--gif {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.docs-showcase-video--gif-ready {
+  opacity: 1;
 }
 </style>
