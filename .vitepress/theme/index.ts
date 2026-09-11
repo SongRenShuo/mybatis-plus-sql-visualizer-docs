@@ -21,6 +21,9 @@ import CoolHome from './components/home/CoolHome.vue'
 // 反馈池组件
 import FeedbackPage from './components/feedback/FeedbackPage.vue'
 
+// 访问埋点
+import { setupTracker } from './composables/useTracker'
+
 // 自定义样式
 import './style.css'
 
@@ -52,7 +55,8 @@ export default {
         ])
     })
   },
-  enhanceApp({ app }) {
+  enhanceApp({ app, router }) {
+    setupTracker(router)
     app.component('GifPlayer', GifPlayer)
     app.component('ThemedImage', ThemedImage)
     app.component('Steps', Steps)
