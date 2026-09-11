@@ -15,6 +15,8 @@ With the setting "Auto-start listening on project launch" enabled, no button cli
 
 Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto-restore to complete SQL. Hibernate (`Hibernate:` + `binding parameter`) and Spring JdbcTemplate log formats are also recognized — statements wrapped across multiple lines are collected in full, and brackets inside string literals don't cause premature closing — enabled by default.
 
+When both Hibernate `show_sql` and its logger print the same statement, the two paths are merged into one entry with the parameters kept together — no zero-parameter leftovers and no false "parameter count mismatch"; if a statement had no parameter-binding log captured at all, the preview says so and guides you to enable TRACE level, and only genuinely incomplete parameters report a count mismatch.
+
 ### Auto-Open Tool Window
 
 When the setting "Auto-open log window on SQL found" (on by default) is active, capturing the first SQL auto-opens the log tool window — debounced to once per 60 seconds, without stealing editor focus. Behavior notes:
@@ -41,7 +43,7 @@ Supports multiple log formats:
 
 Each list entry shows a `#N` number at the front of its meta line — the Nth SQL captured in this session, handy for referring to "entry N":
 
-- Counting restarts from 1 on every project run; clearing the list manually also resets it
+- Counting restarts from 1 on every project run (application / test run configurations — launches of unrelated processes don't reset it); clearing the list manually also resets it
 - SQL dropped by dedup, capture pause or keyword filter takes no number, so the list never skips
 - Numbers stay readable when sorted by duration, preserving the original capture order; entries read back from history files carry no number
 
@@ -80,7 +82,7 @@ Right-click a log entry → "Jump to Source". Three levels of behavior:
 List entries use two-level previewing, consistent across the SQL log list, the History tab's second-level list and the history tool window:
 
 - **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; the "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, and there is a "Close" button; the popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately
-- **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it; with no data source configured, preview prepares silently — it no longer raises the Database tool window over the sidebar, and only an explicit run guides you through configuration
+- **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The toolbar offers layout toggles — horizontal / vertical / keyword wrap — plus a "More" menu gathering low-frequency actions (import parameters, diff, share); vertical layout annotates each INSERT value line end with a `-- column` tag (can be disabled in settings), and IN lists with fewer than 5 elements stay on one line while 5 or more expand one per line; the display mode you switch to survives parameter refill instead of being wiped by re-rendering (Refresh resets it). The dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it; with no data source configured, preview prepares silently — it no longer raises the Database tool window over the sidebar, and only an explicit run guides you through configuration
 
 List rows have a fixed height and no longer wrap by SQL content — for long SQL, view the full text via single-click preview or the double-click dialog.
 
@@ -91,6 +93,7 @@ Enable "Auto-save SQL history" in settings (off by default) and entries evicted 
 - **Level 1 (default view)**: file list — each row shows file name, size and SQL count; search box filters by file name
 - **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info); single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL or jump to source; search box filters by SQL content / source file
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically without interrupting browsing
+- **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same; history files (v2 format) store parameters per entry in an inline `-- pd:` comment line next to the statement — older plugin versions ignore that line and open the file as usual, while the new version reads all older files normally
 
 History files are saved under `.idea/sql-visualizer/sql-history/` in your project by default (renamed from `mybatis-plus-sql-visualizer` in v2026.9.2 — old directories are no longer read). Save location and file name pattern are configurable in settings.
 

@@ -135,7 +135,7 @@ export const enFeatureMatrix = [
       [
         'Auto Capture',
         'sidebar "Capture" button; auto-starts on project open / run with the matching setting enabled',
-        'Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats (multi-line statements included); `#N` per-session entry numbers',
+        'Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats (multi-line statements included, duplicate dual-path prints merged); `#N` per-session entry numbers',
       ],
       [
         'Click Preview',
@@ -180,8 +180,8 @@ export const enFeatureMatrix = [
         'Red warning when no WHERE clause — full-table operation risk',
       ],
       [
-        'Update Check',
-        'Settings page one-click check, background download & install',
+        'No-Restart Update',
+        'One-click download & install hot-swaps the new version into the running IDE instantly — no restart needed; auto-fallback to the restart script where dynamic install isn\'t available',
       ],
     ],
   },
