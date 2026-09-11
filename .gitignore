@@ -30,6 +30,7 @@ credentials*.json
 cf-credentials*.json
 r2-credentials*.json
 wrangler.toml
+.cf-token
 
 # Local dev / temp
 *.local
