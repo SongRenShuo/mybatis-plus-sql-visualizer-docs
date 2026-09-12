@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 
 const props = defineProps<{
   src: string
@@ -17,7 +17,19 @@ const videoEl = ref<HTMLVideoElement>()
 /** GIF 就绪后淡入覆盖 poster；失败则摘除 GIF 叠层，poster 常驻兜底（T9c） */
 const gifReady = ref(false)
 const gifError = ref(false)
+const gifImg = ref<HTMLImageElement>()
 let observer: IntersectionObserver | null = null
+
+/** 缓存命中的 GIF 可能在 @load 监听器就位前已 complete（hydration 竞态，load 永不
+    触发，gifReady 恒 false → 叠层恒透明退化为静态 poster），按 complete + naturalWidth
+    直接补位（同 efda401 首页两组件口径：就绪置 ready，complete 且宽 0 视为失败） */
+function syncGifState() {
+  if (!props.poster || !playing.value) return
+  const img = gifImg.value
+  if (!img?.complete) return
+  if (img.naturalWidth > 0) gifReady.value = true
+  else gifError.value = true
+}
 
 onMounted(() => {
   if (!container.value) return
@@ -31,7 +43,11 @@ onMounted(() => {
     { rootMargin: '200px' }
   )
   observer.observe(container.value)
+  syncGifState()
 })
+
+// 懒加载门打开后 GIF img 才挂载（暂停/恢复也会重挂），挂载后补一次 complete 检查
+watch([loaded, playing], () => nextTick(syncGifState))
 
 onUnmounted(() => {
   observer?.disconnect()
@@ -84,6 +100,7 @@ function togglePlay() {
            GIF 加载失败摘除叠层，poster 永久兜底。暂停态直接显示 poster 静帧 -->
       <img
         v-if="(playing || !poster) && !gifError"
+        ref="gifImg"
         class="mp-gif-player__gif"
         :class="{ 'mp-gif-player__gif--ready': gifReady, 'mp-gif-player__gif--covered': !!poster }"
         :src="src"

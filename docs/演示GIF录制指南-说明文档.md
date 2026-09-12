@@ -64,8 +64,11 @@ search: false
 3. **IME**：整个录制期保持英文态，打字前看一眼任务栏指示器。中文态的候选框入镜只有抽帧才能发现。
 4. **T3 类打字场景全键盘化**：goto_line 居中有 ±2 行漂移，点击行坐标不可靠；goto 本身把光标落在目标行行首，之后 End/Enter/键入全键盘完成，鼠标只做演示滑动。
 5. **前台抢夺**：`AttachThreadInput + SetForegroundWindow` 只给焦点不改 Z 序，视觉上窗口还在浏览器后面，坐标点击会穿透。要配 TOPMOST→NOTOPMOST 舞步；点击坐标在窗口可视区内（DWM 阴影边约 13px 不算数，超了就点到后面的窗口上）。
-6. **坐标系两套**：shot.py/region 截图是 region 相对坐标，点击要 +277/+25；全屏截图 raster 是 1280×720，物理坐标 ×1.5。混用是最大的时间坑，写坐标前先想清楚手里是哪张图。
+6. **坐标系两套**：shot.py/region 截图是 region 相对坐标，点击要 +277/+25；全屏截图 raster 是 1280×720，物理坐标 ×1.5。混用是最大的时间坑，写坐标前先想清楚手里是哪张图。裁剪局部图量的坐标还要再加一层偏移——三套数字（屏幕 / region / 裁剪内）逐级换算，点错一格就是 neighboring 控件。
 7. **运行时改 Zoom 的钳制**：见环境就位清单，预写 other.xml 或等空闲后再定位。
+8. **PixPin 全局热键撞车**：PixPin 常驻时 `Ctrl+Shift+A`（截图）、`Ctrl+Alt+S`（取色）都会被它劫持——Find Action 和 Settings 快捷键全部失效还会弹出它的覆盖层。开 Settings 走 IDE 工具栏齿轮菜单；Find Action 期间先确认 PixPin 不在撞键范围。
+9. **IDE 编辑器缓冲污染**：误打进编辑器的文字用 Ctrl+Z 可能撤不掉（撤销栈状态异常），关标签重开也可能复用内存脏 Document。可靠清理是右键 > Local History > Show History，选污染前的时间点 Revert——它按内容快照回滚，不依赖撤销栈。
+10. **置顶覆盖层抢前台**：ZCode 自动化面板等常驻应用若处于置顶态，TOPMOST→NOTOPMOST 舞步会把 IDE 抬回非置顶带、照样被盖住，坐标点击会打进覆盖层（曾误触自动化面板）。点前先 EnumWindows 核对目标窗口标题与位置，必要时让 IDE 持续保持 TOPMOST 干完活再撤。
 
 ## 逐张场景速查（修订九实测）
 
@@ -78,7 +81,7 @@ search: false
 | completion | t3 | goto(77) 后全键盘（End/Enter/join us/Enter），结尾 undo×4 还原现场 |
 | jpa | t1 | 双弹窗：42 行窄窗直取 + goto(147) 中心取簇，结尾回跳 42 保证接缝 |
 | sql-log | t5 | 应用先跑（8081，选 MybatisPlusDemoApplication），捕捉后轮询触发查询 |
-| sql-to-java | t6 | **输入编辑器回归未修**，继续保留旧成品，修好后按 scene_t6 补录 |
+| sql-to-java | t6 | 修订十一已重录（宽侧栏+Services 关闭构图）；回归已消失；tab 判定用暗蓝药丸（见 scene_t6 ensure_sqljava_tab）；复制按钮=输出区图标行左一（1187,421 旧标，宽侧栏下 (1038,582)） |
 
 ## 落地清单（录完到 commit）
 

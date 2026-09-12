@@ -2,6 +2,8 @@
 
 All settings are located at `Settings > Tools > SQL Visualizer`.
 
+![SQL Visualizer main settings page (Tools > SQL Visualizer)](/demo/settings.png)
+
 No IDE restart needed: re-trigger preview to apply new settings.
 
 ## SQL Preview

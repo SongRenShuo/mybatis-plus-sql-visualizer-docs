@@ -30,6 +30,8 @@
 2. 按 <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>（macOS <kbd>Option</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>）
 3. 弹窗显示生成的 SQL
 
+<GifPlayer src="/demo/wrapper-preview.gif" poster="/demo/wrapper-preview.png" alt="Wrapper 预览演示：光标置于 Wrapper 链，弹窗实时生成 SQL" />
+
 <code-group>
 <div title="Java 代码">
 

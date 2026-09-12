@@ -30,6 +30,8 @@ Once installed, on any MyBatis-Plus Wrapper code:
 2. Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd> (macOS <kbd>Option</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>)
 3. Dialog shows the generated SQL
 
+<GifPlayer src="/demo/wrapper-preview.gif" poster="/demo/wrapper-preview.png" alt="Wrapper preview demo: cursor on a Wrapper chain, SQL generated in a popup" />
+
 <code-group>
 <div title="Java Code">
 

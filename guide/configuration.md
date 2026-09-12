@@ -2,6 +2,8 @@
 
 所有配置位于 `Settings > Tools > SQL Visualizer`。
 
+![SQL Visualizer 设置主页面（Tools > SQL Visualizer）](/demo/settings.png)
+
 设置变更无需重启 IDE：重新触发预览即按新配置生效。
 
 ## SQL 预览
