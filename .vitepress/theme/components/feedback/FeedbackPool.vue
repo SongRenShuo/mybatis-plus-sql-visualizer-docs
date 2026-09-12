@@ -442,7 +442,8 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
   border-radius: 6px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
-  font-size: 0.8rem;
+  /* 与同行三个 FilterSelect 触发器同档，工具栏一排控件字号一致 */
+  font-size: 0.85rem;
   width: 200px;
 }
 
@@ -543,7 +544,8 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
   border-radius: 6px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
-  font-size: 0.8rem;
+  /* 与列表视图的筛选控件、下拉选项同档 */
+  font-size: 0.85rem;
   width: 240px;
 }
 

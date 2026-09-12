@@ -140,7 +140,9 @@ onBeforeUnmount(close)
   border-radius: 6px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
-  font-size: 0.8rem;
+  /* 与 .fs-option 同档（0.85rem）：同一个下拉的触发器与选项字号必须一致，
+     否则展开后会看到文字大小跳变。表单内由 FeedbackForm 覆盖为 1rem 对齐输入框 */
+  font-size: 0.85rem;
   line-height: 1.5;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s;
