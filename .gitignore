@@ -6,6 +6,8 @@ node_modules
 .vitepress/dist
 .vitepress/cache
 .vitepress/.temp
+# VitePress 加载 config.mts 时由 esbuild 生成的临时文件（每次构建一个，会持续堆积）
+.vitepress/config.mts.timestamp-*.mjs
 
 # Editor
 .vscode
