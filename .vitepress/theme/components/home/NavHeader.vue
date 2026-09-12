@@ -102,16 +102,19 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- 全屏导航层（参照文档页 VPNavScreen）：z-index -1 压在 header 背景之上、
-         nav-content 之下，不依赖顶栏具体高度，logo 与关闭按钮保持可点 -->
+    <!-- 全屏导航层（对齐文档页 VPNavScreen 交互）：z-index -1 压在 header 背景之上、
+         nav-content 之下，不依赖顶栏具体高度，logo 与关闭按钮保持可点；
+         动画与 VPNavScreen 同配方——整屏 opacity .25s + 内部容器 translateY(-8px)→0 滑入 -->
     <Transition name="menu-fade">
       <div v-if="mobileOpen" class="mobile-menu">
-        <nav class="mobile-links">
-          <a href="/features/wrapper-preview" class="mobile-link" @click="mobileOpen = false">功能详解</a>
-          <a href="/guide/getting-started" class="mobile-link" @click="mobileOpen = false">使用指南</a>
-          <a href="/about/feedback" class="mobile-link" @click="mobileOpen = false">需求池</a>
-          <a href="/about/" class="mobile-link" @click="mobileOpen = false">关于</a>
-        </nav>
+        <div class="mobile-menu-container">
+          <nav class="mobile-links">
+            <a href="/features/wrapper-preview" class="mobile-link" @click="mobileOpen = false">功能详解</a>
+            <a href="/guide/getting-started" class="mobile-link" @click="mobileOpen = false">使用指南</a>
+            <a href="/about/feedback" class="mobile-link" @click="mobileOpen = false">需求池</a>
+            <a href="/about/" class="mobile-link" @click="mobileOpen = false">关于</a>
+          </nav>
+        </div>
       </div>
     </Transition>
   </header>
@@ -309,19 +312,24 @@ onUnmounted(() => {
   }
 }
 
+/* 内部容器承担 VPNavScreen 同款滑入位移，动画由 .menu-fade-* 类驱动 */
+.mobile-menu-container {
+  padding: 0.5rem 1.5rem 2rem;
+}
+
 .mobile-links {
   display: flex;
   flex-direction: column;
-  padding: 0.5rem 1.5rem 2rem;
 }
 
 .mobile-link {
   display: block;
-  padding: 1rem 0;
+  padding: 0.875rem 0;
   color: var(--text-primary);
   text-decoration: none;
   font-size: 1.05rem;
   border-bottom: 1px solid var(--border-color);
+  transition: color 0.25s, border-color 0.25s;
 }
 
 .mobile-link:last-child {
@@ -332,15 +340,25 @@ onUnmounted(() => {
   color: var(--primary-color);
 }
 
-/* 展开过渡：淡入消除闪现 */
+/* 展开/收起过渡：整屏淡入 + 内容自上下移 8px 滑入，与文档页 VPNavScreen 同配方 */
 .menu-fade-enter-active,
 .menu-fade-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s;
+}
+
+.menu-fade-enter-active .mobile-menu-container,
+.menu-fade-leave-active .mobile-menu-container {
+  transition: transform 0.25s ease;
 }
 
 .menu-fade-enter-from,
 .menu-fade-leave-to {
   opacity: 0;
+}
+
+.menu-fade-enter-from .mobile-menu-container,
+.menu-fade-leave-to .mobile-menu-container {
+  transform: translateY(-8px);
 }
 
 /* 小屏收紧：320px 视口顶栏不溢出不重叠 */
