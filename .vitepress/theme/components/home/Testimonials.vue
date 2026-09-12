@@ -1,24 +1,24 @@
 <script setup>
 const testimonials = [
   {
-    quote: '自从用了这个插件，写 LambdaQueryWrapper 的时候终于不用反复启动项目确认生成的 SQL 了。联表查询的预览特别准，MPJ 的 leftJoin 也能直接看到完整 SQL，排查问题快了很多。',
-    name: '陈伟',
+    quote: '接手的项目一半是 MP 一半是 JdbcTemplate 的字符串 SQL，之前想看真实执行的 SQL 只能跑一遍再翻日志。现在两种写法行首都有图标，点一下直接出 SQL，StringBuilder 拼的也能聚合，上周排查一个分页翻错的问题没启动项目就定位了。',
+    name: '夜航船',
     role: 'Java 开发工程师',
-    initials: '陈',
+    initials: '夜',
     color: '#6366f1',
   },
   {
-    quote: '控制台日志还原功能太实用了，以前看到一堆 Preparing 和 Parameters 还得手动拼 SQL，现在点一下就搞定。动态条件勾选也很方便，if 标签的预览和实际执行完全一致。',
-    name: '林晓东',
+    quote: '我们组维护一个 Hibernate 老项目，实体还挂在 .hbm.xml 上，Criteria 查询根本看不出最后跑的是什么语句。这插件不用启容器就能把 HQL 和 Criteria 链还原成 SQL，hbm 里的命名查询也能认，改一版查询不用再拉同事帮忙跑项目了。',
+    name: '不写注释的人',
     role: '后端开发',
-    initials: '林',
+    initials: '不',
     color: '#0ea5e9',
   },
   {
-    quote: 'SQL 反向转 Java 代码这个功能很惊喜，接手老项目的时候从日志里拿到 SQL，直接转成 LambdaQueryWrapper 代码，省了不少手写的时间。推荐团队都装上了。',
-    name: '黄志鹏',
+    quote: 'SQL 日志窗口现在是开项目自动抓，参数拼好还能点回源码位置，慢查询直接标红。上次压测就靠它挑出两条没走索引的语句。更新也免得重启 IDE，点一下装完接着用，比很多插件都省心。',
+    name: '半糖不加冰',
     role: '全栈开发工程师',
-    initials: '黄',
+    initials: '半',
     color: '#10b981',
   },
 ]
