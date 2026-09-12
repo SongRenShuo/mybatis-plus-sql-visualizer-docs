@@ -567,6 +567,14 @@ kbd {
 
 .mp-gif-player img { display: block; max-width: 100%; }
 
+/* 演示素材四边带录制窗口的浅灰窗框（左/右 7-8px、底部 2-8px、顶部 0-1px，实测值），
+   亮色页面下不可见，暗色模式下呈白边。按百分比裁边随渲染尺寸等比缩放，
+   覆盖 1280×920 与 1440×1034 两批素材的最大窗框厚度 */
+.mp-gif-player img,
+.mp-gif-player video {
+  clip-path: inset(0.15% 0.6% 0.85% 0.6%);
+}
+
 .mp-gif-player__badge {
   position: absolute;
   bottom: 14px;
@@ -733,6 +741,18 @@ kbd {
   .container {
     max-width: 1280px;
   }
+}
+
+/* 标题行高兜底：VitePress 全局 reset 把 h1-h6 压成 line-height:24px，
+   自定义首页标题放大字号后换行会两行重叠（36px 字号 + 24px 行高），统一恢复无单位行高；
+   组件内已显式声明 line-height 的（如 feature-title 1.2）因 scoped 选择器优先级更高不受影响 */
+.cool-home h1,
+.cool-home h2,
+.cool-home h3,
+.cool-home h4,
+.cool-home h5,
+.cool-home h6 {
+  line-height: 1.25;
 }
 
 /* 暗色模式适配（首页组件使用 :global(.dark) 无法覆盖的场景） */

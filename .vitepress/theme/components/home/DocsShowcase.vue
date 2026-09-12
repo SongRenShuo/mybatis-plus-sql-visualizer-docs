@@ -216,6 +216,8 @@ const gifError = ref(false)
   height: 100%;
   display: block;
   object-fit: cover;
+  /* 裁掉素材自带的浅灰窗框（暗色模式下呈白边），poster 与 GIF 叠层同类共用 */
+  clip-path: inset(0.15% 0.6% 0.85% 0.6%);
 }
 
 /* GIF 叠层：poster 常驻底层，GIF 就绪后淡入覆盖（T9c 弱网体验） */
