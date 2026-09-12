@@ -58,6 +58,28 @@
       <FilterSelect v-model="form.category" :options="categories" />
     </div>
 
+    <!-- IDE 版本 / 插件版本：均选填、默认空；选项动态获取，可搜索、搜不到可用自定义输入 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>{{ t('formIdeVersion', props.locale || 'zh') }}</label>
+        <VersionSelect
+          v-model="form.ideVersion"
+          :options="ideVersionOptions"
+          :locale="props.locale || 'zh'"
+          :placeholder="t('formIdeVersionPlaceholder', props.locale || 'zh')"
+        />
+      </div>
+      <div class="form-group">
+        <label>{{ t('formPluginVersion', props.locale || 'zh') }}</label>
+        <VersionSelect
+          v-model="form.pluginVersion"
+          :options="pluginVersionOptions"
+          :locale="props.locale || 'zh'"
+          :placeholder="t('formPluginVersionPlaceholder', props.locale || 'zh')"
+        />
+      </div>
+    </div>
+
     <!-- 昵称和邮箱 -->
     <div class="form-row">
       <div class="form-group">
@@ -114,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, markRaw } from 'vue'
+import { ref, computed, reactive, markRaw, onMounted } from 'vue'
 
 const props = defineProps<{
   apiBase: string
@@ -130,6 +152,7 @@ const emit = defineEmits<{
 
 import { t, type MessageKey } from './i18n'
 import FilterSelect from './FilterSelect.vue'
+import VersionSelect from './VersionSelect.vue'
 
 const types = computed<Array<{ value: number; label: string; icon: string; color: string }>>(() => {
   const l = props.locale || 'zh'
@@ -161,8 +184,29 @@ const form = reactive({
   type: 1,
   // 深链预填分类：仅接受合法 slug，否则回落 other；用户进表单后仍可随意切换
   category: props.initialCategory && categorySlugs.includes(props.initialCategory) ? props.initialCategory : 'other',
+  // 环境版本：均非必填、默认空（不预选任何值）
+  ideVersion: '',
+  pluginVersion: '',
   submitterName: '',
   submitterEmail: '',
+})
+
+// 版本下拉选项：由后端 /feedback/version-options 动态提供（库内沉淀 ∪ 插件市场基线 ∪ 管理员覆盖）。
+// 拉取失败只让下拉为空，不阻塞提交——版本本身是选填项
+const ideVersionOptions = ref<string[]>([])
+const pluginVersionOptions = ref<string[]>([])
+
+onMounted(async () => {
+  try {
+    const res = await fetch(`${props.apiBase}/feedback/version-options`)
+    const data = await res.json()
+    if (data.code === 0) {
+      ideVersionOptions.value = data.data?.ideVersions || []
+      pluginVersionOptions.value = data.data?.pluginVersions || []
+    }
+  } catch {
+    /* 静默：选项拿不到时用户仍可自定义输入 */
+  }
 })
 
 // T-ErrReport：IDE 插件错误对话框的浏览器兜底链接带 ?source=ide&ideVersion=…&pluginVersion=…，
@@ -184,6 +228,10 @@ const fromIdeLabel = computed(() => {
     .join(' · ')
   return env ? `${t('formFromIde', l)} ${env}` : t('formFromIde', l)
 })
+
+// 深链携带的环境值预填进两个下拉（用户仍可改或清空）——IDE 一键报告进来的场景
+if (ideContext?.ideVersion) form.ideVersion = ideContext.ideVersion
+if (ideContext?.pluginVersion) form.pluginVersion = ideContext.pluginVersion
 
 const submitting = ref(false)
 const success = ref(false)
@@ -347,13 +395,16 @@ async function handleSubmit() {
         description: form.description,
         type: form.type,
         category: form.category,
+        // 环境版本：选填，留空则不传（后端按 NULL 落库）
+        ideVersion: form.ideVersion.trim() || undefined,
+        pluginVersion: form.pluginVersion.trim() || undefined,
         submitterName: form.submitterName || undefined,
         submitterEmail: form.submitterEmail || undefined,
         isAnonymous: !form.submitterName,
-        // T-ErrReport：IDE 兜底链路携带来源与环境（后端 fb_posts 已有这三列）
+        // T-ErrReport：IDE 兜底链路携带来源（后端 fb_posts 已有该列）。
+        // 版本值统一由上方两个表单字段提供——深链进来时已预填进 form，用户可改，
+        // 这里不再用 ideContext 覆盖，否则 Web 用户填的值会被恒定为 undefined。
         source: ideContext ? 'ide' : undefined,
-        ideVersion: ideContext?.ideVersion || undefined,
-        pluginVersion: ideContext?.pluginVersion || undefined,
         attachments: successfulAttachments(),
       }),
     })
@@ -368,6 +419,8 @@ async function handleSubmit() {
       form.description = ''
       form.type = 1
       form.category = 'other'
+      form.ideVersion = ''
+      form.pluginVersion = ''
       form.submitterName = ''
       form.submitterEmail = ''
       items.value = []

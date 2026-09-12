@@ -20,6 +20,14 @@
           <span class="fd-dot">·</span>
           <span class="fd-category">{{ categoryLabel(post.category) }}</span>
         </template>
+        <template v-if="post.ideVersion">
+          <span class="fd-dot">·</span>
+          <span class="fd-env">IDE {{ post.ideVersion }}</span>
+        </template>
+        <template v-if="post.pluginVersion">
+          <span class="fd-dot">·</span>
+          <span class="fd-env">插件 {{ post.pluginVersion }}</span>
+        </template>
       </div>
       <div class="fd-desc">
         <div class="fd-desc-body" v-html="renderMd(post.description)"></div>
@@ -209,6 +217,9 @@ interface Post {
   submitterName: string
   createdAt: string
   updatedAt: string
+  /** 环境版本（选填，提交时用户选择或自定义，可空） */
+  ideVersion?: string | null
+  pluginVersion?: string | null
   tags: Array<{ name: string; color: string }>
   comments: Comment[]
   statusLogs: StatusLog[]
