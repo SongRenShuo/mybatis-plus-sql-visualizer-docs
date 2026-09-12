@@ -1,10 +1,25 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
+
+const sectionEl = ref(null)
 
 /** GIF 加载失败时置 gifError 摘除 GIF 叠层，poster 常驻兜底 */
 function onImgError(e, item) {
   item.gifError = true
 }
+
+// GIF 命中 HTTP 缓存时 load 事件可能早于 Vue 挂载监听器触发（hydration 输掉竞态，
+// gifReady 永不置位 → 叠层恒透明退化为静态 poster），挂载后按 complete 状态直接补位；
+// v-for DOM 顺序与 features 一致，按序号回填
+onMounted(() => {
+  if (!sectionEl.value) return
+  const imgs = sectionEl.value.querySelectorAll('img.feature-video--gif')
+  imgs.forEach((img, index) => {
+    if (!img.complete || !features[index]) return
+    if (img.naturalWidth > 0) features[index].gifReady = true
+    else features[index].gifError = true
+  })
+})
 
 const features = reactive([
   {
@@ -69,7 +84,7 @@ const features = reactive([
 </script>
 
 <template>
-  <section class="features-section">
+  <section ref="sectionEl" class="features-section">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">大幅提升您的 SQL 调试效率</h2>

@@ -1,9 +1,19 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 /** T9c：poster 常驻底层，GIF 就绪后淡入覆盖；失败摘除 GIF 叠层，poster 永久兜底 */
 const gifReady = ref(false)
 const gifError = ref(false)
+const gifImg = ref(null)
+
+// GIF 命中 HTTP 缓存时 load 事件可能早于 Vue 挂载监听器触发（hydration 输掉竞态，
+// gifReady 永不置位 → 叠层恒透明退化为静态 poster），挂载后按 complete 状态直接补位
+onMounted(() => {
+  const img = gifImg.value
+  if (!img?.complete) return
+  if (img.naturalWidth > 0) gifReady.value = true
+  else gifError.value = true
+})
 </script>
 
 <template>
@@ -65,6 +75,7 @@ const gifError = ref(false)
           />
           <img
             v-if="!gifError"
+            ref="gifImg"
             src="/demo/wrapper-preview.gif"
             alt="Wrapper → SQL 预览演示"
             loading="lazy"
