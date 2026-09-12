@@ -6,7 +6,7 @@ titleTemplate: false
 hero:
   name: SQL Visualizer
   text: IntelliJ IDEA Plugin
-  tagline: "Wrapper chain, XML/annotation/HQL dynamic SQL live preview (incl. MPJ JOIN), real EXPLAIN plans, console log restore with precise jump-to-source, SQL to Java reverse conversion. No more log digging."
+  tagline: "See the exact SQL your code will run — before the server starts. Wrapper chain, XML/annotation/HQL dynamic SQL live preview (incl. MPJ JOIN), real EXPLAIN plans, console log restore with precise jump-to-source, SQL to Java reverse conversion. No more log digging."
   image:
     src: /logo.svg
     alt: SQL Visualizer

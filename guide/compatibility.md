@@ -30,4 +30,4 @@
 
 ## 遇到兼容性问题
 
-先确认 IDE 版本 ≥ 2024.3，再参考 [FAQ](./faq.md) 排查；仍无法解决的，欢迎到 [Gitee Issues](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/issues) 反馈，附上 IDE 版本号与报错信息。
+先确认 IDE 版本 ≥ 2024.3，再参考 [FAQ](./faq.md) 排查；仍无法解决的，欢迎到 [官网需求池](https://sql-visualizer.jvtools.cn/about/feedback) 反馈，附上 IDE 版本号与报错信息。

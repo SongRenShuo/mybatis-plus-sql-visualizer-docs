@@ -81,4 +81,4 @@ next: false
 
 ---
 
-欢迎通过 [Gitee Issues](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/issues) 提交功能建议。
+欢迎通过 [官网需求池](https://sql-visualizer.jvtools.cn/about/feedback) 提交功能建议。

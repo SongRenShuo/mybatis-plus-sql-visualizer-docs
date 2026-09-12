@@ -85,7 +85,7 @@ v2026.9.2 起，插件在项目内的数据目录由 `.idea/mybatis-plus-sql-vis
 
 ## 反馈问题需要提供什么信息？
 
-请到 [Gitee Issues](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/issues) 提交反馈。建议附上：
+请到 [官网需求池](https://sql-visualizer.jvtools.cn/about/feedback) 提交反馈。建议附上：
 
 - 插件版本号（设置页「内部构建号」可一键复制）
 - IDE 版本（`Help → About`）

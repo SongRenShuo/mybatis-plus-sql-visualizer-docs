@@ -81,4 +81,4 @@ The following features have landed on the dev branch with the full test suite gr
 
 ---
 
-Feature suggestions welcome via [Gitee Issues](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/issues).
+Feature suggestions welcome via [Feedback Pool](https://sql-visualizer.jvtools.cn/en/about/feedback).

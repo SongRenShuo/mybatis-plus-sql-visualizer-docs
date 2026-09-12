@@ -10,8 +10,8 @@ const { version } = usePluginVersion()
       <div class="hero-grid">
         <div class="hero-content">
           <h1 class="hero-title">
-            让 SQL 调试<br />
-            <span class="hero-title-highlight">变得简单</span>
+            服务未启，<br />
+            <span class="hero-title-highlight">SQL 先知</span>
           </h1>
 
           <p class="hero-description">

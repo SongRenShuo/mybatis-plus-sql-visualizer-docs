@@ -85,7 +85,7 @@ In plugin settings, click "Edit" next to the shortcut to re-record. If conflicti
 
 ## What to include when reporting issues?
 
-Please submit feedback at [Gitee Issues](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/issues). Suggested info:
+Please submit feedback at [Feedback Pool](https://sql-visualizer.jvtools.cn/en/about/feedback). Suggested info:
 
 - Plugin version (build number in settings, one-click copy)
 - IDE version (`Help → About`)

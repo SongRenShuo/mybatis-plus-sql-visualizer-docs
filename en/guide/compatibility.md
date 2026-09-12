@@ -30,4 +30,4 @@
 
 ## If something does not work
 
-First confirm the IDE version is ≥ 2024.3, then check the [FAQ](./faq.md). If the problem persists, please open a [Gitee Issue](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/issues) with your IDE version and the error output.
+First confirm the IDE version is ≥ 2024.3, then check the [FAQ](./faq.md). If the problem persists, please open a [Feedback Pool](https://sql-visualizer.jvtools.cn/en/about/feedback) with your IDE version and the error output.
