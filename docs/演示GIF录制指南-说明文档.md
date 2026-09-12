@@ -69,6 +69,8 @@ search: false
 8. **PixPin 全局热键撞车**：PixPin 常驻时 `Ctrl+Shift+A`（截图）、`Ctrl+Alt+S`（取色）都会被它劫持——Find Action 和 Settings 快捷键全部失效还会弹出它的覆盖层。开 Settings 走 IDE 工具栏齿轮菜单；Find Action 期间先确认 PixPin 不在撞键范围。
 9. **IDE 编辑器缓冲污染**：误打进编辑器的文字用 Ctrl+Z 可能撤不掉（撤销栈状态异常），关标签重开也可能复用内存脏 Document。可靠清理是右键 > Local History > Show History，选污染前的时间点 Revert——它按内容快照回滚，不依赖撤销栈。
 10. **置顶覆盖层抢前台**：ZCode 自动化面板等常驻应用若处于置顶态，TOPMOST→NOTOPMOST 舞步会把 IDE 抬回非置顶带、照样被盖住，坐标点击会打进覆盖层（曾误触自动化面板）。点前先 EnumWindows 核对目标窗口标题与位置，必要时让 IDE 持续保持 TOPMOST 干完活再撤。
+11. **活动态像素判定量错元素**：tab 活动高亮改成判定规则前，先沿判定带扫一条像素列看真实 RGB——修订九用的「亮蓝 b>120」阈值实际量到的是聚焦下拉边框，活动标签药丸本身是暗蓝 (35,53,88)，规则应为 b>60 且 b−r>30。活动/非活动两态都量一遍再定阈值。
+12. **runIde 构建疑似卡死**：daemon 低 CPU、产物目录长时间无变化、日志停在同一行即判定卡死，杀 gradle client+daemon 重跑（第二次全 UP-TO-DATE 很快）。构建输出直写日志文件（`> abs/path.log 2>&1`），`-q` 加管道会缓冲到结束才可见。另注：沙盒 IDE 进程是 java.exe 而非 idea64.exe，找窗口按标题不按进程名。
 
 ## 逐张场景速查（修订九实测）
 
@@ -89,7 +91,7 @@ search: false
 □ 7+1 张 gif+png 复制进 docs 仓库 public/demo/（路径用正斜杠，反斜杠 cp 会静默写错位置）
 □ md5 抽查源/目标一致
 □ npm run build 通过，.vitepress/dist/demo/ 资产齐全
-□ npm run preview + puppeteer 抽查：功能页与首页 GIF 动画播放、poster 淡入结构、686px 列宽清晰度
+□ npm run preview + puppeteer 抽查：功能页与首页 GIF 动画播放、poster 淡入结构、686px 列宽清晰度（**重建 dist 后必须重启 preview 服务器**——sirv 启动时预扫文件表，陈旧映射对重新生成过的页面返回 404）
 □ 计划文档实施状态更新（逐张规格）
 □ 只 add 本次文件 commit，不 push，部署等用户确认
 □ 环境还原：demo 应用停掉（Services ■ 或按端口杀进程）、沙盒 IDE 关窗、并行登记 done --name 注销、IME 按需切回
@@ -98,6 +100,6 @@ search: false
 ## 相关文档
 
 - 插件仓库 `docs/经验总结/20260910-0100-IntelliJ演示GIF录制-经验总结.md`——管线原理、平台坑完整版（§十为本轮增量）
-- 插件仓库 `record/`——gifkit.py / assemble.py / shot.py / scene_t1~t8
+- 插件仓库 `record/`——gifkit.py / assemble.py / shot.py / clipread.py（读剪贴板，验证复制类按钮真实行为；gifkit 只写不读）/ scene_t1~t8；通用能力权威源在用户级 skill `~/.zcode/skills/ide-demo-gif/scripts/`
 - `docs/开发计划/20260907-1138-文档站演示图GIF化补齐与替换-开发计划.md`——本轮计划全历程与实施状态
 - `docs/开发计划/20260909-脚本重放式录制-开发计划.md`——脚本重放管线立项
