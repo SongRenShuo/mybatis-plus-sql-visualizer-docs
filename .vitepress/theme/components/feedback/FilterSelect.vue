@@ -178,9 +178,11 @@ onBeforeUnmount(close)
   z-index: 1090;
 }
 
+/* 面板尺寸/圆角/阴影与 VersionSelect 的 vs-panel 保持一致：
+   两个下拉常在同一个表单里并排出现，观感必须是一套 */
 .fs-panel {
   z-index: 1091;
-  max-height: 280px;
+  max-height: 300px;
   overflow-y: auto;
   padding: 4px;
   background: var(--vp-c-bg);
@@ -202,7 +204,7 @@ onBeforeUnmount(close)
   border-radius: 5px;
   background: transparent;
   color: var(--vp-c-text-1);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   text-align: left;
   cursor: pointer;
   white-space: nowrap;

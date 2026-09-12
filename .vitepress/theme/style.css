@@ -763,3 +763,52 @@ kbd {
   --text-secondary: #9ca3af;
   --border-color: #374151;
 }
+
+/* ============================================
+   需求反馈池：滚动条统一
+   ============================================
+   浏览器默认滚动条是「深色方块滑轨 + 生硬直角滑块」，Windows 下更是宽达 17px，
+   出现在浅色圆角的提交弹窗右侧非常突兀（弹窗内容超高一屏就会露出来）。
+   这里统一成 8px 细条 + 圆角滑块，静止时贴近边框色、悬浮才加深，
+   与 VitePress 的 --vp-c-* 变量联动，浅色/深色主题自动跟随。
+
+   Firefox 走标准属性 scrollbar-width / scrollbar-color；
+   WebKit / Blink 走 ::-webkit-scrollbar 伪元素。 */
+.modal-body,
+.modal-overlay,
+.fs-panel,
+.vs-list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--vp-c-border) transparent;
+}
+
+.modal-body::-webkit-scrollbar,
+.modal-overlay::-webkit-scrollbar,
+.fs-panel::-webkit-scrollbar,
+.vs-list::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track,
+.modal-overlay::-webkit-scrollbar-track,
+.fs-panel::-webkit-scrollbar-track,
+.vs-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-body::-webkit-scrollbar-thumb,
+.modal-overlay::-webkit-scrollbar-thumb,
+.fs-panel::-webkit-scrollbar-thumb,
+.vs-list::-webkit-scrollbar-thumb {
+  background: var(--vp-c-border);
+  border-radius: 999px;
+  /* 与容器背景同色的描边，让 8px 轨道里的滑块观感更细（约 4px） */
+  border: 2px solid var(--vp-c-bg);
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover,
+.fs-panel::-webkit-scrollbar-thumb:hover,
+.vs-list::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-text-3);
+}

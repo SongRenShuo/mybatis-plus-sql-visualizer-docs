@@ -492,12 +492,31 @@ async function handleSubmit() {
   color: #10b981;
 }
 
+/* 表单内的分类下拉：与相邻输入框 / 版本下拉完全同款（边框·圆角·内边距·字号·聚焦态），
+   否则「功能分类」会像另一套组件混在表单里 */
 .form-group :deep(.fs-trigger) {
   width: 100%;
   justify-content: space-between;
+  align-items: center;
   padding: 0.5rem 0.75rem;
+  border: 1px solid var(--vp-c-border);
   border-radius: 8px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
   font-size: 1rem;
+  line-height: 1.5;
+  transition: border-color 0.2s;
+}
+
+/* 与输入框的 :focus 表现对齐：只换边框色，不额外加 focus 光环 */
+.form-group :deep(.fs-trigger):focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--vp-c-brand-1);
+}
+
+.form-group :deep(.fs-chevron) {
+  font-size: 0.7rem;
 }
 
 .form-group input,
