@@ -207,7 +207,8 @@ const gifError = ref(false)
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
   box-shadow: 0 24px 60px -36px rgba(0, 0, 0, 0.35);
-  aspect-ratio: 16 / 10;
+  /* 与素材原比例(1440×1034)一致，IDE 画面上下不再被 16/10 裁掉约 13% */
+  aspect-ratio: 1440 / 1034;
 }
 
 .docs-showcase-video {

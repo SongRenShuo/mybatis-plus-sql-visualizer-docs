@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
 import PagefindSearch from '../PagefindSearch.vue'
 
@@ -10,23 +10,36 @@ const mobileOpen = ref(false)
 
 let scrollHandler = null
 
+function onKeydown(e) {
+  if (e.key === 'Escape') mobileOpen.value = false
+}
+
+// 全屏菜单展开期间锁定背景滚动，收起/卸载时兜底恢复
+watch(mobileOpen, (open) => {
+  document.documentElement.style.overflow = open ? 'hidden' : ''
+})
+
 onMounted(() => {
   scrollHandler = () => {
     scrolled.value = window.scrollY > 50
   }
   window.addEventListener('scroll', scrollHandler, { passive: true })
+  window.addEventListener('keydown', onKeydown)
   scrollHandler()
 })
 
 onUnmounted(() => {
-  if (scrollHandler) {
-    window.removeEventListener('scroll', scrollHandler)
-  }
+  window.removeEventListener('scroll', scrollHandler)
+  window.removeEventListener('keydown', onKeydown)
+  document.documentElement.style.overflow = ''
 })
 </script>
 
 <template>
-  <header class="nav-bar" :class="{ scrolled, transparent: !scrolled }">
+  <header
+    class="nav-bar"
+    :class="{ scrolled: scrolled || mobileOpen, transparent: !scrolled && !mobileOpen }"
+  >
     <div class="container">
       <div class="nav-content">
         <div class="logo-area">
@@ -89,14 +102,18 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div v-if="mobileOpen" class="mobile-menu">
-      <nav class="mobile-links">
-        <a href="/features/wrapper-preview" class="mobile-link" @click="mobileOpen = false">功能详解</a>
-        <a href="/guide/getting-started" class="mobile-link" @click="mobileOpen = false">使用指南</a>
-        <a href="/about/feedback" class="mobile-link" @click="mobileOpen = false">需求池</a>
-        <a href="/about/" class="mobile-link" @click="mobileOpen = false">关于</a>
-      </nav>
-    </div>
+    <!-- 全屏导航层（参照文档页 VPNavScreen）：z-index -1 压在 header 背景之上、
+         nav-content 之下，不依赖顶栏具体高度，logo 与关闭按钮保持可点 -->
+    <Transition name="menu-fade">
+      <div v-if="mobileOpen" class="mobile-menu">
+        <nav class="mobile-links">
+          <a href="/features/wrapper-preview" class="mobile-link" @click="mobileOpen = false">功能详解</a>
+          <a href="/guide/getting-started" class="mobile-link" @click="mobileOpen = false">使用指南</a>
+          <a href="/about/feedback" class="mobile-link" @click="mobileOpen = false">需求池</a>
+          <a href="/about/" class="mobile-link" @click="mobileOpen = false">关于</a>
+        </nav>
+      </div>
+    </Transition>
   </header>
 </template>
 
@@ -252,7 +269,7 @@ onUnmounted(() => {
   width: 1.125rem;
   height: 2px;
   border-radius: 1px;
-  background-color: var(--text-secondary);
+  background-color: var(--text-primary);
   transition: transform 0.2s, opacity 0.2s;
 }
 
@@ -268,17 +285,9 @@ onUnmounted(() => {
   transform: translateY(-6px) rotate(-45deg);
 }
 
-/* 桌面端兜底隐藏：菜单展开状态下拉大视口时不残留 */
+/* 全屏导航层：桌面端兜底隐藏，菜单展开状态下拉大视口时不残留 */
 .mobile-menu {
   display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  flex-direction: column;
-  background-color: var(--bg-primary);
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 767px) {
@@ -287,16 +296,31 @@ onUnmounted(() => {
   }
 
   .mobile-menu {
-    display: flex;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-color: var(--bg-primary);
+    overflow-y: auto;
+    padding-top: 4.5rem;
   }
+}
+
+.mobile-links {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 1.5rem 2rem;
 }
 
 .mobile-link {
   display: block;
-  padding: 0.75rem 0;
+  padding: 1rem 0;
   color: var(--text-primary);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.05rem;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -306,6 +330,17 @@ onUnmounted(() => {
 
 .mobile-link:hover {
   color: var(--primary-color);
+}
+
+/* 展开过渡：淡入消除闪现 */
+.menu-fade-enter-active,
+.menu-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.menu-fade-enter-from,
+.menu-fade-leave-to {
+  opacity: 0;
 }
 
 /* 小屏收紧：320px 视口顶栏不溢出不重叠 */

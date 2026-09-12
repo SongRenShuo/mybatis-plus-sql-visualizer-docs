@@ -219,7 +219,9 @@ const features = reactive([
   width: 100%;
   display: block;
   object-fit: cover;
-  min-height: 300px;
+  /* 占位盒始终与素材原比例(1440×1034)一致：min-height 会在窄屏把横图拉成竖框，
+     触发 cover 严重裁切（手机端横向约 1/3 画面丢失） */
+  aspect-ratio: 1440 / 1034;
   border-radius: 1rem;
   background-color: var(--bg-secondary);
 }
