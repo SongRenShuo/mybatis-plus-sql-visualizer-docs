@@ -774,10 +774,17 @@ kbd {
 
    Firefox 走标准属性 scrollbar-width / scrollbar-color；
    WebKit / Blink 走 ::-webkit-scrollbar 伪元素。 */
+/* 反馈池：提交弹窗 + 下拉面板（面板 Teleport 到 body，只能写全局） */
+/* 站点搜索下拉（同样会露出默认滚动条） */
+/* 看板横向滚动（窄屏）与移动端菜单 */
 .modal-body,
 .modal-overlay,
 .fs-panel,
-.vs-list {
+.vs-list,
+.pf-modal,
+.pf-modal-mask,
+.roadmap-board,
+.mobile-menu {
   scrollbar-width: thin;
   scrollbar-color: var(--vp-c-border) transparent;
 }
@@ -785,7 +792,11 @@ kbd {
 .modal-body::-webkit-scrollbar,
 .modal-overlay::-webkit-scrollbar,
 .fs-panel::-webkit-scrollbar,
-.vs-list::-webkit-scrollbar {
+.vs-list::-webkit-scrollbar,
+.pf-modal::-webkit-scrollbar,
+.pf-modal-mask::-webkit-scrollbar,
+.roadmap-board::-webkit-scrollbar,
+.mobile-menu::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
@@ -793,14 +804,22 @@ kbd {
 .modal-body::-webkit-scrollbar-track,
 .modal-overlay::-webkit-scrollbar-track,
 .fs-panel::-webkit-scrollbar-track,
-.vs-list::-webkit-scrollbar-track {
+.vs-list::-webkit-scrollbar-track,
+.pf-modal::-webkit-scrollbar-track,
+.pf-modal-mask::-webkit-scrollbar-track,
+.roadmap-board::-webkit-scrollbar-track,
+.mobile-menu::-webkit-scrollbar-track {
   background: transparent;
 }
 
 .modal-body::-webkit-scrollbar-thumb,
 .modal-overlay::-webkit-scrollbar-thumb,
 .fs-panel::-webkit-scrollbar-thumb,
-.vs-list::-webkit-scrollbar-thumb {
+.vs-list::-webkit-scrollbar-thumb,
+.pf-modal::-webkit-scrollbar-thumb,
+.pf-modal-mask::-webkit-scrollbar-thumb,
+.roadmap-board::-webkit-scrollbar-thumb,
+.mobile-menu::-webkit-scrollbar-thumb {
   background: var(--vp-c-border);
   border-radius: 999px;
   /* 与容器背景同色的描边，让 8px 轨道里的滑块观感更细（约 4px） */
@@ -809,6 +828,8 @@ kbd {
 
 .modal-body::-webkit-scrollbar-thumb:hover,
 .fs-panel::-webkit-scrollbar-thumb:hover,
-.vs-list::-webkit-scrollbar-thumb:hover {
+.vs-list::-webkit-scrollbar-thumb:hover,
+.pf-modal::-webkit-scrollbar-thumb:hover,
+.roadmap-board::-webkit-scrollbar-thumb:hover {
   background: var(--vp-c-text-3);
 }
