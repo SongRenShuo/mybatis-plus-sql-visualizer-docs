@@ -27,6 +27,10 @@ export async function onRequest(context: {
   // 透传 UA：投票指纹 = 访客 IP + UA，不透传则 Worker 侧所有访客 UA 相同、指纹退化为全站单指纹
   const userAgent = request.headers.get('user-agent')
   if (userAgent) headers.set('user-agent', userAgent)
+  // 透传 Origin：埋点 /track 的第一道闸是 Origin 白名单校验，缺 Origin 一律 403——
+  // 不透传则所有浏览器 PV 到 Worker 时都因 Origin 缺失被拒，访问分析永远只有验证数据
+  const origin = request.headers.get('origin')
+  if (origin) headers.set('origin', origin)
 
   const init: RequestInit = {
     method: request.method,
