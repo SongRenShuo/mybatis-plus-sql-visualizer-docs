@@ -47,6 +47,14 @@ Each list entry shows a `#N` number at the front of its meta line — the Nth SQ
 - SQL dropped by dedup, capture pause or keyword filter takes no number, so the list never skips
 - Numbers stay readable when sorted by duration, preserving the original capture order; entries read back from history files carry no number
 
+### CRUD Type Color Markers
+
+List entries get color markers by statement type (applies to the SQL log list and the History page's second-level list): SELECT blue, INSERT green, UPDATE orange, DELETE red (defaults, all customizable); OTHER types carry no marker.
+
+- Three marker styles: **Left color bar** (default, a 3px bar on the entry's left edge; selection uses the platform highlight and keeps the bar); **Full-row tint** (row background blended with the list color, adapting to light and dark themes; the selected row keeps its type tint plus an outline, so duration coloring is no longer washed out by selection); **Off** (back to the unmarked look)
+- Each checkbox in the log page's "Type Filter" popup carries a matching color swatch legend, syncing instantly with color changes (the legend hides when marking is off)
+- Configure under "SQL Log" → "CRUD Color Markers" in settings — four colors and the style are adjustable, with one-click restore to defaults
+
 ### Jump to Source
 
 Right-click a log entry → "Jump to Source". Three levels of behavior:
@@ -77,6 +85,16 @@ Right-click a log entry → "Jump to Source". Three levels of behavior:
 | Keyword filter | Remove log lines containing specified keywords |
 | Timestamp display | Entry list shows capture time |
 
+### Three Display Modes
+
+A display-mode dropdown on the list toolbar controls how SQL renders inside entries, switching instantly:
+
+- **Single line**: one fixed row per entry, long SQL truncated
+- **Keyword wrap** (default): SQL wraps at keywords, height growing with content
+- **Formatted**: full pretty-print, long statements split clause by clause
+
+The SQL log page and the History page share the same setting, which survives IDE restarts; in any mode, Ctrl+C on a selected entry copies the plain SQL, not the rendered text.
+
 ### Single-Click Preview & Double-Click Dialog
 
 List entries use two-level previewing, consistent across the SQL log list, the History tab's second-level list and the history tool window:
@@ -84,7 +102,7 @@ List entries use two-level previewing, consistent across the SQL log list, the H
 - **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; the "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, and there is a "Close" button; the popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately
 - **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The toolbar offers layout toggles — horizontal / vertical / keyword wrap — plus a "More" menu gathering low-frequency actions (import parameters, diff, share); vertical layout annotates each INSERT value line end with a `-- column` tag (can be disabled in settings), and IN lists with fewer than 5 elements stay on one line while 5 or more expand one per line; the display mode you switch to survives parameter refill instead of being wiped by re-rendering (Refresh resets it). The dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it; with no data source configured, preview prepares silently — it no longer raises the Database tool window over the sidebar, and only an explicit run guides you through configuration
 
-List rows have a fixed height and no longer wrap by SQL content — for long SQL, view the full text via single-click preview or the double-click dialog.
+How entries render is controlled by the toolbar's display-mode dropdown (see above). Long field lists can also be folded automatically: with "Auto-fold long field lists" enabled in settings (off by default, threshold adjustable, default 10), preview editors collapse long SELECT / INSERT column lists, VALUES groups and UPDATE SET lists into a "… N columns" placeholder — click the fold marker to expand. This applies consistently across the main preview dialog, single-click preview, history preview, the Log → SQL result area and the native Database console.
 
 ## SQL History
 

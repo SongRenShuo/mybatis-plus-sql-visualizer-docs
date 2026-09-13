@@ -21,6 +21,7 @@ Planned features and progress.
 - [x] First batch of other ORM chain frameworks: xbatis, Easy-Query, MyBatis Dynamic SQL, Querydsl, Spring Data JDBC / R2DBC
 - [x] Custom-DAO string SQL method-definition anchors (gutter icon on the method-name line, shortcut works at method definitions)
 - [x] Gutter anchor left-click instant preview, right-click lookup of recent executions
+- [x] Auto-folding of long field lists in SQL preview (SELECT / INSERT column lists, VALUES groups and UPDATE SET collapse into a "… N columns" placeholder; threshold adjustable, off by default)
 - [x] Real EXPLAIN plans (dialect-wrapped, run on the native database console; MySQL / PostgreSQL / KingBase / DM verified)
 - [x] JOIN relationship diagram (IDEA-native Diagrams rendering with automatic fallback to the built-in renderer; column types / comments from the database when a data source is available)
 - [x] SQL performance analysis hints (20 rules: missing index, full table scan, etc.)
@@ -34,6 +35,7 @@ Planned features and progress.
 - [x] SQL code completion (table columns, comment hints)
 - [x] Wrapper method chain smart completion (suggest next methods and fields after `.eq(`)
 - [x] Batch operation parameter panel (column-level toggle, batch import)
+- [x] Right-click CRUD SQL generation from entity classes / database tables (candidate popup for INSERT / UPDATE / SELECT / DELETE, then into the preview; auto-increment keys unchecked by default, `@Version` optimistic-lock column appended automatically, logic-delete entities get a dedicated variant; Community has entity-side entries only)
 
 ### Log & History
 
@@ -44,6 +46,8 @@ Planned features and progress.
 - [x] Auto-start listening on project launch (captures on project open / run, resumes automatically on the next run after a manual stop)
 - [x] SQL log entry sequence numbers (`#N` per-session capture order, reset on each project run)
 - [x] Click preview (lightweight syntax-highlighted popup, editable inline, copy button with check-mark feedback; double-click still opens the full dialog)
+- [x] Three display modes for the SQL log / history list (single line / keyword wrap / formatted, keyword wrap by default, instant toolbar dropdown)
+- [x] CRUD type color markers for SQL lists (left color bar / full-row tint / off, four customizable colors, selection keeps the type tint)
 - [x] Stop capture when the log tool window closes
 - [x] SQL history two-level navigation + favorites (file list → entries, auto-save)
 - [x] History SQL parameter memory (v2 history files save parameters per entry, older files still readable) and literal parameter recovery for zero-placeholder SQL
@@ -59,15 +63,9 @@ Planned features and progress.
 - [x] No-restart self-update ("Install" hot-swaps the new version into the running IDE instantly, with automatic fallback to the restart script where dynamic install isn't available)
 - [x] Local HTML help page (zero network dependency, dark mode)
 - [x] Renamed to SQL Visualizer (full MyBatis-Plus / MPJ / JPA / Hibernate support unchanged)
+- [x] One-click error / feedback reporting to the website feedback pool (Help menu, settings and the IDE's internal error dialog; optional stack attachment, 24-hour dedup)
 
-> Everything above has shipped with v2026.9.8 ~ v2026.9.11 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details.
-
-## In Progress
-
-The following features have landed on the dev branch with the full test suite green, and are planned to merge into master for the next release.
-
-- One-click error reporting to the website feedback pool — submit exceptions with environment details straight from the IDE to the [feedback pool](./feedback), no manual copy-paste
-- Three display modes for the SQL log / history list (single line / keyword wrap / formatted, keyword wrap by default) and per-entry meta line
+> Everything above has shipped with v2026.9.8 ~ v2026.9.11 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details. CRUD SQL generation, field-list auto-folding, display modes, type color markers and one-click error reporting have landed on master and ship first with the v2026.9.14-beta releases on the Gitee early-access channel (enable "Auto-check on startup" in settings to get them); they merge into the same version number on the Marketplace once the 2026.9.14 stable release ships.
 
 ## Planned
 

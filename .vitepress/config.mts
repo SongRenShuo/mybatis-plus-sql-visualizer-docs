@@ -142,6 +142,7 @@ export default defineConfig({
               { text: 'SQL → Java 反向转换', link: '/features/sql-to-java' },
               { text: 'SQL 日志工具窗口', link: '/features/sql-log' },
               { text: '批量操作参数面板', link: '/features/batch-operation' },
+              { text: 'CRUD SQL 生成', link: '/features/crud-sql' },
               { text: 'SQL 代码补全', link: '/features/code-completion' }
             ]
           },
@@ -209,6 +210,7 @@ export default defineConfig({
               { text: 'SQL → Java Reverse Conversion', link: '/en/features/sql-to-java' },
               { text: 'SQL Log Tool Window', link: '/en/features/sql-log' },
               { text: 'Batch Operation Panel', link: '/en/features/batch-operation' },
+              { text: 'CRUD SQL Generation', link: '/en/features/crud-sql' },
               { text: 'SQL Code Completion', link: '/en/features/code-completion' }
             ]
           },

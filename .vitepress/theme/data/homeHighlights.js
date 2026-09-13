@@ -30,7 +30,7 @@ export const coolCards = [
     icon: 'cog',
     color: 'yellow',
     title: '广泛集成',
-    description: 'XML / 注解 / HQL·JPQL / .hbm.xml 命名查询 / SQL 日志追踪 / 批量操作之外，还支持真实 EXPLAIN 执行计划与项目启动自动监听。',
+    description: 'XML / 注解 / HQL·JPQL / .hbm.xml 命名查询 / SQL 日志追踪 / 批量操作之外，还支持实体类与数据库表右键生成 CRUD SQL、真实 EXPLAIN 执行计划与项目启动自动监听。',
   },
   {
     icon: 'shield',
@@ -178,6 +178,10 @@ export const enFeatureMatrix = [
       [
         'UPDATE/DELETE Warning',
         'Red warning when no WHERE clause — full-table operation risk',
+      ],
+      [
+        'CRUD SQL Generation',
+        'Right-click an entity class (editor / project view) or a Database table node → "Generate CRUD SQL": pick INSERT / UPDATE / SELECT / DELETE in a filterable native popup and it opens in the preview — auto-increment keys unchecked by default, `@Version` column handled, logic-delete variant on the entity side (Community: entity-side entries only)',
       ],
       [
         'No-Restart Update',
