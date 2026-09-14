@@ -1,5 +1,7 @@
 # CRUD SQL 生成
 
+<GifPlayer src="/demo/crud-sql.gif" poster="/demo/crud-sql.png" alt="CRUD SQL 生成演示" />
+
 在实体类或数据库表上右键，一键生成 SELECT / INSERT / UPDATE / DELETE 语句并进入预览——写 Mapper、排查数据、拼测试数据时不用再手写模板 SQL。
 
 ## 触发方式
