@@ -13,9 +13,9 @@ With the setting "Auto-start listening on project launch" enabled, no button cli
 
 ### Auto Capture
 
-Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto-restore to complete SQL. Hibernate (`Hibernate:` + `binding parameter`) and Spring JdbcTemplate log formats are also recognized — statements wrapped across multiple lines are collected in full, and brackets inside string literals don't cause premature closing — enabled by default. For `NamedParameterJdbcTemplate` single-line logs, named-parameter values that are Java collections are restored element-wise (`IN (:p)` with `param=[a]` becomes `IN ('a')`, so the square brackets never leak into the SQL literal).
+Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto-restore to complete SQL. Hibernate (`Hibernate:` + `binding parameter`) and Spring JdbcTemplate log formats are also recognized — statements wrapped across multiple lines are collected in full, and brackets inside string literals don't cause premature closing. For `NamedParameterJdbcTemplate` single-line logs, named-parameter values that are Java collections are restored element-wise (`IN (:p)` with `param=[a]` becomes `IN ('a')`, so the square brackets never leak into the SQL literal), and logs interleaved by concurrent threads are restored in per-thread buckets so parameters never get misattached or lost — enabled by default.
 
-When both Hibernate `show_sql` and its logger print the same statement, the two paths are merged into one entry with the parameters kept together — no zero-parameter leftovers and no false "parameter count mismatch"; if a statement had no parameter-binding log captured at all, the preview says so and guides you to enable TRACE level, and only genuinely incomplete parameters report a count mismatch.
+When both Hibernate `show_sql` and its logger print the same statement, the two paths are merged into one entry with the parameters kept together — no zero-parameter leftovers and no false "parameter count mismatch"; if a statement had no parameter-binding log captured at all, the preview says so and guides you to enable TRACE level (for JdbcTemplate it names `org.springframework.jdbc.core` specifically), and only genuinely incomplete parameters report a count mismatch.
 
 ### Auto-Open Tool Window
 
@@ -45,7 +45,16 @@ Each list entry shows a `#N` number at the front of its meta line — the Nth SQ
 
 - Counting restarts from 1 on every project run (application / test run configurations — launches of unrelated processes don't reset it); clearing the list manually also resets it
 - SQL dropped by dedup, capture pause or keyword filter takes no number, so the list never skips
-- Numbers stay readable when sorted by duration, preserving the original capture order; entries read back from history files carry no number
+- Numbers stay readable when sorted by duration, preserving the original capture order; the History page's second-level list also shows `#N` numbers by in-file entry order, stable under search filtering
+
+### Timestamps & Time Source
+
+Each entry can show a timestamp, taken from the "Timestamp source" radio option under "SQL Log" in settings:
+
+- **Log time** (default): the original time parsed from the log line itself (common formats recognized automatically — Logback / Log4j2 / Spring Boot defaults, ISO 8601 and more); entries whose log line carries no time fall back to capture time
+- **Capture time**: the moment the plugin captured the log
+
+The "Show timestamp" switch controls whether the time column appears, and the timestamp format setting (default `yyyy-MM-dd HH:mm:ss`) applies to both sources alike; copied timestamps and the times shown on the History page all follow the same configuration.
 
 ### CRUD Type Color Markers
 
@@ -57,9 +66,7 @@ List entries get color markers by statement type (applies to the SQL log list an
 
 ### Jump to Source
 
-Right-click a log entry → "Jump to Source". Three levels of behavior:
-
-1. **Precise jump (recommended)**: SQL logs contain no call-site info, so the plugin ships an optional runtime interceptor — copy the self-contained `SqlSourceInterceptor` from the plugin repository (`docs/instrumentation/SqlSourceInterceptor.kt`) into your project and register it as a MyBatis-Plus `InnerInterceptor`:
+Right-click a log entry → "Jump to Source". SQL logs contain no call-site info, so the plugin ships an optional runtime interceptor — copy the self-contained `SqlSourceInterceptor` from the plugin repository (`docs/instrumentation/SqlSourceInterceptor.kt`) into your project and register it as a MyBatis-Plus `InnerInterceptor`:
 
    ```java
    @Bean
@@ -72,9 +79,9 @@ Right-click a log entry → "Jump to Source". Three levels of behavior:
    }
    ```
 
-   The interceptor captures the real call site on the SQL execution thread and prints a `SQLVIS-SOURCE|relative-path|line` marker to the console (no impact on SQL execution, no performance overhead). The plugin parses it and jumps precisely `file:line` — straight to the Service / Controller line that fired the SQL
-2. **Search by table (default fallback)**: without the interceptor, the plugin extracts table names from the SQL and searches for matching entities / wrappers — works in most cases but may miss; in multi-module projects or projects with unconventional source roots it matches module content roots one by one for a higher hit rate
-3. **No table name**: statements like `SELECT 1` have no jump target and report as such
+   The interceptor captures the real call site on the SQL execution thread and prints a `SQLVIS-SOURCE|relative-path|line` marker to the console (no impact on SQL execution, no performance overhead). The plugin parses it and jumps precisely `file:line` — straight to the Service / Controller line that fired the SQL.
+
+Jumps rely only on the real position captured by the interceptor — no table-name guessing fallback, so a same-named table can never send you to an unrelated file. When an entry carries no position (no interceptor configured, or an outdated interceptor file), a guide dialog pops up with one-click "Open settings" or "Inject now"; triggering "Auto-inject source capture interceptor" in settings on a multi-module project first shows a dialog to pick the modules to inject (all selected by default). Statements like `SELECT 1` have no jump target and report as such.
 
 ### Dedup & Filter
 
@@ -83,11 +90,12 @@ Right-click a log entry → "Jump to Source". Three levels of behavior:
 | Dedup window | Same SQL doesn't reappear within window (default 60000ms, adjustable; dedup ignores leading / trailing and repeated whitespace differences — different parameters still count as different statements) |
 | Instant dedup | Toggling "Remove duplicate SQL" immediately trims existing duplicates in the window and shows a `⨉N` badge with the dropped count |
 | Keyword filter | Remove log lines containing specified keywords |
-| Timestamp display | Entry list shows capture time |
+| List search | The search box matches SQL content, source file, `#number` (`#5` or `5` hits exactly entry 5) and time text (search what you see, matched against the displayed format); available on both the log page and the History page |
+| Copy timestamps | Select entries (multi-select works), right-click → "Copy timestamp" to copy plain time text line by line (no display brackets; the menu item shows the count for multi-select); grayed out while timestamp display is off |
 
 ### Three Display Modes
 
-A display-mode dropdown on the list toolbar controls how SQL renders inside entries, switching instantly:
+The "List display" dropdown under "SQL Log" in settings controls how SQL renders inside entries, switching instantly:
 
 - **Single line**: one fixed row per entry, long SQL truncated
 - **Keyword wrap** (default): SQL wraps at keywords, height growing with content
@@ -99,17 +107,18 @@ The SQL log page and the History page share the same setting, which survives IDE
 
 List entries use two-level previewing, consistent across the SQL log list, the History tab's second-level list and the history tool window:
 
-- **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; the "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, and there is a "Close" button; the popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately
+- **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; its display follows the existing "Format SQL on preview" setting (on by default), so long SQL opens multi-line indented, or as original text when off. The "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, and there is a "Close" button; the popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately. While a Ctrl / Shift multi-select is in progress, single-clicks no longer trigger the preview (any open popup closes with it); single-select resumes normal previewing
+- **Multi-select batch copy**: after Ctrl / Shift multi-select, right-click → "Copy" copies all selected SQL at once (the menu item shows the count, e.g. "Copy selected SQL (3)", each statement semicolon-terminated and newline-joined); right-clicking a row already in the selection keeps the selection, while the other menu actions still apply to the right-clicked row
 - **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The toolbar offers layout toggles — horizontal / vertical / keyword wrap — plus a "More" menu gathering low-frequency actions (import parameters, diff, share); vertical layout annotates each INSERT value line end with a `-- column` tag (can be disabled in settings), and IN lists with fewer than 5 elements stay on one line while 5 or more expand one per line; the display mode you switch to survives parameter refill instead of being wiped by re-rendering (Refresh resets it). The dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it; with no data source configured, preview prepares silently — it no longer raises the Database tool window over the sidebar, and only an explicit run guides you through configuration
 
-How entries render is controlled by the toolbar's display-mode dropdown (see above). Long field lists can also be folded automatically: with "Auto-fold long field lists" enabled in settings (off by default, threshold adjustable, default 10), preview editors collapse long SELECT / INSERT column lists, VALUES groups and UPDATE SET lists into a "… N columns" placeholder — click the fold marker to expand. This applies consistently across the main preview dialog, single-click preview, history preview, the Log → SQL result area and the native Database console.
+How entries render is controlled by the "List display" option in settings (see above). Long field lists can also be folded automatically: with "Auto-fold long field lists" enabled in settings (off by default, threshold adjustable, default 10), preview editors collapse long SELECT / INSERT column lists, VALUES groups and UPDATE SET lists into a "… N columns" placeholder — click the fold marker to expand. This applies consistently across the main preview dialog, single-click preview, history preview, the Log → SQL result area and the native Database console.
 
 ## SQL History
 
 Enable "Auto-save SQL history" in settings (off by default) and entries evicted from the list are written to history files, browsable any time in the History tab:
 
 - **Level 1 (default view)**: file list — each row shows file name, size and SQL count; search box filters by file name
-- **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info); single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL or jump to source; search box filters by SQL content / source file
+- **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info — timestamps follow the format and source currently set in settings — and a `#N` number per in-file entry order); single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically without interrupting browsing
 - **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same; history files (v2 format) store parameters per entry in an inline `-- pd:` comment line next to the statement — older plugin versions ignore that line and open the file as usual, while the new version reads all older files normally
 

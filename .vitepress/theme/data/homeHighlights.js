@@ -135,7 +135,7 @@ export const enFeatureMatrix = [
       [
         'Auto Capture',
         'sidebar "Capture" button; auto-starts on project open / run with the matching setting enabled',
-        'Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats (multi-line statements included, duplicate dual-path prints merged); `#N` per-session entry numbers',
+        'Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats (multi-line statements included, duplicate dual-path prints merged); `#N` per-session entry numbers; log-line original timestamps with a log/capture source switch',
       ],
       [
         'Click Preview',

@@ -22,7 +22,7 @@ Planned features and progress.
 - [x] Custom-DAO string SQL method-definition anchors (gutter icon on the method-name line, shortcut works at method definitions)
 - [x] Gutter anchor left-click instant preview, right-click lookup of recent executions
 - [x] Auto-folding of long field lists in SQL preview (SELECT / INSERT column lists, VALUES groups and UPDATE SET collapse into a "… N columns" placeholder; threshold adjustable, off by default)
-- [x] Real EXPLAIN plans (dialect-wrapped, run on the native database console; MySQL / PostgreSQL / KingBase / DM verified)
+- [x] Real EXPLAIN plans (dialect-wrapped, run on the native database console; MySQL / PostgreSQL / KingBase / DM verified; MySQL / MariaDB aligned with IDEA's native plan table shape)
 - [x] JOIN relationship diagram (IDEA-native Diagrams rendering with automatic fallback to the built-in renderer; column types / comments from the database when a data source is available)
 - [x] SQL performance analysis hints (20 rules: missing index, full table scan, etc.)
 - [x] Wrapper chain complexity scoring
@@ -41,12 +41,16 @@ Planned features and progress.
 
 - [x] SQL log tool window (MyBatis / Hibernate / JdbcTemplate capture incl. multi-line statements and duplicate dual-path print merging, Log → SQL batch restore)
 - [x] Duration display & slow-query detection (threshold coloring, sort by duration)
-- [x] Precise jump to source — runtime `InnerInterceptor` marks the call site for exact `file:line` jumps; one-click interceptor injection from settings; multi-module source-root fallback
+- [x] Precise jump to source — runtime `InnerInterceptor` marks the call site for exact `file:line` jumps; one-click interceptor injection from settings (multi-module projects pick modules in a dialog); jumps rely only on the real captured position; multi-module source-root fallback
 - [x] Auto-open log tool window on first captured SQL (on by default, debounced and focus-friendly, suppressed for the session after a manual close — lifted again on the next project run)
 - [x] Auto-start listening on project launch (captures on project open / run, resumes automatically on the next run after a manual stop)
-- [x] SQL log entry sequence numbers (`#N` per-session capture order, reset on each project run)
+- [x] SQL log entry sequence numbers (`#N` per-session capture order, reset on each project run; history lists show numbers by in-file entry order)
 - [x] Click preview (lightweight syntax-highlighted popup, editable inline, copy button with check-mark feedback; double-click still opens the full dialog)
-- [x] Three display modes for the SQL log / history list (single line / keyword wrap / formatted, keyword wrap by default, instant toolbar dropdown)
+- [x] Three display modes for the SQL log / history list (single line / keyword wrap / formatted, keyword wrap by default, instant switching from settings)
+- [x] Multi-select batch copy for SQL lists (one right-click copies every selected SQL, semicolon-terminated) and right-click copy timestamps (plain time text, line by line)
+- [x] Log list search by row number and time (`#N` matches entry N exactly, time text searched as displayed)
+- [x] Log original-time recording with a display switch (shows the time parsed from the log line by default, switchable to capture time; history files stay backward compatible)
+- [x] JdbcTemplate collection parameters restored element-wise (`IN (:p)` no longer leaks square brackets into the SQL) and per-thread bucketing of interleaved concurrent logs
 - [x] CRUD type color markers for SQL lists (left color bar / full-row tint / off, four customizable colors, selection keeps the type tint)
 - [x] Stop capture when the log tool window closes
 - [x] SQL history two-level navigation + favorites (file list → entries, auto-save)
@@ -63,9 +67,9 @@ Planned features and progress.
 - [x] No-restart self-update ("Install" hot-swaps the new version into the running IDE instantly, with automatic fallback to the restart script where dynamic install isn't available)
 - [x] Local HTML help page (zero network dependency, dark mode)
 - [x] Renamed to SQL Visualizer (full MyBatis-Plus / MPJ / JPA / Hibernate support unchanged)
-- [x] One-click error / feedback reporting to the website feedback pool (Help menu, settings and the IDE's internal error dialog; optional stack attachment, 24-hour dedup)
+- [x] One-click error / feedback reporting to the website feedback pool (Help menu, settings and the IDE's internal error dialog; optional stack attachment, 24-hour dedup; multi-select errors merge into one post with automatic staggered sending beyond the rate limit, and a rejected submission shows the server's exact reason for an in-place retry)
 
-> Everything above has shipped with v2026.9.8 ~ v2026.9.11 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details. CRUD SQL generation, field-list auto-folding, display modes, type color markers and one-click error reporting have landed on master and ship first with the v2026.9.14-beta releases on the Gitee early-access channel (enable "Auto-check on startup" in settings to get them); they merge into the same version number on the Marketplace once the 2026.9.14 stable release ships.
+> Everything above has shipped with v2026.9.8 ~ v2026.9.14 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details. Log original-time recording, log list search by row number / time with timestamp copying, and batch-report dialog merging have landed on master and ship first with the v2026.9.18-beta series on the Gitee early-access channel (enable "Auto-check on startup" in settings to get them); they merge into the same version number on the Marketplace once the stable release ships.
 
 ## Planned
 
