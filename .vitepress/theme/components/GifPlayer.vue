@@ -31,8 +31,21 @@ function syncGifState() {
   else gifError.value = true
 }
 
+/** 元素在视口内（含 rootMargin 200px 之外的自身判定，rootMargin 按 viewport root 计算）
+    时直接放行；SPA 路由切换/hydration 下 IntersectionObserver 对「观察时已相交」的元素
+    可能不产生回调（生产实证：首屏播放器 top=152 视口 720，5.3s 内仍无 entries），导致
+    loaded 永不置位、首屏永久停在模糊 poster——挂载后同步兜底判定一次 */
+function isNearViewport(el: HTMLElement) {
+  const rect = el.getBoundingClientRect()
+  return rect.top < window.innerHeight + 200 && rect.bottom > -200
+}
+
 onMounted(() => {
   if (!container.value) return
+  if (isNearViewport(container.value)) {
+    loaded.value = true
+    return
+  }
   observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting) {
@@ -66,6 +79,8 @@ function onImgError() {
   }
 }
 
+/** 暂停后再点恢复时 GIF img 会重新挂载，此时不再有观察器兜底（已 disconnect 或从未
+    注册），同样用同步判定放行，防止恢复播放后叠层不回来 */
 function togglePlay() {
   if (videoEl.value) {
     if (videoEl.value.paused) {
@@ -77,6 +92,9 @@ function togglePlay() {
     }
   } else {
     playing.value = !playing.value
+    if (container.value && isNearViewport(container.value)) {
+      nextTick(syncGifState)
+    }
   }
 }
 </script>
