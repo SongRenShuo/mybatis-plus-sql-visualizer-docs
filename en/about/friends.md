@@ -7,9 +7,9 @@ next:
   link: /en/about/roadmap
 ---
 
-# Friend Plugin Recommendations
+# Friend Recommendations
 
-Here are some quality IDEA plugins built by fellow independent developers. Worth checking out if you're doing backend API development.
+A few good things built by fellow independent developers — IDEA plugins and dev tools alike. Worth checking out if you're doing backend development.
 
 <div class="friend-card">
   <a href="https://www.coolrequest.dev" target="_blank" rel="noopener noreferrer" class="friend-card__link">

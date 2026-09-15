@@ -232,7 +232,7 @@ export default defineConfig({
               { text: 'Changelog', link: '/en/about/changelog' },
               { text: 'Roadmap', link: '/en/about/roadmap' },
               { text: 'Feedback Pool', link: '/en/about/feedback' },
-              { text: 'Friend Plugins', link: '/en/about/friends' }
+              { text: 'Friend Recommendations', link: '/en/about/friends' }
             ]
           }
         },

@@ -7,9 +7,9 @@ next:
   link: /about/roadmap
 ---
 
-# 友情插件推荐
+# 友情推荐
 
-这里推荐一些同样由独立开发者打造的优质 IDEA 插件，如果你也在做后端 API 开发，值得一试。
+这里推荐一些同样由独立开发者打造的好东西——IDEA 插件、开发工具都有，如果你也在做后端开发，值得一试。
 
 <div class="friend-card">
   <a href="https://www.coolrequest.dev" target="_blank" rel="noopener noreferrer" class="friend-card__link">
