@@ -91,7 +91,7 @@ next:
 | Platform | IntelliJ Platform Gradle Plugin 2.18.1 |
 | IDE Compatibility | IDEA 2024.3+ |
 | Dependencies | `com.intellij.java` (hard) + `com.intellij.database` (optional) |
-| Tests | 610+ unit tests all green |
+| Tests | Three layers: unit, platform integration, real database engines; sharded runs finish in minutes |
 
 ## Acknowledgments
 

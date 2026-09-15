@@ -91,7 +91,7 @@ next:
 | 平台 | IntelliJ Platform Gradle Plugin 2.18.1 |
 | IDE 兼容 | IDEA 2024.3+ |
 | 依赖 | `com.intellij.java`（硬）+ `com.intellij.database`（可选） |
-| 测试 | 610+ 单元测试全绿 |
+| 测试 | 三层覆盖：单元 · 平台集成 · 多数据库引擎真机验证；分片并行回归，全量分钟级 |
 
 ## 致谢
 
