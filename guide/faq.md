@@ -75,6 +75,12 @@ v2026.9.2 起，插件在项目内的数据目录由 `.idea/mybatis-plus-sql-vis
 
 `Settings → Tools → SQL Visualizer → 界面语言`。支持 简体中文 / English / 跟随系统。插件语言独立于 IDE 语言设置，切换后重新打开预览弹窗即生效。
 
+## 内网 / 无外网环境能用吗？
+
+可以，核心功能完全离线——预览、参数回填、反向转换、日志还原、JOIN 图、格式化、CRUD 生成都不需要外网，插件也没有遥测或账号校验。仅「检查更新」与「提交反馈」两个可选入口会访问外网，失败时只提示不阻塞。
+
+内网部署另需注意两点：执行 SQL 所需的 JDBC 驱动要提前预置（驱动缺失时是 IDE 平台联网下载），以及可用系统属性把更新源换成内网地址。详见[内网与离线环境](./offline.md)。
+
 ## 支持哪些数据库方言的分页语法？
 
 9 种：MySQL、PostgreSQL、Oracle、SQL Server、H2、SQLite、MariaDB、DM（达梦）、KingBase（金仓）。分页子句和 upsert 冲突子句按方言差异渲染。

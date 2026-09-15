@@ -154,6 +154,7 @@ export default defineConfig({
               { text: '配置详解', link: '/guide/configuration' },
               { text: '快捷键速查', link: '/guide/shortcuts' },
               { text: '版本兼容', link: '/guide/compatibility' },
+              { text: '内网与离线环境', link: '/guide/offline' },
               { text: '常见问题 FAQ', link: '/guide/faq' }
             ]
           },
@@ -221,6 +222,7 @@ export default defineConfig({
               { text: 'Configuration', link: '/en/guide/configuration' },
               { text: 'Shortcuts', link: '/en/guide/shortcuts' },
               { text: 'Compatibility', link: '/en/guide/compatibility' },
+              { text: 'Offline & Intranet', link: '/en/guide/offline' },
               { text: 'Why SQL Visualizer', link: '/en/guide/comparison' },
               { text: 'FAQ', link: '/en/guide/faq' }
             ]

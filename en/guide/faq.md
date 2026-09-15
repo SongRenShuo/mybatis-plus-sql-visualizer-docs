@@ -75,6 +75,12 @@ Yes. Generated code is strictly based on MyBatis-Plus public APIs (local jar dec
 
 `Settings → Tools → SQL Visualizer → UI Language`. Supports Simplified Chinese / English / Follow System. Plugin language is independent of IDE language; reopen preview dialog to apply.
 
+## Does it work on an intranet with no internet access?
+
+Yes — core features are entirely offline: previews, parameter substitution, reverse conversion, log restore, JOIN diagrams, formatting and CRUD generation all run locally, with no telemetry and no account validation. Only two optional entry points reach the internet (update check and feedback submission), and both merely report a failure without blocking anything.
+
+Two things to prepare for an intranet deployment: pre-provision the JDBC drivers needed by "Execute SQL" (the IDE platform downloads them when missing), and optionally repoint the update channel to an internal URL via a system property. See [Offline & Intranet](./offline.md).
+
 ## Which database dialects are supported?
 
 9 dialects: MySQL, PostgreSQL, Oracle, SQL Server, H2, SQLite, MariaDB, DM (Dameng), KingBase. Pagination and upsert conflict clauses render per dialect differences.

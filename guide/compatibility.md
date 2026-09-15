@@ -27,6 +27,7 @@
 - **JetBrains Marketplace**（推荐）：IDE 内 `Settings` > `Plugins` > `Marketplace` 搜索 `SQL Visualizer`；IDE 运行时也可直接在[插件市场页面](https://plugins.jetbrains.com/plugin/33633-sql-visualizer)一键安装
 - **离线安装**：从 [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases) 下载插件包，`Settings` > `Plugins` > ⚙ > `Install Plugin from Disk...`
 - 抢先体验版本通过 Gitee 内部更新通道分发，见 [关于页](../about/) 说明
+- **内网 / 无外网环境**：插件核心功能完全离线可用；网络行为、JDBC 驱动预置与内网私有更新通道见[内网与离线环境](./offline.md)
 
 ## 遇到兼容性问题
 

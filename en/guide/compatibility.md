@@ -27,6 +27,7 @@
 - **JetBrains Marketplace** (recommended): in the IDE, `Settings` > `Plugins` > `Marketplace`, search `SQL Visualizer`; with the IDE running you can also one-click install from the [Marketplace page](https://plugins.jetbrains.com/plugin/33633-sql-visualizer)
 - **Offline**: download the plugin package from [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases), then `Settings` > `Plugins` > ⚙ > `Install Plugin from Disk...`
 - Early-access builds ship through the Gitee internal update channel — see the [About page](../about/)
+- **Intranet / no internet**: core features work entirely offline; see [Offline & Intranet](./offline.md) for network behavior, JDBC driver preparation and an internal update channel
 
 ## If something does not work
 
