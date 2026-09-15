@@ -91,7 +91,8 @@ search: false
 □ 7+1 张 gif+png 复制进 docs 仓库 public/demo/（路径用正斜杠，反斜杠 cp 会静默写错位置）
 □ md5 抽查源/目标一致
 □ npm run build 通过，.vitepress/dist/demo/ 资产齐全
-□ npm run preview + puppeteer 抽查：功能页与首页 GIF 动画播放、poster 淡入结构、686px 列宽清晰度（**重建 dist 后必须重启 preview 服务器**——sirv 启动时预扫文件表，陈旧映射对重新生成过的页面返回 404）
+□ npm run preview + puppeteer 抽查：功能页与首页 GIF 结构（img 挂载/complete）、poster 淡入结构、686px 列宽清晰度（**重建 dist 后必须重启 preview 服务器**——sirv 启动时预扫文件表，陈旧映射对重新生成过的页面返回 404）
+□ **动画是否在播必须真实浏览器确认**（puppeteer / ZCode 内嵌浏览器不推进 GIF 动画帧，canvas 像素采样指纹恒定，DOM 就绪≠动画播放；2026-09-15 实证，详见《开发笔记/20260915-1300-GIF动画播放验证与渲染结构》）
 □ 计划文档实施状态更新（逐张规格）
 □ 只 add 本次文件 commit，不 push，部署等用户确认
 □ 环境还原：demo 应用停掉（Services ■ 或按端口杀进程）、沙盒 IDE 关窗、并行登记 done --name 注销、IME 按需切回
