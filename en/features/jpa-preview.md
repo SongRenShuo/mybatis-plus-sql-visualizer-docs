@@ -1,5 +1,5 @@
 # JPA / Hibernate SQL Preview
-<GifPlayer src="/demo/jpa-preview.gif" poster="/demo/jpa-preview.png" alt="JPA / Hibernate SQL Preview Demo" />
+<GifPlayer src="/demo/jpa-preview.gif" alt="JPA / Hibernate SQL Preview Demo" />
 
 Static SQL preview for Spring Data JPA and Hibernate projects — Repository methods, JPQL / HQL, Criteria chains, `.hbm.xml` mappings. No Spring context, no database connection: click the gutter icon next to the line and get the SQL.
 

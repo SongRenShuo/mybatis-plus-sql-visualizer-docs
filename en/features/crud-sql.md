@@ -1,6 +1,6 @@
 # CRUD SQL Generation
 
-<GifPlayer src="/demo/crud-sql.gif" poster="/demo/crud-sql.png" alt="CRUD SQL Generation Demo" />
+<GifPlayer src="/demo/crud-sql.gif" alt="CRUD SQL Generation Demo" />
 
 Right-click an entity class or a database table to generate SELECT / INSERT / UPDATE / DELETE statements and jump straight into the preview — no more hand-writing boilerplate SQL for mappers, data inspection, or test fixtures.
 

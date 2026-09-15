@@ -1,5 +1,5 @@
 # 批量操作参数面板
-<GifPlayer src="/demo/batch-operation.gif" poster="/demo/batch-operation.png" alt="批量操作参数面板演示" />
+<GifPlayer src="/demo/batch-operation.gif" alt="批量操作参数面板演示" />
 
 `save` / `updateBatchById` / `saveOrUpdate` 等批量 SQL 按列展开，参数可逐列勾选。
 

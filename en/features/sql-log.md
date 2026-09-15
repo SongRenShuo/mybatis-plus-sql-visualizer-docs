@@ -1,5 +1,5 @@
 # SQL Log Tool Window
-<GifPlayer src="/demo/sql-log.gif" poster="/demo/sql-log.png" alt="SQL Log Restore Demo" />
+<GifPlayer src="/demo/sql-log.gif" alt="SQL Log Restore Demo" />
 
 Auto-capture `Preparing:` / `Parameters:` logs from the run console, restore to executable SQL, and jump precisely to the source line that fired the query.
 
@@ -13,7 +13,7 @@ With the setting "Auto-start listening on project launch" enabled, no button cli
 
 ### Auto Capture
 
-Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto-restore to complete SQL. Hibernate (`Hibernate:` + `binding parameter`) and Spring JdbcTemplate log formats are also recognized — statements wrapped across multiple lines are collected in full, and brackets inside string literals don't cause premature closing — enabled by default.
+Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto-restore to complete SQL. Hibernate (`Hibernate:` + `binding parameter`) and Spring JdbcTemplate log formats are also recognized — statements wrapped across multiple lines are collected in full, and brackets inside string literals don't cause premature closing — enabled by default. For `NamedParameterJdbcTemplate` single-line logs, named-parameter values that are Java collections are restored element-wise (`IN (:p)` with `param=[a]` becomes `IN ('a')`, so the square brackets never leak into the SQL literal).
 
 When both Hibernate `show_sql` and its logger print the same statement, the two paths are merged into one entry with the parameters kept together — no zero-parameter leftovers and no false "parameter count mismatch"; if a statement had no parameter-binding log captured at all, the preview says so and guides you to enable TRACE level, and only genuinely incomplete parameters report a count mismatch.
 

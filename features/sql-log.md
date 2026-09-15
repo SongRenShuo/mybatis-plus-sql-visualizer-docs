@@ -1,5 +1,5 @@
 # SQL 日志工具窗口
-<GifPlayer src="/demo/sql-log.gif" poster="/demo/sql-log.png" alt="控制台日志还原演示" />
+<GifPlayer src="/demo/sql-log.gif" alt="控制台日志还原演示" />
 
 自动捕获运行控制台的 `Preparing:` / `Parameters:` 日志，还原成可执行 SQL，并可精确跳转到触发这条 SQL 的源码位置。
 
@@ -13,7 +13,7 @@
 
 ### 自动捕获
 
-监听运行控制台的日志输出，识别 `Preparing:` 和 `Parameters:` 行，自动还原成完整 SQL。同时支持 Hibernate（`Hibernate:` + `binding parameter`）与 Spring JdbcTemplate 日志格式（SQL 折成多行的语句也能跨行完整收集，字符串内的方括号不会误判截断），默认开启。
+监听运行控制台的日志输出，识别 `Preparing:` 和 `Parameters:` 行，自动还原成完整 SQL。同时支持 Hibernate（`Hibernate:` + `binding parameter`）与 Spring JdbcTemplate 日志格式（SQL 折成多行的语句也能跨行完整收集，字符串内的方括号不会误判截断；`NamedParameterJdbcTemplate` 单行日志的命名参数若为集合值，按元素还原——`IN (:p)` 配 `param=[a]` 还原为 `IN ('a')`，方括号不再落进 SQL 字面量），默认开启。
 
 同时开启 Hibernate `show_sql` 与 logger 双路打印时，同一条 SQL 会自动合并为一个条目，参数归到一处，不再出现零参残留与「参数数量不匹配」误报；预览时若语句完全没有捕获到参数绑定日志，面板会提示未捕获到参数并引导开启 TRACE 级别，只有参数确实不齐才提示数量不匹配。
 
