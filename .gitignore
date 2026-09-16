@@ -40,3 +40,5 @@ wrangler.toml
 .cache/
 .wrangler/
 .playwright-mcp/
+# WorkBuddy AI 沙盒运行时产物
+.workbuddy-ai/
