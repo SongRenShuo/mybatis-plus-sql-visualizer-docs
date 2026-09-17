@@ -75,7 +75,7 @@ export const enCards = [
   {
     icon: '🪵',
     title: 'Console Log One-Click Restore',
-    details: 'Auto-capture Preparing / Parameters logs from run console, restore executable SQL. Paste entire log blocks for batch restore',
+    details: 'Enhanced capture as the default channel — real parameters, exact durations and affected rows with no SQL logging setup; console Preparing / Parameters logs restored in per-thread buckets',
     link: '/en/features/sql-log',
   },
   {
@@ -135,7 +135,7 @@ export const enFeatureMatrix = [
       [
         'Auto Capture',
         'sidebar "Capture" button; auto-starts on project open / run with the matching setting enabled',
-        'Monitor console `Preparing:` / `Parameters:`; mixed-prefix tolerant matching; Hibernate & JdbcTemplate formats (multi-line statements included, duplicate dual-path prints merged); `#N` per-session entry numbers; log-line original timestamps with a log/capture source switch',
+        'Enhanced capture (bytecode instrumentation) as the default channel — one consent dialog on first project run, then real parameters, exact durations, affected rows, error messages and true source locations with no SQL logging setup; console `Preparing:` / `Parameters:` logs restored in per-thread buckets; `#N` per-session entry numbers; log-line original timestamps with a log/capture source switch',
       ],
       [
         'Click Preview',
@@ -186,6 +186,10 @@ export const enFeatureMatrix = [
       [
         'No-Restart Update',
         'One-click download & install hot-swaps the new version into the running IDE instantly — no restart needed; auto-fallback to the restart script where dynamic install isn\'t available',
+      ],
+      [
+        'Works Fully Offline',
+        'All core features run locally with zero network requests — no telemetry, no account or license checks, your code and SQL never leave the machine; intranet-ready with a private update channel',
       ],
     ],
   },

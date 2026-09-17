@@ -49,13 +49,17 @@ No IDE restart needed: re-trigger preview to apply new settings.
 | Auto-Open Window on SQL Found | On | Auto-open log window when SQL captured (60s debounce, never steals focus); a manual close suppresses auto-open for the session, restored by re-enabling the setting, restarting the IDE, or (with auto-start listening on) running the project again |
 | Stop Capture on Tool Window Close | Off | Automatically stops capture when the log tool window is closed |
 | Auto-Inject Source-Capture Interceptor | Off | Trigger-style switch: checking it immediately generates the `SqlSourceInterceptor` and config class in your project once (skipped if already present); after restarting your app, live logs carry the call site — precise jumps without manually copying interceptor files. Multi-module projects first show a dialog to pick the modules to inject (all selected by default) |
+| Enhanced Capture | On | Bytecode-instrumentation capture channel: a one-time consent dialog on first project run; after agreeing, capture attaches to the application JVM directly — no SQL logging setup needed, and real parameters, millisecond-accurate durations, affected rows and true source locations come out of the box; automatic fallback to console capture on failure; stopping listening also stops in-app collection |
+| Enhanced Capture Desensitization | Off | Masks parameter values that look sensitive (real values collected by default) |
+| Source-Capture Frame Skip Prefixes | Empty | Framework frame prefixes skipped when tracing enhanced-capture jumps up the call stack (one per line); live list and history panel share the same resolver |
 | Timestamp Display | On | Whether the time column appears in the entry list |
 | Timestamp Source | Log time | "Log time" shows the original time parsed from the log line (common formats recognized automatically, falling back to capture time when absent); "Capture time" shows when the plugin captured the log. The timestamp format setting applies to both sources alike |
 | Dedup Window | 60000 ms | Same SQL (whitespace-insensitive) doesn't reappear within window; toggling "Remove duplicate SQL" trims existing duplicates immediately |
 | Duration Prefix | `Time:` | Custom prefix for parsing execution time from logs (supports p6spy / MyBatis-Plus timing output) |
 | Slow Query Threshold | 1000 ms | Durations at or above this are flagged as slow queries in red |
-| Auto-Save SQL History | Off | Entries evicted from the list are written to files for the "History" tab |
+| Auto-Save SQL History | Off | Captured entries are saved to history files in full (not limited by the list's max-entry count) for the "History" tab |
 | History Directory / File Name | Empty (default path) / `sql-history-$yyyy-MM-dd$.sql` | History save location and file name template with date placeholders |
+| History File Retention Limit | 30 | When the save directory holds more history files than this, the oldest are cleaned up automatically to keep the disk in check; 0 = keep everything |
 | Remove Lines Containing | Empty | Filter log lines containing specified keywords |
 | CRUD Color Markers | Left color bar | Log / history lists colored by SELECT / INSERT / UPDATE / DELETE type (default blue / green / orange / red); three styles (left color bar / full-row tint / off), four customizable colors with one-click restore to defaults; the "Type Filter" popup shows color swatch legends |
 

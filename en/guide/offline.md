@@ -10,13 +10,14 @@ Every core capability of SQL Visualizer runs locally — the plugin **works full
 | `?` placeholder substitution, dialect formatting | No |
 | SQL → Java reverse conversion, CRUD SQL from entities and tables | No |
 | Console SQL log capture and restore, SQL history | No |
+| Enhanced capture (bytecode instrumentation) | No — capture points attach to your application's JVM on the local machine (with a consent dialog on first project run); data stays in the local IDE, generating no network traffic |
 | JOIN diagram, PNG / SVG export | No |
 | Built-in help page | No (bundled local page) |
 | Check for plugin updates | Yes (optional, off by default) |
 | Submit feedback | Yes (optional, sent only when you click submit) |
 | Execute SQL / EXPLAIN | Needs a reachable database; **IDE downloads the driver when missing**, see below |
 
-The plugin works by static analysis — it does not modify bytecode or inject interceptors, and previews are rendered locally. No need to start your application or connect to a database.
+Preview and restore run as local static analysis — no database connection involved. The one exception is the optional enhanced-capture channel: when enabled, capture points attach to your application's JVM on the local machine (a consent dialog asks on first project run, and you can decline), and the collected data is only displayed inside the local IDE — again with no network requests.
 
 ## Network behavior
 
@@ -87,6 +88,8 @@ The manifest URL and the package URL are independent — host both internally, o
 ::: warning The property is read once, at IDE startup
 `mpvs.update.manifest.url` is resolved and fixed during process startup, so **changing it later has no effect until you restart the IDE**. A line `update manifest url overridden by system property: <your url>` is written to the startup log — use it to confirm the override took effect.
 :::
+
+The override only changes where the manifest and the package are fetched from — download and install still go through the plugin's built-in one-click flow: the new version hot-swaps into the running IDE (no restart), with automatic fallback to the restart script when dynamic install isn't available. Exactly the same behavior as the internet update channel.
 
 ## Building and releasing is a separate matter
 

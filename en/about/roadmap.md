@@ -69,12 +69,11 @@ Planned features and progress.
 - [x] Renamed to SQL Visualizer (full MyBatis-Plus / MPJ / JPA / Hibernate support unchanged)
 - [x] One-click error / feedback reporting to the website feedback pool (Help menu, settings and the IDE's internal error dialog; optional stack attachment, 24-hour dedup; multi-select errors merge into one post with automatic staggered sending beyond the rate limit, and a rejected submission shows the server's exact reason for an in-place retry)
 
-> Everything above has shipped with v2026.9.8 ~ v2026.9.14 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details. Log original-time recording, log list search by row number / time with timestamp copying, and batch-report dialog merging have landed on master and ship first with the v2026.9.18-beta series on the Gitee early-access channel (enable "Auto-check on startup" in settings to get them); they merge into the same version number on the Marketplace once the stable release ships.
+> Everything above has shipped with v2026.9.8 ~ v2026.9.14 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details. Log original-time recording, log list search by row number / time with timestamp copying, batch-report dialog merging, enhanced capture as the default channel (first-run consent, database badges, millisecond durations with affected rows, true source locations), per-thread bucketing of concurrent console logs, the sort-mode selector, and full SQL-history persistence with a file retention limit ship first with the v2026.9.18-beta series on the Gitee early-access channel (enable "Auto-check on startup" in settings to get them); they merge into the same version number on the Marketplace once the stable release ships.
 
 ## Planned
 
 - Rollback SQL — generate rollback statements from a pre-execution snapshot in the preview window, INSERT derivation first
-- Agent bytecode enhancement — non-intrusive JDBC-level hooks covering 9 framework families (proof of concept first)
 - MPJ `fill` association rendering
 - Second batch of other ORM support (candidates: jOOQ / Jimmer / Fluent MyBatis / dbVisitor — research matrix ready)
 - Remaining long-tail JPA derived-query shapes

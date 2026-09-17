@@ -39,11 +39,11 @@ const features = reactive([
   {
     badge: '日志还原',
     title: '控制台日志一键还原',
-    description: '自动捕获运行控制台 Preparing / Parameters 日志，还原成可执行 SQL',
+    description: '增强捕获为默认通道，无需应用开启 SQL 日志即得真实参数与耗时；控制台日志自动捕获还原',
     features: [
-      { title: '自动捕获', description: '监听控制台输出，自动识别 SQL 日志' },
-      { title: '批量还原', description: '粘贴整段日志，多组语句自动分隔' },
-      { title: '混合前缀匹配', description: '宽容匹配各种日志前缀格式' },
+      { title: '增强捕获默认通道', description: '首次运行项目确认后自动采集，真实参数、精确耗时、影响行数开箱即得' },
+      { title: '并发日志分桶还原', description: '自动识别 Preparing / Parameters，多线程交错按线程分桶，参数不错挂' },
+      { title: '目标库角标', description: '条目标注 [MySQL]、[DM（达梦）] 等，9 种方言与 openGauss / GBASE 全识别' },
     ],
     imageSrc: '/demo/sql-log.gif',
     poster: '/demo/sql-log.png',

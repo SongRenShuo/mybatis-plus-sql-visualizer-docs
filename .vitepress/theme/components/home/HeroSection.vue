@@ -43,6 +43,27 @@ const { version } = usePluginVersion()
             </a>
           </div>
 
+          <ul class="hero-highlights">
+            <li class="hero-highlight">
+              <svg class="highlight-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <span>更新无需重启 IDEA</span>
+            </li>
+            <li class="hero-highlight">
+              <svg class="highlight-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <span>内网环境离线可用</span>
+            </li>
+            <li class="hero-highlight">
+              <svg class="highlight-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <span>无遥测 · 代码不出本机</span>
+            </li>
+          </ul>
+
           <div class="hero-stats">
             <div class="hero-stat">
               <span class="hero-stat-value">{{ version }}</span>
@@ -177,6 +198,33 @@ const { version } = usePluginVersion()
 .btn-outline:hover {
   background-color: var(--bg-secondary);
   color: var(--primary-color);
+}
+
+.hero-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-highlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.highlight-icon {
+  color: var(--primary-color);
+  flex-shrink: 0;
 }
 
 .hero-stats {

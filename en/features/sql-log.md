@@ -1,13 +1,30 @@
 # SQL Log Tool Window
 <GifPlayer src="/demo/sql-log.gif" alt="SQL Log Restore Demo" />
 
-Auto-capture `Preparing:` / `Parameters:` logs from the run console, restore to executable SQL, and jump precisely to the source line that fired the query.
+Auto-capture SQL as it runs and restore everything into a single list of executable statements, with precise jump-to-source for every entry.
 
 ## Trigger Method
 
 Sidebar "MyBatis SQL Log" tool window → click "Capture" button to start listening.
 
 With the setting "Auto-start listening on project launch" enabled, no button click is needed: opening the project or running / debugging it starts capture automatically. Enabling the setting itself does not start listening immediately — it triggers when the project runs. Clicking "Stop capture" suppresses auto-start for the session — it will not pop back on its own; as long as the switch stays on, the next project run starts capture again.
+
+## Two Capture Channels
+
+Entries come from two channels, unified in one list with identical display and actions:
+
+**Enhanced capture (default channel)**: bytecode-instrumentation based. The first time you run a project, a one-time consent dialog asks to inject; after agreeing, capture points attach to your application's JVM on the local machine, collecting directly at the JDBC interface layer — no SQL logging setup needed in your app, it works out of the box:
+
+- Real parameter values (desensitization off by default, can be enabled in settings), millisecond-accurate execution durations, affected-row counts and execution error messages
+- Entries carry a database badge (`[MySQL]`, `[DM (Dameng)]` etc.), inferred from the JDBC URL — all 9 dialect databases plus openGauss / GBASE covered
+- Source locations come from the real call stack, jumping straight to the code line that executed the SQL (see "Jump to Source" below)
+- Collected data is only displayed inside the IDE on your machine — nothing is sent to any server; turning the switch off stops collection (attached capture points remain but stay idle)
+- Declining the injection skips it for this run (asked again the next time you run the project), while console capture remains fully available; if enhanced capture fails, it automatically falls back to console capture
+- On JDK 21+ the application console may show a dynamic agent loading warning — expected JVM behavior (JEP 451), a warning only, no impact on your app
+
+Stopping listening also stops in-app collection — no more capture-and-discard waste; re-enabling listening resumes it, and after the agent mounts on project startup the listening state is reconciled automatically, so a project started with listening off no longer collects for nothing.
+
+**Console capture**: monitors the run console's log output, recognizes MyBatis `Preparing:` / `Parameters:` lines (Hibernate and JdbcTemplate formats are also supported), and fills `?` placeholders back into executable SQL. The log-format and duration-parsing descriptions in the sections below apply to this channel.
 
 ## Features
 
@@ -35,9 +52,10 @@ Supports multiple log formats:
 ### SQL Highlighting & Execution Time
 
 - SQL summaries in the list are lexically colored: keywords, table names, strings, numbers and comments each in their own color; timestamps and durations are dimmed gray so they never steal focus
-- Execution time is parsed from the log, supporting p6spy `elapsed`, MyBatis-Plus `Time:` output and a custom time prefix (configurable in settings, default `Time:`)
-- Duration is colored by threshold: gray under 100ms, orange at 100ms+, red once the slow-query threshold is reached (default 1000ms, adjustable)
-- Click the sort button to order entries by duration; a slow-query counter appears when slow queries are detected
+- Enhanced-capture entries carry structured durations (millisecond-accurate), affected-row counts and execution error messages directly — no log parsing involved
+- Console-channel durations are parsed from the log, supporting p6spy `elapsed`, MyBatis-Plus `Time:` output and a custom time prefix (configurable in settings, default `Time:`)
+- Duration is colored by threshold: gray under 100ms, orange at 100ms+, red once the slow-query threshold is reached (default 1000ms, adjustable); a slow-query counter appears when slow queries are detected
+- A persistent "Sort by" button on the list opens a single-choice menu: time ascending (default, i.e. capture order) / time descending / duration ascending / duration descending / line number. Entries missing duration or line number always sink to the bottom (in both directions); time sorting follows the list's time column (with "Log time" selected, entries are ordered by log time — what you see is what is sorted)
 
 ### Entry Sequence Numbers
 
@@ -66,7 +84,11 @@ List entries get color markers by statement type (applies to the SQL log list an
 
 ### Jump to Source
 
-Right-click a log entry → "Jump to Source". SQL logs contain no call-site info, so the plugin ships an optional runtime interceptor — copy the self-contained `SqlSourceInterceptor` from the plugin repository (`docs/instrumentation/SqlSourceInterceptor.kt`) into your project and register it as a MyBatis-Plus `InnerInterceptor`:
+Right-click a log entry → "Jump to Source". How the position is resolved depends on the capture channel:
+
+**Enhanced-capture entries**: the source location comes from the real call stack at SQL execution time, straight to the code line that ran the query. Calls entering through a self-developed framework's unified entry point are traced up the stack automatically, skipping framework frames to land on your business code; frame filtering is decided by origin (business classes come from directories in dev, third-party dependencies from JARs), so framework or data-layer plugin frames cannot mislead the jump. The framework prefixes skipped during upward traversal are configurable in settings ("Source-capture frame skip prefixes", one per line), and the live list and history panel share the same resolver.
+
+**Console-capture entries**: SQL logs contain no call-site info, so the plugin ships an optional runtime interceptor — copy the self-contained `SqlSourceInterceptor` from the plugin repository (`docs/instrumentation/SqlSourceInterceptor.kt`) into your project and register it as a MyBatis-Plus `InnerInterceptor`:
 
    ```java
    @Bean
@@ -81,7 +103,7 @@ Right-click a log entry → "Jump to Source". SQL logs contain no call-site info
 
    The interceptor captures the real call site on the SQL execution thread and prints a `SQLVIS-SOURCE|relative-path|line` marker to the console (no impact on SQL execution, no performance overhead). The plugin parses it and jumps precisely `file:line` — straight to the Service / Controller line that fired the SQL.
 
-Jumps rely only on the real position captured by the interceptor — no table-name guessing fallback, so a same-named table can never send you to an unrelated file. When an entry carries no position (no interceptor configured, or an outdated interceptor file), a guide dialog pops up with one-click "Open settings" or "Inject now"; triggering "Auto-inject source capture interceptor" in settings on a multi-module project first shows a dialog to pick the modules to inject (all selected by default). Statements like `SELECT 1` have no jump target and report as such.
+Jumps rely only on the real captured position — no table-name guessing fallback, so a same-named table can never send you to an unrelated file. When a console-channel entry carries no position (no interceptor configured, or an outdated interceptor file), a guide dialog pops up with one-click "Open settings" or "Inject now"; triggering "Auto-inject source capture interceptor" in settings on a multi-module project first shows a dialog to pick the modules to inject (all selected by default). Statements like `SELECT 1` have no jump target and report as such.
 
 ### Dedup & Filter
 
@@ -107,20 +129,20 @@ The SQL log page and the History page share the same setting, which survives IDE
 
 List entries use two-level previewing, consistent across the SQL log list, the History tab's second-level list and the history tool window:
 
-- **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; its display follows the existing "Format SQL on preview" setting (on by default), so long SQL opens multi-line indented, or as original text when off. The "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, and there is a "Close" button; the popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately. While a Ctrl / Shift multi-select is in progress, single-clicks no longer trigger the preview (any open popup closes with it); single-select resumes normal previewing
+- **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; its display follows the existing "Format SQL on preview" setting (on by default), so long SQL opens multi-line indented, or as original text when off. Literal SQL with zero placeholders (values inlined in the SQL text) and IN lists are recognized into editable parameter rows as well. The "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, and there is a "Close" button; the popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately. While a Ctrl / Shift multi-select is in progress, single-clicks no longer trigger the preview (any open popup closes with it); single-select resumes normal previewing
 - **Multi-select batch copy**: after Ctrl / Shift multi-select, right-click → "Copy" copies all selected SQL at once (the menu item shows the count, e.g. "Copy selected SQL (3)", each statement semicolon-terminated and newline-joined); right-clicking a row already in the selection keeps the selection, while the other menu actions still apply to the right-clicked row
-- **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The toolbar offers layout toggles — horizontal / vertical / keyword wrap — plus a "More" menu gathering low-frequency actions (import parameters, diff, share); vertical layout annotates each INSERT value line end with a `-- column` tag (can be disabled in settings), and IN lists with fewer than 5 elements stay on one line while 5 or more expand one per line; the display mode you switch to survives parameter refill instead of being wiped by re-rendering (Refresh resets it). The dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it; with no data source configured, preview prepares silently — it no longer raises the Database tool window over the sidebar, and only an explicit run guides you through configuration
+- **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The toolbar offers layout toggles — horizontal / vertical / keyword wrap — plus a "More" menu gathering low-frequency actions (import parameters, diff, share); vertical layout annotates each INSERT value line end with a `-- column` tag (can be disabled in settings), and IN lists expand vertically element by element — any list with a comma (≥2 elements) puts `(` on its own line with one element per line, while single-element forms (`IN (1)` / `IN (?)`) stay on one line, and IN subqueries and LIMIT pagination parameters are never expanded; the display mode you switch to survives parameter refill instead of being wiped by re-rendering (Refresh resets it). The dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it; with no data source configured, preview prepares silently — it no longer raises the Database tool window over the sidebar, and only an explicit run guides you through configuration
 
 How entries render is controlled by the "List display" option in settings (see above). Long field lists can also be folded automatically: with "Auto-fold long field lists" enabled in settings (off by default, threshold adjustable, default 10), preview editors collapse long SELECT / INSERT column lists, VALUES groups and UPDATE SET lists into a "… N columns" placeholder — click the fold marker to expand. This applies consistently across the main preview dialog, single-click preview, history preview, the Log → SQL result area and the native Database console.
 
 ## SQL History
 
-Enable "Auto-save SQL history" in settings (off by default) and entries evicted from the list are written to history files, browsable any time in the History tab:
+Enable "Auto-save SQL history" in settings (off by default) and captured entries are saved to history files in full (not limited by the list's max-entry count), browsable any time in the History tab; when the save directory holds more history files than the retention limit (default 30, configurable, 0 = keep everything), the oldest files are cleaned up automatically to keep the disk in check:
 
 - **Level 1 (default view)**: file list — each row shows file name, size and SQL count; search box filters by file name
 - **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info — timestamps follow the format and source currently set in settings — and a `#N` number per in-file entry order); single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically without interrupting browsing
-- **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same; history files (v2 format) store parameters per entry in an inline `-- pd:` comment line next to the statement — older plugin versions ignore that line and open the file as usual, while the new version reads all older files normally
+- **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same; history files (v2 format) store parameters per entry in an inline `-- pd:` comment line next to the statement, along with the original log time and database info — older plugin versions ignore the extra fields and open the file as usual, while the new version reads all older files normally
 
 History files are saved under `.idea/sql-visualizer/sql-history/` in your project by default (renamed from `mybatis-plus-sql-visualizer` in v2026.9.2 — old directories are no longer read). Save location and file name pattern are configurable in settings.
 

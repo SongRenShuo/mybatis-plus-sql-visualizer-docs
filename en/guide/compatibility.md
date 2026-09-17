@@ -9,7 +9,7 @@
 ## Runtime
 
 - The plugin runs on the IDE's bundled JBR (JetBrains Runtime) — no extra JDK or environment setup needed
-- No project dependencies required: the plugin works by static analysis, it does not modify bytecode or inject interceptors
+- No project dependencies required; preview, restore and reverse conversion are local static analysis. The optional enhanced-capture channel, when enabled, attaches capture points to your application's JVM on the local machine (a consent dialog on first project run, you can decline) — data stays in the local IDE
 
 ## Framework coverage
 
