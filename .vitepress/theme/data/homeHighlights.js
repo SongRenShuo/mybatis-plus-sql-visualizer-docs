@@ -18,7 +18,7 @@ export const coolCards = [
     icon: 'gauge',
     color: 'blue',
     title: '极致性能',
-    description: '静态解析，轻量级设计。执行失败面板内报错不打断、大日志流式渲染不卡顿，长时间开启依然流畅。',
+    description: '静态解析，轻量级设计。预览即点即出，捕捉开启时控制台日志单通道解析开销减半；执行失败面板内报错不打断、大日志流式渲染不卡顿，长时间开启依然流畅。',
   },
   {
     icon: 'bulb',
@@ -30,13 +30,13 @@ export const coolCards = [
     icon: 'cog',
     color: 'yellow',
     title: '广泛集成',
-    description: 'XML / 注解 / HQL·JPQL / .hbm.xml 命名查询 / SQL 日志追踪 / 批量操作之外，还支持实体类与数据库表右键生成 CRUD SQL、真实 EXPLAIN 执行计划与项目启动自动监听。',
+    description: 'XML / 注解 / HQL·JPQL / .hbm.xml 命名查询 / SQL 日志追踪 / 批量操作之外，还支持实体类与数据库表右键生成 CRUD SQL、真实 EXPLAIN 执行计划、项目启动自动监听，以及面向 AI Agent 的 MCP Server 十工具（IDEA 2025.2+）。',
   },
   {
     icon: 'shield',
     color: 'orange',
     title: '安全防护',
-    description: 'UPDATE / DELETE 无 WHERE 条件红色警示，逻辑删除与乐观锁条件自动注入，远离全表误操作。',
+    description: 'UPDATE / DELETE 无 WHERE 条件红色警示并列出无界写发现，${} 直替执行前二次确认，执行超时护栏兜底，逻辑删除与乐观锁条件自动注入，远离全表误操作。',
   },
   {
     icon: 'history',
@@ -57,7 +57,7 @@ export const enCards = [
   {
     icon: '📄',
     title: 'XML / Annotation Dynamic SQL Preview',
-    details: 'mapper XML dynamic tags (if / choose / foreach) rendered per MyBatis semantics. @Select / @Update annotations fully supported with OGNL toggles',
+    details: 'mapper XML dynamic tags (if / choose / foreach) rendered per MyBatis semantics, cross-namespace `include` resolved across files. @Select / @Update annotations fully supported with OGNL toggles',
     link: '/en/features/xml-preview',
   },
   {
@@ -81,7 +81,7 @@ export const enCards = [
   {
     icon: '📊',
     title: 'Batch Operation Panel',
-    details: 'save / updateBatchById SQL expanded by column with per-column toggles. saveOrUpdate conflict clause rendered per dialect (MySQL ON DUPLICATE KEY / PG ON CONFLICT)',
+    details: 'save / updateBatchById SQL expanded by column with per-column toggles. saveOrUpdate conflict clause rendered per dialect (MySQL ON DUPLICATE KEY / PG ON CONFLICT); multi-statement execution with a candidate checklist',
     link: '/en/features/batch-operation',
   },
 ]
@@ -103,7 +103,7 @@ export const enFeatureMatrix = [
       [
         'XML Dynamic SQL',
         'gutter icon on `<select>` etc.',
-        '`if` / `choose` / `where` / `set` / `foreach` / `bind` / `sql`+`include`; OGNL toggles',
+        '`if` / `choose` / `where` / `set` / `foreach` / `bind` / `sql`+`include` (cross-namespace supported); OGNL toggles; out-of-support test expressions flagged inline',
       ],
       [
         'Annotation SQL',
@@ -123,7 +123,7 @@ export const enFeatureMatrix = [
       [
         'Parameter Replace',
         'panel input',
-        '`?` placeholder → actual value; LIKE auto `%`; type-aware quoting',
+        '`?` placeholder → actual value; LIKE auto `%`; type-aware quoting; type-category placeholders (number / temporal / collection / object) with inline warnings',
       ],
     ],
   },
@@ -135,7 +135,17 @@ export const enFeatureMatrix = [
       [
         'Auto Capture',
         'sidebar "Capture" button; auto-starts on project open / run with the matching setting enabled',
-        'Enhanced capture (bytecode instrumentation) as the default channel — one consent dialog on first project run, then real parameters, exact durations, affected rows, error messages and true source locations with no SQL logging setup; console `Preparing:` / `Parameters:` logs restored in per-thread buckets; `#N` per-session entry numbers; log-line original timestamps with a log/capture source switch',
+        'Enhanced capture (bytecode instrumentation) as the default channel — one consent dialog on first project run, then real parameters, exact durations, affected rows, error messages and true source locations with no SQL logging setup; startup-period SQL captured via a premain agent (no dynamic-attach warning); console `Preparing:` / `Parameters:` logs restored in per-thread buckets; `#N` per-session entry numbers; log-line original timestamps with a log/capture source switch',
+      ],
+      [
+        'Focus Tabs',
+        'right-click a log entry → "Focus by method" / "Focus by request"',
+        'Filter the list to one calling method (line-range approximation, Kotlin callers not yet supported) or one web request; tabs stack, dedupe, capped at 8',
+      ],
+      [
+        'Jump to Mapper XML',
+        'right-click a log entry',
+        'Entries carrying a mapper statement id jump straight to the statement node in the matching mapper XML; falls back to "Jump to Java" — same entry points on log and history views',
       ],
       [
         'Click Preview',
@@ -151,6 +161,11 @@ export const enFeatureMatrix = [
         'SQL → Java',
         'right-click / `Alt+Shift+J` / sidebar',
         '4 forms (QueryWrapper / Lambda / Wrappers / MPJ); configurable default',
+      ],
+      [
+        'Rollback SQL',
+        'preview panel "Rollback" button',
+        'Generates the reverse statement for the current INSERT / UPDATE / DELETE — DELETE by primary key, restore original values, or re-insert by WHERE — shown in a dialog with one-click copy',
       ],
     ],
   },
@@ -177,7 +192,11 @@ export const enFeatureMatrix = [
       ],
       [
         'UPDATE/DELETE Warning',
-        'Red warning when no WHERE clause — full-table operation risk',
+        'Red warning when no WHERE clause — unbounded-write findings listed in the execution confirm dialog',
+      ],
+      [
+        'MCP Server Tools',
+        'Ten read-only SQL tools for external AI agents (Claude Code / Cursor / AI Assistant / Junie) via the built-in MCP Server — per-tool gating in settings, instant effect; requires IDEA 2025.2+',
       ],
       [
         'CRUD SQL Generation',

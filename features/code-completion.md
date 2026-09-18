@@ -19,4 +19,10 @@ mapper XML 与 Java SQL 注解字符串内 `Ctrl+Space` 补全。
 | XML 动态标签 | `<if>` / `<where>` / `<foreach>` 等 |
 | OGNL 表达式 | `<if test="...">` 内的属性名 |
 
+## 数据源字段补全
+
+配置了数据源（IDEA Ultimate 的 Database 工具窗）时，列名补全候选在实体列之外并入数据源真实列——实体列在前，数据源独有的列照常提示；同名列的注释与类型取数据源值，候选项尾部标注数据库真实类型。预热在预览打开与控制台就绪时后台进行，补全时无需等待。
+
+内嵌控制台执行 DDL 或事务提交（COMMIT / ROLLBACK）后，表 / 列注释缓存自动失效——`ALTER TABLE` 之后立刻预览或补全，不会命中旧结构。
+
 > 对补全功能有建议或遇到问题？[直达需求反馈池](/about/feedback?category=completion)

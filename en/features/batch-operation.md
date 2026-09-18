@@ -42,5 +42,11 @@ Auto-determine quoting by field type:
 | SQL Server | `MERGE INTO` |
 | Oracle | `MERGE INTO` |
 
+## Batch Execution and Confirmation
+
+When a multi-statement product restored by Log → SQL is executed in one click, a single statement runs directly; multiple statements pop up a candidate-check list to confirm before executing.
+
+For multiple same-table equality deletes restored from a foreach batch delete, the confirmation popup shows a one-line merge hint: "Detected N same-table equality deletes that could be merged into DELETE ... WHERE id IN (...)". This is a preview hint only — execution still runs each statement as-is; with heterogeneous statements mixed in, the count is disclosed honestly as "N of M".
+
 > Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=batch)
 

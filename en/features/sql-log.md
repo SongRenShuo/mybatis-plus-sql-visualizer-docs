@@ -5,7 +5,9 @@ Auto-capture SQL as it runs and restore everything into a single list of executa
 
 ## Trigger Method
 
-Sidebar "MyBatis SQL Log" tool window → click "Capture" button to start listening.
+Sidebar "MyBatis SQL Log" tool window → the "Capture" button (first in the panel toolbar) starts listening.
+
+First-time onboarding: opening a code file that uses MyBatis-Plus pops a one-time pointer notification (once per machine, can be turned off in settings); the first successful capture in a session also pops a notification linking straight to the log panel.
 
 With the setting "Auto-start listening on project launch" enabled, no button click is needed: opening the project or running / debugging it starts capture automatically. Enabling the setting itself does not start listening immediately — it triggers when the project runs. Clicking "Stop capture" suppresses auto-start for the session — it will not pop back on its own; as long as the switch stays on, the next project run starts capture again.
 
@@ -19,8 +21,9 @@ Entries come from two channels, unified in one list with identical display and a
 - Entries carry a database badge (`[MySQL]`, `[DM (Dameng)]` etc.), inferred from the JDBC URL — all 9 dialect databases plus openGauss / GBASE covered
 - Source locations come from the real call stack, jumping straight to the code line that executed the SQL (see "Jump to Source" below)
 - Collected data is only displayed inside the IDE on your machine — nothing is sent to any server; turning the switch off stops collection (attached capture points remain but stay idle)
-- Declining the injection skips it for this run (asked again the next time you run the project), while console capture remains fully available; if enhanced capture fails, it automatically falls back to console capture
-- On JDK 21+ the application console may show a dynamic agent loading warning — expected JVM behavior (JEP 451), a warning only, no impact on your app
+- Capture from the very start: with enhanced capture enabled and injection consented, the plugin writes `-javaagent` into the VM arguments before the Java run configuration launches, so the agent weaves in during the target JVM's premain phase — startup-phase SQL (framework init, data-source probes, Flyway / Liquibase migrations) goes straight into the enhanced channel instead of landing before the mount completes; nothing is injected when enhanced capture is off or consent hasn't been given, and any injection failure only falls back to the existing attach path and the console bridge, leaving the run configuration untouched
+- Declining the injection skips it for this run and silences re-asking for 24 hours (within the cooldown, "Re-authorize" in settings re-opens the consent dialog in one click), while console capture remains fully available; if enhanced capture fails, it automatically falls back to console capture
+- Premain injection is the JVM's expected loading path and no longer produces the dynamic-attach warning; only when injection fails and falls back to dynamic attach may the application console on JDK 21+ show one agent warning (JEP 451) — expected JVM behavior, a warning only, no impact on your app
 
 Stopping listening also stops in-app collection — no more capture-and-discard waste; re-enabling listening resumes it, and after the agent mounts on project startup the listening state is reconciled automatically, so a project started with listening off no longer collects for nothing.
 
@@ -42,6 +45,13 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 - Closing the window manually suppresses auto-open for the rest of the session — no "close and it pops back"; re-enabling the setting, restarting the IDE, or (with "Auto-start listening on project launch" on) running the project again restores it
 - Users who turned the switch off before the upgrade keep it off, unaffected by the new default
 
+### Capture Diagnostics & Authorization
+
+- **Zero-output diagnostics**: when capture is running but not a single entry shows up, the panel's empty state names the blocker — the enhanced channel's current state (off / not authorized / waiting for the app process / attached / fallen back), the console channel's attached count and scanned line count — plus actionable next steps in three tiers ("waiting for the project to run / console has no output yet / output exists but no SQL matched")
+- **Honest status line**: the enhanced-capture status line in settings renders all five states faithfully; when not authorized it says so explicitly with the cooldown's remaining hours, and shows blank only while enhanced capture is off
+- **Re-authorize**: during the 24-hour cooldown after declining, the "Re-authorize" button in settings clears the cooldown and re-opens the consent dialog in one click — no switch toggling needed
+- **Three-state consent dialog**: the confirmation dialog records all three outcomes faithfully — "Agree and enable / Cancel / Disable enhanced capture and don't ask again"; the third persists the opt-out in one click (re-enable any time in settings)
+
 ### Mixed Prefix Matching
 
 Supports multiple log formats:
@@ -56,6 +66,10 @@ Supports multiple log formats:
 - Console-channel durations are parsed from the log, supporting p6spy `elapsed`, MyBatis-Plus `Time:` output and a custom time prefix (configurable in settings, default `Time:`)
 - Duration is colored by threshold: gray under 100ms, orange at 100ms+, red once the slow-query threshold is reached (default 1000ms, adjustable); a slow-query counter appears when slow queries are detected
 - A persistent "Sort by" button on the list opens a single-choice menu: time ascending (default, i.e. capture order) / time descending / duration ascending / duration descending / line number. Entries missing duration or line number always sink to the bottom (in both directions); time sorting follows the list's time column (with "Log time" selected, entries are ordered by log time — what you see is what is sorted)
+
+### Execution Errors Inline
+
+SQL execution error lines from the console — MyBatis `###` error blocks, Spring DAO exceptions, the JDBC exception family, parameter-binding errors — are recognized and bound back to the nearest matching entry within the time window: the list row shows an error snippet, and the entry details carry the full error text (red meta info, an error banner and a copy-full-text action), so failed executions are visible at a glance.
 
 ### Entry Sequence Numbers
 
@@ -103,6 +117,8 @@ Right-click a log entry → "Jump to Source". How the position is resolved depen
 
    The interceptor captures the real call site on the SQL execution thread and prints a `SQLVIS-SOURCE|relative-path|line` marker to the console (no impact on SQL execution, no performance overhead). The plugin parses it and jumps precisely `file:line` — straight to the Service / Controller line that fired the SQL.
 
+Entries carrying mapper statement info can also right-click → "Jump to Mapper XML": the statement id is split into namespace and fragment id, the mapper XML is located through the project index, the namespace is verified and the jump lands on the statement node's start line; if the XML doesn't exist (annotation SQL, MP built-in statements) or locating fails, it falls back to "Jump to Java" with no capability loss. The log page and the History page share the same entries.
+
 Jumps rely only on the real captured position — no table-name guessing fallback, so a same-named table can never send you to an unrelated file. When a console-channel entry carries no position (no interceptor configured, or an outdated interceptor file), a guide dialog pops up with one-click "Open settings" or "Inject now"; triggering "Auto-inject source capture interceptor" in settings on a multi-module project first shows a dialog to pick the modules to inject (all selected by default). Statements like `SELECT 1` have no jump target and report as such.
 
 ### Dedup & Filter
@@ -114,6 +130,13 @@ Jumps rely only on the real captured position — no table-name guessing fallbac
 | Keyword filter | Remove log lines containing specified keywords |
 | List search | The search box matches SQL content, source file, `#number` (`#5` or `5` hits exactly entry 5) and time text (search what you see, matched against the displayed format); available on both the log page and the History page |
 | Copy timestamps | Select entries (multi-select works), right-click → "Copy timestamp" to copy plain time text line by line (no display brackets; the menu item shows the count for multi-select); grayed out while timestamp display is off |
+
+### Focus Tabs
+
+The entry context menu offers two focus modes, shown as tabs at the top of the panel — several can be open at once, each can be closed, and they stack correctly with type filter and search:
+
+- **Focus caller method**: statically approximates the source position's line range so the list shows only SQL issued from within that method. Nested classes, overloads and lambdas resolve to the smallest containing method; entries outside the range are hidden with a count hint. Known boundary: Kotlin callers are not supported in the first batch
+- **Focus by request**: right-click a SQL executed inside a web request → "Focus by request" to see only that request's SQL, kept in a flat timeline. Request tabs are deduplicated and capped at 8 (the oldest tab is evicted past the cap), so long load-test sessions can't flood the list; entries without a request tag (scheduled jobs, startup phase) are hidden under focus with a count
 
 ### Three Display Modes
 

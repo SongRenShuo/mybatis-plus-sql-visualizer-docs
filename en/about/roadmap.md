@@ -28,6 +28,9 @@ Planned features and progress.
 - [x] Wrapper chain complexity scoring
 - [x] Interceptor simulation: logic delete / tenant / dynamic table name / data permission
 - [x] 9-dialect pagination / upsert rendering (reserved words calibrated against official docs, H2 upsert as native `MERGE INTO ... KEY`)
+- [x] Dialect auto-inference (follows the data source by default: enhanced-capture connection URL first, IDE data source next, MySQL fallback, with a status line showing the inference basis; a manual pick always wins)
+- [x] Preview reliability enhancements (cross-namespace include resolution, expression-support precheck annotations, `${}` injection confirmation gate, parameter type contract, `${table}` quick templates)
+- [x] Execution guardrails (execution timeout setting, unbounded-write findings in the execution confirmation)
 
 ### Conversion & Completion
 
@@ -36,6 +39,7 @@ Planned features and progress.
 - [x] Wrapper method chain smart completion (suggest next methods and fields after `.eq(`)
 - [x] Batch operation parameter panel (column-level toggle, batch import)
 - [x] Right-click CRUD SQL generation from entity classes / database tables (candidate popup for INSERT / UPDATE / SELECT / DELETE, then into the preview; auto-increment keys unchecked by default, `@Version` optimistic-lock column appended automatically, logic-delete entities get a dedicated variant; Community has entity-side entries only)
+- [x] One-click rollback SQL from the preview (generates the inverse SQL for the INSERT / UPDATE / DELETE being previewed — INSERT to DELETE by primary key, UPDATE restoring original values, DELETE re-inserting by WHERE; shown in a dialog with one-click copy)
 
 ### Log & History
 
@@ -57,6 +61,8 @@ Planned features and progress.
 - [x] History SQL parameter memory (v2 history files save parameters per entry, older files still readable) and literal parameter recovery for zero-placeholder SQL
 - [x] Log capture pipeline performance optimization (EDT overhead reduction)
 - [x] Performance red-line hardening (inline error reporting instead of modal dialogs, streaming log rendering, parameter-input debounce, backgrounded large-file reads, memory-leak cleanup)
+- [x] Enhanced capture at startup via premain (startup-phase SQL is no longer lost, no dynamic-attach warning; falls back to attach on failure)
+- [x] Log panel focus and navigation enhancements (method-level / request-level focus tabs, jump to mapper XML from log entries, execution errors shown inline with their entries)
 
 ### Platform & Ecosystem
 
@@ -68,12 +74,12 @@ Planned features and progress.
 - [x] Local HTML help page (zero network dependency, dark mode)
 - [x] Renamed to SQL Visualizer (full MyBatis-Plus / MPJ / JPA / Hibernate support unchanged)
 - [x] One-click error / feedback reporting to the website feedback pool (Help menu, settings and the IDE's internal error dialog; optional stack attachment, 24-hour dedup; multi-select errors merge into one post with automatic staggered sending beyond the rate limit, and a rejected submission shows the server's exact reason for an in-place retry)
+- [x] Ten read-only MCP Server tools (an AI-agent tool surface: render SQL / schema context / EXPLAIN / log restore / rollback plan and more, gated per tool in settings; requires IDEA 2025.2+)
 
-> Everything above has shipped with v2026.9.8 ~ v2026.9.14 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details. Log original-time recording, log list search by row number / time with timestamp copying, batch-report dialog merging, enhanced capture as the default channel (first-run consent, database badges, millisecond durations with affected rows, true source locations), per-thread bucketing of concurrent console logs, the sort-mode selector, and full SQL-history persistence with a file retention limit ship first with the v2026.9.18-beta series on the Gitee early-access channel (enable "Auto-check on startup" in settings to get them); they merge into the same version number on the Marketplace once the stable release ships.
+> Everything above has shipped with v2026.9.8 ~ v2026.9.18 — update via JetBrains Marketplace; see the [changelog](./changelog) for version details. The v2026.9.18 stable release (including everything from the beta series) shipped under the same version; highlights of this round: the ten MCP Server tools, premain capture at startup, method-level / request-level focus tabs, one-click rollback SQL, dialect auto-inference, cross-namespace include resolution, and more.
 
 ## Planned
 
-- Rollback SQL — generate rollback statements from a pre-execution snapshot in the preview window, INSERT derivation first
 - MPJ `fill` association rendering
 - Second batch of other ORM support (candidates: jOOQ / Jimmer / Fluent MyBatis / dbVisitor — research matrix ready)
 - Remaining long-tail JPA derived-query shapes

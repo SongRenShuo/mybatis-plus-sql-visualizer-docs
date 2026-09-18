@@ -143,7 +143,8 @@ export default defineConfig({
               { text: 'SQL 日志工具窗口', link: '/features/sql-log' },
               { text: '批量操作参数面板', link: '/features/batch-operation' },
               { text: 'CRUD SQL 生成', link: '/features/crud-sql' },
-              { text: 'SQL 代码补全', link: '/features/code-completion' }
+              { text: 'SQL 代码补全', link: '/features/code-completion' },
+              { text: 'MCP Server 工具', link: '/features/mcp' }
             ]
           },
           '/guide/': {
@@ -212,7 +213,8 @@ export default defineConfig({
               { text: 'SQL Log Tool Window', link: '/en/features/sql-log' },
               { text: 'Batch Operation Panel', link: '/en/features/batch-operation' },
               { text: 'CRUD SQL Generation', link: '/en/features/crud-sql' },
-              { text: 'SQL Code Completion', link: '/en/features/code-completion' }
+              { text: 'SQL Code Completion', link: '/en/features/code-completion' },
+              { text: 'MCP Server Tools', link: '/en/features/mcp' }
             ]
           },
           '/en/guide/': {

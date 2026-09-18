@@ -56,6 +56,12 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 - Subqueries, aggregates, `UPDATE` / `DELETE` JPQL (incl. `@Modifying`) fully supported
 - Bare entity alias in `SELECT u` auto-expands to the column list (see [XML / HQL Dynamic SQL Preview](/en/features/xml-preview))
 
+## Inheritance-Chain Entity Column Resolution
+
+When an entity extends a parent class (including abstract classes), HQL / JPQL previews still resolve the full column list — parent-mapped columns are included, and resolution no longer degrades to `x.*` just because the column list came back empty; custom entity names from `@Entity(name = "...")` resolve back to the entity class as well.
+
+Under `@Inheritance(JOINED)` / `TABLE_PER_CLASS`, parent fields actually live in the parent table or per-class tables; the preview merges the column list on a single-table basis and attaches a boundary note. When an entity truly can't be resolved, the degradation comment comes in two flavors — "entity unresolvable" and "entity resolvable but column list empty (check the parent mappings along the inheritance chain)" — so diagnosis points in the right direction.
+
 ## hbm Named Queries
 
 Named queries in Hibernate XML mappings (`.hbm.xml`) preview the same way: `<query>` (HQL) converts through the entity-to-table mapping, `<sql-query>` (native SQL) fills `:param` named parameters back as `?` placeholders. The query-name line gets a gutter icon — click it or use the shortcut to preview.

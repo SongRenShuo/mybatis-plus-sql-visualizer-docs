@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 
 // Marketplace API 不可用时的静态兜底，随发版手动同步
-const FALLBACK_VERSION = 'v2026.9.4'
+const FALLBACK_VERSION = 'v2026.9.18'
 
 export function usePluginVersion() {
   const version = ref(FALLBACK_VERSION)

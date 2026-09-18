@@ -10,7 +10,7 @@ No IDE restart needed: re-trigger preview to apply new settings.
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| Database Dialect | MySQL | Pagination / upsert clause per dialect. Reserved words of all 9 dialects are calibrated against official docs / engine tests; H2 upsert renders as native `MERGE INTO ... KEY` |
+| Database Dialect | Auto-infer | Pagination / upsert clause per dialect. Defaults to "Auto-infer (follow the data source)": the enhanced-capture connection's JDBC URL wins first, the IDE data source configuration next, MySQL as the fallback; "Auto-infer" is the first entry of the dialect dropdown, with a status line below showing the current inference result and its basis. Picking a dialect manually takes effect as-is and you can switch back anytime; at project level, leaving it empty follows the global setting. Upgrade note: users who never touched the dialect setting enter inference mode automatically (the old default was MySQL); manual values are preserved. Reserved words of all 9 dialects are calibrated against official docs / engine tests; H2 upsert renders as native `MERGE INTO ... KEY` |
 | Replace `?` Placeholders | On | Off = variables also render as `?` |
 | Formatted Output | On | Multi-line indent (Off = single line) |
 | Vertical Layout Column Tags | On | In vertical layout, each INSERT value line end shows a pairing `-- column` annotation (the vertical-layout button tooltip mentions this setting) |
@@ -23,6 +23,8 @@ No IDE restart needed: re-trigger preview to apply new settings.
 | Tenant Column Name | `tenant_id` | Column name used for tenant injection, adjustable per business (e.g. `org_id` / `shop_id`) |
 | Tenant Column Default | 1 | Literal default appended to UPDATE SET / INSERT tenant columns |
 | Append Tenant Column on INSERT | On | Sub-switch: INSERT column list gets the tenant column (aligned with MP `TenantLineInnerInterceptor` INSERT semantics); INSERT only — requires Tenant Injection to be on, UPDATE / DELETE unaffected |
+| Execution Timeout | 30 s | Timeout guard for the execute / EXPLAIN chain (0 = unlimited): a hung query no longer sits in loading forever — the statement is cancelled first, then an error is reported; multi-statement scripts get a budget scaled by statement count (capped at 8x) |
+| Empty-Parameter Fill Strategy | NULL literal | What an empty typed parameter input row renders as: NULL literal / empty string; paths without type info keep the `?` placeholder |
 
 ## Table Name Mapping
 
@@ -76,6 +78,23 @@ History SQL and execution temp files live under `.idea/sql-visualizer/` in your 
 | UI Language | Simplified Chinese | Plugin UI language (English / Follow System) |
 | Shortcuts | `Alt+Shift+Q` / `Alt+Shift+J` | SQL preview / SQL → Java respectively |
 
+## MCP Tools
+
+The plugin exposes 10 read-only tools to AI agents (Claude Code / Cursor / AI Assistant, etc.) through the platform's MCP Server — rendering executable SQL, schema context, EXPLAIN plans, log restore, rollback plans, CRUD generation and more (requires IDEA 2025.2+; environments without the MCP Server plugin are unaffected). The "MCP Tools" subpage in settings gates this surface:
+
+- Master switch: enable/disable the plugin's MCP functionality as a whole
+- Per-tool enable/disable for all ten tools, plus "Enable All / Disable All" buttons
+- Changes take effect immediately — no IDE restart needed
+
+## Project-Level Settings
+
+`Settings > Tools > SQL Visualizer (Current Project)` offers 10 project-level controls: the enhanced-capture switch, database dialect, 3 checkboxes, logic-delete value, table prefix / suffix, table-name strategy, and ignored fields.
+
+- When the "Use project settings" master switch is off, the 9 override rows gray out and show the effective global values — what you see is what runs; a "Reset to follow global" button clears this project's overrides in one click
+- With the dialect on "Auto-infer", the project level takes precedence over the global setting
+- Settings search hits both the global page and the project page for the same keywords
+- Import / export covers global settings only; project-level settings are not included
+
 ## Update & Diagnostics
 
 | Setting | Default | Description |
@@ -86,6 +105,6 @@ History SQL and execution temp files live under `.idea/sql-visualizer/` in your 
 | Plugin Cache | - | Show cache size and entry count (lookup / resolution / Wrapper preview, all scopes), one-click clear |
 | Report a Problem / Feedback Pool | - | Manual feedback entry opening a report dialog straight to the [feedback pool](/en/about/feedback): type / category / description required; exception-stack attachment is opt-in (may contain local paths and class names); IDE and plugin versions are attached automatically; the same exception is deduplicated for 24 hours. The Help menu's "SQL Visualizer Feedback" entry and the IDE's internal error dialog offer one-click reporting too. Reporting several entries selected in the IDE error list merges them into a single post (items beyond the rate-limit threshold are queued and sent staggered automatically); when a submission is rejected the dialog stays open and the status line shows the exact reason from the server, ready to fix and retry |
 | Internal Build Number | - | Unique per build, one-click copy for bug reports |
-| Settings Import / Export | - | Import / export settings as JSON; the result is shown inline next to the buttons |
+| Settings Import / Export | - | Import / export settings as JSON; covers global settings only (project-level settings are not included), with the result shown inline next to the buttons |
 
 > If the IDE shows an info-level "plugin was not completely unloaded" notice after a no-restart update: it is a one-time notice from the IDE's GC watch window over the old classloader — the new plugin instance has fully taken over (extension points / services rebuilt), the old instance is only transiently resident and clears on the next IDE restart, with no functional impact.

@@ -28,5 +28,6 @@ The selected statement opens in the existing SQL preview window, ready to edit, 
 - The `@Version` optimistic-lock column is appended to UPDATE's WHERE automatically, with `version = version + 1` at the end of SET
 - UPDATE / DELETE locate rows by primary key; tables without a primary key degrade the WHERE clause to a `1 = 0` placeholder, flagged as "no primary key recognized" in the candidate list to prevent accidental full-table statements
 - Logic-delete semantics travel with the "DELETE (logic delete)" variant, leaving the physical DELETE untouched
+- Parameter input rows follow a per-type contract: placeholder hints by category, a faint end-of-line warning when a number field gets non-numeric or a date field gets an unparseable input (a hint only, never a blocker), and mock values dispatched by category
 
 > Have a suggestion or hit an issue with CRUD SQL generation? [Go to the feedback pool](/en/about/feedback?category=other)

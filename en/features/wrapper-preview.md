@@ -58,6 +58,10 @@ Boolean-overloaded conditions like `.eq(true, ...)` can be toggled in the left p
 | DM (Dameng) | `LIMIT n OFFSET m` |
 | KingBase | `LIMIT n OFFSET m` |
 
+### JOIN Diagram
+
+JOIN query previews ship with a relationship diagram rendered by IDEA's native Diagrams engine (the built-in renderer can be restored in settings). JOIN tables are drawn with the same full entity column list as the main table — wide tables over 50 columns keep only primary-key columns, columns referenced by the SQL are appended after the entity columns, and columns that exist in the data source but are not mapped by the entity are added to the node as well, with the database COMMENT and real type. Column comments come from two sources — entity comments and database COMMENTs — falling back to the database when the entity has none. A loading indicator is visible while rendering; if rendering fails, an error page shows a summary of the cause.
+
 ### Safety Warning
 
 UPDATE / DELETE without WHERE shows a red warning:

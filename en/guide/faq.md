@@ -67,6 +67,12 @@ Yes. "Auto-open log window on SQL found" is on by default: capturing the first S
 
 Since v2026.9.2 the plugin's in-project data directory is renamed from `.idea/mybatis-plus-sql-visualizer/` to `.idea/sql-visualizer/` (history SQL and execution temp files). Old data is not migrated — history accumulates fresh in the new directory after upgrading. To keep old records, manually copy `.sql` files from the old directory's `sql-history/` into the new one.
 
+## Why did my SQL dialect change after upgrading?
+
+Since v2026.9.18 the database dialect defaults to "Auto-infer (follow the data source)": the plugin infers the dialect first from the enhanced-capture connection's JDBC URL, then from the IDE data source configuration, falling back to MySQL when neither matches. Configurations that never set a dialect manually enter inference mode automatically after upgrading (the old default was MySQL).
+
+To pin a dialect, pick one manually in settings — pagination / upsert rendering then follows the selected dialect. You can switch back to "Auto-infer" anytime.
+
 ## Can SQL → Java reverse conversion generate compilable code?
 
 Yes. Generated code is strictly based on MyBatis-Plus public APIs (local jar decompilation as sole authority), no fictional methods. Auto-infers entity classes for Lambda type-safe code; falls back to string-column `QueryWrapper` when entity not found.
