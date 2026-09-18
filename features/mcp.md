@@ -2,39 +2,69 @@
 
 从 2026.9.18 起，插件向 IDEA 内置 MCP Server 注册了十个工具，让 Claude Code、Cursor、JetBrains AI Assistant、Junie 这类外部 agent 能直接调用插件的 SQL 能力：渲染可执行 SQL、查表结构、拿执行计划。你在 IDE 里照常写代码，agent 在旁边干活，两边互不打扰。
 
+## 快速上手
+
+1. 确认 IDEA 为 2025.2 及以上——MCP Server 为平台内置，无需另装插件
+2. 在支持 MCP 的 agent 里添加当前 IDE 的 MCP Server 连接（如 Claude Code 的 `use_idea_mcp`），工具列表里即可看到 `mpsv_*` 十个工具
+3. 直接调用。比如把一段 mapper XML 丢给 `mpsv_render_sql`，拿回来的就是参数已回填、可直接执行的真 SQL
+
+不需要改一行项目代码，也不用在插件里做额外配置；想控制哪些工具对 agent 可见，见下文「设置页门控」。
+
+## 十个工具
+
+按 agent 的工作流分三组：先拿到 SQL，再了解数据库，最后执行前把关。
+
+### 拿 SQL
+
+| 工具 | 输入 | 产出 |
+|------|------|------|
+| `mpsv_render_sql` | `filePath` + `line`（文件与行号），或直接贴 `xmlSnippet`（mapper XML 片段） | 真实可执行 SQL——参数已回填，渲染降级处附说明 |
+| `mpsv_render_logs` | `logText` 整段控制台日志原文（可选自定义 `sqlPrefix` / `paramPrefix` 等前缀） | MyBatis / Hibernate / JdbcTemplate 日志还原成的可执行 SQL |
+| `mpsv_crud_sql` | `filePath` 或 `className`（MyBatis-Plus 实体类） | INSERT / UPDATE / SELECT / DELETE 四件套 |
+| `mpsv_reverse_sql` | `sql` 一条 SQL | 反向生成的 MyBatis-Plus Java 代码 |
+
+### 看库
+
+| 工具 | 输入 | 产出 |
+|------|------|------|
+| `mpsv_schema_context` | `tables` 表名清单（可选 `dataSource`、`maxTables`，默认最多 8 张、上限 20） | 数据源真实的表列结构、类型与注释，紧凑上下文 |
+| `mpsv_explain` | `selectSql` 单条 SELECT（可选 `dataSource`、`dialect`） | 七方言 EXPLAIN 执行计划文本，附驱动 notices 与 index hints 建议 |
+
+### 执行前把关
+
+| 工具 | 输入 | 产出 |
+|------|------|------|
+| `mpsv_check_sql` | `sql` 一条 SQL | 静态写风险与类型核查结论 |
+| `mpsv_mapper_check` | mapper XML（`xmlSnippet` 或 `filePath`），可选 `simulate` | mapper 契约核查；simulate 模式对渲染产物做写风险与性能分析——校验器给不出的证据形态 |
+| `mpsv_rollback_plan` | `sql` 一条 INSERT / UPDATE / DELETE（可选 `primaryKeyColumns`） | 回滚预案——只产出预案，不执行任何语句 |
+| `mpsv_perf_advice` | `sql` 一条 SQL | 按 20 条内置规则给性能建议，最多 30 条、超限按严重级别裁剪保留高危 |
+
 ## 校验给置信度，这里给证据
 
 插件里的各类校验与提示，给出的是置信度评分——「可能有风险」「建议关注」；MCP 工具走的是另一条路：把渲染链真实产出的可执行 SQL 本体交给 agent。比如 `mpsv_mapper_check` 除了静态契约核查，还能对渲染产物做写风险与性能分析——这是静态校验器产不出的实证形态。agent 不用猜，拿着证据改代码。
 
-## 十个工具
+## 典型工作流
 
-按用途分三组：渲染三件套、工作流四件套、生成与核查三件套。
+以「让 agent 查一条慢 SQL 的病根」为例，agent 会按需串起这些工具：
 
-| 工具 | 用途 | 只读 |
-|------|------|------|
-| `mpsv_render_sql` | 按文件与行号（或 mapper XML 片段）渲染真实可执行 SQL，参数已回填，附降级说明 | 是 |
-| `mpsv_schema_context` | 按表名白名单返回数据源真实的表列结构与注释（紧凑上下文，默认最多 8 张表、上限 20） | 是 |
-| `mpsv_explain` | 单条 SELECT 的七方言 EXPLAIN 执行计划文本 | 是 |
-| `mpsv_render_logs` | 把 MyBatis / Hibernate / JdbcTemplate 日志还原成可执行 SQL | 是 |
-| `mpsv_check_sql` | 静态写风险与类型核查 | 是 |
-| `mpsv_rollback_plan` | 生成回滚预案（只产出预案，不执行任何语句） | 是 |
-| `mpsv_perf_advice` | 按 20 条内置规则给出性能建议 | 是 |
-| `mpsv_crud_sql` | 从实体类生成 CRUD 四件套 SQL | 是 |
-| `mpsv_reverse_sql` | SQL 反向转 MyBatis-Plus 代码 | 是 |
-| `mpsv_mapper_check` | mapper 契约核查，可选 simulate 模式对渲染产物做写风险与性能分析 | 是 |
+1. `mpsv_render_sql` 按文件与行号拿到真实可执行 SQL（参数已回填，不是源码里的 `?` 占位）
+2. `mpsv_explain` 对这条 SELECT 拿执行计划——末尾如果命中全表扫描、filesort 之类模式，还会附 `index hints` 建议
+3. `mpsv_perf_advice` 按 20 条规则拿性能建议；`mpsv_schema_context` 顺带取回表的列注释与结构佐证
+4. 改完代码再用 `mpsv_render_sql` 复验渲染产物；写操作改动前可用 `mpsv_rollback_plan` 备好回滚预案
 
-几点使用口径：
+每一步都是确定性输出：SQL 是渲染链的真实产物，计划是数据库真实返回，建议有规则出处——不掺杂「我觉得」。
+
+## 使用口径
 
 - `mpsv_render_sql` 一次渲染一条语句；同一位置有多个候选时取第一个并注明，多语句日志请交给 `mpsv_render_logs`
 - `mpsv_render_logs`、`mpsv_rollback_plan`、`mpsv_mapper_check` 的语句头会带上语句名（取自日志前导 `-- Name:` 注释），多语句输出一目了然
-- `mpsv_perf_advice` 最多返回 30 条建议，超限按严重级别裁剪、保留高危项，尾部带「showing 30 of N」计数；单条文案超长会被截断，避免无上限输出
+- `mpsv_perf_advice` 单条文案超长会被截断，避免无上限输出
 
 ## 使用前提
 
 - IDEA 2025.2 及以上：MCP Server 为平台内置，无需另装
 - IDEA 2024.3 ~ 2025.1 不支持此功能面（平台没有内置 MCP Server），插件其余功能不受影响
 - 环境里没有 MCP Server 插件时零影响：插件的 MCP 注册整份不加载，其余功能照常
-- agent 侧连接：工具挂在 IDEA 内置 MCP Server 下，在支持 MCP 的 agent（Claude Code / Cursor / AI Assistant / Junie 等）里添加当前 IDE 的 MCP Server 连接即可，如 Claude Code 的 `use_idea_mcp`
 
 ## 设置页门控
 
