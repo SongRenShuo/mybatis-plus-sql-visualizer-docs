@@ -196,7 +196,7 @@ export const enFeatureMatrix = [
       ],
       [
         'MCP Server Tools',
-        'Ten read-only SQL tools for external AI agents (Claude Code / Cursor / AI Assistant / Junie) via the built-in MCP Server — per-tool gating in settings, instant effect; requires IDEA 2025.2+',
+        'Ten read-only SQL tools for external AI agents (Claude Code / Cursor / AI Assistant / Codex) via the built-in MCP Server — per-tool gating in settings, instant effect; requires IDEA 2025.2+',
       ],
       [
         'CRUD SQL Generation',

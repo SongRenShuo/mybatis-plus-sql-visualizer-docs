@@ -1,102 +1,156 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="920" viewBox="0 0 1280 920">
-  <!-- MCP 演示占位图：GIF 录制前临时使用，录制后由 mcp.gif + mcp.png 替换 -->
+  <!-- SQL Visualizer MCP Server 官方配图（首页功能演示卡 + MCP 功能页共用） -->
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#f8fafc"/>
       <stop offset="1" stop-color="#eef2f7"/>
     </linearGradient>
+    <linearGradient id="mcp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <filter id="ds" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="5" stdDeviation="9" flood-color="#0f172a" flood-opacity="0.10"/>
+    </filter>
   </defs>
   <rect width="1280" height="920" fill="url(#bg)"/>
   <rect x="24" y="24" width="1232" height="872" rx="16" fill="#ffffff" stroke="#e2e8f0"/>
 
-  <text x="640" y="88" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="40" font-weight="700" fill="#1e293b">SQL Visualizer · MCP Server</text>
-  <text x="640" y="128" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="22" fill="#64748b">给 AI Agent 的确定性 SQL 工具 —— 十个只读工具，证据而非置信度</text>
+  <!-- 标题区 -->
+  <text x="640" y="86" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="38" font-weight="700" fill="#1e293b">SQL Visualizer · MCP Server</text>
+  <text x="640" y="126" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="20" fill="#64748b">给 AI Agent 的确定性 SQL 工具 —— 证据而非置信度</text>
 
-  <!-- 左：外部 agent -->
+  <!-- 左：外部 Agent -->
   <g font-family="system-ui, 'Segoe UI', sans-serif">
-    <text x="210" y="196" text-anchor="middle" font-size="20" font-weight="600" fill="#475569">外部 Agent</text>
+    <text x="212" y="196" text-anchor="middle" font-size="18" font-weight="600" fill="#94a3b8">外部 AGENT</text>
     <g font-size="20" fill="#334155">
-      <rect x="80" y="216" width="260" height="52" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
-      <text x="210" y="249" text-anchor="middle">Claude Code</text>
-      <rect x="80" y="282" width="260" height="52" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
-      <text x="210" y="315" text-anchor="middle">Cursor</text>
-      <rect x="80" y="348" width="260" height="52" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
-      <text x="210" y="381" text-anchor="middle">JetBrains AI Assistant</text>
-      <rect x="80" y="414" width="260" height="52" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
-      <text x="210" y="447" text-anchor="middle">Junie</text>
+      <g filter="url(#ds)">
+        <rect x="84" y="212" width="264" height="54" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+        <circle cx="110" cy="239" r="7" fill="#d97757"/>
+        <text x="130" y="246">Claude Code</text>
+      </g>
+      <g filter="url(#ds)">
+        <rect x="84" y="280" width="264" height="54" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+        <circle cx="110" cy="307" r="7" fill="#2563eb"/>
+        <text x="130" y="314">Cursor</text>
+      </g>
+      <g filter="url(#ds)">
+        <rect x="84" y="348" width="264" height="54" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+        <circle cx="110" cy="375" r="7" fill="#8b5cf6"/>
+        <text x="130" y="382">JetBrains AI Assistant</text>
+      </g>
+      <g filter="url(#ds)">
+        <rect x="84" y="416" width="264" height="54" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+        <circle cx="110" cy="443" r="7" fill="#10a37f"/>
+        <text x="130" y="450">Codex</text>
+      </g>
     </g>
   </g>
 
-  <!-- 中：连接 -->
-  <g stroke="#3b82f6" stroke-width="3" fill="none" stroke-dasharray="8 6">
-    <path d="M 340 242 C 420 242, 440 320, 520 330"/>
-    <path d="M 340 308 C 420 308, 440 330, 520 342"/>
-    <path d="M 340 374 C 420 374, 440 356, 520 354"/>
-    <path d="M 340 440 C 420 440, 440 382, 520 366"/>
+  <!-- 中：MCP 连接 -->
+  <g stroke="#3b82f6" stroke-width="2.5" fill="none" stroke-dasharray="7 6" opacity="0.85">
+    <path d="M 350 239 C 396 239, 378 294, 401 300"/>
+    <path d="M 350 307 C 372 307, 384 306, 401 306"/>
+    <path d="M 350 375 C 396 375, 378 318, 401 312"/>
+    <path d="M 350 443 C 396 443, 378 326, 401 316"/>
+    <path d="M 473 298 C 496 294, 500 300, 520 302"/>
+    <path d="M 473 314 C 496 318, 500 312, 520 310"/>
   </g>
-  <circle cx="430" cy="298" r="34" fill="#3b82f6"/>
-  <text x="430" y="308" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="24" font-weight="700" fill="#ffffff">MCP</text>
+  <!-- MCP 官方标识（取自 modelcontextprotocol.io favicon，黑底白色连接链路） -->
+  <g filter="url(#ds)">
+    <svg x="401" y="270" width="72" height="72" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="180" height="180" rx="24" fill="black"/>
+      <mask id="mcp-official-mask" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="7" y="7" width="166" height="166">
+        <path d="M173 7H7V173H173V7Z" fill="white"/>
+      </mask>
+      <g mask="url(#mcp-official-mask)">
+        <path d="M23.5996 85.2532L86.2021 22.6507C94.8457 14.0071 108.86 14.0071 117.503 22.6507C126.147 31.2942 126.147 45.3083 117.503 53.9519L70.2254 101.23" stroke="white" stroke-width="11.0667" stroke-linecap="round"/>
+        <path d="M70.8789 100.578L117.504 53.952C126.148 45.3083 140.163 45.3083 148.806 53.952L149.132 54.278C157.776 62.9216 157.776 76.9357 149.132 85.5792L92.5139 142.198C89.6327 145.079 89.6327 149.75 92.5139 152.631L104.14 164.257" stroke="white" stroke-width="11.0667" stroke-linecap="round"/>
+        <path d="M101.853 38.3013L55.553 84.6011C46.9094 93.2447 46.9094 107.258 55.553 115.902C64.1966 124.546 78.2106 124.546 86.8543 115.902L133.154 69.6025" stroke="white" stroke-width="11.0667" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </g>
+  <text x="437" y="368" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="15" font-weight="600" fill="#334155">MCP</text>
 
-  <!-- 右：IDE -->
-  <g font-family="system-ui, 'Segoe UI', sans-serif">
-    <rect x="520" y="216" width="680" height="200" rx="12" fill="#1e293b"/>
-    <rect x="520" y="216" width="680" height="44" rx="12" fill="#0f172a"/>
-    <circle cx="548" cy="238" r="7" fill="#f87171"/>
-    <circle cx="572" cy="238" r="7" fill="#fbbf24"/>
-    <circle cx="596" cy="238" r="7" fill="#34d399"/>
-    <text x="860" y="245" text-anchor="middle" font-size="18" fill="#94a3b8">IntelliJ IDEA（2025.2+ 内置 MCP Server）</text>
-    <text x="560" y="300" font-size="24" font-weight="600" fill="#ffffff">SQL Visualizer 插件</text>
-    <text x="560" y="338" font-size="19" fill="#cbd5e1">渲染链 · 数据源 · 执行计划 · 校验器</text>
-    <g font-size="17" fill="#93c5fd">
-      <text x="560" y="386">mpsv_* 十工具注册进平台 MCP Server</text>
-      <text x="920" y="386" fill="#64748b">SELECT 白名单 · 零弹窗 · 审计留痕</text>
-    </g>
+  <!-- 右：IDE 面板 -->
+  <g font-family="system-ui, 'Segoe UI', sans-serif" filter="url(#ds)">
+    <rect x="520" y="210" width="680" height="204" rx="12" fill="#1e293b"/>
+    <path d="M 520 222 a 12 12 0 0 1 12 -12 h 656 a 12 12 0 0 1 12 12 v 32 h -680 z" fill="#0f172a"/>
+    <circle cx="548" cy="232" r="7" fill="#f87171"/>
+    <circle cx="572" cy="232" r="7" fill="#fbbf24"/>
+    <circle cx="596" cy="232" r="7" fill="#34d399"/>
+    <text x="860" y="238" text-anchor="middle" font-size="17" fill="#94a3b8">IntelliJ IDEA（2025.2+ 内置 MCP Server）</text>
+    <text x="558" y="292" font-size="24" font-weight="600" fill="#ffffff">SQL Visualizer 插件</text>
+    <text x="558" y="328" font-size="19" fill="#cbd5e1">渲染链 · 数据源 · 执行计划 · 校验器</text>
+    <text x="558" y="378" font-size="18" fill="#93c5fd">mpsv_* 十工具注册进平台 MCP Server</text>
+    <text x="1184" y="378" text-anchor="end" font-size="16" fill="#64748b">SELECT 白名单 · 零弹窗 · 审计留痕</text>
   </g>
+
+  <!-- 分组说明 -->
+  <text x="640" y="458" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="16" fill="#94a3b8">十个工具 · 按 agent 工作流分组</text>
 
   <!-- 下：工具三组 -->
   <g font-family="system-ui, 'Segoe UI', sans-serif">
     <!-- 拿 SQL -->
-    <rect x="80" y="470" width="360" height="380" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
-    <rect x="80" y="470" width="360" height="56" rx="12" fill="#3b82f6"/>
-    <text x="260" y="506" text-anchor="middle" font-size="22" font-weight="600" fill="#ffffff">拿 SQL</text>
-    <g font-size="19" fill="#334155">
-      <text x="108" y="564" font-family="Consolas, monospace" font-weight="600" fill="#1d4ed8">mpsv_render_sql</text>
-      <text x="108" y="592" fill="#64748b" font-size="17">文件+行号 / XML 片段 → 可执行 SQL</text>
-      <text x="108" y="636" font-family="Consolas, monospace" font-weight="600" fill="#1d4ed8">mpsv_render_logs</text>
-      <text x="108" y="664" fill="#64748b" font-size="17">控制台日志还原真实参数 SQL</text>
-      <text x="108" y="708" font-family="Consolas, monospace" font-weight="600" fill="#1d4ed8">mpsv_crud_sql</text>
-      <text x="108" y="736" fill="#64748b" font-size="17">实体类 → CRUD 四件套</text>
-      <text x="108" y="780" font-family="Consolas, monospace" font-weight="600" fill="#1d4ed8">mpsv_reverse_sql</text>
-      <text x="108" y="808" fill="#64748b" font-size="17">SQL → MyBatis-Plus 代码</text>
+    <g filter="url(#ds)">
+      <rect x="80" y="474" width="360" height="380" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+    </g>
+    <path d="M 80 530 v -44 a 12 12 0 0 1 12 -12 h 336 a 12 12 0 0 1 12 12 v 44 z" fill="#3b82f6"/>
+    <text x="236" y="510" text-anchor="middle" font-size="21" font-weight="600" fill="#ffffff">拿 SQL</text>
+    <rect x="382" y="492" width="34" height="24" rx="12" fill="#ffffff" opacity="0.25"/>
+    <text x="399" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">4</text>
+    <g font-size="20" font-weight="600" fill="#1d4ed8" font-family="Consolas, 'JetBrains Mono', monospace">
+      <text x="108" y="566">mpsv_render_sql</text>
+      <text x="108" y="638">mpsv_render_logs</text>
+      <text x="108" y="710">mpsv_crud_sql</text>
+      <text x="108" y="782">mpsv_reverse_sql</text>
+    </g>
+    <g font-size="17" fill="#64748b">
+      <text x="108" y="592">文件+行号 / XML 片段 → 可执行 SQL</text>
+      <text x="108" y="664">控制台日志还原真实参数 SQL</text>
+      <text x="108" y="736">实体类 → CRUD 四件套</text>
+      <text x="108" y="808">SQL → MyBatis-Plus 代码</text>
     </g>
 
     <!-- 看库 -->
-    <rect x="460" y="470" width="360" height="380" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
-    <rect x="460" y="470" width="360" height="56" rx="12" fill="#0ea5e9"/>
-    <text x="640" y="506" text-anchor="middle" font-size="22" font-weight="600" fill="#ffffff">看库</text>
-    <g font-size="19" fill="#334155">
-      <text x="488" y="564" font-family="Consolas, monospace" font-weight="600" fill="#0369a1">mpsv_schema_context</text>
-      <text x="488" y="592" fill="#64748b" font-size="17">表名白名单 → 表列注释上下文</text>
-      <text x="488" y="636" font-family="Consolas, monospace" font-weight="600" fill="#0369a1">mpsv_explain</text>
-      <text x="488" y="664" fill="#64748b" font-size="17">七方言 EXPLAIN + notices</text>
-      <text x="488" y="700" fill="#64748b" font-size="17">+ index hints 建议</text>
+    <g filter="url(#ds)">
+      <rect x="460" y="474" width="360" height="380" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+    </g>
+    <path d="M 460 530 v -44 a 12 12 0 0 1 12 -12 h 336 a 12 12 0 0 1 12 12 v 44 z" fill="#0ea5e9"/>
+    <text x="616" y="510" text-anchor="middle" font-size="21" font-weight="600" fill="#ffffff">看库</text>
+    <rect x="762" y="492" width="34" height="24" rx="12" fill="#ffffff" opacity="0.25"/>
+    <text x="779" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">2</text>
+    <g font-size="20" font-weight="600" fill="#0369a1" font-family="Consolas, 'JetBrains Mono', monospace">
+      <text x="488" y="566">mpsv_schema_context</text>
+      <text x="488" y="638">mpsv_explain</text>
+    </g>
+    <g font-size="17" fill="#64748b">
+      <text x="488" y="592">表名白名单 → 表列注释上下文</text>
+      <text x="488" y="664">七方言 EXPLAIN 执行计划文本</text>
+      <text x="488" y="692">附驱动 notices 与 index hints 建议</text>
     </g>
 
     <!-- 执行前把关 -->
-    <rect x="840" y="470" width="360" height="380" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
-    <rect x="840" y="470" width="360" height="56" rx="12" fill="#10b981"/>
-    <text x="1020" y="506" text-anchor="middle" font-size="22" font-weight="600" fill="#ffffff">执行前把关</text>
-    <g font-size="19" fill="#334155">
-      <text x="868" y="564" font-family="Consolas, monospace" font-weight="600" fill="#047857">mpsv_check_sql</text>
-      <text x="868" y="592" fill="#64748b" font-size="17">静态写风险与类型核查</text>
-      <text x="868" y="636" font-family="Consolas, monospace" font-weight="600" fill="#047857">mpsv_mapper_check</text>
-      <text x="868" y="664" fill="#64748b" font-size="17">契约核查 + simulate 实证</text>
-      <text x="868" y="708" font-family="Consolas, monospace" font-weight="600" fill="#047857">mpsv_rollback_plan</text>
-      <text x="868" y="736" fill="#64748b" font-size="17">回滚预案，只产出不执行</text>
-      <text x="868" y="780" font-family="Consolas, monospace" font-weight="600" fill="#047857">mpsv_perf_advice</text>
-      <text x="868" y="808" fill="#64748b" font-size="17">20 条规则性能建议</text>
+    <g filter="url(#ds)">
+      <rect x="840" y="474" width="360" height="380" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+    </g>
+    <path d="M 840 530 v -44 a 12 12 0 0 1 12 -12 h 336 a 12 12 0 0 1 12 12 v 44 z" fill="#10b981"/>
+    <text x="996" y="510" text-anchor="middle" font-size="21" font-weight="600" fill="#ffffff">执行前把关</text>
+    <rect x="1142" y="492" width="34" height="24" rx="12" fill="#ffffff" opacity="0.25"/>
+    <text x="1159" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">4</text>
+    <g font-size="20" font-weight="600" fill="#047857" font-family="Consolas, 'JetBrains Mono', monospace">
+      <text x="868" y="566">mpsv_check_sql</text>
+      <text x="868" y="638">mpsv_mapper_check</text>
+      <text x="868" y="710">mpsv_rollback_plan</text>
+      <text x="868" y="782">mpsv_perf_advice</text>
+    </g>
+    <g font-size="17" fill="#64748b">
+      <text x="868" y="592">静态写风险与类型核查</text>
+      <text x="868" y="664">契约核查 + simulate 实证</text>
+      <text x="868" y="736">回滚预案，只产出不执行</text>
+      <text x="868" y="808">20 条规则性能建议 · 至多 30 条</text>
     </g>
   </g>
 
-  <text x="640" y="886" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="17" fill="#94a3b8">演示占位图 · 动图录制中，功能详见「MCP Server 工具」页</text>
+  <text x="640" y="888" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="16" fill="#94a3b8">IDEA 2025.2+ 内置 MCP Server · 设置页可逐项启停 · 变更即时生效免重启</text>
 </svg>

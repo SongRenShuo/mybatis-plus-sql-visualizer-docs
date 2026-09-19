@@ -112,7 +112,7 @@ const features = reactive([
   {
     badge: 'AI Agent 集成',
     title: 'MCP Server：给 AI Agent 的 SQL 工具',
-    description: 'Claude Code / Cursor / AI Assistant / Junie 经 IDEA 内置 MCP Server 直连插件能力，IDE 里照常写代码，agent 在旁边干活',
+    description: 'Claude Code / Cursor / AI Assistant / Codex 经 IDEA 内置 MCP Server 直连插件能力，IDE 里照常写代码，agent 在旁边干活',
     features: [
       { title: '确定性证据', description: '渲染链真实产出的可执行 SQL 本体交给 agent，不是置信度评分' },
       { title: '十个只读工具', description: '渲染还原、表结构、EXPLAIN、写风险核查、回滚预案、性能建议（IDEA 2025.2+）' },
