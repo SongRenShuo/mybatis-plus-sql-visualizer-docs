@@ -20,7 +20,7 @@ update-rule: 新增/归档文档时同步更新本索引，与 docs/ 目录保�
 |------|------|
 | [文档命名规范-说明文档.md](./文档命名规范-说明文档.md) | 需求文档/开发计划/调研报告/验收文档/发行说明/SQL 文件/**图片设计稿**的命名与格式规范（与插件项目同一份规范同步维护） |
 | [演示GIF录制指南-说明文档.md](./演示GIF录制指南-说明文档.md) | IDE 功能演示 GIF 录制管线：脚本重放+帧稳定采样+坑表（与 ide-demo-gif skill 同源沉淀） |
-| [JetBrains AI Assistant 搭配插件 MCP-说明文档.md](./JetBrains%20AI%20Assistant%20搭配插件%20MCP-说明文档.md) | AI Assistant 接入插件 MCP 工具的路径：**重点是用本地自定义端点与模型、全程免认证**（ACP「使用智能体继续」= MANAGED_EXTERNALLY）；含 UI 入口文案、配置键名、终端路线备选与两个已知坑。文档站 MCP 页面的取材源 |
+| ~~JetBrains AI Assistant 搭配插件 MCP-说明文档.md~~（2026-09-19 已迁出） | 该文属**插件侧机制**知识（AI Assistant 的 ACP 接入、MCP 传递开关、provider 约束），与插件仓库既有 ACP 经验总结同源，两份分居两仓必然漂移，故已**合并进插件仓库** `mybatis-plus-sql-visualizer/docs/经验总结/20260919-2210-AI-Assistant-ACP接入IDE-MCP工具-经验总结.md`（单一权威源）。文档站侧只保留面向页面的产物 `features/mcp.md` 与 `en/features/mcp.md` |
 | [记忆精简规范.md](./记忆精简规范.md) | 本地记忆文件管理：分类标准（保留/归档/全局）、归档目录结构（docs/memory-archive/）、操作流程、数量基线 |
 | [代码编辑规范-grep优先读取.md](./代码编辑规范-grep优先读取.md) | 大文件（>300 行）修改纪律：grep 定位行号 + 精确 Read，替代全文读取省 token |
 | [变更记录.md](./变更记录.md) | **全量变更记录总册**（唯一权威位置，最新在上；单文件变更记录仍留各自文档） |
