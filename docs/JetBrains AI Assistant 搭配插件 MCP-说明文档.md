@@ -17,7 +17,7 @@ search: false
 
 要点：**ACP 的协议底座是 IDE 自带的，但承载 ACP agent 的界面在 AI Assistant 里**。所以要用 ACP 路线，AI Assistant 必须装。
 
-插件的 MCP 工具在 `com.intellij.mcpServer` 在场时自动注册，共十个，全部只读：`mpsv_render_sql`、`mpsv_schema_context`、`mpsv_explain`、`mpsv_render_logs`、`mpsv_check_sql`、`mpsv_rollback_plan`、`mpsv_perf_advice`、`mpsv_crud_sql`、`mpsv_reverse_sql`、`mpsv_mapper_check`。
+插件的 MCP 工具在 `com.intellij.mcpServer` 在场时自动注册，共十个，全部只读：`sqlv_render_sql`、`sqlv_schema_context`、`sqlv_explain`、`sqlv_render_logs`、`sqlv_check_sql`、`sqlv_rollback_plan`、`sqlv_perf_advice`、`sqlv_crud_sql`、`sqlv_reverse_sql`、`sqlv_mapper_check`。
 
 ## 二、官方文档参考（中文版）
 
@@ -36,7 +36,7 @@ JetBrains 对 MCP 功能有专门的帮助文档，**中文版地址**：
 | 无需确认执行操作 | 关闭执行前的确认弹窗 |
 | 支持的工具 | 按类别列出平台自带工具：分析、代码洞察、数据库、调试器、开发者工具包、执行、文件、格式设置、检查生成器、检查 KTS、单仓库开发者工具包、读取、重构、运行 Notebook、搜索、终端、文本、VCS 等 |
 
-**「暴露工具」的路径值得注意**：官方给的是 `设置 | 工具 | MCP 服务器 | 暴露工具`——这就是逐工具启用/禁用清单所在的页面，也是本插件十个 `mpsv_*` 工具出现的地方。
+**「暴露工具」的路径值得注意**：官方给的是 `设置 | 工具 | MCP 服务器 | 暴露工具`——这就是逐工具启用/禁用清单所在的页面，也是本插件十个 `sqlv_*` 工具出现的地方。
 
 **关于终端横幅**：英文版文档有独立小节 “Show setup suggestions in terminal sessions”，对应的就是第六节那条「Enable the IntelliJ IDEA MCP Server and connect it to Claude Code…」横幅。
 
@@ -100,7 +100,7 @@ env.ANTHROPIC_MODEL      = <模型名>
 
 ## 四、MCP 传递设置：两个开关，别只改一个
 
-要让 agent 拿到插件的十个 `mpsv_*` 工具，**必须让 IDE 把内置 MCP 服务器传给 agent**。这里有**两个独立的开关**，缺一个都不行——这是最容易踩的地方。
+要让 agent 拿到插件的十个 `sqlv_*` 工具，**必须让 IDE 把内置 MCP 服务器传给 agent**。这里有**两个独立的开关**，缺一个都不行——这是最容易踩的地方。
 
 ### 4.1 开关一：IDE 设置页
 
@@ -266,7 +266,7 @@ Windows 下配置目录为 `%APPDATA%\JetBrains\<产品><版本>\options\acpAgen
 
 ### 6.2 验证
 
-终端里执行 `claude mcp list`，`idea` 一行显示 `✓ Connected` 即成功。要看工具清单，可直接按 MCP Streamable HTTP 协议查服务端：向 `/stream` POST `initialize` 拿 `mcp-session-id`，再带该头 POST `tools/list`，返回结果里应包含十个 `mpsv_*`（服务端自报 `IntelliJ IDEA MCP Server`）。
+终端里执行 `claude mcp list`，`idea` 一行显示 `✓ Connected` 即成功。要看工具清单，可直接按 MCP Streamable HTTP 协议查服务端：向 `/stream` POST `initialize` 拿 `mcp-session-id`，再带该头 POST `tools/list`，返回结果里应包含十个 `sqlv_*`（服务端自报 `IntelliJ IDEA MCP Server`）。
 
 ### 6.3 两个已知坑
 
@@ -278,7 +278,7 @@ Windows 下配置目录为 `%APPDATA%\JetBrains\<产品><版本>\options\acpAgen
 
 ## 七、Codex 路线（ACP，实测可用）
 
-**这是目前唯一实测跑通「ACP 面板内原生调用插件工具」的路线**（2026-09-19 实测，会话记录里可见 `mcp__idea/mpsv_check_sql` 原生调用 + `[MCP-AUDIT]` 落盘）。
+**这是目前唯一实测跑通「ACP 面板内原生调用插件工具」的路线**（2026-09-19 实测，会话记录里可见 `mcp__idea/sqlv_check_sql` 原生调用 + `[MCP-AUDIT]` 落盘）。
 
 ### 7.1 为什么是它
 
@@ -331,17 +331,17 @@ model = "<你的模型>"
 面板切到 Codex，发一句：
 
 ```
-调用 mpsv_check_sql 检查 UPDATE sys_user SET nickname='x' WHERE id=1
+调用 sqlv_check_sql 检查 UPDATE sys_user SET nickname='x' WHERE id=1
 ```
 
 成功的判据有两条：
 
 - 会话记录里出现**原生 MCP 调用**形态（Codex 会话存于 `~/.codex/sessions/<年>/<月>/<日>/rollout-*.jsonl`）：
   ```json
-  {"type":"function_call","name":"mpsv_check_sql","namespace":"mcp__idea","arguments":"{...}"}
+  {"type":"function_call","name":"sqlv_check_sql","namespace":"mcp__idea","arguments":"{...}"}
   ```
-  界面上表现为 `mcp: idea/mpsv_check_sql started` / `completed`；
-- `idea.log` 出现 `[MCP-AUDIT] tool=mpsv_check_sql status=OK ...`。
+  界面上表现为 `mcp: idea/sqlv_check_sql started` / `completed`；
+- `idea.log` 出现 `[MCP-AUDIT] tool=sqlv_check_sql status=OK ...`。
 
 若调用出现但报 `Unable to determine the target project`，是调用没带 `projectPath` 参数所致，补齐即可，不是缺陷。
 
@@ -362,7 +362,7 @@ model = "<你的模型>"
 1. **AI Assistant 不是 IDE 内置插件**，需从 Marketplace 安装；`Settings → 智能体` 页与 ACP 面板都来自它。仅装 `com.intellij.platform.acp` 只有 API，没有界面。
 2. **ACP 认证方式按 IDE 实例存**（`options/acpAgents.xml`），换实例需重选或复制该文件；agent 本身与其凭据是机器级的，不用动。
 3. **终端路线端口漂移**：每次会话端点可能变化，接入动作需随会话重做（IDE 通常会自动写回，但不要手工叠加条目）。
-4. 依赖 Database 工具的能力（如 `mpsv_explain` 取执行计划）需要 Ultimate 及其数据库支持；社区版环境下相关工具不可用属预期。
+4. 依赖 Database 工具的能力（如 `sqlv_explain` 取执行计划）需要 Ultimate 及其数据库支持；社区版环境下相关工具不可用属预期。
 5. **Claude Agent 的 ACP 路线拿不到 IDE 的 MCP 工具——根因已定位到上游 agent（2026-09-19 反编译实证，非本插件问题）**：
 
    IDE 侧已逐项验证无误：`use_idea_mcp` 与 `use_custom_mcp` 两个开关都能让 server 进入 ACP 的 `session/new` 参数（日志 `Exposing configured MCP servers for agent ...: Stdio(name=jetbrains, ...)`）；私有 IJ MCP 会话的 stdio 命令是 `StdioRunnerUtil.createStdioMcpServerCommandLine()` 现拼的 `<IDE 启动器> stdioMcpServer` + `IJ_MCP_SERVER_PORT` / `IJ_MCP_SERVER_PROJECT_PATH` / token 三个环境变量，**手动执行该命令实测可正常桥接**（stderr：`Proxy transports started`）。
@@ -381,4 +381,4 @@ model = "<你的模型>"
 
    后果：ACP 会话里 agent 的工具列表**一个 MCP 服务器都没有**（连用户自配的也没进来），于是它只能退回用 Bash + curl 手工调 MCP——这正是本机实测观察到的现象。
 
-   **可行的规避（2026-09-19 已实测验证其中两条）**：① **换用 Codex**——实测可用，agent 以 `mcp__idea/mpsv_check_sql` 原生调用并落审计行，配置见第七节（前提是 provider 接受 `reasoning.summary`）；② 让 IDE 以 **SSE 传输**下发（agent 对 `type === "sse"` 的分支实现正确）——传输由扩展点 `com.intellij.ml.llm.agents.acp.ideaMcpTransportProvider` 决定，agent 未声明 SSE 能力时回落 Stdio，插件侧绕行方案已立项；③ **终端路线**（第六节，已验证可用）；④ 向 JetBrains 报 issue（证据即上述两段代码：注释与实现自相矛盾）。
+   **可行的规避（2026-09-19 已实测验证其中两条）**：① **换用 Codex**——实测可用，agent 以 `mcp__idea/sqlv_check_sql` 原生调用并落审计行，配置见第七节（前提是 provider 接受 `reasoning.summary`）；② 让 IDE 以 **SSE 传输**下发（agent 对 `type === "sse"` 的分支实现正确）——传输由扩展点 `com.intellij.ml.llm.agents.acp.ideaMcpTransportProvider` 决定，agent 未声明 SSE 能力时回落 Stdio，插件侧绕行方案已立项；③ **终端路线**（第六节，已验证可用）；④ 向 JetBrains 报 issue（证据即上述两段代码：注释与实现自相矛盾）。

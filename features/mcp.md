@@ -4,7 +4,7 @@
 
 ## 校验给置信度，这里给证据
 
-插件里的各类校验与提示，给出的是置信度评分——「可能有风险」「建议关注」；MCP 工具走的是另一条路：把渲染链真实产出的可执行 SQL 本体交给 agent。比如 `mpsv_mapper_check` 除了静态契约核查，还能对渲染产物做写风险与性能分析——这是静态校验器产不出的实证形态。agent 不用猜，拿着证据改代码。
+插件里的各类校验与提示，给出的是置信度评分——「可能有风险」「建议关注」；MCP 工具走的是另一条路：把渲染链真实产出的可执行 SQL 本体交给 agent。比如 `sqlv_mapper_check` 除了静态契约核查，还能对渲染产物做写风险与性能分析——这是静态校验器产不出的实证形态。agent 不用猜，拿着证据改代码。
 
 ## 十个工具
 
@@ -12,22 +12,22 @@
 
 | 工具 | 用途 | 只读 |
 |------|------|------|
-| `mpsv_render_sql` | 按文件与行号（或 mapper XML 片段）渲染真实可执行 SQL，参数已回填，附降级说明 | 是 |
-| `mpsv_schema_context` | 按表名白名单返回数据源真实的表列结构与注释（紧凑上下文，默认最多 8 张表、上限 20） | 是 |
-| `mpsv_explain` | 单条 SELECT 的七方言 EXPLAIN 执行计划文本 | 是 |
-| `mpsv_render_logs` | 把 MyBatis / Hibernate / JdbcTemplate 日志还原成可执行 SQL | 是 |
-| `mpsv_check_sql` | 静态写风险与类型核查 | 是 |
-| `mpsv_rollback_plan` | 生成回滚预案（只产出预案，不执行任何语句） | 是 |
-| `mpsv_perf_advice` | 按 20 条内置规则给出性能建议 | 是 |
-| `mpsv_crud_sql` | 从实体类生成 CRUD 四件套 SQL | 是 |
-| `mpsv_reverse_sql` | SQL 反向转 MyBatis-Plus 代码 | 是 |
-| `mpsv_mapper_check` | mapper 契约核查，可选 simulate 模式对渲染产物做写风险与性能分析 | 是 |
+| `sqlv_render_sql` | 按文件与行号（或 mapper XML 片段）渲染真实可执行 SQL，参数已回填，附降级说明 | 是 |
+| `sqlv_schema_context` | 按表名白名单返回数据源真实的表列结构与注释（紧凑上下文，默认最多 8 张表、上限 20） | 是 |
+| `sqlv_explain` | 单条 SELECT 的七方言 EXPLAIN 执行计划文本 | 是 |
+| `sqlv_render_logs` | 把 MyBatis / Hibernate / JdbcTemplate 日志还原成可执行 SQL | 是 |
+| `sqlv_check_sql` | 静态写风险与类型核查 | 是 |
+| `sqlv_rollback_plan` | 生成回滚预案（只产出预案，不执行任何语句） | 是 |
+| `sqlv_perf_advice` | 按 20 条内置规则给出性能建议 | 是 |
+| `sqlv_crud_sql` | 从实体类生成 CRUD 四件套 SQL | 是 |
+| `sqlv_reverse_sql` | SQL 反向转 MyBatis-Plus 代码 | 是 |
+| `sqlv_mapper_check` | mapper 契约核查，可选 simulate 模式对渲染产物做写风险与性能分析 | 是 |
 
 几点使用口径：
 
-- `mpsv_render_sql` 一次渲染一条语句；同一位置有多个候选时取第一个并注明，多语句日志请交给 `mpsv_render_logs`
-- `mpsv_render_logs`、`mpsv_rollback_plan`、`mpsv_mapper_check` 的语句头会带上语句名（取自日志前导 `-- Name:` 注释），多语句输出一目了然
-- `mpsv_perf_advice` 最多返回 30 条建议，超限按严重级别裁剪、保留高危项，尾部带「showing 30 of N」计数；单条文案超长会被截断，避免无上限输出
+- `sqlv_render_sql` 一次渲染一条语句；同一位置有多个候选时取第一个并注明，多语句日志请交给 `sqlv_render_logs`
+- `sqlv_render_logs`、`sqlv_rollback_plan`、`sqlv_mapper_check` 的语句头会带上语句名（取自日志前导 `-- Name:` 注释），多语句输出一目了然
+- `sqlv_perf_advice` 最多返回 30 条建议，超限按严重级别裁剪、保留高危项，尾部带「showing 30 of N」计数；单条文案超长会被截断，避免无上限输出
 
 ## 使用前提
 
@@ -58,7 +58,7 @@
 
 涉及连接数据库的输出还带几类附加信息：
 
-- `mpsv_explain` 执行前会先清掉连接上残留的驱动消息，PostgreSQL 的 NOTICE / WARNING 等驱动消息会以 `notices` 节随计划一并返回；计划末尾对高频低效模式（大表全表扫描、filesort / temporary、PG Seq Scan 等）追加 `index hints` 建议——只提示，不改 SQL 也不执行
+- `sqlv_explain` 执行前会先清掉连接上残留的驱动消息，PostgreSQL 的 NOTICE / WARNING 等驱动消息会以 `notices` 节随计划一并返回；计划末尾对高频低效模式（大表全表扫描、filesort / temporary、PG Seq Scan 等）追加 `index hints` 建议——只提示，不改 SQL 也不执行
 - 查询不存在的表名（AI 生成的幻觉表名是高频场景）时，负结果按数据源缓存 30 秒，长会话里同一个幻觉表名不会反复触发全库扫描
 
 > 对 MCP 工具有建议或遇到问题？[直达需求反馈池](/about/feedback?category=mcp)
