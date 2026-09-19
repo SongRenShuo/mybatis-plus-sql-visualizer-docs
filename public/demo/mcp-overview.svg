@@ -82,7 +82,7 @@
     <text x="860" y="238" text-anchor="middle" font-size="17" fill="#94a3b8">IntelliJ IDEA（2025.2+ 内置 MCP Server）</text>
     <text x="558" y="292" font-size="24" font-weight="600" fill="#ffffff">SQL Visualizer 插件</text>
     <text x="558" y="328" font-size="19" fill="#cbd5e1">渲染链 · 数据源 · 执行计划 · 校验器</text>
-    <text x="558" y="378" font-size="18" fill="#93c5fd">mpsv_* 十工具注册进平台 MCP Server</text>
+    <text x="558" y="378" font-size="18" fill="#93c5fd">sqlv_* 十工具注册进平台 MCP Server</text>
     <text x="1184" y="378" text-anchor="end" font-size="16" fill="#64748b">SELECT 白名单 · 零弹窗 · 审计留痕</text>
   </g>
 
@@ -100,10 +100,10 @@
     <rect x="382" y="492" width="34" height="24" rx="12" fill="#ffffff" opacity="0.25"/>
     <text x="399" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">4</text>
     <g font-size="20" font-weight="600" fill="#1d4ed8" font-family="Consolas, 'JetBrains Mono', monospace">
-      <text x="108" y="566">mpsv_render_sql</text>
-      <text x="108" y="638">mpsv_render_logs</text>
-      <text x="108" y="710">mpsv_crud_sql</text>
-      <text x="108" y="782">mpsv_reverse_sql</text>
+      <text x="108" y="566">sqlv_render_sql</text>
+      <text x="108" y="638">sqlv_render_logs</text>
+      <text x="108" y="710">sqlv_crud_sql</text>
+      <text x="108" y="782">sqlv_reverse_sql</text>
     </g>
     <g font-size="17" fill="#64748b">
       <text x="108" y="592">文件+行号 / XML 片段 → 可执行 SQL</text>
@@ -121,8 +121,8 @@
     <rect x="762" y="492" width="34" height="24" rx="12" fill="#ffffff" opacity="0.25"/>
     <text x="779" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">2</text>
     <g font-size="20" font-weight="600" fill="#0369a1" font-family="Consolas, 'JetBrains Mono', monospace">
-      <text x="488" y="566">mpsv_schema_context</text>
-      <text x="488" y="638">mpsv_explain</text>
+      <text x="488" y="566">sqlv_schema_context</text>
+      <text x="488" y="638">sqlv_explain</text>
     </g>
     <g font-size="17" fill="#64748b">
       <text x="488" y="592">表名白名单 → 表列注释上下文</text>
@@ -139,10 +139,10 @@
     <rect x="1142" y="492" width="34" height="24" rx="12" fill="#ffffff" opacity="0.25"/>
     <text x="1159" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">4</text>
     <g font-size="20" font-weight="600" fill="#047857" font-family="Consolas, 'JetBrains Mono', monospace">
-      <text x="868" y="566">mpsv_check_sql</text>
-      <text x="868" y="638">mpsv_mapper_check</text>
-      <text x="868" y="710">mpsv_rollback_plan</text>
-      <text x="868" y="782">mpsv_perf_advice</text>
+      <text x="868" y="566">sqlv_check_sql</text>
+      <text x="868" y="638">sqlv_mapper_check</text>
+      <text x="868" y="710">sqlv_rollback_plan</text>
+      <text x="868" y="782">sqlv_perf_advice</text>
     </g>
     <g font-size="17" fill="#64748b">
       <text x="868" y="592">静态写风险与类型核查</text>
