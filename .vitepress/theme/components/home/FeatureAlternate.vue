@@ -118,9 +118,9 @@ const features = reactive([
       { title: '十个只读工具', description: '渲染还原、表结构、EXPLAIN、写风险核查、回滚预案、性能建议（IDEA 2025.2+）' },
       { title: '可控可审计', description: '设置页逐工具启停即时生效，SELECT 白名单拦截 + 每次调用审计留痕' },
     ],
-    // 占位图：GIF 录制后 imageSrc 换 /demo/mcp.gif、poster 换 /demo/mcp.png
-    imageSrc: '/demo/mcp-overview.svg',
-    poster: '/demo/mcp-overview.svg',
+    // 20260920 换为实录动图；示意 SVG 保留在功能页 features/mcp.md 开篇
+    imageSrc: '/demo/mcp.gif',
+    poster: '/demo/mcp.png',
     gifReady: false,
     gifError: false,
   },
