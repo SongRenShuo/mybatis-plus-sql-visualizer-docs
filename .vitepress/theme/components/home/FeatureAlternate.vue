@@ -268,6 +268,16 @@ const features = reactive([
   opacity: 1;
 }
 
+@media (max-width: 767px) {
+  /* 手机端演示图整行出血：抵消 section 与内层 .container 各 24px 的水平内边距，
+     图片由 279px 提到接近视口宽（375px，+34%）。窄屏专属，桌面端布局不变。
+     两层内边距叠加见 docs/开发计划/20260920-1230-首页功能卡手机端演示图过小修复-开发计划.md */
+  .feature-video-wrapper {
+    margin-left: -48px;
+    margin-right: -48px;
+  }
+}
+
 @media (min-width: 768px) {
   .feature-video-wrapper.reverse {
     order: 2;
