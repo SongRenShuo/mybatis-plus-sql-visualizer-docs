@@ -47,6 +47,7 @@
 
 ## 典型工作流
 
+<GifPlayer src="/demo/mcp-agent.gif" poster="/demo/mcp-agent.png" alt="AI Assistant 的 Codex agent 经 ACP 调用插件 MCP 工具并留痕" />
 以「让 agent 查一条慢 SQL 的病根」为例，agent 会按需串起这些工具：
 
 1. `mpsv_render_sql` 按文件与行号拿到真实可执行 SQL（参数已回填，不是源码里的 `?` 占位）

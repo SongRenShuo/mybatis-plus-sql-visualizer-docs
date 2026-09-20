@@ -47,6 +47,7 @@ The plugin's checks and hints produce confidence scores — "might be risky", "w
 
 ## A Typical Workflow
 
+<GifPlayer src="/demo/mcp-agent.gif" poster="/demo/mcp-agent.png" alt="The Codex agent in AI Assistant calling a plugin MCP tool over ACP, with an audit line" />
 Take "have the agent diagnose a slow SQL" as an example — the agent chains these tools as needed:
 
 1. `mpsv_render_sql` fetches the real executable SQL by file and line (parameters filled in, not `?` placeholders)
