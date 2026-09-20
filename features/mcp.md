@@ -71,6 +71,7 @@
 
 ## 设置页门控
 
+<GifPlayer src="/demo/mcp.gif" poster="/demo/mcp.png" alt="插件设置页 MCP 工具门控与平台 Exposed Tools 注册面" />
 设置 → 「MCP 工具」子页提供门控区：
 
 - 总开关：整体启停插件的 MCP 功能

@@ -118,9 +118,10 @@ const features = reactive([
       { title: '十个只读工具', description: '渲染还原、表结构、EXPLAIN、写风险核查、回滚预案、性能建议（IDEA 2025.2+）' },
       { title: '可控可审计', description: '设置页逐工具启停即时生效，SELECT 白名单拦截 + 每次调用审计留痕' },
     ],
-    // 20260920 换为实录动图；示意 SVG 保留在功能页 features/mcp.md 开篇
-    imageSrc: '/demo/mcp.gif',
-    poster: '/demo/mcp.png',
+    // 20260920 首页卡用「真实调用」那张（agent 经 ACP 调 sqlv_check_sql）；
+    // 「开启设置」那张移到功能页「典型工作流」节。示意 SVG 仍保留在 features/mcp.md 开篇
+    imageSrc: '/demo/mcp-agent.gif',
+    poster: '/demo/mcp-agent.png',
     gifReady: false,
     gifError: false,
   },

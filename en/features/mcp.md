@@ -71,6 +71,7 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 
 ## Settings and Gating
 
+<GifPlayer src="/demo/mcp.gif" poster="/demo/mcp.png" alt="Plugin settings MCP tool gating and the platform Exposed Tools list" />
 Settings → the "MCP Tools" page provides a gating area:
 
 - Master switch: enable or disable the plugin's MCP functionality as a whole
