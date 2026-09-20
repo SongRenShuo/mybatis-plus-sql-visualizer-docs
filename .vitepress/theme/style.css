@@ -579,6 +579,16 @@ kbd {
     margin-left: -48px;
     margin-right: -48px;
   }
+
+  /* md 里直接写的演示插图（如 mcp 页开篇的示意 SVG）不是 GifPlayer，渲染成 p > img，
+     需单独一条同款出血规则；VitePress 默认的 img{max-width:100%} 会把宽度钳在父级
+     279px 上，故必须同时放开 max-width。选择器限定 /demo/ 前缀，不波及正文里的其它图。 */
+  .vp-doc p > img[src^="/demo/"] {
+    max-width: none;
+    width: calc(100% + 96px);
+    margin-left: -48px;
+    margin-right: -48px;
+  }
 }
 
 /* 演示素材四边带录制窗口的浅灰窗框（左/右 7-8px、底部 2-8px、顶部 0-1px，实测值），
