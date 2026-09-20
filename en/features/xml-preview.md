@@ -79,7 +79,13 @@ Preview execution, Log → SQL execution and rollback execution share the same c
 
 ## Rollback SQL
 
-A "Rollback" button in the preview panel generates inverse SQL for the current INSERT / UPDATE / DELETE: INSERT becomes a primary-key DELETE, UPDATE restores original SET values, DELETE re-inserts by WHERE — shown in a dialog with one-click copy.
+The "Rollback SQL" button in the preview panel derives inverse SQL for the current statement; the dialog states up front whether that derivation can be trusted, then shows the output to copy or execute.
+
+INSERT is the only statement type that gets an automatic rollback: each VALUES row yields `DELETE FROM table WHERE …` with an equality predicate on every column of that row (`NULL` renders as `IS NULL`). The plugin reads no database metadata, so it has no primary key and the predicate is the whole row — which can match more than one row; the dialog warns about that and offers a `SELECT COUNT(*) FROM table WHERE …` check to run first, and flags any `?` placeholders left unfilled. INSERTs without a column list (column names unknown), INSERT … SELECT (no before-image) and upserts (they may have modified existing rows, so a DELETE cannot undo them) are refused outright.
+
+UPDATE and DELETE get no automatic rollback. The plugin has only the SQL text, never the pre-execution values (no before-image), so a derived statement would also wipe out later changes by others; the dialog says so plainly ("UPDATE cannot be auto-rolled back: original values are unknowable." / "DELETE cannot be auto-rolled back: the deleted data is unknowable."), points to binlog, flashback or backup restore for manual recovery, and offers a snapshot query `SELECT * FROM table [WHERE original WHERE]` — the "Run snapshot query" button executes it and the result lands in the panel's console grid. Copy that result grid wholesale back into the dialog (TSV, first line is the column names) and click "Generate rollback from pasted result" to turn the row images you fetched yourself into a rollback: a DELETE original becomes an INSERT that backfills every column, an UPDATE original becomes a reverse UPDATE that also puts the written new values into the WHERE clause as an optimistic lock — it only rolls back while the database still holds the written state. The optional primary-key field (comma-separated) applies to UPDATE originals: fill it to locate rows by primary key, leave it empty to mirror the whole old row. Rows or statement volume beyond the limits are truncated with a notice, and "Execute rollback" and "Copy" stay disabled until something has been generated.
+
+Other statements (SELECT, MERGE, DDL and so on) do not open the dialog at all — they get a message box explaining why. A multi-statement preview is judged as a whole: if any statement is not derivable, no partial rollback is produced, since a half rollback is more dangerous than none.
 
 ## SQL Quick Templates
 
