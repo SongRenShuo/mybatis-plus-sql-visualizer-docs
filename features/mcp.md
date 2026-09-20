@@ -47,7 +47,7 @@
 
 ## 典型工作流
 
-<GifPlayer src="/demo/mcp-agent.gif" poster="/demo/mcp-agent.png" alt="AI Assistant 的 Codex agent 经 ACP 调用插件 MCP 工具并留痕" />
+<GifPlayer src="/demo/mcp-agent.gif" alt="AI Assistant 的 Codex agent 经 ACP 调用插件 MCP 工具并留痕" />
 以「让 agent 查一条慢 SQL 的病根」为例，agent 会按需串起这些工具：
 
 1. `sqlv_render_sql` 按文件与行号拿到真实可执行 SQL（参数已回填，不是源码里的 `?` 占位）
@@ -71,7 +71,7 @@
 
 ## 设置页门控
 
-<GifPlayer src="/demo/mcp.gif" poster="/demo/mcp.png" alt="插件设置页 MCP 工具门控与平台 Exposed Tools 注册面" />
+<GifPlayer src="/demo/mcp.gif" alt="插件设置页 MCP 工具门控与平台 Exposed Tools 注册面" />
 设置 → 「MCP 工具」子页提供门控区：
 
 - 总开关：整体启停插件的 MCP 功能

@@ -79,7 +79,7 @@ Preview execution, Log → SQL execution and rollback execution share the same c
 
 ## Rollback SQL
 
-<GifPlayer src="/demo/xml-preview-rollback.gif" poster="/demo/xml-preview-rollback.png" alt="Rollback SQL demo" />
+<GifPlayer src="/demo/xml-preview-rollback.gif" alt="Rollback SQL demo" />
 
 The "Rollback SQL" button in the preview panel derives inverse SQL for the current statement; the dialog states up front whether that derivation can be trusted, then shows the output to copy or execute.
 

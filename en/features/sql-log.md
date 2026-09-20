@@ -133,7 +133,7 @@ Jumps rely only on the real captured position — no table-name guessing fallbac
 
 ### Focus Tabs
 
-<GifPlayer src="/demo/sql-log-focus.gif" poster="/demo/sql-log-focus.png" alt="SQL log focus tabs demo" />
+<GifPlayer src="/demo/sql-log-focus.gif" alt="SQL log focus tabs demo" />
 The entry context menu offers two focus modes, shown as tabs at the top of the panel — several can be open at once, each can be closed, and they stack correctly with type filter and search:
 
 - **Focus caller method**: statically approximates the source position's line range so the list shows only SQL issued from within that method. Nested classes, overloads and lambdas resolve to the smallest containing method; entries outside the range are hidden with a count hint. Known boundary: Kotlin callers are not supported in the first batch

@@ -47,7 +47,7 @@ The plugin's checks and hints produce confidence scores — "might be risky", "w
 
 ## A Typical Workflow
 
-<GifPlayer src="/demo/mcp-agent.gif" poster="/demo/mcp-agent.png" alt="The Codex agent in AI Assistant calling a plugin MCP tool over ACP, with an audit line" />
+<GifPlayer src="/demo/mcp-agent.gif" alt="The Codex agent in AI Assistant calling a plugin MCP tool over ACP, with an audit line" />
 Take "have the agent diagnose a slow SQL" as an example — the agent chains these tools as needed:
 
 1. `sqlv_render_sql` fetches the real executable SQL by file and line (parameters filled in, not `?` placeholders)
@@ -71,7 +71,7 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 
 ## Settings and Gating
 
-<GifPlayer src="/demo/mcp.gif" poster="/demo/mcp.png" alt="Plugin settings MCP tool gating and the platform Exposed Tools list" />
+<GifPlayer src="/demo/mcp.gif" alt="Plugin settings MCP tool gating and the platform Exposed Tools list" />
 Settings → the "MCP Tools" page provides a gating area:
 
 - Master switch: enable or disable the plugin's MCP functionality as a whole

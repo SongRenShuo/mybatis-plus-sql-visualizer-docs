@@ -79,7 +79,7 @@ ORDER BY create_time DESC
 
 ## 回滚 SQL
 
-<GifPlayer src="/demo/xml-preview-rollback.gif" poster="/demo/xml-preview-rollback.png" alt="XML 预览回滚 SQL 演示" />
+<GifPlayer src="/demo/xml-preview-rollback.gif" alt="XML 预览回滚 SQL 演示" />
 
 预览面板的「回滚 SQL」按钮对当前预览的语句推导逆向 SQL，弹窗先说明这次推导是否可信，再给出可复制的产物。
 
