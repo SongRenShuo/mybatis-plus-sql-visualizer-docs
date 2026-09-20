@@ -79,6 +79,8 @@ Preview execution, Log → SQL execution and rollback execution share the same c
 
 ## Rollback SQL
 
+<GifPlayer src="/demo/xml-preview-rollback.gif" poster="/demo/xml-preview-rollback.png" alt="Rollback SQL demo" />
+
 The "Rollback SQL" button in the preview panel derives inverse SQL for the current statement; the dialog states up front whether that derivation can be trusted, then shows the output to copy or execute.
 
 INSERT is the only statement type that gets an automatic rollback: each VALUES row yields `DELETE FROM table WHERE …` with an equality predicate on every column of that row (`NULL` renders as `IS NULL`). The plugin reads no database metadata, so it has no primary key and the predicate is the whole row — which can match more than one row; the dialog warns about that and offers a `SELECT COUNT(*) FROM table WHERE …` check to run first, and flags any `?` placeholders left unfilled. INSERTs without a column list (column names unknown), INSERT … SELECT (no before-image) and upserts (they may have modified existing rows, so a DELETE cannot undo them) are refused outright.

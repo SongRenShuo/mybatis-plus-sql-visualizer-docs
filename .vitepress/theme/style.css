@@ -565,7 +565,31 @@ kbd {
   border: 1px solid var(--border-color);
 }
 
+.mp-gif-player { width: 100%; }
+
 .mp-gif-player img { display: block; max-width: 100%; }
+
+@media (max-width: 767px) {
+  /* 手机端演示图整行出血：抵消 VitePress 主题 .VPDoc/.container 两侧各 48px 的水平内边距
+     （实测 375px 视口里内容区只剩 279px，1280px 宽的 IDE 截图压到 22%）。
+     width 必须用 calc 同步加宽——组件根元素带 width:100%，只给负边距会把盒子左移并右侧溢出。
+     详见 docs/开发计划/20260920-1500-功能详解页演示图手机端过小修复-开发计划.md */
+  .mp-gif-player {
+    width: calc(100% + 96px);
+    margin-left: -48px;
+    margin-right: -48px;
+  }
+
+  /* md 里直接写的演示插图（如 mcp 页开篇的示意 SVG）不是 GifPlayer，渲染成 p > img，
+     需单独一条同款出血规则；VitePress 默认的 img{max-width:100%} 会把宽度钳在父级
+     279px 上，故必须同时放开 max-width。选择器限定 /demo/ 前缀，不波及正文里的其它图。 */
+  .vp-doc p > img[src^="/demo/"] {
+    max-width: none;
+    width: calc(100% + 96px);
+    margin-left: -48px;
+    margin-right: -48px;
+  }
+}
 
 /* 演示素材四边带录制窗口的浅灰窗框（左/右 7-8px、底部 2-8px、顶部 0-1px，实测值），
    亮色页面下不可见，暗色模式下呈白边。按百分比裁边随渲染尺寸等比缩放，

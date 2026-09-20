@@ -79,6 +79,8 @@ ORDER BY create_time DESC
 
 ## 回滚 SQL
 
+<GifPlayer src="/demo/xml-preview-rollback.gif" poster="/demo/xml-preview-rollback.png" alt="XML 预览回滚 SQL 演示" />
+
 预览面板的「回滚 SQL」按钮对当前预览的语句推导逆向 SQL，弹窗先说明这次推导是否可信，再给出可复制的产物。
 
 INSERT 是唯一能自动生成回滚的语句：按 VALUES 逐行生成 `DELETE FROM 表 WHERE …`，谓词是该行每一列的等值（`NULL` 渲染为 `IS NULL`）。插件不查数据库元数据，拿不到主键，谓词只能按整行——可能误匹配多行，弹窗为此给出警示，并附一条 `SELECT COUNT(*) FROM 表 WHERE …` 自查语句供执行前核对；语句含未回填的 `?` 占位符时另行标注。无列清单的 INSERT（列名未知）、INSERT … SELECT（执行前数据未知）与 upsert（可能改过已存在的行，DELETE 回不干净）一律拒绝。

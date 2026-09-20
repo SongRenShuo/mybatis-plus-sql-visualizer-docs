@@ -26,7 +26,9 @@ function togglePlay() {
 </script>
 
 <template>
-  <div class="mp-gif-player" :style="{ width: width || '100%' }" @click="togglePlay">
+  <!-- 默认宽度交回 CSS（.mp-gif-player 的 width:100%）：行内写死会挡住窄屏媒体查询的
+       整行出血规则（行内样式优先级高于样式表）。传了 width 时仍按行内生效 -->
+  <div class="mp-gif-player" :style="width ? { width } : undefined" @click="togglePlay">
     <video
       v-if="video"
       ref="videoEl"

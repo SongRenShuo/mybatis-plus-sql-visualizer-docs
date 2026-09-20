@@ -109,6 +109,22 @@ const features = reactive([
     gifError: false,
     reverse: true,
   },
+  {
+    badge: 'AI Agent 集成',
+    title: 'MCP Server：给 AI Agent 的 SQL 工具',
+    description: 'Claude Code / Cursor / AI Assistant / Codex 经 IDEA 内置 MCP Server 直连插件能力，IDE 里照常写代码，agent 在旁边干活',
+    features: [
+      { title: '确定性证据', description: '渲染链真实产出的可执行 SQL 本体交给 agent，不是置信度评分' },
+      { title: '十个只读工具', description: '渲染还原、表结构、EXPLAIN、写风险核查、回滚预案、性能建议（IDEA 2025.2+）' },
+      { title: '可控可审计', description: '设置页逐工具启停即时生效，SELECT 白名单拦截 + 每次调用审计留痕' },
+    ],
+    // 20260920 首页卡用「真实调用」那张（agent 经 ACP 调 sqlv_check_sql）；
+    // 「开启设置」那张移到功能页「典型工作流」节。示意 SVG 仍保留在 features/mcp.md 开篇
+    imageSrc: '/demo/mcp-agent.gif',
+    poster: '/demo/mcp-agent.png',
+    gifReady: false,
+    gifError: false,
+  },
 ])
 </script>
 
@@ -251,6 +267,16 @@ const features = reactive([
 
 .feature-video--gif-ready {
   opacity: 1;
+}
+
+@media (max-width: 767px) {
+  /* 手机端演示图整行出血：抵消 section 与内层 .container 各 24px 的水平内边距，
+     图片由 279px 提到接近视口宽（375px，+34%）。窄屏专属，桌面端布局不变。
+     两层内边距叠加见 docs/开发计划/20260920-1230-首页功能卡手机端演示图过小修复-开发计划.md */
+  .feature-video-wrapper {
+    margin-left: -48px;
+    margin-right: -48px;
+  }
 }
 
 @media (min-width: 768px) {
