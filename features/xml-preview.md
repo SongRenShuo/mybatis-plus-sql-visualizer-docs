@@ -79,6 +79,7 @@ ORDER BY create_time DESC
 
 ## 回滚 SQL
 
+<GifPlayer src="/demo/xml-preview-rollback.gif" poster="/demo/xml-preview-rollback.png" alt="XML 预览回滚 SQL 演示" />
 预览面板的「回滚」按钮对当前预览的 INSERT / UPDATE / DELETE 生成逆向 SQL：INSERT 按主键生成 DELETE、UPDATE 还原 SET 原值、DELETE 按 WHERE 重插，弹窗展示并一键复制。
 
 ## SQL 快捷模板

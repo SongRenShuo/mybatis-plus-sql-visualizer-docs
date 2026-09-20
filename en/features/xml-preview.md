@@ -79,6 +79,7 @@ Preview execution, Log → SQL execution and rollback execution share the same c
 
 ## Rollback SQL
 
+<GifPlayer src="/demo/xml-preview-rollback.gif" poster="/demo/xml-preview-rollback.png" alt="XML preview rollback SQL demo" />
 A "Rollback" button in the preview panel generates inverse SQL for the current INSERT / UPDATE / DELETE: INSERT becomes a primary-key DELETE, UPDATE restores original SET values, DELETE re-inserts by WHERE — shown in a dialog with one-click copy.
 
 ## SQL Quick Templates
