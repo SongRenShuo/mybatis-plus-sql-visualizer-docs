@@ -20,6 +20,7 @@ Windows / Linux 与 macOS 的默认键位，以及各功能的入口方式。
 | 注解 SQL 预览 | `@Select` / `@Update` 等注解行的 gutter 图标 |
 | JPA / Hibernate 预览 | 派生方法 / CRUD 调用 / `@Query` / `@NamedQuery` / Criteria 链 / `.hbm.xml` 命名查询所在行的 gutter 图标 |
 | EXPLAIN 执行计划 | 预览面板按钮行「执行计划」按钮（英文界面 EXPLAIN） |
+| SQL 快捷模板（EXPLAIN / COUNT / 抽样 10 行） | 在 mapper XML 或预览编辑器里选中表名 → 右键菜单「SQL 快捷模板」组；默认不占键位，可在插件设置页「快捷键」节或 Keymap 自绑 |
 | SQL → Java | 选中 SQL 文本 → 右键菜单；或工具窗口侧边栏 tab |
 | SQL 日志工具窗口 | 底部工具窗口栏；自动捕获控制台 MyBatis 日志，可开启「项目启动时自动开始监听」 |
 | 批量操作参数面板 | 预览弹窗内的参数面板 |

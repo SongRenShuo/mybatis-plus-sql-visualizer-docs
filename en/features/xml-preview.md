@@ -91,7 +91,7 @@ Other statements (SELECT, MERGE, DDL and so on) do not open the dialog at all â€
 
 ## SQL Quick Templates
 
-Select text in a mapper XML or the preview editor and use the "SQL quick templates" context-menu group to run EXPLAIN / COUNT / a 10-row sample in one click (Alt+Shift+E / C / T), going through the native Database console chain.
+Select text in a mapper XML or the preview editor and use the "SQL quick templates" context-menu group to run EXPLAIN / COUNT / a 10-row sample in one click, going through the native Database console chain. These three actions ship without default shortcuts; bind your own in Settings > Keymap or in the plugin's "Shortcuts" settings section.
 
 ## Render Annotations & Degradation Banners
 

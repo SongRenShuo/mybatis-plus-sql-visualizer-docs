@@ -20,6 +20,7 @@ Bindings can be changed in `Settings` > `Keymap` by searching for the plugin act
 | Annotation SQL preview | Gutter icon on `@Select` / `@Update` lines |
 | JPA / Hibernate preview | Gutter icon on derived methods / CRUD calls / `@Query` / `@NamedQuery` / Criteria chains / `.hbm.xml` named queries |
 | EXPLAIN plan | "EXPLAIN" button in the preview panel button row |
+| SQL quick templates (EXPLAIN / COUNT / 10-row sample) | Select a table name in a mapper XML or the preview editor → the "SQL quick templates" context menu; no default shortcut — bind your own in the plugin's "Shortcuts" settings section or in Keymap |
 | SQL → Java | Select SQL text → context menu; or the sidebar tab in the tool window |
 | SQL Log tool window | Bottom tool window bar; captures MyBatis console logs automatically, with an optional "auto-start listening on project launch" setting |
 | Batch operation parameter panel | Parameter panel inside the preview popup |

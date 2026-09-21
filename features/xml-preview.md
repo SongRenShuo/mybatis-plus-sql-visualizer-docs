@@ -91,7 +91,7 @@ UPDATE 与 DELETE 不给自动回滚。插件只有 SQL 文本，没有执行前
 
 ## SQL 快捷模板
 
-mapper XML 与预览编辑器里选中文本后，右键菜单「SQL 快捷模板」可一键 EXPLAIN / COUNT / 抽样 10 行（快捷键 Alt+Shift+E / C / T），走原生 Database 控制台链路执行。
+mapper XML 与预览编辑器里选中文本后，右键菜单「SQL 快捷模板」可一键 EXPLAIN / COUNT / 抽样 10 行，走原生 Database 控制台链路执行。这三个动作默认不占键位，如需快捷键可在 设置 > Keymap 或插件设置页「快捷键」节录制。
 
 ## 渲染标注与降级提示
 
