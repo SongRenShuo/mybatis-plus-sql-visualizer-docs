@@ -65,7 +65,7 @@ Supports multiple log formats:
 - Enhanced-capture entries carry structured durations (millisecond-accurate), affected-row counts and execution error messages directly — no log parsing involved
 - Console-channel durations are parsed from the log, supporting p6spy `elapsed`, MyBatis-Plus `Time:` output and a custom time prefix (configurable in settings, default `Time:`)
 - Duration is colored by threshold: gray under 100ms, orange at 100ms+, red once the slow-query threshold is reached (default 1000ms, adjustable); a slow-query counter appears when slow queries are detected
-- A persistent "Sort by" button on the list opens a single-choice menu: time ascending (default, i.e. capture order) / time descending / duration ascending / duration descending / line number. Entries missing duration or line number always sink to the bottom (in both directions); time sorting follows the list's time column (with "Log time" selected, entries are ordered by log time — what you see is what is sorted)
+- A persistent sort button on the list (it shows the current mode; hover for the full label) opens a single-choice menu: time ascending (default, i.e. capture order) / time descending / duration ascending / duration descending / line number. Entries missing duration or line number always sink to the bottom (in both directions); time sorting follows the list's time column (with "Log time" selected, entries are ordered by log time — what you see is what is sorted)
 
 ### Execution Errors Inline
 
