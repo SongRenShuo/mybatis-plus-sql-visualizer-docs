@@ -82,7 +82,7 @@ Settings → the "MCP Tools" page provides a gating area:
 
 Every change takes effect immediately: the next tool-list refresh or tool call follows the new configuration — no IDE restart needed.
 
-These switches only control whether the plugin's ten tools are visible to the agent. They are independent of the IDE-wide "Enable MCP Server" toggle under Tools → MCP Server — the latter is the master switch for the platform's built-in MCP service (127.0.0.1:64342), which also serves tools from other plugins and the platform itself. Turning off the plugin's switch leaves that service running; the `sqlv_*` tools simply disappear from the tool list (agent clients see the change after they refresh their tool list).
+These switches only control whether the plugin's ten tools are visible to the agent. They are independent of the IDE-wide "Enable MCP Server" toggle under Tools → MCP Server — the latter is the master switch for the platform's built-in MCP service (127.0.0.1:64342), which also serves tools from other plugins and the platform itself. Turning off the plugin's switch leaves that service running: through the platform's tool-filter extension (`mcpToolFilterProvider`), the plugin removes the `sqlv_*` tools from the agent's tool list — effective at the next listing refresh or new session, visible to connected clients once they refresh.
 
 ## Read-Only and Safety
 

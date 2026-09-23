@@ -85,7 +85,7 @@ The plugin exposes 10 read-only tools to AI agents (Claude Code / Cursor / AI As
 - Master switch: enable/disable the plugin's MCP functionality as a whole
 - Per-tool enable/disable for all ten tools, plus "Enable All / Disable All" buttons
 - Changes take effect immediately — no IDE restart needed
-- These switches gate the plugin's own tools only; the IDE-wide "Enable MCP Server" toggle under Tools → MCP Server is the platform master switch (other plugins and platform tools share the same service). The two are independent — switching the plugin's off leaves the service running, with the `sqlv_*` tools simply gone from the tool list
+- These switches gate the plugin's own tools only; the IDE-wide "Enable MCP Server" toggle under Tools → MCP Server is the platform master switch (other plugins and platform tools share the same service). The two are independent — switching the plugin's off leaves the service running, while the plugin removes the `sqlv_*` tools from the agent's tool list dynamically through the platform's tool-filter extension, no restart needed
 
 ## Project-Level Settings
 
