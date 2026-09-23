@@ -20,7 +20,7 @@ Grouped the way an agent works: get the SQL first, then understand the database,
 
 | Tool | Input | Output |
 |------|-------|--------|
-| `sqlv_render_sql` | `filePath` (project-relative) + `line`, or paste a mapper XML as `xmlSnippet` | Real executable SQL — parameters filled in, with notes wherever rendering degraded |
+| `sqlv_render_sql` | `filePath` (project-relative, or absolute inside the project) + `line`, or paste a mapper XML as `xmlSnippet` | Real executable SQL — parameters filled in, with notes wherever rendering degraded |
 | `sqlv_render_logs` | `logText`, the raw console log (optional custom `sqlPrefix` / `paramPrefix` etc.) | Executable SQL restored from MyBatis / Hibernate / JdbcTemplate logs |
 | `sqlv_crud_sql` | `filePath` or `className` of a MyBatis-Plus entity | INSERT / UPDATE / SELECT / DELETE set |
 | `sqlv_reverse_sql` | `sql`, one SQL statement | MyBatis-Plus Java code generated in reverse |
@@ -60,7 +60,7 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 ## Usage Notes
 
 - `sqlv_render_sql` renders one statement per call; when a location has multiple candidates it takes the first and says so — multi-statement logs belong to `sqlv_render_logs`
-- `sqlv_render_sql` expects `filePath` relative to the project root (e.g. `src/main/resources/mapper/UserMapper.xml`); absolute paths are rejected as an argument error
+- `filePath` behaves the same across the three tools that take one (`sqlv_render_sql` / `sqlv_crud_sql` / `sqlv_mapper_check`): project-relative to the project root (e.g. `src/main/resources/mapper/UserMapper.xml`) or an absolute path inside the project; paths outside the project and `..` traversal are rejected
 - With several data sources configured, pass `dataSource` explicitly to `sqlv_schema_context` / `sqlv_explain` — when the intended data source isn't connected and introspected in the Database tool window, same-named tables may resolve from a different one
 - `sqlv_render_logs`, `sqlv_rollback_plan` and `sqlv_mapper_check` label statement headers with statement names (from a leading `-- Name:` comment), keeping multi-statement output readable
 - `sqlv_perf_advice` truncates overly long entries — no unbounded output

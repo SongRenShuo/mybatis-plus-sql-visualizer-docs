@@ -20,7 +20,7 @@
 
 | 工具 | 输入 | 产出 |
 |------|------|------|
-| `sqlv_render_sql` | `filePath` + `line`（项目相对路径与行号），或直接贴 `xmlSnippet`（mapper XML 片段） | 真实可执行 SQL——参数已回填，渲染降级处附说明 |
+| `sqlv_render_sql` | `filePath` + `line`（项目相对路径或项目内绝对路径，配行号），或直接贴 `xmlSnippet`（mapper XML 片段） | 真实可执行 SQL——参数已回填，渲染降级处附说明 |
 | `sqlv_render_logs` | `logText` 整段控制台日志原文（可选自定义 `sqlPrefix` / `paramPrefix` 等前缀） | MyBatis / Hibernate / JdbcTemplate 日志还原成的可执行 SQL |
 | `sqlv_crud_sql` | `filePath` 或 `className`（MyBatis-Plus 实体类） | INSERT / UPDATE / SELECT / DELETE 四件套 |
 | `sqlv_reverse_sql` | `sql` 一条 SQL | 反向生成的 MyBatis-Plus Java 代码 |
@@ -60,7 +60,7 @@
 ## 使用口径
 
 - `sqlv_render_sql` 一次渲染一条语句；同一位置有多个候选时取第一个并注明，多语句日志请交给 `sqlv_render_logs`
-- `sqlv_render_sql` 的 `filePath` 用项目相对路径（相对项目根，如 `src/main/resources/mapper/UserMapper.xml`），绝对路径会被拒为参数错误
+- 带 `filePath` 的三个工具（`sqlv_render_sql` / `sqlv_crud_sql` / `sqlv_mapper_check`）路径口径一致：项目相对路径（相对项目根，如 `src/main/resources/mapper/UserMapper.xml`）或项目内绝对路径都收；项目外路径与 `..` 上跳一律拒绝
 - 配置了多个数据源时，给 `sqlv_schema_context` / `sqlv_explain` 显式指名 `dataSource`——目标数据源未在 Database 工具窗连接并内省时，同名表可能改从其他数据源解析
 - `sqlv_render_logs`、`sqlv_rollback_plan`、`sqlv_mapper_check` 的语句头会带上语句名（取自日志前导 `-- Name:` 注释），多语句输出一目了然
 - `sqlv_perf_advice` 单条文案超长会被截断，避免无上限输出
