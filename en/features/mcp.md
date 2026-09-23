@@ -20,7 +20,7 @@ Grouped the way an agent works: get the SQL first, then understand the database,
 
 | Tool | Input | Output |
 |------|-------|--------|
-| `sqlv_render_sql` | `filePath` + `line`, or paste a mapper XML as `xmlSnippet` | Real executable SQL — parameters filled in, with notes wherever rendering degraded |
+| `sqlv_render_sql` | `filePath` (project-relative) + `line`, or paste a mapper XML as `xmlSnippet` | Real executable SQL — parameters filled in, with notes wherever rendering degraded |
 | `sqlv_render_logs` | `logText`, the raw console log (optional custom `sqlPrefix` / `paramPrefix` etc.) | Executable SQL restored from MyBatis / Hibernate / JdbcTemplate logs |
 | `sqlv_crud_sql` | `filePath` or `className` of a MyBatis-Plus entity | INSERT / UPDATE / SELECT / DELETE set |
 | `sqlv_reverse_sql` | `sql`, one SQL statement | MyBatis-Plus Java code generated in reverse |
@@ -30,7 +30,7 @@ Grouped the way an agent works: get the SQL first, then understand the database,
 | Tool | Input | Output |
 |------|-------|--------|
 | `sqlv_schema_context` | `tables`, a list of table names (optional `dataSource`, `maxTables` — default 8, cap 20) | Compact context of the data source's real columns, types and comments |
-| `sqlv_explain` | `selectSql`, a single SELECT (optional `dataSource`, `dialect`) | EXPLAIN plan text for seven dialects, with driver notices and index hints |
+| `sqlv_explain` | `selectSql`, a single SELECT (optional `dataSource`; omit `dialect` to auto-detect from the data source URL) | EXPLAIN plan text for seven dialects, with driver notices and index hints |
 
 ### Check Before Execution
 
@@ -60,6 +60,8 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 ## Usage Notes
 
 - `sqlv_render_sql` renders one statement per call; when a location has multiple candidates it takes the first and says so — multi-statement logs belong to `sqlv_render_logs`
+- `sqlv_render_sql` expects `filePath` relative to the project root (e.g. `src/main/resources/mapper/UserMapper.xml`); absolute paths are rejected as an argument error
+- With several data sources configured, pass `dataSource` explicitly to `sqlv_schema_context` / `sqlv_explain` — when the intended data source isn't connected and introspected in the Database tool window, same-named tables may resolve from a different one
 - `sqlv_render_logs`, `sqlv_rollback_plan` and `sqlv_mapper_check` label statement headers with statement names (from a leading `-- Name:` comment), keeping multi-statement output readable
 - `sqlv_perf_advice` truncates overly long entries — no unbounded output
 
@@ -79,6 +81,8 @@ Settings → the "MCP Tools" page provides a gating area:
 - "Enable all" / "Disable all" shortcuts
 
 Every change takes effect immediately: the next tool-list refresh or tool call follows the new configuration — no IDE restart needed.
+
+These switches only control whether the plugin's ten tools are visible to the agent. They are independent of the IDE-wide "Enable MCP Server" toggle under Tools → MCP Server — the latter is the master switch for the platform's built-in MCP service (127.0.0.1:64342), which also serves tools from other plugins and the platform itself. Turning off the plugin's switch leaves that service running; the `sqlv_*` tools simply disappear from the tool list (agent clients see the change after they refresh their tool list).
 
 ## Read-Only and Safety
 

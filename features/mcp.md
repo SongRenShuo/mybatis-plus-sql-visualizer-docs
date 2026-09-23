@@ -20,7 +20,7 @@
 
 | 工具 | 输入 | 产出 |
 |------|------|------|
-| `sqlv_render_sql` | `filePath` + `line`（文件与行号），或直接贴 `xmlSnippet`（mapper XML 片段） | 真实可执行 SQL——参数已回填，渲染降级处附说明 |
+| `sqlv_render_sql` | `filePath` + `line`（项目相对路径与行号），或直接贴 `xmlSnippet`（mapper XML 片段） | 真实可执行 SQL——参数已回填，渲染降级处附说明 |
 | `sqlv_render_logs` | `logText` 整段控制台日志原文（可选自定义 `sqlPrefix` / `paramPrefix` 等前缀） | MyBatis / Hibernate / JdbcTemplate 日志还原成的可执行 SQL |
 | `sqlv_crud_sql` | `filePath` 或 `className`（MyBatis-Plus 实体类） | INSERT / UPDATE / SELECT / DELETE 四件套 |
 | `sqlv_reverse_sql` | `sql` 一条 SQL | 反向生成的 MyBatis-Plus Java 代码 |
@@ -30,7 +30,7 @@
 | 工具 | 输入 | 产出 |
 |------|------|------|
 | `sqlv_schema_context` | `tables` 表名清单（可选 `dataSource`、`maxTables`，默认最多 8 张、上限 20） | 数据源真实的表列结构、类型与注释，紧凑上下文 |
-| `sqlv_explain` | `selectSql` 单条 SELECT（可选 `dataSource`、`dialect`） | 七方言 EXPLAIN 执行计划文本，附驱动 notices 与 index hints 建议 |
+| `sqlv_explain` | `selectSql` 单条 SELECT（可选 `dataSource`；`dialect` 可省略，按数据源 URL 自动识别） | 七方言 EXPLAIN 执行计划文本，附驱动 notices 与 index hints 建议 |
 
 ### 执行前把关
 
@@ -60,6 +60,8 @@
 ## 使用口径
 
 - `sqlv_render_sql` 一次渲染一条语句；同一位置有多个候选时取第一个并注明，多语句日志请交给 `sqlv_render_logs`
+- `sqlv_render_sql` 的 `filePath` 用项目相对路径（相对项目根，如 `src/main/resources/mapper/UserMapper.xml`），绝对路径会被拒为参数错误
+- 配置了多个数据源时，给 `sqlv_schema_context` / `sqlv_explain` 显式指名 `dataSource`——目标数据源未在 Database 工具窗连接并内省时，同名表可能改从其他数据源解析
 - `sqlv_render_logs`、`sqlv_rollback_plan`、`sqlv_mapper_check` 的语句头会带上语句名（取自日志前导 `-- Name:` 注释），多语句输出一目了然
 - `sqlv_perf_advice` 单条文案超长会被截断，避免无上限输出
 
@@ -79,6 +81,8 @@
 - 「全部启用」「全部禁用」快捷切换
 
 所有变更即时生效：下一次工具列表刷新或工具调用就按新配置走，无需重启 IDE。
+
+这里的开关只管插件的十个工具对 agent 是否可见，与 IDE「工具 → MCP 服务器」页的「启用 MCP 服务器」相互独立——后者是平台内置 MCP 服务（127.0.0.1:64342）的总开关，其他插件与平台自带的工具都挂在同一个服务下。关掉插件开关不会动平台开关：服务照常，只是 `sqlv_*` 从工具清单消失（agent 客户端刷新工具列表后可见）。
 
 ## 只读与安全
 
