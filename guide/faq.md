@@ -89,7 +89,7 @@ v2026.9.18 起，数据库方言默认改为「智能推断（跟随数据源）
 
 ## 支持哪些数据库方言的分页语法？
 
-9 种：MySQL、PostgreSQL、Oracle、SQL Server、H2、SQLite、MariaDB、DM（达梦）、KingBase（金仓）。分页子句和 upsert 冲突子句按方言差异渲染。
+11 种：MySQL、PostgreSQL、Oracle、SQL Server、H2、SQLite、MariaDB、DM（达梦）、KingBase（金仓）、OceanBase、openGauss。分页子句和 upsert 冲突子句按方言差异渲染。
 
 ## 快捷键冲突怎么办？
 

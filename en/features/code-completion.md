@@ -16,7 +16,7 @@
 | Table names | Inferred from project entity classes |
 | Column names | Suggestions by clause position: table names after FROM / JOIN, column names everywhere else; an `alias.` prefix suggests the aliased entity's columns, with comments searchable |
 | `#{}` param names | Method parameter names (`@Param` values first, param1..N as fallback) |
-| XML dynamic tags | `<if>` / `<where>` / `<foreach>` etc. |
+| XML dynamic tags | `<if>` / `<where>` / `<foreach>` etc.; for the `collection` attribute of `<foreach>`, when the method takes a single collection parameter with no `@Param`, the candidates include the `collection` / `list` / `array` shortcut names (matching MyBatis parameter-naming semantics) |
 | OGNL expressions | Property names in `<if test="...">` |
 
 ## Data-Source Column Completion

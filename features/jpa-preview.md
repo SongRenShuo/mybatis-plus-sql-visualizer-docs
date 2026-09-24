@@ -55,6 +55,7 @@
 - JOIN 关系解析：关联路径按实体映射展开为真实 ON 条件，JOIN 图可视化可用
 - 子查询、聚合、`UPDATE` / `DELETE` JPQL（含 `@Modifying`）完整支持
 - `SELECT u` 裸实体别名自动展开为列清单（详见 [XML / HQL 动态 SQL 预览](./xml-preview)）
+- 无别名形态的 HQL 同样映射：`WHERE stationCode = ?` 这类裸属性转列名（`STATION_CODE = ?`），嵌入段（如 `updateInfo.BE_DELETE`）占限定符位时按嵌入映射产出裸列名，与 Hibernate 真实语义一致
 
 ## 继承链实体列解析
 

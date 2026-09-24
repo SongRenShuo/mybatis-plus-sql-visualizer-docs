@@ -19,7 +19,7 @@ For the same problem — seeing what SQL MyBatis actually produces — there are
 | Reverse-convert SQL to Wrapper Java code | Yes | No | No |
 | Toggle dynamic conditions and re-render in real time | Yes | No | No |
 | Warning for UPDATE / DELETE without WHERE | Yes | No | Relies on human eyes |
-| Pagination rendering for 9 dialects | Yes | No | Manual |
+| Pagination rendering for 11 dialects | Yes | No | Manual |
 
 ## Two different routes
 

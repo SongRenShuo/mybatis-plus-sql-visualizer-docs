@@ -46,17 +46,20 @@ Boolean-overloaded conditions like `.eq(true, ...)` can be toggled in the left p
 - `?` placeholders replaced with actual values
 - LIKE params auto-append `%`
 - Quote wrapping based on type (numbers unquoted, strings quoted)
+- With a data source configured, column names can be calibrated against the data source's real columns (the "Calibrate column names from the data source" setting, on by default): when an entity field name differs from the real column name (field `orderID`, column `order_id`), the name is rewritten only when it maps to exactly one column — ambiguous matches stay untouched; with no usable data source the behavior is identical to having the option off
 
-### 9-Dialect Pagination
+### 11-Dialect Pagination
 
 | Dialect | Syntax |
 |---------|--------|
 | MySQL / MariaDB / SQLite / H2 | `LIMIT n OFFSET m` |
-| PostgreSQL | `LIMIT n OFFSET m` |
+| PostgreSQL / openGauss | `LIMIT n OFFSET m` |
+| OceanBase (MySQL mode) | `LIMIT [offset,] n` |
 | Oracle | `ROWNUM` / `FETCH FIRST` |
 | SQL Server | `OFFSET m ROWS FETCH NEXT n ROWS ONLY` |
-| DM (Dameng) | `LIMIT n OFFSET m` |
-| KingBase | `LIMIT n OFFSET m` |
+| DM (Dameng) / KingBase | `LIMIT n OFFSET m` |
+
+Upsert conflict clauses for OceanBase and openGauss also render in their real forms (openGauss uses the MySQL-style `ON DUPLICATE KEY UPDATE`, not PG's `ON CONFLICT`).
 
 ### JOIN Diagram
 

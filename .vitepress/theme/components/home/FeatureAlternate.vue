@@ -29,7 +29,7 @@ const features = reactive([
     features: [
       { title: 'Lambda 链静态解析', description: '无需运行项目即可预览完整 SQL' },
       { title: '动态条件勾选', description: 'if / choose / where 等标签按需渲染' },
-      { title: '9 种方言分页', description: 'MySQL / PG / Oracle 等全方言分页语法' },
+      { title: '11 种方言分页', description: 'MySQL / PG / Oracle 等全方言分页语法' },
     ],
     imageSrc: '/demo/wrapper-preview.gif',
     poster: '/demo/wrapper-preview.png',
@@ -43,7 +43,7 @@ const features = reactive([
     features: [
       { title: '增强捕获默认通道', description: '首次运行项目确认后自动采集，真实参数、精确耗时、影响行数开箱即得' },
       { title: '并发日志分桶还原', description: '自动识别 Preparing / Parameters，多线程交错按线程分桶，参数不错挂' },
-      { title: '目标库角标', description: '条目标注 [MySQL]、[DM（达梦）] 等，9 种方言与 openGauss / GBASE 全识别' },
+      { title: '目标库角标', description: '条目标注 [MySQL]、[DM（达梦）] 等，11 种方言与 HSQL / GBASE 全识别' },
     ],
     imageSrc: '/demo/sql-log.gif',
     poster: '/demo/sql-log.png',

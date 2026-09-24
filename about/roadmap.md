@@ -15,30 +15,32 @@ next: false
 
 - [x] Wrapper → SQL 静态解析（Lambda / 字符串 / MPJ 联表 / Kotlin）
 - [x] XML / 注解动态 SQL 预览（OGNL 面板、`maintainPage` XML）
-- [x] HQL / JPQL / JPA Criteria 预览，HQL `SELECT 实体别名` 自动展开为列清单
+- [x] HQL / JPQL / JPA Criteria 预览，HQL `SELECT 实体别名` 自动展开为列清单，无别名形态裸属性转列名
 - [x] `.hbm.xml` 命名查询预览（`<query>` / `<sql-query>`，`createNamedQuery` 自动回落 hbm 定义）
 - [x] JPA Repository CRUD 写路径预览（save / findById / findAllById / delete 家族 / flush 语义），派生查询深化（六前缀、Pageable / Sort、Page / Slice / Stream 返回），Specification 与 QueryByExample
 - [x] 其他 ORM 链式框架预览第一批：xbatis、Easy-Query、MyBatis Dynamic SQL、Querydsl、Spring Data JDBC / R2DBC
 - [x] 自研 DAO 字符串 SQL 方法定义锚点（方法名行 gutter 图标，快捷键在方法定义处生效）
 - [x] gutter 锚点左键直接预览、右键反查最近执行记录
 - [x] SQL 预览字段列表自动折叠（SELECT / INSERT 列清单、VALUES 组、UPDATE SET 收起为「… N 列」占位符，阈值可配，默认关）
+- [x] 预览 INSERT 目标列 inlay 提示（VALUES 表达式 / SELECT 投影旁标注列名，列-值错位一眼可见）
+- [x] 通用 XML 内嵌 SQL 识别（自研框架 XML 的自定义标签 CDATA / 文本兜底通道，`type="hql"` 走 HQL 转换管道，设置页可关）
 - [x] 真实 EXPLAIN 执行计划（按方言包装提交原生数据库控制台，MySQL / PostgreSQL / 金仓 / 达梦真机验证；MySQL / MariaDB 对齐 IDEA 原生计划表格形态）
 - [x] JOIN 关系可视化图（IDEA 原生 Diagrams 引擎渲染，Diagrams 缺席自动回退自绘；数据源可用时列类型 / 注释取 DB 真实值）
 - [x] SQL 性能分析建议（索引缺失 / 全表扫描等 20 条规则）
 - [x] Wrapper 链复杂度评分
 - [x] 逻辑删除 / 多租户 / 动态表名 / 数据权限拦截器模拟
-- [x] 9 种数据库方言分页 / upsert 渲染（保留字按官方文档全量校准，H2 upsert 为原生 `MERGE INTO ... KEY`）
+- [x] 11 种数据库方言分页 / upsert 渲染（保留字按官方文档全量校准，H2 upsert 为原生 `MERGE INTO ... KEY`；信创方言 OceanBase / openGauss 按真机证据落地——openGauss 的 upsert 实为 `ON DUPLICATE KEY UPDATE` MySQL 形态）
 - [x] 方言智能推断（默认跟随数据源：增强捕获连接 URL 优先、IDE 数据源次之、回退 MySQL，状态行显示推断依据，手动选定后按手动值生效）
-- [x] 预览可靠性增强（跨命名空间 include 解析、动态条件支持面预检标注、`${}` 注入确认闸门、参数面板类型契约、`${table}` 快捷模板）
-- [x] 执行护栏（执行超时设置、执行确认的无界写发现清单）
+- [x] 预览可靠性增强（跨命名空间 include 解析、动态条件支持面预检标注、`${}` 注入确认闸门、参数面板类型契约（含集合参数按签名拆分多值渲染）、`${table}` 快捷模板）
+- [x] 执行护栏（执行超时设置、执行确认的无界写发现清单、`DELIMITER` 自定义界符感知、空参数默认 `?` 占位防 NULL 静默过滤行）
 
 ### 转换与补全
 
 - [x] SQL → Java 反向转换（AUTO / QueryWrapper / Lambda / Wrappers / MPJ 五形态，多表 JOIN）
-- [x] SQL 代码补全（表列名、注释提示）
+- [x] SQL 代码补全（表列名、注释提示，`<foreach>` 的 `collection` 快捷别名候选）
 - [x] Wrapper 方法链智能补全（`.eq(` 后提示后续方法与字段）
 - [x] 批量操作参数面板（列级勾选、批量导入）
-- [x] 实体类 / 数据库表右键生成 CRUD SQL（INSERT / UPDATE / SELECT / DELETE 候选浮层选定后进预览；自增主键默认不勾、`@Version` 列乐观锁自动追加、逻辑删除实体出对应变体；Community 版仅实体侧入口）
+- [x] 实体类 / 数据库表右键生成 CRUD SQL（INSERT / UPDATE / SELECT / DELETE 候选浮层选定后进预览；自增主键默认不勾、`@Version` 列乐观锁自动追加、逻辑删除实体出对应变体；SQL Server 身份列 INSERT 自动包 `SET IDENTITY_INSERT` 可直接回放；Community 版仅实体侧入口）
 - [x] 预览一键生成回滚 SQL（对当前预览的 INSERT / UPDATE / DELETE 生成对应逆向 SQL——INSERT 按主键删、UPDATE 还原原值、DELETE 按 WHERE 重插，弹窗展示一键复制）
 
 ### 日志与历史
@@ -63,6 +65,7 @@ next: false
 - [x] 性能红线全面治理（执行失败面板内报错、日志流式增量渲染、参数输入防抖、历史大文件后台读取、内存泄漏清理）
 - [x] 增强捕获启动即捕获（premain 通道：启动期 SQL 不丢、免动态挂载告警，失败回落 attach）
 - [x] 日志面板聚焦与定位增强（方法级 / 请求级聚焦页签、日志条目直跳 mapper XML、执行报错与条目同列展示）
+- [x] SQL 日志屏蔽（右键一键屏蔽保活心跳类 SQL，管理对话框规则列表 / 命中计数 / 可选结构匹配，上限 500 条，对话框可拖拽缩放）
 
 ### 平台与生态
 
@@ -76,7 +79,7 @@ next: false
 - [x] 错误 / 反馈一键上报官网需求池（帮助菜单、设置页、IDE 内部错误对话框三入口，异常堆栈附件可选，24 小时去重；多选错误合并为一帖、超限条目自动错峰补发，提交失败可见服务端原因并可原地重试）
 - [x] MCP Server 十个只读工具（AI agent 工具面：渲染 SQL / schema 上下文 / EXPLAIN / 日志还原 / 回滚预案等，设置页逐项门控；需 IDEA 2025.2+）
 
-> 以上功能已随 v2026.9.8 ~ v2026.9.18 正式发行，可在 JetBrains Marketplace 更新获取；版本明细见[更新日志](./changelog)。v2026.9.18 正式版（含此前 beta 系列全部内容）同版上架，本轮代表功能：MCP Server 十工具、增强捕获启动即捕获（premain）、方法级 / 请求级聚焦页签、预览一键回滚 SQL、方言智能推断、跨命名空间 include 解析等。
+> 以上功能已随 v2026.9.8 ~ v2026.9.23 发行，版本明细见[更新日志](./changelog)。v2026.9.23 代表功能：MCP Server 十工具、增强捕获启动即捕获（premain）、方法级 / 请求级聚焦页签、预览一键回滚 SQL、方言智能推断、跨命名空间 include 解析等。其后最新一批能力（SQL 日志屏蔽、通用 XML 内嵌 SQL 识别、无别名 HQL 映射、信创方言 OceanBase / openGauss、空参数默认 `?` 占位等）已合入 master，将随下一版发行。
 
 ## 规划中
 

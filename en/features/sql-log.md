@@ -18,7 +18,7 @@ Entries come from two channels, unified in one list with identical display and a
 **Enhanced capture (default channel)**: bytecode-instrumentation based. The first time you run a project, a one-time consent dialog asks to inject; after agreeing, capture points attach to your application's JVM on the local machine, collecting directly at the JDBC interface layer — no SQL logging setup needed in your app, it works out of the box:
 
 - Real parameter values (desensitization off by default, can be enabled in settings), millisecond-accurate execution durations, affected-row counts and execution error messages
-- Entries carry a database badge (`[MySQL]`, `[DM (Dameng)]` etc.), inferred from the JDBC URL — all 9 dialect databases plus openGauss / GBASE covered
+- Entries carry a database badge (`[MySQL]`, `[DM (Dameng)]` etc.), inferred from the JDBC URL — all 11 dialect databases plus HSQL / GBASE covered
 - Source locations come from the real call stack, jumping straight to the code line that executed the SQL (see "Jump to Source" below)
 - Collected data is only displayed inside the IDE on your machine — nothing is sent to any server; turning the switch off stops collection (attached capture points remain but stay idle)
 - Capture from the very start: with enhanced capture enabled and injection consented, the plugin writes `-javaagent` into the VM arguments before the Java run configuration launches, so the agent weaves in during the target JVM's premain phase — startup-phase SQL (framework init, data-source probes, Flyway / Liquibase migrations) goes straight into the enhanced channel instead of landing before the mount completes; nothing is injected when enhanced capture is off or consent hasn't been given, and any injection failure only falls back to the existing attach path and the console bridge, leaving the run configuration untouched
@@ -36,6 +36,8 @@ Stopping listening also stops in-app collection — no more capture-and-discard 
 Monitor console log output, recognize `Preparing:` and `Parameters:` lines, auto-restore to complete SQL. Hibernate (`Hibernate:` + `binding parameter`) and Spring JdbcTemplate log formats are also recognized — statements wrapped across multiple lines are collected in full, and brackets inside string literals don't cause premature closing. For `NamedParameterJdbcTemplate` single-line logs, named-parameter values that are Java collections are restored element-wise (`IN (:p)` with `param=[a]` becomes `IN ('a')`, so the square brackets never leak into the SQL literal), and logs interleaved by concurrent threads are restored in per-thread buckets so parameters never get misattached or lost — enabled by default.
 
 When both Hibernate `show_sql` and its logger print the same statement, the two paths are merged into one entry with the parameters kept together — no zero-parameter leftovers and no false "parameter count mismatch"; if a statement had no parameter-binding log captured at all, the preview says so and guides you to enable TRACE level (for JdbcTemplate it names `org.springframework.jdbc.core` specifically), and only genuinely incomplete parameters report a count mismatch.
+
+Projects that only print the statement line with no parameter lines to follow (JdbcTemplate on DEBUG only, Tomcat spawning a thread per request) still produce entries: after 1 second of silence the statement is judged complete and handed over, instead of staying stuck at "N lines scanned / 0 produced".
 
 ### Auto-Open Tool Window
 
@@ -119,7 +121,7 @@ Right-click a log entry → "Jump to Source". How the position is resolved depen
 
 Entries carrying mapper statement info can also right-click → "Jump to Mapper XML": the statement id is split into namespace and fragment id, the mapper XML is located through the project index, the namespace is verified and the jump lands on the statement node's start line; if the XML doesn't exist (annotation SQL, MP built-in statements) or locating fails, it falls back to "Jump to Java" with no capability loss. The log page and the History page share the same entries.
 
-Jumps rely only on the real captured position — no table-name guessing fallback, so a same-named table can never send you to an unrelated file. When a console-channel entry carries no position (no interceptor configured, or an outdated interceptor file), a guide dialog pops up with one-click "Open settings" or "Inject now"; triggering "Auto-inject source capture interceptor" in settings on a multi-module project first shows a dialog to pick the modules to inject (all selected by default). Statements like `SELECT 1` have no jump target and report as such.
+Jumps rely only on the real captured position — no table-name guessing fallback, so a same-named table can never send you to an unrelated file. When a console-channel entry carries no position (no interceptor configured, or an outdated interceptor file), a guide dialog pops up with one-click "Open settings" or "Inject now"; when the interceptor auto-injection meets an unrecognized project type (not a Spring Boot + MyBatis-Plus project), the dialog instead guides you to enable enhanced capture in one click (the enhanced channel does not depend on project type) rather than pointing you at a manual configuration sample (the `SqlSourceInterceptor` sample file remains in the plugin repository — the manual route is still there); triggering "Auto-inject source capture interceptor" in settings on a multi-module project first shows a dialog to pick the modules to inject (all selected by default). Statements like `SELECT 1` have no jump target and report as such.
 
 ### Dedup & Filter
 
@@ -130,6 +132,15 @@ Jumps rely only on the real captured position — no table-name guessing fallbac
 | Keyword filter | Remove log lines containing specified keywords |
 | List search | The search box matches SQL content, source file, `#number` (`#5` or `5` hits exactly entry 5) and time text (search what you see, matched against the displayed format); available on both the log page and the History page |
 | Copy timestamps | Select entries (multi-select works), right-click → "Copy timestamp" to copy plain time text line by line (no display brackets; the menu item shows the count for multi-select); grayed out while timestamp display is off |
+
+### SQL Suppression
+
+When keep-alive heartbeat SQL (such as `SELECT 1`) keeps flooding the list, you can suppress it out of the list:
+
+- Right-click an entry → "Suppress this SQL" to suppress in one click; multi-select works (different statements become separate rules, existing ones are skipped automatically). Suppression feeds back on three layers — existing rows vanish from the list immediately, a balloon notification can jump straight to the management dialog, and the management dialog shows live hit counts
+- The toolbar "Manage suppression rules" (funnel icon) and the right-click "Manage suppression rules…" open the same management dialog: a rule list (pattern summary / created at / blocked N times counter) plus a read-only SQL preview with syntax highlighting and line numbers on the right; add / delete / clear take effect instantly, and the dialog is resizable with its size remembered
+- Matching = exact match after whitespace normalization of the restored SQL (trailing semicolons are stripped automatically, so a rule pasted with `;` still matches), `SELECT 1` and `select  1` hit the same rule; an optional **structural match** (off by default, enabled per rule or all at once) matches by statement shape instead — the same shape with different parameter values is suppressed together
+- Rules apply globally at application level and are stored independently (not part of settings import/export), capped at 500 rules; entries still in the buffer reappear when a rule is deleted (entries already dropped from the queue cannot be restored)
 
 ### Focus Tabs
 

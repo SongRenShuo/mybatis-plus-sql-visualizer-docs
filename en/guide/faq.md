@@ -89,7 +89,7 @@ Two things to prepare for an intranet deployment: pre-provision the JDBC drivers
 
 ## Which database dialects are supported?
 
-9 dialects: MySQL, PostgreSQL, Oracle, SQL Server, H2, SQLite, MariaDB, DM (Dameng), KingBase. Pagination and upsert conflict clauses render per dialect differences.
+11 dialects: MySQL, PostgreSQL, Oracle, SQL Server, H2, SQLite, MariaDB, DM (Dameng), KingBase, OceanBase, openGauss. Pagination and upsert conflict clauses render per dialect differences.
 
 ## Shortcut conflicts?
 

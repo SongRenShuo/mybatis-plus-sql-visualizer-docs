@@ -55,6 +55,7 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 - JOIN resolution: association paths expand into real ON conditions via entity mappings; the JOIN diagram works too
 - Subqueries, aggregates, `UPDATE` / `DELETE` JPQL (incl. `@Modifying`) fully supported
 - Bare entity alias in `SELECT u` auto-expands to the column list (see [XML / HQL Dynamic SQL Preview](/en/features/xml-preview))
+- Alias-free HQL maps as well: bare properties like `WHERE stationCode = ?` convert to column names (`STATION_CODE = ?`), and embedded segments (e.g. `updateInfo.BE_DELETE`) occupying the qualifier position produce bare column names per the embedded mapping — matching real Hibernate semantics
 
 ## Inheritance-Chain Entity Column Resolution
 

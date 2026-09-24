@@ -16,7 +16,7 @@ mapper XML 与 Java SQL 注解字符串内 `Ctrl+Space` 补全。
 | 表名 | 根据项目实体类推断 |
 | 列名 | 按子句位置提示：FROM / JOIN 后提示表名，其余位置提示列名；`别名.` 前缀按对应实体提示列，注释参与检索 |
 | `#{}` 参数名 | 方法参数名（`@Param` 值优先，含 param1..N 兜底） |
-| XML 动态标签 | `<if>` / `<where>` / `<foreach>` 等 |
+| XML 动态标签 | `<if>` / `<where>` / `<foreach>` 等；`<foreach>` 的 `collection` 属性在方法只有一个集合参数又没写 `@Param` 时，候选列出 `collection` / `list` / `array` 快捷名（与 MyBatis 参数命名语义一致） |
 | OGNL 表达式 | `<if test="...">` 内的属性名 |
 
 ## 数据源字段补全

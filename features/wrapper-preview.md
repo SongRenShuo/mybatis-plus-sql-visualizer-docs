@@ -47,17 +47,20 @@
 - `?` 占位符替换为实际值
 - LIKE 参数自动拼百分号，`LIKE '%value%'`
 - 按字段类型决定是否加引号（数值类型不加引号，字符串加引号）
+- 配置数据源后可按数据源真实列集合校正列名（设置页「按数据源校正列名」，默认开）：实体字段名与库真实列名不一致（字段 `orderID`、列为 `order_id`）时，仅在能唯一确定是哪一列才改写，歧义保持原样；无可用数据源时与关闭该开关完全一致
 
-### 9 种方言分页渲染
+### 11 种方言分页渲染
 
 | 方言 | 分页语法 |
 |------|---------|
 | MySQL / MariaDB / SQLite / H2 | `LIMIT n OFFSET m` |
-| PostgreSQL | `LIMIT n OFFSET m` |
+| PostgreSQL / openGauss | `LIMIT n OFFSET m` |
+| OceanBase（MySQL 模式） | `LIMIT [offset,] n` |
 | Oracle | `ROWNUM` / `FETCH FIRST` |
 | SQL Server | `OFFSET m ROWS FETCH NEXT n ROWS ONLY` |
-| DM（达梦） | `LIMIT n OFFSET m` |
-| KingBase（金仓） | `LIMIT n OFFSET m` |
+| DM（达梦）/ KingBase（金仓） | `LIMIT n OFFSET m` |
+
+OceanBase 与 openGauss 的 upsert 冲突子句亦按各自真实形态渲染（openGauss 实为 `ON DUPLICATE KEY UPDATE` MySQL 形态，非 PG 的 `ON CONFLICT`）。
 
 ### JOIN 关系图
 

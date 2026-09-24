@@ -7,6 +7,10 @@ Complete preview of dynamic SQL in mapper XML — rendered per MyBatis semantics
 
 Gutter icon at `<select>` / `<update>` / `<delete>` / `<insert>` lines in mapper XML. Click to preview.
 
+### SQL Embedded in Generic XML
+
+Mapper XMLs from in-house frameworks (root element name not fixed, SQL written inside custom tags as CDATA or text — RFListPage and the like) preview as well: once the first text segment of a leaf tag starts with SELECT / INSERT / UPDATE / DELETE / WITH / REPLACE, the gutter icon appears, with no reliance on tag or root element names. When the carrier tag itself or an ancestor carries `type="hql"` / `"jpql"`, the HQL conversion pipeline handles it (alias-scoped property-to-column mapping applies as usual); if the entity can't be resolved or conversion fails it falls back to showing the original text. The right-click and `Alt+Shift+Q` entries plus the multi-statement picker behave the same as for mapper XML. Settings → "Interface & actions" has a master switch, "Detect SQL embedded in generic XML (leaf tag text/CDATA)", on by default.
+
 ## Supported Dynamic Tags
 
 | Tag | Description |
@@ -63,7 +67,11 @@ When a preview contains `${}` raw substitution, the panel shows a non-modal bann
 
 ## Parameter Panel Type Contract
 
-Parameters are typed by signature into categories (text / number / temporal / collection / object), and input rows show matching placeholders — number `42`, date `2026-01-01 12:00:00`, collection `[1, 2, 3]`, object `{"id": 1}`. Invalid number or temporal input gets a dimmed warning at the end of the row — a hint, not a gate; the value still goes into the SQL as typed. Mock placeholder values are dispatched per category. The "Empty parameter fill strategy" radio under "SQL Preview" in settings (NULL literal / empty string, default NULL) decides what a signature-typed parameter row yields when left empty.
+Parameters are typed by signature into categories (text / number / temporal / collection / object), and input rows show matching placeholders — number `42`, date `2026-01-01 12:00:00`, collection `[1, 2, 3]`, object `{"id": 1}`. Invalid number or temporal input gets a dimmed warning at the end of the row — a hint, not a gate; the value still goes into the SQL as typed. Mock placeholder values are dispatched per category; `BigInteger` counts as a number and `UUID` as text, and when a parameter's type can't be recognized you get a one-time notice before Execute / EXPLAIN (preview itself is not blocked).
+
+Collection parameters split into multiple values by signature: for a direct `IN (#{taskTypeList})` written without `<foreach>` on a `@Param("taskTypeList") List<String>` parameter, typing `PI,WP` renders `IN ('PI', 'WP')` instead of one lump value; quoting follows the element kind (`List<String>` quoted, `List<Long>` bare), and newlines or extra spaces between `IN` and `(` are recognized as an IN shape too.
+
+The "Empty parameter fill strategy" radio under "SQL Preview" in settings (Placeholder `?` (default) / NULL literal / empty string) decides what a signature-typed parameter row yields when left empty. The default keeps the `?` as a to-be-filled hint — NULL silently filters rows away (e.g. `amount >= NULL` never matches), which is easy to miss; switch to NULL / empty string when you need directly executable SQL.
 
 ## Execution Guards
 
@@ -71,7 +79,7 @@ Parameters are typed by signature into categories (text / number / temporal / co
 - **Execution timeout**: the "Execution timeout" setting (seconds, default 30, 0 = unlimited) cancels the statement before reporting the error, so hung queries no longer sit in loading forever
 - **Error localization**: execution errors are enriched with SQLState / driver error codes and the reported error position, and a "Locate failing statement" button jumps straight to that statement's start line in the preview source
 - **Disconnected DDL probing**: when the connection drops while a CREATE-type DDL runs, the plugin probes in the background whether the object now exists and reports honestly ("exists" / "not detected") — "couldn't check" is never dressed up as "didn't take effect"
-- **Multi-statement confirmation**: one-click execution of Log → SQL output runs a single statement directly, while multiple statements pop a candidate-selection overlay
+- **Multi-statement confirmation**: one-click execution of Log → SQL output runs a single statement directly, while multiple statements pop a candidate-selection overlay; stored-procedure scripts with custom delimiters (`DELIMITER $$`) are collected per delimiter instead of being split at every top-level `;`
 - **`\G` suffix stripping**: a MySQL CLI `\G` suffix (e.g. `SELECT 1\G`) pasted into the preview or console is stripped before execution; `\G` inside comments and string literals is untouched, history keeps the original text, and non-MySQL data sources are never stripped
 - **Sessions & data sources**: multiple same-named data sources no longer silently pick the first one; last-used memory matches by UUID exactly (renames don't break it), and shared consoles are identity-probed before reuse
 
@@ -96,6 +104,7 @@ Select text in a mapper XML or the preview editor and use the "SQL quick templat
 ## Render Annotations & Degradation Banners
 
 - In vertical layout, each UPDATE SET item gets a trailing "column (new) = expression" annotation (self-referencing forms like `a = a + 1` read as the new value as-is), making old-vs-new comparison easier
+- For multi-column dynamic INSERT, the preview labels each VALUES expression / SELECT projection with inlay hints showing the target column name — column-value misalignment is visible at a glance (suppressed when the projection already carries a same-name alias, or when it can't be judged statically)
 - The preview panel and the Log → SQL panel embed non-modal degradation banners saying which part wasn't restored, why, and what you can do about it — no more silent truncation
 
 ## HQL / JPQL Preview

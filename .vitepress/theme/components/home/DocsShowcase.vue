@@ -29,7 +29,7 @@ onMounted(() => {
           </h2>
 
           <p class="docs-showcase-description">
-            支持 9 种数据库方言分页渲染，参数自动替换为实际值，LIKE 自动拼百分号，动态条件面板勾选实时预览。
+            支持 11 种数据库方言分页渲染，参数自动替换为实际值，LIKE 自动拼百分号，动态条件面板勾选实时预览。
           </p>
 
           <div class="docs-showcase-points">
@@ -42,7 +42,7 @@ onMounted(() => {
               <div>
                 <div class="feature-point-title">多方言支持</div>
                 <div class="feature-point-description">
-                  MySQL / PostgreSQL / Oracle / SQLServer 等 9 种方言分页语法
+                  MySQL / PostgreSQL / Oracle / SQLServer 等 11 种方言分页语法
                 </div>
               </div>
             </div>
