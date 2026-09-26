@@ -1,6 +1,6 @@
 # MCP Server：给 AI Agent 的 SQL 工具
 
-从 2026.9.18 起，插件向 IDEA 内置 MCP Server 注册了十个工具，让 Claude Code、Cursor、JetBrains AI Assistant、Codex 这类外部 agent 能直接调用插件的 SQL 能力：渲染可执行 SQL、查表结构、拿执行计划。你在 IDE 里照常写代码，agent 在旁边干活，两边互不打扰。
+插件向 IDEA 内置 MCP Server 注册了十个工具，让 Claude Code、Cursor、JetBrains AI Assistant、Codex 这类外部 agent 能直接调用插件的 SQL 能力：渲染可执行 SQL、查表结构、拿执行计划。你在 IDE 里照常写代码，agent 在旁边干活，两边互不打扰。
 
 ![SQL Visualizer MCP Server：十个只读工具按 agent 工作流分组](/demo/mcp-overview.svg)
 
