@@ -33,6 +33,7 @@ Planned features and progress.
 - [x] Dialect auto-inference (follows the data source by default: enhanced-capture connection URL first, IDE data source next, MySQL fallback, with a status line showing the inference basis; a manual pick always wins)
 - [x] Preview reliability enhancements (cross-namespace include resolution, expression-support precheck annotations, `${}` injection confirmation gate, parameter type contract incl. signature-driven multi-value splitting of collection parameters, `${table}` quick templates)
 - [x] Execution guardrails (execution timeout setting, unbounded-write findings in the execution confirmation, `DELIMITER` custom-delimiter awareness, empty parameters defaulting to a `?` placeholder against NULL silently filtering rows)
+- [x] Preview panel remembers debug parameters (values filled for the same SQL are recalled automatically on the next preview; table-less plain-text / custom-DAO previews persist by a normalized SQL-text fingerprint, so parameters are no longer lost)
 
 ### Conversion & Completion
 
@@ -66,6 +67,8 @@ Planned features and progress.
 - [x] Enhanced capture at startup via premain (startup-phase SQL is no longer lost, no dynamic-attach warning; falls back to attach on failure)
 - [x] Log panel focus and navigation enhancements (method-level / request-level focus tabs, jump to mapper XML from log entries, execution errors shown inline with their entries)
 - [x] SQL log suppression (right-click one-click suppression of keep-alive heartbeat SQL; management dialog with rule list / hit counters / optional structural matching, capped at 500 rules, resizable dialog)
+- [x] Jump-landing fixes and JAR business-frame reverse allowlist (execution points inside in-house tool classes no longer climb to the caller line; business tool libraries running as dependency JARs are treated as business frames once their package prefixes are registered, with both prefix fields validated as you type and one-click fix)
+- [x] Full-width parenthesis tolerance in multi-statement splitting (IME-stray full-width parentheses count on the same depth stack as half-width ones, so mixed-pair statements are no longer split into two or swallow the statements after them)
 
 ### Platform & Ecosystem
 
@@ -79,7 +82,7 @@ Planned features and progress.
 - [x] One-click error / feedback reporting to the website feedback pool (Help menu, settings and the IDE's internal error dialog; optional stack attachment, 24-hour dedup; multi-select errors merge into one post with automatic staggered sending beyond the rate limit, and a rejected submission shows the server's exact reason for an in-place retry)
 - [x] Ten read-only MCP Server tools (an AI-agent tool surface: render SQL / schema context / EXPLAIN / log restore / rollback plan and more, gated per tool in settings; requires IDEA 2025.2+)
 
-> Everything above has shipped with v2026.9.8 ~ v2026.9.23; see the [changelog](./changelog) for version details. Highlights of v2026.9.23: the ten MCP Server tools, premain capture at startup, method-level / request-level focus tabs, one-click rollback SQL, dialect auto-inference, cross-namespace include resolution, and more. The latest batch after that (SQL log suppression, SQL embedded in generic XML, alias-free HQL mapping, the OceanBase / openGauss dialects, empty parameters defaulting to a `?` placeholder, etc.) has landed on master and will ship with the next release.
+> Everything above has shipped with v2026.9.8 ~ v2026.9.23; see the [changelog](./changelog) for version details. Highlights of v2026.9.23: the ten MCP Server tools, premain capture at startup, method-level / request-level focus tabs, one-click rollback SQL, dialect auto-inference, cross-namespace include resolution, and more. The latest batch after that (SQL log suppression, SQL embedded in generic XML, alias-free HQL mapping, the OceanBase / openGauss dialects, empty parameters defaulting to a `?` placeholder, JAR business-frame registration and jump-landing fixes, etc.) has landed on master and will ship with the next release; full-width parenthesis tolerance in statement splitting and the preview parameter memory extension have landed on the dev branch first and will ship with a later release.
 
 ## Planned
 
