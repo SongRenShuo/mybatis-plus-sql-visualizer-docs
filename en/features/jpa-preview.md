@@ -57,6 +57,15 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 - Bare entity alias in `SELECT u` auto-expands to the column list (see [XML / HQL Dynamic SQL Preview](/en/features/xml-preview))
 - Alias-free HQL maps as well: bare properties like `WHERE stationCode = ?` convert to column names (`STATION_CODE = ?`), and embedded segments (e.g. `updateInfo.BE_DELETE`) occupying the qualifier position produce bare column names per the embedded mapping — matching real Hibernate semantics
 
+## Embedded Value Objects (@Embedded)
+
+Fields of embedded value objects (`@Embedded` / `@Embeddable` / `@EmbeddedId`) are flattened into the owner table's columns for preview:
+
+- Nested `@AttributeOverride` supports the JPA-spec dot-path form (`name="zipcode.zip"`) — dot paths take priority with bare-name fallback, and class-level override keys propagate down the nesting chain
+- Spring Data shapes: a bare `@Embedded` flattens column names under its `prefix`, and the `@Embedded.Nullable` / `@Embedded.Empty` shortcut annotations are recognized (multiple embeds of the same value object expand under their own prefixes, no collisions)
+- Camel-case embedded paths in derived method names (`findByUpdateInfoCreatedTimeAfter` and the like) resolve to the real flattened column — WHERE / ORDER BY (including `Sort.by` literal properties) no longer produce pseudo columns like `update_info_created_time` (full SELECT expansion and the `@Query` JPQL path were already correct)
+- Mixed-annotation entities (`@TableName` alongside jakarta embed annotations) flatten into owner-table columns in Wrapper preview, batch templates and CRUD generation as well
+
 ## Inheritance-Chain Entity Column Resolution
 
 When an entity extends a parent class (including abstract classes), HQL / JPQL previews still resolve the full column list — parent-mapped columns are included, and resolution no longer degrades to `x.*` just because the column list came back empty; custom entity names from `@Entity(name = "...")` resolve back to the entity class as well.

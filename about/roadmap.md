@@ -18,6 +18,7 @@ next: false
 - [x] HQL / JPQL / JPA Criteria 预览，HQL `SELECT 实体别名` 自动展开为列清单，无别名形态裸属性转列名
 - [x] `.hbm.xml` 命名查询预览（`<query>` / `<sql-query>`，`createNamedQuery` 自动回落 hbm 定义）
 - [x] JPA Repository CRUD 写路径预览（save / findById / findAllById / delete 家族 / flush 语义），派生查询深化（六前缀、Pageable / Sort、Page / Slice / Stream 返回），Specification 与 QueryByExample
+- [x] 嵌入值对象（@Embedded / @Embeddable / @EmbeddedId）字段按宿主表列展平参与预览（嵌套点路径覆写、Spring Data prefix 与捷径注解、派生查询嵌入段驼峰路径、MyBatis-Plus 混合注解实体）
 - [x] 其他 ORM 链式框架预览第一批：xbatis、Easy-Query、MyBatis Dynamic SQL、Querydsl、Spring Data JDBC / R2DBC
 - [x] 自研 DAO 字符串 SQL 方法定义锚点（方法名行 gutter 图标，快捷键在方法定义处生效）
 - [x] gutter 锚点左键直接预览、右键反查最近执行记录
@@ -34,6 +35,13 @@ next: false
 - [x] 预览可靠性增强（跨命名空间 include 解析、动态条件支持面预检标注、`${}` 注入确认闸门、参数面板类型契约（含集合参数按签名拆分多值渲染）、`${table}` 快捷模板）
 - [x] 执行护栏（执行超时设置、执行确认的无界写发现清单、`DELIMITER` 自定义界符感知、空参数默认 `?` 占位防 NULL 静默过滤行）
 - [x] 预览参数面板记忆调试参数（同一 SQL 再次预览自动召回上次填写值；无表名的纯文本 / 自定义 DAO 预览按 SQL 文本规范化指纹持久化，参数不再丢失）
+- [x] 预览参数预设（当前填好的参数另存为预设一键切换，参数值与 OGNL 勾选态整组还原，管理对话框支持另存 / 重命名 / 删除，预设行可折叠）
+- [x] mapper XML 语法高亮注入（语句文本 SQL 关键字着色、`#{}`/`${}` 参数占位底色、`test`/`value` 表达式着色，`#`/`$` 敲键自动闭合 `{}`，resultMap 列名补全，与平台注入 / CodeHelperPro 共存自动让位，设置页可关）
+- [x] gutter SQL 图标分组开关（按语句来源分组控制显隐：mapper XML / 注解 SQL / JPA·HQL / JdbcTemplate 等，默认全开）
+- [x] IPage 分页拦截器模拟（带 IPage 形参的查询按方言在 SELECT 尾追 LIMIT，并同步产出 COUNT 包裹语句；手写 LIMIT 不重复追加）
+- [x] EXPLAIN 支持面扩至 11 种方言与结果结构化渲染（Oracle / SQL Server 接入；MySQL 表格 / PostgreSQL JSON 计划树在预览面板内直接渲染成表格 / 可折叠树，失败自动回退原生控制台）
+- [x] 动态 SQL 条件求值探镜（XML 条件行旁标注本轮预览的求值结果——真 / 假 / 未求值，纯只读探针）
+- [x] 预览交互细节（列信息表恢复 Ctrl+A 全选、快捷模板「抽样」行数可配置）
 
 ### 转换与补全
 
@@ -43,6 +51,7 @@ next: false
 - [x] 批量操作参数面板（列级勾选、批量导入）
 - [x] 实体类 / 数据库表右键生成 CRUD SQL（INSERT / UPDATE / SELECT / DELETE 候选浮层选定后进预览；自增主键默认不勾、`@Version` 列乐观锁自动追加、逻辑删除实体出对应变体；SQL Server 身份列 INSERT 自动包 `SET IDENTITY_INSERT` 可直接回放；Community 版仅实体侧入口）
 - [x] 预览一键生成回滚 SQL（对当前预览的 INSERT / UPDATE / DELETE 生成对应逆向 SQL——INSERT 按主键删、UPDATE 还原原值、DELETE 按 WHERE 重插，弹窗展示一键复制）
+- [x] CRUD / 回滚 SQL 可移植导出（「更多」菜单导出当前语句与回滚链串联产物，逐条注释标注方言 / 种类 / UPSERT 形态，走 CSV / TSV / TXT 三格式）
 
 ### 日志与历史
 
@@ -69,6 +78,13 @@ next: false
 - [x] SQL 日志屏蔽（右键一键屏蔽保活心跳类 SQL，管理对话框规则列表 / 命中计数 / 可选结构匹配，上限 500 条，对话框可拖拽缩放）
 - [x] 源码跳转落点双修复与 JAR 业务帧反向名单（自研工具类里的执行点不再上顶到上层调用方行；以依赖 JAR 形态运行的业务工具库登记包名前缀后按业务帧对待，与跳过前缀两栏随输入校验、可一键修复）
 - [x] 多语句切分全角括号容错（IME 误输的全角括号与半角括号同栈计数，混对语句不再误切成多条或吞并后续语句）
+- [x] 历史条目钉住与正则检索（钉住防淘汰；`regex:` 前缀正则匹配 SQL / 摘要 / 源文件，非法正则回退子串）
+- [x] 历史 / 日志导出（右键导出 CSV / TSV / 纯文本，后台写盘）
+- [x] ShardingSphere 双段日志捕获（`Logic SQL` 主条目 + `Actual SQL` 折叠附注的第四解析器，默认开）
+- [x] 历史 SQL 对比（右键恰两条逐行差异 + 结构指纹等价判定，IDEA 原生 Diff 窗口呈现）
+- [x] N+1 同模板计数徽章（同结构模板 ≥3 条显示「×N 同模板」徽章，右键聚焦该模板全部条目）
+- [x] 数据源上下文角标（条目角标升级为「方言 · 库名@host」，从 JDBC URL 解析，凭据信息不入任何展示）
+- [x] 日志转 SQL 剪贴板读取按钮（一键贴入并立即转换）
 
 ### 平台与生态
 
@@ -81,8 +97,10 @@ next: false
 - [x] 插件更名 SQL Visualizer（MyBatis-Plus / MPJ / JPA / Hibernate 全面支持不变）
 - [x] 错误 / 反馈一键上报官网需求池（帮助菜单、设置页、IDE 内部错误对话框三入口，异常堆栈附件可选，24 小时去重；多选错误合并为一帖、超限条目自动错峰补发，提交失败可见服务端原因并可原地重试）
 - [x] MCP Server 十个只读工具（AI agent 工具面：渲染 SQL / schema 上下文 / EXPLAIN / 日志还原 / 回滚预案等，设置页逐项门控；需 IDEA 2025.2+）
+- [x] MCP 第十一工具 sqlv_history_search（AI agent 检索本地 SQL 历史：关键词 / 正则 / 时间范围 / 来源文件过滤，只读不执行）
+- [x] 设置页与引导可发现性打磨（MCP 设置页就绪横幅、SQL 日志空面板补「增强捕获」引导、帧过滤前缀入口指向说明、设置首页能力矩阵、首次引导通知一键直达预览）
 
-> 以上功能已随 v2026.9.8 ~ v2026.9.23 发行，版本明细见[更新日志](./changelog)。v2026.9.23 代表功能：MCP Server 十工具、增强捕获启动即捕获（premain）、方法级 / 请求级聚焦页签、预览一键回滚 SQL、方言智能推断、跨命名空间 include 解析等。其后最新一批能力（SQL 日志屏蔽、通用 XML 内嵌 SQL 识别、无别名 HQL 映射、信创方言 OceanBase / openGauss、空参数默认 `?` 占位、JAR 业务帧登记与跳转落点修复等）已合入 master，将随下一版发行；多语句全角括号容错与预览参数记忆扩展两项已先行合入 dev 分支，将随后续版本发行。
+> 以上功能已随 v2026.9.8 ~ v2026.9.23 发行，版本明细见[更新日志](./changelog)。v2026.9.23 代表功能：MCP Server 十工具、增强捕获启动即捕获（premain）、方法级 / 请求级聚焦页签、预览一键回滚 SQL、方言智能推断、跨命名空间 include 解析等。其后一批能力（嵌入值对象 @Embedded 识别补全、SQL 日志屏蔽、通用 XML 内嵌 SQL 识别、无别名 HQL 映射、信创方言 OceanBase / openGauss、空参数默认 `?` 占位、JAR 业务帧登记与跳转落点修复等）已合入 master，将随下一版 v2026.10.6 发行；预览参数预设、mapper XML 语法高亮、EXPLAIN 全方言支持与结构化渲染、IPage 分页模拟、ShardingSphere 日志捕获、MCP 历史检索工具、历史对比与导出、多语句全角括号容错、预览参数记忆等已先行合入 dev 分支，将随后续版本发行。
 
 ## 规划中
 

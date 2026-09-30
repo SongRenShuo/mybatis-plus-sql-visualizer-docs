@@ -57,6 +57,15 @@
 - `SELECT u` 裸实体别名自动展开为列清单（详见 [XML / HQL 动态 SQL 预览](./xml-preview)）
 - 无别名形态的 HQL 同样映射：`WHERE stationCode = ?` 这类裸属性转列名（`STATION_CODE = ?`），嵌入段（如 `updateInfo.BE_DELETE`）占限定符位时按嵌入映射产出裸列名，与 Hibernate 真实语义一致
 
+## 嵌入值对象（@Embedded）
+
+嵌入值对象字段（`@Embedded` / `@Embeddable` / `@EmbeddedId`）按宿主表列展平参与预览：
+
+- 嵌套嵌入的 `@AttributeOverride` 支持 JPA 规范的点路径覆写（`name="zipcode.zip"`）——点路径优先、裸名兜底，类级覆写键随嵌套链传递
+- Spring Data 形态：裸 `@Embedded` 按 `prefix` 前缀展平列名，`@Embedded.Nullable` / `@Embedded.Empty` 捷径注解正确识别（同一值对象多处嵌入各按前缀展开，防撞车）
+- 派生查询方法名里的嵌入段驼峰路径（`findByUpdateInfoCreatedTimeAfter` 这类）解析到真实展平列——WHERE / ORDER BY（含 `Sort.by` 字面量属性）不再产出 `update_info_created_time` 这类伪列（SELECT 全列展开与 `@Query` JPQL 链本就正确）
+- MyBatis-Plus 与 jakarta 嵌入注解共存的混合注解实体（`@TableName` + `@Embedded`）在 Wrapper 预览、批量模板与 CRUD 生成里同样展平为宿主表列，不再出现值对象伪列
+
 ## 继承链实体列解析
 
 实体继承父类（含抽象类）时，HQL / JPQL 预览照常解析出完整列清单——父类映射的列一并纳入，不会因列清单暂时为空而降级为 `x.*`；`@Entity(name = "...")` 自定义实体名同样能反查到实体类。
