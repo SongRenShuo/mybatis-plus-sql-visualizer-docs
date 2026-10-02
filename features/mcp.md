@@ -30,7 +30,7 @@
 | 工具 | 输入 | 产出 |
 |------|------|------|
 | `sqlv_schema_context` | `tables` 表名清单（可选 `dataSource`、`maxTables`，默认最多 8 张、上限 20） | 数据源真实的表列结构、类型与注释，紧凑上下文 |
-| `sqlv_explain` | `selectSql` 单条 SELECT（可选 `dataSource`；`dialect` 可省略，按数据源 URL 自动识别） | 七方言 EXPLAIN 执行计划文本，附驱动 notices 与 index hints 建议 |
+| `sqlv_explain` | `selectSql` 单条 SELECT（可选 `dataSource`；`dialect` 可省略，按数据源 URL 自动识别） | 九方言 EXPLAIN 执行计划文本，附驱动 notices 与 index hints 建议 |
 
 ### 执行前把关
 

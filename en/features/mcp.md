@@ -30,7 +30,7 @@ Grouped the way an agent works: get the SQL first, then understand the database,
 | Tool | Input | Output |
 |------|-------|--------|
 | `sqlv_schema_context` | `tables`, a list of table names (optional `dataSource`, `maxTables` — default 8, cap 20) | Compact context of the data source's real columns, types and comments |
-| `sqlv_explain` | `selectSql`, a single SELECT (optional `dataSource`; omit `dialect` to auto-detect from the data source URL) | EXPLAIN plan text for seven dialects, with driver notices and index hints |
+| `sqlv_explain` | `selectSql`, a single SELECT (optional `dataSource`; omit `dialect` to auto-detect from the data source URL) | EXPLAIN plan text for nine dialects, with driver notices and index hints |
 
 ### Check Before Execution
 
