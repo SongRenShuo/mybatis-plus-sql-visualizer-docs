@@ -10,7 +10,7 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| Database Dialect | Auto-infer | Pagination / upsert clauses render per dialect; defaults to "Auto-infer", can be pinned manually, and leaving it empty at project level follows the global setting. See [Wrapper → SQL Preview · Dialect pagination](/en/features/wrapper-preview#11-dialect-pagination) |
+| Database Dialect | Auto-infer | Pagination / upsert clauses render per dialect; defaults to "Auto-infer", can be pinned manually, and leaving it empty at project level follows the global setting. See [Wrapper → SQL Preview · Dialect pagination](/en/features/wrapper-preview#_11-dialect-pagination) |
 | Replace `?` Placeholders | On | Off = variables also render as `?` |
 | Formatted Output | On | Multi-line indent (Off = single line) |
 | Vertical Layout Column Tags | On | In vertical layout, each INSERT value line end shows a pairing `-- column` annotation (the vertical-layout button tooltip likewise notes that this can be turned off here) |
