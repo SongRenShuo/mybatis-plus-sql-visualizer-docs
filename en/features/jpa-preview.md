@@ -1,4 +1,5 @@
 # JPA / Hibernate SQL Preview
+
 <GifPlayer src="/demo/jpa-preview.gif" alt="JPA / Hibernate SQL Preview Demo" />
 
 Static SQL preview for Spring Data JPA and Hibernate projects — Repository methods, JPQL / HQL, Criteria chains, `.hbm.xml` mappings. No Spring context, no database connection: click the gutter icon next to the line and get the SQL.
@@ -30,7 +31,7 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 | `findAllById` | primary-key `IN (?, ?, ...)` expansion |
 | `findAll` / `count` | full SELECT / `SELECT COUNT(*)` |
 | `deleteById` / `delete` / `deleteAll` | per-entity `em.remove` semantics (select-then-delete, not bulk DELETE) |
-| `deleteAllInBatch` variants | the one bulk DELETE shape (no cascading, no callbacks) |
+| `deleteAllInBatch` and variants | the one bulk DELETE shape (no cascading, no callbacks) |
 | `flush` | annotated form (dirty-check batch flush, no standalone SQL) |
 | `getReferenceById` | annotated "no query" (lazy proxy sends no SQL by default) |
 
@@ -59,18 +60,22 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 
 ## Embedded Value Objects (@Embedded)
 
-Fields of embedded value objects (`@Embedded` / `@Embeddable` / `@EmbeddedId`) are flattened into the owner table's columns for preview:
+Fields of embedded value objects (`@Embedded` / `@Embeddable` / `@EmbeddedId`) are flattened into the owner table's columns and take part in the preview, and camel-case embedded paths in derived method names (`findByUpdateInfoCreatedTimeAfter` and the like) also resolve to the real flattened column — WHERE / ORDER BY no longer produce pseudo columns like `update_info_created_time`.
 
+::: details Flattening rules in detail (When to read: an embedded field's column name doesn't match expectations)
 - Nested `@AttributeOverride` supports the JPA-spec dot-path form (`name="zipcode.zip"`) — dot paths take priority with bare-name fallback, and class-level override keys propagate down the nesting chain
 - Spring Data shapes: a bare `@Embedded` flattens column names under its `prefix`, and the `@Embedded.Nullable` / `@Embedded.Empty` shortcut annotations are recognized (multiple embeds of the same value object expand under their own prefixes, no collisions)
-- Camel-case embedded paths in derived method names (`findByUpdateInfoCreatedTimeAfter` and the like) resolve to the real flattened column — WHERE / ORDER BY (including `Sort.by` literal properties) no longer produce pseudo columns like `update_info_created_time` (full SELECT expansion and the `@Query` JPQL path were already correct)
-- Mixed-annotation entities (`@TableName` alongside jakarta embed annotations) flatten into owner-table columns in Wrapper preview, batch templates and CRUD generation as well
+- Embedded-segment resolution for derived queries covers WHERE / ORDER BY (including `Sort.by` literal properties); full SELECT expansion and the `@Query` JPQL path were already correct
+- Mixed-annotation entities with MyBatis-Plus and jakarta embed annotations coexisting (`@TableName` + `@Embedded`) flatten into owner-table columns in Wrapper preview, batch templates and CRUD generation as well — value-object pseudo columns are gone there too
+:::
 
 ## Inheritance-Chain Entity Column Resolution
 
 When an entity extends a parent class (including abstract classes), HQL / JPQL previews still resolve the full column list — parent-mapped columns are included, and resolution no longer degrades to `x.*` just because the column list came back empty; custom entity names from `@Entity(name = "...")` resolve back to the entity class as well.
 
+::: details Inheritance strategies and degradation notes (When to read: JOINED / TABLE_PER_CLASS mappings or a degradation comment shows up)
 Under `@Inheritance(JOINED)` / `TABLE_PER_CLASS`, parent fields actually live in the parent table or per-class tables; the preview merges the column list on a single-table basis and attaches a boundary note. When an entity truly can't be resolved, the degradation comment comes in two flavors — "entity unresolvable" and "entity resolvable but column list empty (check the parent mappings along the inheritance chain)" — so diagnosis points in the right direction.
+:::
 
 ## hbm Named Queries
 
