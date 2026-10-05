@@ -11,7 +11,9 @@ Planned features and progress.
 
 ## Completed
 
-### Preview & Diagnostics
+Completed capabilities are grouped by module — click a title to expand.
+
+::: details Preview & Diagnostics (30)
 
 - [x] Wrapper → SQL static parsing (Lambda / String / MPJ JOIN / Kotlin)
 - [x] XML / annotation dynamic SQL preview (OGNL panel, `maintainPage` XML)
@@ -43,8 +45,9 @@ Planned features and progress.
 - [x] Dynamic SQL condition-evaluation probe (each XML condition line annotated with this round's evaluation — true / false / unevaluated; read-only)
 - [x] Preview interaction details (Ctrl+A select-all restored in the column info table, configurable row count for the `${table}` sampling quick template)
 - [x] Preview panel data-source binding indicator (a persistent gray line in the parameter area showing the bound data source in three states — no data source bound (run a query in the console once to bind) / associated (last used): name / bound: name; it mirrors the data source actually used by "Execute SQL" and EXPLAIN, remembers the last-used source per project across restarts, and refreshes instantly once an execution attaches the console)
+:::
 
-### Conversion & Completion
+::: details Conversion & Completion (7)
 
 - [x] SQL → Java reverse conversion (AUTO / QueryWrapper / Lambda / Wrappers / MPJ, multi-table JOIN)
 - [x] SQL code completion (table columns, comment hints, `collection` shortcut-alias candidates for `<foreach>`)
@@ -53,8 +56,9 @@ Planned features and progress.
 - [x] Right-click CRUD SQL generation from entity classes / database tables (candidate popup for INSERT / UPDATE / SELECT / DELETE, then into the preview; auto-increment keys unchecked by default, `@Version` optimistic-lock column appended automatically, logic-delete entities get a dedicated variant; SQL Server identity-column INSERTs auto-wrapped in `SET IDENTITY_INSERT` for direct replay; Community has entity-side entries only)
 - [x] One-click rollback SQL from the preview (generates the inverse SQL for the INSERT / UPDATE / DELETE being previewed — INSERT to DELETE by primary key, UPDATE restoring original values, DELETE re-inserting by WHERE; shown in a dialog with one-click copy)
 - [x] Portable export of CRUD / rollback SQL (export the current statements plus the rollback chain from the "More" menu, each statement annotated in a comment with dialect / kind / UPSERT form, through the CSV / TSV / TXT formats)
+:::
 
-### Log & History
+::: details Log & History (30)
 
 - [x] SQL log tool window (MyBatis / Hibernate / JdbcTemplate capture incl. multi-line statements and duplicate dual-path print merging, Log → SQL batch restore)
 - [x] Duration display & slow-query detection (threshold coloring, sort by duration)
@@ -86,8 +90,9 @@ Planned features and progress.
 - [x] N+1 same-template count badge (templates appearing ≥3 times get an "×N same template" badge, right-click to focus all entries of that template)
 - [x] Data-source context badge (entry badges upgraded to "dialect · db@host", parsed from the JDBC URL; credentials never surface anywhere)
 - [x] Clipboard read button in Log → SQL (paste in and convert in one click)
+:::
 
-### Platform & Ecosystem
+::: details Platform & Ecosystem (11)
 
 - [x] Native Database console execution in SQL → Java panel (Ultimate)
 - [x] SQL sharing (Markdown / HTML / executable SQL)
@@ -100,6 +105,7 @@ Planned features and progress.
 - [x] Ten read-only MCP Server tools (an AI-agent tool surface: render SQL / schema context / EXPLAIN / log restore / rollback plan and more, gated per tool in settings; requires IDEA 2025.2+)
 - [x] Eleventh MCP tool sqlv_history_search (lets AI agents search the local SQL history: keyword / regex / time range / source-file filters, read-only, no execution)
 - [x] Settings & onboarding discoverability polish (a readiness banner on the MCP settings page, an "Enhanced Capture" hint in the empty SQL log panel, a pointer line for the frame-filter prefix entry, a capability matrix on the settings landing page, and a one-click action on the first-run notification)
+:::
 
 > Everything above has shipped with v2026.9.8 ~ v2026.9.23; see the [changelog](./changelog) for version details. Highlights of v2026.9.23: the ten MCP Server tools, premain capture at startup, method-level / request-level focus tabs, one-click rollback SQL, dialect auto-inference, cross-namespace include resolution, and more. The next batch (embedded value objects (@Embedded) support, SQL log suppression, SQL embedded in generic XML, alias-free HQL mapping, the OceanBase / openGauss dialects, empty parameters defaulting to a `?` placeholder, JAR business-frame registration and jump-landing fixes, etc.) has landed on master and will ship with v2026.10.6; preview parameter presets, mapper XML syntax highlighting, full-dialect EXPLAIN with structured rendering, IPage pagination simulation, ShardingSphere log capture, the MCP history-search tool, history diff & export, full-width parenthesis tolerance, the preview data-source binding indicator, preview parameter memory and more have landed on the dev branch first and will ship with a later release.
 

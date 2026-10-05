@@ -11,7 +11,9 @@ next: false
 
 ## 已完成
 
-### 预览与诊断
+已完成能力按模块分组，点标题展开查看明细。
+
+::: details 预览与诊断（30 项）
 
 - [x] Wrapper → SQL 静态解析（Lambda / 字符串 / MPJ 联表 / Kotlin）
 - [x] XML / 注解动态 SQL 预览（OGNL 面板、`maintainPage` XML）
@@ -43,8 +45,9 @@ next: false
 - [x] 动态 SQL 条件求值探镜（XML 条件行旁标注本轮预览的求值结果——真 / 假 / 未求值，纯只读探针）
 - [x] 预览交互细节（列信息表恢复 Ctrl+A 全选、快捷模板「抽样」行数可配置）
 - [x] 预览面板数据源绑定指示行（参数区常驻灰字显示当前绑定的数据源，三态——未绑定数据源（在控制台执行一次查询即可绑定）/ 关联（上次使用）：数据源名 / 已绑定：数据源名；绑定与「执行 SQL」「执行计划」实际使用的数据源同源，最近使用数据源按项目记忆跨重启有效，执行挂载数据源后即时刷新）
+:::
 
-### 转换与补全
+::: details 转换与补全（7 项）
 
 - [x] SQL → Java 反向转换（AUTO / QueryWrapper / Lambda / Wrappers / MPJ 五形态，多表 JOIN）
 - [x] SQL 代码补全（表列名、注释提示，`<foreach>` 的 `collection` 快捷别名候选）
@@ -53,8 +56,9 @@ next: false
 - [x] 实体类 / 数据库表右键生成 CRUD SQL（INSERT / UPDATE / SELECT / DELETE 候选浮层选定后进预览；自增主键默认不勾、`@Version` 列乐观锁自动追加、逻辑删除实体出对应变体；SQL Server 身份列 INSERT 自动包 `SET IDENTITY_INSERT` 可直接回放；Community 版仅实体侧入口）
 - [x] 预览一键生成回滚 SQL（对当前预览的 INSERT / UPDATE / DELETE 生成对应逆向 SQL——INSERT 按主键删、UPDATE 还原原值、DELETE 按 WHERE 重插，弹窗展示一键复制）
 - [x] CRUD / 回滚 SQL 可移植导出（「更多」菜单导出当前语句与回滚链串联产物，逐条注释标注方言 / 种类 / UPSERT 形态，走 CSV / TSV / TXT 三格式）
+:::
 
-### 日志与历史
+::: details 日志与历史（30 项）
 
 - [x] SQL 日志工具窗口（MyBatis / Hibernate / JdbcTemplate 日志捕获含多行语句与双路打印合并，Log → SQL 批量还原）
 - [x] 耗时显示与慢查询检测（阈值着色、按耗时排序）
@@ -86,8 +90,9 @@ next: false
 - [x] N+1 同模板计数徽章（同结构模板 ≥3 条显示「×N 同模板」徽章，右键聚焦该模板全部条目）
 - [x] 数据源上下文角标（条目角标升级为「方言 · 库名@host」，从 JDBC URL 解析，凭据信息不入任何展示）
 - [x] 日志转 SQL 剪贴板读取按钮（一键贴入并立即转换）
+:::
 
-### 平台与生态
+::: details 平台与生态（11 项）
 
 - [x] SQL → Java 面板原生 Database 控制台执行（Ultimate）
 - [x] SQL 分享（Markdown / HTML / 可执行 SQL 三格式）
@@ -100,6 +105,7 @@ next: false
 - [x] MCP Server 十个只读工具（AI agent 工具面：渲染 SQL / schema 上下文 / EXPLAIN / 日志还原 / 回滚预案等，设置页逐项门控；需 IDEA 2025.2+）
 - [x] MCP 第十一工具 sqlv_history_search（AI agent 检索本地 SQL 历史：关键词 / 正则 / 时间范围 / 来源文件过滤，只读不执行）
 - [x] 设置页与引导可发现性打磨（MCP 设置页就绪横幅、SQL 日志空面板补「增强捕获」引导、帧过滤前缀入口指向说明、设置首页能力矩阵、首次引导通知一键直达预览）
+:::
 
 > 以上功能已随 v2026.9.8 ~ v2026.9.23 发行，版本明细见[更新日志](./changelog)。v2026.9.23 代表功能：MCP Server 十工具、增强捕获启动即捕获（premain）、方法级 / 请求级聚焦页签、预览一键回滚 SQL、方言智能推断、跨命名空间 include 解析等。其后一批能力（嵌入值对象 @Embedded 识别补全、SQL 日志屏蔽、通用 XML 内嵌 SQL 识别、无别名 HQL 映射、信创方言 OceanBase / openGauss、空参数默认 `?` 占位、JAR 业务帧登记与跳转落点修复等）已合入 master，将随下一版 v2026.10.6 发行；预览参数预设、mapper XML 语法高亮、EXPLAIN 全方言支持与结构化渲染、IPage 分页模拟、ShardingSphere 日志捕获、MCP 历史检索工具、历史对比与导出、多语句全角括号容错、预览数据源绑定指示行、预览参数记忆等已先行合入 dev 分支，将随后续版本发行。
 
