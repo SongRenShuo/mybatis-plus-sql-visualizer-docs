@@ -93,12 +93,14 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 
 | Dialect | Rendered Form | Verification |
 |---------|---------------|--------------|
-| MySQL / MariaDB | `EXPLAIN FORMAT=JSON <sql>` | verified on real DB |
+| MySQL / MariaDB | `EXPLAIN <sql>` (native table rows) | verified on real DB |
 | PostgreSQL | `EXPLAIN (FORMAT JSON, VERBOSE) <sql>` | verified on real DB |
 | KingBase | `EXPLAIN (FORMAT JSON) <sql>` | verified on real DB |
 | DM (Dameng) | `EXPLAIN <sql>` | verified on real DB |
 | H2 | `EXPLAIN PLAN FOR <sql>` | engine-level unit tests |
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | engine-level unit tests |
+| OceanBase (MySQL mode) | `EXPLAIN <sql>` (table rows) | verified against official docs (real-DB check pending) |
+| openGauss | `EXPLAIN (FORMAT JSON) <sql>` | verified on real DB |
 | Oracle / SQL Server | not supported yet; clicking shows a fallback hint | — |
 
 Like "Execute SQL", EXPLAIN requires a configured data source (Ultimate's Database tool window); without one you'll be asked to configure it first.

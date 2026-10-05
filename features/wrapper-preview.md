@@ -94,12 +94,14 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 
 | 方言 | 渲染形态 | 验证程度 |
 |------|----------|----------|
-| MySQL / MariaDB | `EXPLAIN FORMAT=JSON <sql>` | 真机通过 |
+| MySQL / MariaDB | `EXPLAIN <sql>`（原生表格行） | 真机通过 |
 | PostgreSQL | `EXPLAIN (FORMAT JSON, VERBOSE) <sql>` | 真机通过 |
 | KingBase（金仓） | `EXPLAIN (FORMAT JSON) <sql>` | 真机通过 |
 | DM（达梦） | `EXPLAIN <sql>` | 真机通过 |
 | H2 | `EXPLAIN PLAN FOR <sql>` | 引擎级单测 |
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | 引擎级单测 |
+| OceanBase（MySQL 模式） | `EXPLAIN <sql>`（表格行） | 官方文档级验证（真机留账） |
+| openGauss | `EXPLAIN (FORMAT JSON) <sql>` | 真机通过 |
 | Oracle / SQL Server | 暂不支持，点击后提示降级 | — |
 
 「执行计划」与「执行 SQL」一样依赖已配置的数据源（Ultimate 的 Database 工具窗），未配置时会提示先配置。
