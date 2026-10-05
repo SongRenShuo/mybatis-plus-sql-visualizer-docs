@@ -9,7 +9,7 @@ next:
 
 ## Author
 
-**SongRenShuo** — Independent developer focused on IntelliJ Platform plugins and Java ecosystem tools.
+[**SongRenShuo**](https://gitee.com/songrenshuo) — Independent developer focused on IntelliJ Platform plugins and Java ecosystem tools.
 
 ## Contact
 

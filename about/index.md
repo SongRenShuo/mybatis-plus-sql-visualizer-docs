@@ -9,7 +9,7 @@ next:
 
 ## 作者
 
-**SongRenShuo** — 独立开发者，专注于 IntelliJ 平台插件与 Java 生态工具。
+[**SongRenShuo**](https://gitee.com/songrenshuo) — 独立开发者，专注于 IntelliJ 平台插件与 Java 生态工具。
 
 ## 联系方式
 
