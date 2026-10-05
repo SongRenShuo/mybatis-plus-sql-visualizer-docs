@@ -53,11 +53,17 @@ JPA 派生查询的第一批尚未包含 `findAllById` 这类 IN 展开形态，
 
 ## gutter 右键「最近执行记录」是空的？
 
-「最近执行记录」从本次会话捕获的日志里反查该位置附近的执行，需要日志捕获处于开启状态，且此前已捕获过该位置的执行。新会话刚启动、还没跑过 SQL 时菜单项为空，属正常现象。日志一直捕获不到时，先按上一节的步骤排查。
+「最近执行记录」从本次会话捕获的日志里反查该位置附近的执行，需要日志捕获处于开启状态，且此前已捕获过该位置的执行。
+
+新会话刚启动、还没跑过 SQL 时菜单项为空，属正常现象。日志一直捕获不到时，先按上一节的步骤排查。
 
 ## 实时日志「跳转到源码」跳不准怎么办？
 
-SQL 日志本身不含调用位置，未做任何配置时插件按表名搜索实体做近似跳转，可能落空。要精确跳转到触发 SQL 的 Service / Controller 行，请把插件自带的自包含拦截器 `SqlSourceInterceptor`（见插件仓库 `docs/instrumentation/SqlSourceInterceptor.kt`）复制到项目并注册为 MyBatis-Plus `InnerInterceptor`，详见[功能详解 · 跳转到源码](../features/sql-log.md#跳转到源码)。不配置也不影响其他功能。
+SQL 日志本身不含调用位置，未做任何配置时插件按表名搜索实体做近似跳转，可能落空。
+
+要精确跳转，把插件自带的自包含拦截器 `SqlSourceInterceptor` 复制到项目并注册为 MyBatis-Plus `InnerInterceptor`，详见[功能详解 · 跳转到源码](../features/sql-log.md#跳转到源码)。
+
+拦截器文件在插件仓库 `docs/instrumentation/SqlSourceInterceptor.kt`；不配置也不影响其他功能。
 
 ## 自动弹出的日志窗口能彻底关掉吗？
 
@@ -65,7 +71,9 @@ SQL 日志本身不含调用位置，未做任何配置时插件按表名搜索�
 
 ## 升级后 SQL 历史记录去哪了？
 
-v2026.9.2 起，插件在项目内的数据目录由 `.idea/mybatis-plus-sql-visualizer/` 改名为 `.idea/sql-visualizer/`（历史 SQL 与执行临时文件）。此次更名不做旧数据迁移，升级后历史 SQL 从新目录起算重新积累；如需保留旧记录，可手动把旧目录 `sql-history/` 下的 `.sql` 文件复制到新目录。
+v2026.9.2 起，插件在项目内的数据目录由 `.idea/mybatis-plus-sql-visualizer/` 改名为 `.idea/sql-visualizer/`（历史 SQL 与执行临时文件）。此次更名不做旧数据迁移，升级后历史 SQL 从新目录起算重新积累。
+
+如需保留旧记录，可手动把旧目录 `sql-history/` 下的 `.sql` 文件复制到新目录。
 
 ## 升级后我的 SQL 方言怎么变了？
 
