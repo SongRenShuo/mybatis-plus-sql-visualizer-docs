@@ -65,7 +65,7 @@
 |------------|------|
 | `sqlv_render_sql` | 一次渲染一条语句；同一位置有多个候选时取第一个并注明，多语句日志请交给 `sqlv_render_logs` |
 | 带 `filePath` 的三个工具（`sqlv_render_sql` / `sqlv_crud_sql` / `sqlv_mapper_check`） | 路径口径一致：项目相对路径（相对项目根，如 `src/main/resources/mapper/UserMapper.xml`）或项目内绝对路径都收；项目外路径与 `..` 上跳一律拒绝 |
-| `sqlv_schema_context` / `sqlv_explain` | 配置了多个数据源时显式指名 `dataSource`——目标数据源未在 Database 工具窗连接并内省时，同名表可能改从其他数据源解析 |
+| `sqlv_schema_context` / `sqlv_explain` | 配置了多个数据源时显式指名 `dataSource`——目标数据源未在 Database 工具窗连接并内省时，同名表可能改从其他数据源解析；`sqlv_schema_context` 的成功输出首行会披露实际命中的数据源（`source: …`），未指名 `dataSource` 时标注 `auto-resolved` 并附 pin 提示，照提示重试即可锁定意图库 |
 | `sqlv_render_logs` / `sqlv_rollback_plan` / `sqlv_mapper_check` | 语句头会带上语句名（取自日志前导 `-- Name:` 注释），多语句输出一目了然 |
 | `sqlv_perf_advice` | 单条文案超长会被截断，避免无上限输出 |
 

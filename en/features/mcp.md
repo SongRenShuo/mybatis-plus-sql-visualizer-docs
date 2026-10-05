@@ -65,7 +65,7 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 |-----------------|----------|
 | `sqlv_render_sql` | One statement per call; when a location has multiple candidates it takes the first and says so — multi-statement logs belong to `sqlv_render_logs` |
 | The three tools that take `filePath` (`sqlv_render_sql` / `sqlv_crud_sql` / `sqlv_mapper_check`) | Path semantics are identical across all three: project-relative paths (relative to the project root, e.g. `src/main/resources/mapper/UserMapper.xml`) and absolute paths inside the project are both accepted; paths outside the project and `..` traversal are rejected |
-| `sqlv_schema_context` / `sqlv_explain` | With several data sources configured, pass `dataSource` explicitly — when the intended data source isn't connected and introspected in the Database tool window, same-named tables may resolve from a different one |
+| `sqlv_schema_context` / `sqlv_explain` | With several data sources configured, pass `dataSource` explicitly — when the intended data source isn't connected and introspected in the Database tool window, same-named tables may resolve from a different one; a successful `sqlv_schema_context` response discloses the data source it hit on the first line (`source: …`), marked `auto-resolved` with a pin hint when `dataSource` was omitted — follow the hint to pin the intended database |
 | `sqlv_render_logs` / `sqlv_rollback_plan` / `sqlv_mapper_check` | Statement headers carry the statement name (taken from a leading `-- Name:` log comment), keeping multi-statement output readable at a glance |
 | `sqlv_perf_advice` | Overly long entries are truncated — no unbounded output |
 
