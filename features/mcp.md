@@ -43,7 +43,9 @@
 
 ## 校验给置信度，这里给证据
 
-插件里的各类校验与提示，给出的是置信度评分——「可能有风险」「建议关注」；MCP 工具走的是另一条路：把渲染链真实产出的可执行 SQL 本体交给 agent。比如 `sqlv_mapper_check` 除了静态契约核查，还能对渲染产物做写风险与性能分析——这是静态校验器产不出的实证形态。agent 不用猜，拿着证据改代码。
+插件里的各类校验与提示，给出的是置信度评分——「可能有风险」「建议关注」。MCP 工具走的是另一条路：把渲染链真实产出的可执行 SQL 本体交给 agent，agent 不用猜，拿着证据改代码。
+
+比如 `sqlv_mapper_check` 除了静态契约核查，还能对渲染产物做写风险与性能分析——这是静态校验器产不出的实证形态。
 
 ## 典型工作流
 
@@ -59,11 +61,13 @@
 
 ## 使用口径
 
-- `sqlv_render_sql` 一次渲染一条语句；同一位置有多个候选时取第一个并注明，多语句日志请交给 `sqlv_render_logs`
-- 带 `filePath` 的三个工具（`sqlv_render_sql` / `sqlv_crud_sql` / `sqlv_mapper_check`）路径口径一致：项目相对路径（相对项目根，如 `src/main/resources/mapper/UserMapper.xml`）或项目内绝对路径都收；项目外路径与 `..` 上跳一律拒绝
-- 配置了多个数据源时，给 `sqlv_schema_context` / `sqlv_explain` 显式指名 `dataSource`——目标数据源未在 Database 工具窗连接并内省时，同名表可能改从其他数据源解析
-- `sqlv_render_logs`、`sqlv_rollback_plan`、`sqlv_mapper_check` 的语句头会带上语句名（取自日志前导 `-- Name:` 注释），多语句输出一目了然
-- `sqlv_perf_advice` 单条文案超长会被截断，避免无上限输出
+| 工具 / 场景 | 口径 |
+|------------|------|
+| `sqlv_render_sql` | 一次渲染一条语句；同一位置有多个候选时取第一个并注明，多语句日志请交给 `sqlv_render_logs` |
+| 带 `filePath` 的三个工具（`sqlv_render_sql` / `sqlv_crud_sql` / `sqlv_mapper_check`） | 路径口径一致：项目相对路径（相对项目根，如 `src/main/resources/mapper/UserMapper.xml`）或项目内绝对路径都收；项目外路径与 `..` 上跳一律拒绝 |
+| `sqlv_schema_context` / `sqlv_explain` | 配置了多个数据源时显式指名 `dataSource`——目标数据源未在 Database 工具窗连接并内省时，同名表可能改从其他数据源解析 |
+| `sqlv_render_logs` / `sqlv_rollback_plan` / `sqlv_mapper_check` | 语句头会带上语句名（取自日志前导 `-- Name:` 注释），多语句输出一目了然 |
+| `sqlv_perf_advice` | 单条文案超长会被截断，避免无上限输出 |
 
 ## 使用前提
 
@@ -82,7 +86,9 @@
 
 所有变更即时生效：下一次工具列表刷新或工具调用就按新配置走，无需重启 IDE。
 
+::: details 与平台 MCP 开关的关系（何时看：关了插件开关 agent 仍能看到别的工具，或想彻底关闭 MCP 服务时）
 这里的开关只管插件的十个工具对 agent 是否可见，与 IDE「工具 → MCP 服务器」页的「启用 MCP 服务器」相互独立——后者是平台内置 MCP 服务（127.0.0.1:64342）的总开关，其他插件与平台自带的工具都挂在同一个服务下。关掉插件开关不会动平台开关：服务照常，插件经平台的工具过滤扩展（`mcpToolFilterProvider`）把 `sqlv_*` 从 agent 的工具清单摘掉——下一次列表刷新或新会话即生效，已连接的客户端刷新后可见。
+:::
 
 ## 只读与安全
 
@@ -96,7 +102,9 @@
 
 涉及连接数据库的输出还带几类附加信息：
 
-- `sqlv_explain` 执行前会先清掉连接上残留的驱动消息，PostgreSQL 的 NOTICE / WARNING 等驱动消息会以 `notices` 节随计划一并返回；计划末尾对高频低效模式（大表全表扫描、filesort / temporary、PG Seq Scan 等）追加 `index hints` 建议——只提示，不改 SQL 也不执行
-- 查询不存在的表名（AI 生成的幻觉表名是高频场景）时，负结果按数据源缓存 30 秒，长会话里同一个幻觉表名不会反复触发全库扫描
+| 工具 | 附加信息 |
+|------|---------|
+| `sqlv_explain` | 执行前先清掉连接上残留的驱动消息，PostgreSQL 的 NOTICE / WARNING 等以 `notices` 节随计划一并返回；计划末尾对高频低效模式（大表全表扫描、filesort / temporary、PG Seq Scan 等）追加 `index hints` 建议——只提示，不改 SQL 也不执行 |
+| 连库查询 | 查询不存在的表名（AI 生成的幻觉表名是高频场景）时，负结果按数据源缓存 30 秒，长会话里同一个幻觉表名不会反复触发全库扫描 |
 
 > 对 MCP 工具有建议或遇到问题？[直达需求反馈池](/about/feedback?category=mcp)

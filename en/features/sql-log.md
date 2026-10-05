@@ -217,7 +217,7 @@ The SQL log page and the History page share the same setting, which survives IDE
 
 List entries use two-level previewing, consistent across the SQL log list, the History tab's second-level list and the history tool window:
 
-- **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; the "Copy" button in the header takes the currently edited text and flashes a check mark when clicked
+- **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; the "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, plus a "Close" button
 - **Multi-select batch copy**: after Ctrl / Shift multi-select, right-click → "Copy" copies all selected SQL at once (the menu item shows the count, e.g. "Copy selected SQL (3)", each statement semicolon-terminated and newline-joined)
 - **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The toolbar offers layout toggles — horizontal / vertical / keyword wrap — plus a "More" menu gathering low-frequency actions (import parameters, diff, share)
 

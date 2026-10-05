@@ -8,7 +8,9 @@ Complete preview of dynamic SQL in mapper XML — rendered per MyBatis semantics
 
 Gutter icon at `<select>` / `<update>` / `<delete>` / `<insert>` lines in mapper XML. Click to preview.
 
-Mapper XMLs from in-house frameworks (root element name not fixed, SQL written inside custom tags as CDATA or text — RFListPage and the like) preview as well: once the first text segment of a leaf tag starts with SELECT / INSERT / UPDATE / DELETE / WITH / REPLACE, the gutter icon appears, with no reliance on tag or root element names. Settings → "Interface & actions" has a master switch, "Detect SQL embedded in generic XML (leaf tag text/CDATA)", on by default.
+Mapper XMLs from in-house frameworks (root element name not fixed, SQL written inside custom tags as CDATA or text — RFListPage and the like) preview as well: once the first text segment of a leaf tag starts with SELECT / INSERT / UPDATE / DELETE / WITH / REPLACE, the gutter icon appears, with no reliance on tag or root element names.
+
+Settings → "Interface & actions" has a master switch, "Detect SQL embedded in generic XML (leaf tag text/CDATA)", on by default.
 
 ::: details HQL carriers in generic XML (When to read: your custom tags contain HQL)
 When the carrier tag itself or an ancestor carries `type="hql"` / `"jpql"`, the HQL conversion pipeline handles it (alias-scoped property-to-column mapping applies as usual); if the entity can't be resolved or conversion fails it falls back to showing the original text. The right-click and `Alt+Shift+Q` entries plus the multi-statement picker behave the same as for mapper XML.
@@ -29,7 +31,9 @@ When the carrier tag itself or an ancestor carries `type="hql"` / `"jpql"`, the 
 
 ### Cross-Namespace Includes
 
-Fully-qualified `refid="other.namespace.fragmentId"` includes expand across files — the preview finds the mapper file whose namespace matches, takes the `<sql id>` fragment content out and merges it in at the reference site. Dynamic tags inside the fragment (`<if>` / `<foreach>` etc.) render as usual, `${}` dynamic refids are supported, and property substitution plus cycle detection apply the same.
+Fully-qualified `refid="other.namespace.fragmentId"` includes expand across files — the preview finds the mapper file whose namespace matches, takes the `<sql id>` fragment content out and merges it in at the reference site.
+
+Dynamic tags inside the fragment (`<if>` / `<foreach>` etc.) render as usual, `${}` dynamic refids are supported, and property substitution plus cycle detection apply the same.
 
 When the target can't be resolved the preview continues, with the warning naming the concrete reason: no mapper file for the namespace / no such fragment under that namespace / the same fragment id declared in multiple files (ambiguous — the difference is reported as-is). Bare ids still resolve within the current file only, matching MyBatis runtime behavior.
 
@@ -119,13 +123,17 @@ Preview execution, Log → SQL execution and rollback execution share the same c
 
 ### INSERT: Auto-Generated Rollback
 
-INSERT is the only statement type that gets an automatic rollback: each VALUES row yields `DELETE FROM table WHERE …` with an equality predicate on every column of that row (`NULL` renders as `IS NULL`). The plugin reads no database metadata, so it has no primary key and the predicate is the whole row — which can match more than one row; the dialog warns about that and offers a `SELECT COUNT(*) FROM table WHERE …` check to run before executing, and flags any `?` placeholders left unfilled separately.
+INSERT is the only statement type that gets an automatic rollback: each VALUES row yields `DELETE FROM table WHERE …` with an equality predicate on every column of that row (`NULL` renders as `IS NULL`).
+
+The plugin reads no database metadata, so it has no primary key and the predicate is the whole row — which can match more than one row. The dialog warns about that and offers a `SELECT COUNT(*) FROM table WHERE …` check to run before executing, and flags any `?` placeholders left unfilled separately.
 
 INSERTs without a column list (column names unknown), INSERT … SELECT (pre-execution data unknown) and upserts (they may have modified existing rows, so a DELETE cannot undo them) are refused outright.
 
 ### UPDATE / DELETE: Generated from Pasted Query Results
 
-UPDATE and DELETE get no automatic rollback. The plugin has only the SQL text, never the pre-execution values (no before-image), so a derived statement would also wipe out later changes by others; the dialog says so plainly ("UPDATE cannot be auto-rolled back: original values are unknowable." / "DELETE cannot be auto-rolled back: the deleted data is unknowable."), points to binlog, flashback or backup restore for manual recovery, and offers a snapshot query `SELECT * FROM table [WHERE original WHERE]`:
+UPDATE and DELETE get no automatic rollback. The plugin has only the SQL text, never the pre-execution values (no before-image), so a derived statement would also wipe out later changes by others.
+
+The dialog says so plainly ("UPDATE cannot be auto-rolled back: original values are unknowable." / "DELETE cannot be auto-rolled back: the deleted data is unknowable."), points to binlog, flashback or backup restore for manual recovery, and offers a snapshot query `SELECT * FROM table [WHERE original WHERE]`:
 
 1. Click "Run snapshot query" to execute it directly — the result lands in the panel's console grid, the row image fetched by your own hands
 2. Copy the whole result grid back into the dialog (TSV, first line is the column names)
@@ -157,7 +165,11 @@ The plugin also previews Hibernate HQL and JPA JPQL statically. Entries appear a
 | `@Query("...")` annotations (JPQL, incl. `@Modifying` DML) | The annotation line |
 | JPA Repository derived methods and CRUD methods | Method declaration / call line |
 
-HQL strings split across multiple lines with `+`, or concatenated via chained assignments, are recognized as well — the gutter icon still appears. The remaining entry points (`@NamedQuery` named queries, JPA CriteriaQuery chains, custom DAO HQL query methods, `.hbm.xml` mapped entities) trigger previews too. For the full trigger surface and capability set (Repository CRUD write paths, derived queries, Specification, QueryByExample, pagination & sorting), see [JPA / Hibernate SQL Preview](/en/features/jpa-preview).
+HQL strings split across multiple lines with `+`, or concatenated via chained assignments, are recognized as well — the gutter icon still appears.
+
+The remaining entry points (`@NamedQuery` named queries, JPA CriteriaQuery chains, custom DAO HQL query methods, `.hbm.xml` mapped entities) trigger previews too.
+
+For the full trigger surface and capability set (Repository CRUD write paths, derived queries, Specification, QueryByExample, pagination & sorting), see [JPA / Hibernate SQL Preview](/en/features/jpa-preview).
 
 ### SELECT Entity Alias Expansion
 

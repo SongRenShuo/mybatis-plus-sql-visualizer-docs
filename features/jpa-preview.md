@@ -59,18 +59,24 @@
 
 ## 嵌入值对象（@Embedded）
 
-嵌入值对象字段（`@Embedded` / `@Embeddable` / `@EmbeddedId`）按宿主表列展平参与预览：
+嵌入值对象字段（`@Embedded` / `@Embeddable` / `@EmbeddedId`）按宿主表列展平参与预览。
 
+派生查询方法名里的嵌入段驼峰路径（`findByUpdateInfoCreatedTimeAfter` 这类）也能解析到真实展平列——WHERE / ORDER BY 不再产出 `update_info_created_time` 这类伪列。
+
+::: details 展平规则细节（何时看：嵌入字段列名不符预期时）
 - 嵌套嵌入的 `@AttributeOverride` 支持 JPA 规范的点路径覆写（`name="zipcode.zip"`）——点路径优先、裸名兜底，类级覆写键随嵌套链传递
 - Spring Data 形态：裸 `@Embedded` 按 `prefix` 前缀展平列名，`@Embedded.Nullable` / `@Embedded.Empty` 捷径注解正确识别（同一值对象多处嵌入各按前缀展开，防撞车）
-- 派生查询方法名里的嵌入段驼峰路径（`findByUpdateInfoCreatedTimeAfter` 这类）解析到真实展平列——WHERE / ORDER BY（含 `Sort.by` 字面量属性）不再产出 `update_info_created_time` 这类伪列（SELECT 全列展开与 `@Query` JPQL 链本就正确）
+- 派生查询的嵌入段解析覆盖 WHERE / ORDER BY（含 `Sort.by` 字面量属性）；SELECT 全列展开与 `@Query` JPQL 链本就正确
 - MyBatis-Plus 与 jakarta 嵌入注解共存的混合注解实体（`@TableName` + `@Embedded`）在 Wrapper 预览、批量模板与 CRUD 生成里同样展平为宿主表列，不再出现值对象伪列
+:::
 
 ## 继承链实体列解析
 
 实体继承父类（含抽象类）时，HQL / JPQL 预览照常解析出完整列清单——父类映射的列一并纳入，不会因列清单暂时为空而降级为 `x.*`；`@Entity(name = "...")` 自定义实体名同样能反查到实体类。
 
+::: details 继承策略与降级说明（何时看：JOINED / TABLE_PER_CLASS 映射或降级注释出现时）
 `@Inheritance(JOINED)` / `TABLE_PER_CLASS` 策略下父类字段实际存于父表或各子类独立表，预览按单表口径合并列清单并附边界说明注释。实体确实解析不了时，降级注释分两档——「实体不可解析」与「实体可解析但列为空（提示检查继承链父类映射）」，诊断方向可区分。
+:::
 
 ## hbm 命名查询
 

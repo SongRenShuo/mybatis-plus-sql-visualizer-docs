@@ -60,7 +60,9 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 
 ## Embedded Value Objects (@Embedded)
 
-Fields of embedded value objects (`@Embedded` / `@Embeddable` / `@EmbeddedId`) are flattened into the owner table's columns and take part in the preview, and camel-case embedded paths in derived method names (`findByUpdateInfoCreatedTimeAfter` and the like) also resolve to the real flattened column — WHERE / ORDER BY no longer produce pseudo columns like `update_info_created_time`.
+Fields of embedded value objects (`@Embedded` / `@Embeddable` / `@EmbeddedId`) are flattened into the owner table's columns and take part in the preview.
+
+Camel-case embedded paths in derived method names (`findByUpdateInfoCreatedTimeAfter` and the like) also resolve to the real flattened column — WHERE / ORDER BY no longer produce pseudo columns like `update_info_created_time`.
 
 ::: details Flattening rules in detail (When to read: an embedded field's column name doesn't match expectations)
 - Nested `@AttributeOverride` supports the JPA-spec dot-path form (`name="zipcode.zip"`) — dot paths take priority with bare-name fallback, and class-level override keys propagate down the nesting chain
