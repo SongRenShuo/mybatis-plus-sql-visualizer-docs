@@ -25,7 +25,7 @@ next:
   <div class="qr-card">
     <img src="/wechat-qr.png" width="180" height="180" alt="Author WeChat QR code" class="qr-card__img"/>
     <div class="qr-card__title">Author WeChat</div>
-    <div class="qr-card__desc">Scan to add the author as a friend. Questions about usage and development are both welcome.</div>
+    <div class="qr-card__desc">Scan to add the author as a friend. Questions about usage and development are both welcome — please note "SQL Visualizer" in your friend request.</div>
   </div>
   <div class="qr-card">
     <img src="/group-qr.png" width="180" height="180" alt="User group QR code" class="qr-card__img"/>

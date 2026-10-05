@@ -25,7 +25,7 @@ next:
   <div class="qr-card">
     <img src="/wechat-qr.png" width="180" height="180" alt="作者微信二维码" class="qr-card__img"/>
     <div class="qr-card__title">作者微信</div>
-    <div class="qr-card__desc">扫码添加作者为朋友，欢迎交流插件使用与开发话题。</div>
+    <div class="qr-card__desc">扫码添加作者为朋友，欢迎交流插件使用与开发话题；加好友时请备注「SQL Visualizer」。</div>
   </div>
   <div class="qr-card">
     <img src="/group-qr.png" width="180" height="180" alt="交流群二维码" class="qr-card__img"/>
