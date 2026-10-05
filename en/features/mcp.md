@@ -20,7 +20,7 @@ Grouped the way an agent works: get the SQL first, then understand the database,
 
 | Tool | Input | Output |
 |------|-------|--------|
-| `sqlv_render_sql` | `filePath` (project-relative, or absolute inside the project) + `line`, or paste a mapper XML as `xmlSnippet` | Real executable SQL — parameters filled in, with notes wherever rendering degraded |
+| `sqlv_render_sql` | `filePath` + `line` (project-relative, or absolute inside the project), or paste a mapper XML fragment as `xmlSnippet` | Real executable SQL — parameters filled in, with notes wherever rendering degraded |
 | `sqlv_render_logs` | `logText`, the raw console log (optional custom `sqlPrefix` / `paramPrefix` etc.) | Executable SQL restored from MyBatis / Hibernate / JdbcTemplate logs |
 | `sqlv_crud_sql` | `filePath` or `className` of a MyBatis-Plus entity | INSERT / UPDATE / SELECT / DELETE set |
 | `sqlv_reverse_sql` | `sql`, one SQL statement | MyBatis-Plus Java code generated in reverse |
@@ -43,15 +43,17 @@ Grouped the way an agent works: get the SQL first, then understand the database,
 
 ## Verifiers Give Confidence, MCP Gives Evidence
 
-The plugin's checks and hints produce confidence scores — "might be risky", "worth a look". The MCP tools take a different route: they hand the agent the actual executable SQL produced by the rendering chain. For example, `sqlv_mapper_check` goes beyond static contract checking and can analyze rendered output for write risks and performance issues — hard evidence no static verifier can produce. The agent doesn't have to guess; it works from facts.
+The plugin's checks and hints produce confidence scores — "might be risky", "worth a look". The MCP tools take a different route: they hand the agent the actual executable SQL produced by the rendering chain. The agent doesn't have to guess; it edits code with evidence in hand.
+
+For example, `sqlv_mapper_check` goes beyond static contract checking and can also analyze rendered output for write risks and performance — empirical evidence no static verifier can produce.
 
 ## A Typical Workflow
 
 <GifPlayer src="/demo/mcp-agent.gif" alt="The Codex agent in AI Assistant calling a plugin MCP tool over ACP, with an audit line" />
 Take "have the agent diagnose a slow SQL" as an example — the agent chains these tools as needed:
 
-1. `sqlv_render_sql` fetches the real executable SQL by file and line (parameters filled in, not `?` placeholders)
-2. `sqlv_explain` gets the plan for that SELECT — if it hits full-table scans, filesort and similar patterns, `index hints` are appended
+1. `sqlv_render_sql` fetches the real executable SQL by file and line (parameters filled in, not the `?` placeholders in source)
+2. `sqlv_explain` gets the plan for that SELECT — if the tail hits full-table scans, filesort and similar patterns, `index hints` are appended
 3. `sqlv_perf_advice` runs the 20-rule advisory; `sqlv_schema_context` pulls the table's column comments and structure as supporting evidence
 4. After the fix, `sqlv_render_sql` re-renders to verify; before touching a write statement, `sqlv_rollback_plan` prepares a rollback plan
 
@@ -59,17 +61,19 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 
 ## Usage Notes
 
-- `sqlv_render_sql` renders one statement per call; when a location has multiple candidates it takes the first and says so — multi-statement logs belong to `sqlv_render_logs`
-- `filePath` behaves the same across the three tools that take one (`sqlv_render_sql` / `sqlv_crud_sql` / `sqlv_mapper_check`): project-relative to the project root (e.g. `src/main/resources/mapper/UserMapper.xml`) or an absolute path inside the project; paths outside the project and `..` traversal are rejected
-- With several data sources configured, pass `dataSource` explicitly to `sqlv_schema_context` / `sqlv_explain` — when the intended data source isn't connected and introspected in the Database tool window, same-named tables may resolve from a different one
-- `sqlv_render_logs`, `sqlv_rollback_plan` and `sqlv_mapper_check` label statement headers with statement names (from a leading `-- Name:` comment), keeping multi-statement output readable
-- `sqlv_perf_advice` truncates overly long entries — no unbounded output
+| Tool / Scenario | Behavior |
+|-----------------|----------|
+| `sqlv_render_sql` | One statement per call; when a location has multiple candidates it takes the first and says so — multi-statement logs belong to `sqlv_render_logs` |
+| The three tools that take `filePath` (`sqlv_render_sql` / `sqlv_crud_sql` / `sqlv_mapper_check`) | Path semantics are identical across all three: project-relative paths (relative to the project root, e.g. `src/main/resources/mapper/UserMapper.xml`) and absolute paths inside the project are both accepted; paths outside the project and `..` traversal are rejected |
+| `sqlv_schema_context` / `sqlv_explain` | With several data sources configured, pass `dataSource` explicitly — when the intended data source isn't connected and introspected in the Database tool window, same-named tables may resolve from a different one |
+| `sqlv_render_logs` / `sqlv_rollback_plan` / `sqlv_mapper_check` | Statement headers carry the statement name (taken from a leading `-- Name:` log comment), keeping multi-statement output readable at a glance |
+| `sqlv_perf_advice` | Overly long entries are truncated — no unbounded output |
 
 ## Requirements
 
 - IDEA 2025.2+: the MCP Server is built into the platform, nothing extra to install
-- IDEA 2024.3 ~ 2025.1 do not support this feature set (no built-in MCP Server); all other plugin features are unaffected
-- Environments without the MCP Server plugin see zero impact: the plugin's MCP registration is skipped entirely
+- IDEA 2024.3 ~ 2025.1 do not support this feature set (the platform has no built-in MCP Server); all other plugin features are unaffected
+- Environments without the MCP Server plugin see zero impact: the plugin's MCP registration is not loaded at all, and every other feature works as usual
 
 ## Settings and Gating
 
@@ -82,7 +86,9 @@ Settings → the "MCP Tools" page provides a gating area:
 
 Every change takes effect immediately: the next tool-list refresh or tool call follows the new configuration — no IDE restart needed.
 
-These switches only control whether the plugin's ten tools are visible to the agent. They are independent of the IDE-wide "Enable MCP Server" toggle under Tools → MCP Server — the latter is the master switch for the platform's built-in MCP service (127.0.0.1:64342), which also serves tools from other plugins and the platform itself. Turning off the plugin's switch leaves that service running: through the platform's tool-filter extension (`mcpToolFilterProvider`), the plugin removes the `sqlv_*` tools from the agent's tool list — effective at the next listing refresh or new session, visible to connected clients once they refresh.
+::: details Relationship with the platform MCP switch (When to read: the agent still sees other tools after you turn off the plugin's switch, or you want to shut down the MCP service entirely)
+These switches only control whether the plugin's ten tools are visible to the agent. They are independent of the "Enable MCP Server" toggle under Tools → MCP Server — the latter is the master switch for the platform's built-in MCP service (127.0.0.1:64342), which also serves tools from other plugins and the platform itself. Turning off the plugin's switch leaves that service running: through the platform's tool-filter extension (`mcpToolFilterProvider`), the plugin removes the `sqlv_*` tools from the agent's tool list — effective at the next listing refresh or new session, visible to connected clients once they refresh.
+:::
 
 ## Read-Only and Safety
 
@@ -96,7 +102,9 @@ All ten tools declare themselves to the agent as read-only, idempotent and non-d
 
 Outputs that touch the database carry a few extras:
 
-- `sqlv_explain` drains stale driver messages from the connection before executing; PostgreSQL NOTICE / WARNING messages come back alongside the plan in a `notices` section; the plan tail appends `index hints` for common inefficiency patterns (full scans on large tables, filesort / temporary, PG Seq Scan) — advisory only, never modifies or executes
-- Queries against non-existent tables (AI-generated hallucinated table names are a frequent case) are negatively cached per data source for 30 seconds, so long sessions don't re-scan the whole database for the same phantom name
+| Tool | Extra information |
+|------|-------------------|
+| `sqlv_explain` | Stale driver messages are drained from the connection before executing; PostgreSQL NOTICE / WARNING messages come back alongside the plan in a `notices` section; the plan tail appends `index hints` for common inefficiency patterns (full scans on large tables, filesort / temporary, PG Seq Scan) — advisory only, never modifies or executes |
+| Database-backed queries | Queries against non-existent tables (AI-generated hallucinated table names are a frequent case) are negatively cached per data source for 30 seconds, so long sessions don't re-scan the whole database for the same phantom name |
 
 > Suggestions or issues with the MCP tools? [Feedback pool](/en/about/feedback?category=mcp)
