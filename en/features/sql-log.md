@@ -133,6 +133,15 @@ Marker style is a three-way choice, configured under the "SQL Log" group's "CRUD
 
 Each checkbox in the log page's "Type Filter" popup carries a matching color swatch legend, syncing instantly with color changes (the legend hides when marking is off).
 
+### Scroll to Bottom & Tail Following
+
+The log list has tail following on by default: the view sticks to the bottom as new SQL arrives, always showing the latest entries; scrolling up to read history pauses following automatically, and scrolling back to the bottom or clicking the toolbar's "Scroll to Bottom" action resumes it — the same habit as the IDE console.
+
+::: details Details (When to read: the list is not at the bottom, or you are looking for the action)
+- The "Scroll to Bottom" action sits at the end of the toolbar's action group: one click jumps to the bottom of the list and resumes following.
+- Pausing and resuming are judged by scroll direction; programmatic appends (new entries arriving) never disturb the reading position you scrolled to.
+:::
+
 ### Jump to Source
 
 Right-click a log entry → "Jump to Source". How the position is resolved depends on the capture channel.
@@ -239,7 +248,7 @@ How entries render is controlled by the "List display" option in settings (see t
 Enable "Auto-save SQL history" in settings (off by default) and captured entries are saved to disk in full (not limited by the list's max-entry count); when the save directory holds more history files than the retention limit (default 30, configurable, 0 = keep everything), the oldest files are cleaned up automatically to keep the disk in check.
 
 - **Level 1 (default view)**: file list — each row shows file name, size and SQL count; search box filters by file name
-- **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info, and a `#N` number per in-file entry order); single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text
+- **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info, and a `#N` number per in-file entry order); large files load in batches as you scroll — the first 30 entries up front, more appended as you near the bottom; single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically, without interrupting browsing while the file you're viewing still exists
 - **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same
 

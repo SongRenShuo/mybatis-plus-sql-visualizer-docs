@@ -57,6 +57,14 @@
 - `SELECT u` 裸实体别名自动展开为列清单（详见 [XML / HQL 动态 SQL 预览](./xml-preview)）
 - 无别名形态的 HQL 同样映射：`WHERE stationCode = ?` 这类裸属性转列名（`STATION_CODE = ?`），嵌入段（如 `updateInfo.BE_DELETE`）占限定符位时按嵌入映射产出裸列名，与 Hibernate 真实语义一致
 
+## JPA 参数链（setParameter）
+
+`em.createQuery(...).setParameter(...)` 链式调用完整参与预览，参数面板与渲染结果保持一致：
+
+- **字面量与枚举常量自动预填**：实参为字面量或枚举常量的调用（`setParameter("status", OrderStatus.PAID)`）自动把值预填进参数框，无需手动录入
+- **按名回填**：命名占位（`:status` 等）按参数名配值，同名占位复用同值；渲染与「复制可执行 SQL」均与 `setParameter` 书写顺序解耦，混入位置参数时保守按序回填
+- **同名写重提示**：同名参数被多次 `setParameter` 时，参数区尾部出现灰字提示（运行时以最后一次为准）
+
 ## 嵌入值对象（@Embedded）
 
 嵌入值对象字段（`@Embedded` / `@Embeddable` / `@EmbeddedId`）按宿主表列展平参与预览。

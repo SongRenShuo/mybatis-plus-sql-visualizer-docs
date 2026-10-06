@@ -58,6 +58,14 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 - Bare entity alias in `SELECT u` auto-expands to the column list (see [XML / HQL Dynamic SQL Preview](/en/features/xml-preview))
 - Alias-free HQL maps as well: bare properties like `WHERE stationCode = ?` convert to column names (`STATION_CODE = ?`), and embedded segments (e.g. `updateInfo.BE_DELETE`) occupying the qualifier position produce bare column names per the embedded mapping — matching real Hibernate semantics
 
+## JPA Parameter Chains (setParameter)
+
+Chained `em.createQuery(...).setParameter(...)` calls fully take part in the preview, and the parameter panel stays consistent with the rendered SQL:
+
+- **Auto-prefill for literals and enum constants**: calls whose argument is a literal or enum constant (`setParameter("status", OrderStatus.PAID)`) prefill the parameter box automatically — no manual typing
+- **Fill by name**: named placeholders (`:status` and the like) are matched by parameter name, and the same name reuses the same value; both rendering and "Copy executable SQL" are decoupled from the order of `setParameter` calls, with a conservative positional fallback when positional parameters are mixed in
+- **Duplicate-name notice**: setting the same parameter name multiple times via `setParameter` shows a gray hint at the tail of the parameter area (the last value wins at runtime)
+
 ## Embedded Value Objects (@Embedded)
 
 Fields of embedded value objects (`@Embedded` / `@Embeddable` / `@EmbeddedId`) are flattened into the owner table's columns and take part in the preview.
