@@ -15,6 +15,7 @@ For the same problem — seeing what SQL MyBatis actually produces — there are
 | Other ORM chain frameworks (xbatis / Easy-Query / MyBatis Dynamic SQL / Querydsl …) | Yes | N/A | Manual |
 | Real EXPLAIN plans (dialect-wrapped, run on the database) | Yes | No | Manual |
 | Restore full SQL from console logs with parameters filled in | Yes | Yes | Manual |
+| Capture real parameters / durations / affected rows at runtime (no app change, no logging needed) | Yes (enhanced capture) | No | Manual |
 | Jump from restored SQL back to source location | Yes | Partial | No |
 | Reverse-convert SQL to Wrapper Java code | Yes | No | No |
 | Toggle dynamic conditions and re-render in real time | Yes | No | No |
@@ -27,7 +28,7 @@ For the same problem — seeing what SQL MyBatis actually produces — there are
 
 **Log restore** (the route of MyBatis Log Plugin family): after the application starts, stitch the `Preparing:` and `Parameters:` lines from the console into a complete SQL. Great for inspecting real execution in staging or production.
 
-The two are not mutually exclusive. The SQL Log tool window of SQL Visualizer covers the log-restore route and additionally jumps from a log line back to the source code. If your workflow only needs log restore, sticking with your current tool is perfectly fine.
+The two are not mutually exclusive. The SQL Log tool window of SQL Visualizer uses enhanced capture by default — collecting at the JDBC layer inside your application's own JVM, with no logging needed in your app, real parameter values and durations, and the call stack and source location included. Console capture is kept as the no-code-change fallback. Jump-to-source and jump-from-call-stack both live in this same pipeline.
 
 ## Where it shines
 

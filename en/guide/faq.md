@@ -43,13 +43,19 @@ The most common cause is a missing data source: like "Execute SQL", "EXPLAIN" re
 
 ## SQL log not capturing SQL?
 
-Troubleshooting steps:
+Start with the diagnostics the panel's empty state gives you — it shows the enhanced-capture channel's current state (off / not authorized / waiting for the app process / attached / fallen back) plus the console channel's scanned line count, and names the next step for your case.
 
-1. Confirm the "Capture" button in the sidebar has been clicked to start listening (the button changes to "Stop")
-2. Confirm the application log contains `Preparing:` / `Parameters:` format lines
-3. If the log format is `==> Preparing:`, enable "Mixed prefix" in settings
-4. Check whether lines were hit by the "Remove Lines Containing" filter rule
-5. Confirm the log goes to the run console (not a separate log file)
+**Enhanced capture (default channel)**
+
+1. Injection not authorized yet: click "Agree and enable" in the dialog, or use "Re-authorize" under "Enhanced Capture" in settings; once authorized, the next project run captures fully
+2. Project not run yet: enhanced capture attaches with the application process — run / debug the project once
+
+**Console channel (the fallback when enhanced capture is unavailable)**
+
+3. The application log must contain `Preparing:` / `Parameters:`; the `==> Preparing:` form needs "Mixed prefix" enabled in settings
+4. Parameter lines may be blocked by the log level — usually TRACE is required
+5. Check whether lines were hit by the "Remove Lines Containing" filter rule
+6. Confirm the log goes to the run console (not a separate log file)
 
 ## The gutter right-click "Recent Executions" item is empty?
 

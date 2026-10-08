@@ -1,8 +1,8 @@
 # SQL Log Tool Window
 
-<GifPlayer src="/demo/sql-log.gif" alt="SQL Log Restore Demo" />
+<GifPlayer src="/demo/sql-log.gif" alt="SQL log capture and restore demo" />
 
-Auto-captures SQL as it runs, restores everything into a unified list of executable statements, and jumps precisely to the source line that fired each SQL.
+Auto-captures SQL as it runs, restores everything into a unified list of executable statements, and jumps precisely to the source line that fired each SQL. Enhanced capture is the default channel and works out of the box; console capture is the no-code-change fallback.
 
 ## Trigger Method
 
@@ -17,18 +17,18 @@ A few details about auto-listen: enabling the setting does not start listening i
 
 ## Two Capture Channels
 
-Entries come from two channels, unified in one list with identical display and actions:
+Entries come from two channels, unified in one list with identical display and actions. **Use enhanced capture by default** — it works out of the box and carries the most data, and it is the recommended channel on this page; console capture is the no-code-change fallback for when enhanced capture isn't available or you'd rather not touch the application process at all.
 
-| Channel | Source | Characteristics |
-|---------|--------|-----------------|
-| **Enhanced capture** (default) | Bytecode instrumentation attaches to your application's JVM on the local machine, collecting directly at the JDBC interface layer | No SQL logging setup needed in your app, works out of the box; parameters, durations, errors and source locations are all real structured data |
-| **Console capture** | Monitors the run console's log output | Recognizes MyBatis `Preparing:` / `Parameters:` lines (Hibernate and JdbcTemplate formats are also supported) and fills `?` placeholders back into executable SQL |
+| Channel | Source | Role |
+|---------|--------|------|
+| **Enhanced capture** (default, recommended) | Bytecode instrumentation attaches to your application's JVM on the local machine, collecting directly at the JDBC interface layer | No SQL logging setup needed in your app; parameters, durations, affected rows, errors, source locations and the call stack are all real structured data |
+| **Console capture** (fallback) | Monitors the run console's log output | No code change and no injection, but it requires your app to print SQL to the console, parameter restoration depends on log format and level (TRACE in the common case), and source locations need the interceptor configured separately |
 
 Enhanced capture asks for injection consent before any run happens — the dialog pops as soon as you enable enhanced capture or open the project (fresh, not-yet-confirmed state), and the authorization persists ahead of any Run; once agreed, the very first run captures completely (startup-phase SQL included), no project restart needed. Core capabilities:
 
-- Real parameter values (desensitization off by default, can be enabled in settings), millisecond-accurate execution durations, affected-row counts and execution error messages
+- Real parameter values (desensitization off by default, can be enabled in settings), millisecond-accurate execution durations, affected-row counts and execution error messages — none of which console capture can produce, or can only approximate by correlating log text
 - Entries carry a database badge (`[MySQL]`, `[DM (Dameng)]` etc.), inferred from the JDBC URL — all 11 dialect databases plus HSQL / GBASE covered
-- Source locations come from the real call stack, jumping straight to the code line that executed the SQL (see "Jump to Source" below)
+- Source locations come from the real call stack, jumping straight to the code line that executed the SQL with no configuration at all (see "Jump to Source" below); console capture needs its own interceptor for the same precision
 - Entries carry the full call-stack snapshot — hover the preview panel to see the whole call chain and click any frame to jump to that frame's source (see "Jump from the Call Stack" below)
 - Collected data is only displayed inside the IDE on your machine — nothing is sent to any server; turning the switch off stops collection (attached capture points remain but stay idle)
 
@@ -43,22 +43,16 @@ Enhanced capture asks for injection consent before any run happens — the dialo
 - **Collection follows the listening state**: stopping listening also stops in-app collection — no more capture-and-discard waste; re-enabling listening resumes it, and after the agent mounts on project startup the listening state is reconciled automatically, so a project started with listening off no longer collects for nothing.
 :::
 
-The log-format, duration-parsing and similar descriptions in the sections below apply to the console capture channel; enhanced-capture entries carry structured data of their own and need no log parsing.
+::: details Console-capture log formats and restore details (When to read: you only use the console channel and your logs are unusual or capture seems incomplete)
+With enhanced capture none of this applies — skip it, along with the "log format / duration parsing" notes further down.
+- **Recognized formats**: MyBatis `Preparing:` / `Parameters:`; Hibernate `Hibernate:` + `binding parameter`; JdbcTemplate (statements wrapped across multiple lines are collected in full and brackets inside string literals don't cause premature truncation; for `NamedParameterJdbcTemplate` a named parameter whose value is a collection is restored element-wise — `IN (:p)` with `param=[a]` becomes `IN ('a')`; logs interleaved by concurrent threads are restored in per-thread buckets, so parameters never get misattached or lost)
+- **Mixed prefixes**: `Preparing: SELECT ...` (MyBatis default), `==> Preparing: SELECT ...` (Spring Boot), custom prefixes (configurable in settings)
+- **Merging double-printed statements**: when both Hibernate `show_sql` and its logger print the same statement, the two paths merge into one entry with the parameters kept together — no zero-parameter leftovers, no false "parameter count mismatch"
+- **Missing-parameter hints**: if a statement had no parameter-binding log captured at all, the preview says so and guides you to enable TRACE level (for JdbcTemplate it names `org.springframework.jdbc.core` specifically); only genuinely incomplete parameters report a count mismatch
+- **Statement-line-only projects**: after 1 second of silence the statement is judged complete and handed over (JdbcTemplate on DEBUG only, Tomcat spawning a thread per request), instead of staying stuck at "N lines scanned / 0 produced"
+:::
 
 ## Features
-
-### Auto Capture
-
-Monitors the run console's log output, recognizes `Preparing:` and `Parameters:` lines, and auto-restores them into complete SQL — enabled by default. Also supported:
-
-- **Hibernate**: the `Hibernate:` + `binding parameter` log format
-- **JdbcTemplate**: statements wrapped across multiple lines are collected in full, and brackets inside string literals don't cause premature truncation; for `NamedParameterJdbcTemplate` single-line logs, a named parameter whose value is a collection is restored element-wise — `IN (:p)` with `param=[a]` becomes `IN ('a')`; logs interleaved by concurrent threads are restored in per-thread buckets, so parameters never get misattached or lost
-
-::: details Capture compatibility details (When to read: your logs look unusual or capture seems incomplete)
-- When both Hibernate `show_sql` and its logger print the same statement, the two paths are merged into one entry with the parameters kept together — no zero-parameter leftovers and no false "parameter count mismatch".
-- If a statement had no parameter-binding log captured at all, the preview says so and guides you to enable TRACE level (for JdbcTemplate it names `org.springframework.jdbc.core` specifically); only genuinely incomplete parameters report a count mismatch.
-- Projects that only print the statement line with no parameter lines to follow (JdbcTemplate on DEBUG only, Tomcat spawning a thread per request) still produce entries: after 1 second of silence the statement is judged complete and handed over, instead of staying stuck at "N lines scanned / 0 produced".
-:::
 
 ### Auto-Open Tool Window
 
@@ -79,18 +73,10 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 | Re-authorize | During the 24-hour cooldown after declining, the "Re-authorize" button in settings clears the cooldown and re-opens the consent dialog in one click — no switch toggling needed |
 | Three-state consent dialog | The confirmation dialog records all three outcomes faithfully — "Agree and enable / Cancel / Disable enhanced capture and don't ask again"; the third persists the opt-out in one click (re-enable any time in settings) |
 
-### Mixed Prefix Matching
-
-Supports multiple log formats:
-
-- `Preparing: SELECT ...` (MyBatis default)
-- `==> Preparing: SELECT ...` (Spring Boot)
-- Custom prefixes (configurable in settings)
-
 ### SQL Highlighting & Execution Time
 
 - SQL summaries in the list are lexically colored: keywords, table names, strings, numbers and comments each in their own color; timestamps and durations are dimmed gray so they never steal focus
-- Console-channel durations are parsed from the log, supporting p6spy `elapsed`, MyBatis-Plus `Time:` output and a custom time prefix (configurable in settings, default `Time:`)
+- Durations on enhanced-capture entries are the real measured execution time (millisecond-accurate); console capture instead parses them from the log, supporting p6spy `elapsed`, MyBatis-Plus `Time:` output and a custom time prefix (configurable in settings, default `Time:`)
 - Duration is colored by threshold: gray under 100ms, orange at 100ms+, red once the slow-query threshold is reached (default 1000ms, adjustable); a slow-query counter appears when slow queries are detected
 - A persistent sort button on the list opens a single-choice menu: time ascending (default, i.e. capture order) / time descending / duration ascending / duration descending / line number
 
@@ -101,7 +87,9 @@ Supports multiple log formats:
 
 ### Execution Errors Inline
 
-SQL execution error lines from the console — MyBatis `###` error blocks, Spring DAO exceptions, the JDBC exception family, parameter-binding errors — are recognized and bound back to the nearest matching entry within the time window. The list row shows an error snippet, and the entry details carry the full error text (red meta info, an error banner and a copy-full-text action), so failed executions are visible at a glance.
+Enhanced-capture entries bring their own execution errors (the failure cause and full error text are collected with the entry), so failures are visible at a glance with no parsing at all.
+
+On console capture the errors have to be recognized from log text: SQL execution error lines (MyBatis `###` error blocks, Spring DAO exceptions, the JDBC exception family, parameter-binding errors) are recognized and bound back to the nearest matching entry within the time window. Both channels display the same way: the list row shows an error snippet, and the entry details carry the full error text (red meta info, an error banner and a copy-full-text action).
 
 ### Entry Sequence Numbers
 
@@ -117,7 +105,7 @@ Each entry can show a timestamp, taken from the "Timestamp source" radio option 
 
 | Time source | Description |
 |------------|-------------|
-| **Log time** (default) | Shows the original time parsed from the log line itself — common formats recognized automatically, such as Logback / Log4j2 / Spring Boot defaults and ISO 8601; entries whose log line carries no time fall back to capture time |
+| **Log time** (default) | Shows the original time parsed from the log line itself — common formats recognized automatically, such as Logback / Log4j2 / Spring Boot defaults and ISO 8601; entries whose log line carries no time fall back to capture time (enhanced-capture entries have no log line and use capture time directly) |
 | **Capture time** | Shows the moment the plugin captured the log |
 
 The "Show timestamp" switch controls whether the time column appears. The timestamp format setting (default `yyyy-MM-dd HH:mm:ss`) applies to both sources alike, and copied timestamps and the times shown on the History page all follow the same configuration.
@@ -164,9 +152,8 @@ An enhanced-capture entry carries more than a single execution point — it carr
 
 How many frames are kept is configurable — "Call-stack snapshot frames" in settings (default 24, range 12–64): sampled at both ends, the top keeps JDBC / engine-side frames and the bottom always keeps 8 business-side frames, joined by an omission marker in the middle. Changes take effect via a hot push on save — no application restart.
 
-**Console-capture entries**: SQL logs contain no call-site info, so the plugin ships an optional runtime interceptor — copy the self-contained sample `SqlSourceInterceptor` into your project and register it as a MyBatis-Plus `InnerInterceptor` for precise resolution.
-
-The interceptor sample file ships with the plugin repository: `docs/instrumentation/SqlSourceInterceptor.kt`.
+::: details The console channel's interceptor route (When to read: you use console capture and still need precise landing)
+Enhanced capture needs none of this — its source location comes from the real call stack. Console logs carry no call-site info, so the plugin ships an optional runtime interceptor: copy the self-contained sample `SqlSourceInterceptor` (shipped with the plugin repository at `docs/instrumentation/SqlSourceInterceptor.kt`) into your project and register it as a MyBatis-Plus `InnerInterceptor`.
 
 ```java
 @Bean
@@ -180,6 +167,7 @@ public MybatisPlusInterceptor mybatisPlusInterceptor() {
 ```
 
 The interceptor captures the real call site on the SQL execution thread and prints a `SQLVIS-SOURCE|relative-path|line` marker to the console (no impact on SQL execution, no performance overhead). The plugin parses it and jumps precisely `file:line`, just like the SQL History panel — straight to the Service / Controller line that fired the SQL.
+:::
 
 **Jump to Mapper XML**: entries carrying mapper statement info can also right-click → "Jump to Mapper XML" — the statement id is split into namespace and fragment id, the mapper XML is located through the project index, the namespace is verified, and the jump lands on the statement node's start line.
 
