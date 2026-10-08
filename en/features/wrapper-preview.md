@@ -107,9 +107,16 @@ Like "Execute SQL", EXPLAIN requires a configured data source (Ultimate's Databa
 
 ### Recent Executions
 
-Reading a Wrapper chain and wondering what its latest actual execution looked like — right-click the anchor icon and choose "Recent Executions". The plugin searches the log entries captured this session for executions near that spot (same file first, lines within ±30 ranked higher); picking one opens the full SQL preview with parameters filled in.
+Reading a Wrapper chain and wondering what its latest actual execution looked like — right-click the anchor icon and choose "Recent Executions". The plugin searches the log entries captured this session for executions near that spot (same file first, lines within ±30 ranked higher) and opens a browsing dialog:
 
-Prerequisite: log capture is on and has captured executions at that spot; an empty menu item is normal when nothing was captured. See [SQL Log Tool Window](/en/features/sql-log).
+- The **left list** reuses the SQL log panel's entry renderer directly (two-line rows, type color bar, duration and source badges identical to the log page) and supports **Ctrl / Shift multi-select**, with "N selected" in the status line
+- The **right editor** shows the executable SQL with parameters restored and **is editable** — tweak a field value temporarily and copy; both the copy button and Ctrl+C take the edited text. It is always formatted (long SQL no longer squeezed onto one line), and the two icon buttons above it are Format (idempotent re-layout) and Copy
+- **With multiple rows selected** the right pane joins them in row order (what you see is what you copy), and Ctrl+C copies all of them at once
+- **Open Preview** uses the last interacted row; double-clicking a row opens the full preview too, and the dialog stays open afterwards so you can compare several executions in a row
+- The **right-click menu** carries the same six items as the SQL log page: copy timestamp (gated by the "Show timestamp" switch, grayed out when off), suppress this SQL, send to SQL → Java, send to Log → SQL, jump to Java, jump to Mapper XML (hidden when it cannot resolve). It deliberately has **no delete** — the dialog is a browsing view and never mutates the global log buffer
+- The dialog is non-modal, draggable and remembers its size and position; an **empty match still opens the dialog**, with the empty state reported in the status line instead of a fleeting notification
+
+Prerequisite: log capture is on and has captured executions at that spot. See [SQL Log Tool Window](/en/features/sql-log).
 
 ## Example
 

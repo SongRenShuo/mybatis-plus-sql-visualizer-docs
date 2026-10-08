@@ -55,11 +55,11 @@ Troubleshooting steps:
 
 "Recent Executions" looks up executions near that spot from logs captured this session — it requires log capture to be on and to have captured executions at that spot before.
 
-An empty menu item right after a fresh session start, before any SQL has run, is normal. If logs aren't being captured at all, go through the steps in the previous section.
+An empty state right after a fresh session start, before any SQL has run, is normal — the dialog opens and reports it. If logs aren't being captured at all, go through the steps in the previous section.
 
 ## "Jump to Source" in realtime logs misses — how to fix?
 
-SQL logs contain no call-site info, so without any configuration the plugin does an approximate jump by searching entities by table name, which may miss.
+Jumps rely only on the positions the plugin actually captured — there is no table-name guessing fallback. Enhanced-capture entries carry the real call stack from execution time and land precisely; console-capture logs contain no call-site info, so they need the interceptor below for a precise landing.
 
 For precise jumps, copy the self-contained `SqlSourceInterceptor` shipped with the plugin into your project and register it as a MyBatis-Plus `InnerInterceptor` — see [Features · Jump to Source](/en/features/sql-log#jump-to-source).
 

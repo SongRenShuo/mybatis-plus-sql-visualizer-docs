@@ -28,14 +28,37 @@
 - SELECT（含多表 JOIN、子查询、聚合）
 - UPDATE（含多字段 SET）
 - DELETE（含多条件 WHERE）
-- INSERT（含批量 VALUES）
+- INSERT（含批量 VALUES、`NULL` 值）
 
-## 调用类与 VO
+## 覆盖的语句能力
 
-可选指定：
-- 调用类（Service / Mapper）
-- 返回 VO 类型
-- 生成的代码可直接编译
+SELECT 侧除 JOIN / 子查询 / 聚合之外，还覆盖这些此前会丢失语义的写法：
+
+- `GROUP BY` → `.groupBy(...)`；`HAVING` → `.having("...")`（聚合表达式原样透传）
+- `SELECT DISTINCT` → `.select("DISTINCT ...")`
+- `FOR UPDATE` → `.last("FOR UPDATE")`（与分页同时存在时合并为单个 `last`）
+- 聚合 / 函数列（`COUNT(*) AS cnt`、`MAX(price)` 等）收集原文生成 `.select("COUNT(*) AS cnt")`，不再整列展开把聚合丢掉
+- `INSERT ... NULL` 值生成 Java 的 `null`
+- `UNION / UNION ALL`：SQL 层往返可还原；MyBatis-Plus 核心没有 `union()` 方法，Java 生成层降级为原文注释提示
+
+## 方言宽容
+
+解析不因方言写法挡路——双引号标识符（`"member"`）、`0x` 十六进制字面量、反斜杠字符串转义（`'a\'b'`）、`DATE` / `TIMESTAMP '...'` 类型字面量都可识别。算术表达式、`<=>` 空安全比较、`ILIKE` 等静态无法映射的形态一律降级成 `apply()` 透传，不阻断转换；条件值也做参数化——`DATE_FORMAT(...) = '2024'` 这类形态生成 `apply("... = {0}", "2024")`，值与会变化的表达式分离。
+
+## 调用类与返回类型
+
+可选的生成上下文：
+
+- **调用类**（Service / Mapper）——决定生成的调用族，如 `service.list(wrapper)`、`mapper.selectList(wrapper)`
+- **返回类型**——一个可编辑字段承载全部返回形态，自由键入任意返回声明：
+  - 含 `Map` → `selectJoinMaps(wrapper)` / 分页 `selectJoinMapsPage(page, wrapper)`（JOIN，MPJ）或单表 `selectMaps` / `listMaps` 族
+  - 含 `Object` → `selectObjs` / `listObjs` 族（单表；JOIN 场景没有对应方法，会报错指路）
+  - 写类名（VO）→ `selectJoinList(Vo.class, wrapper)` + `selectAs` 别名驱动
+  - 留空 = 自动：有实体推断实体 / VO，无实体推断 Map 列表
+
+字段右侧的选类按钮可从项目里挑一个类填入；固定候选里还带了 `List<Map<String, Object>>`、`Page<Map<String, Object>>` 等常用声明。
+
+生成的代码可直接编译。
 
 ## 示例
 

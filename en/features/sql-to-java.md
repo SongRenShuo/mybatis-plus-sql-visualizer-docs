@@ -28,14 +28,37 @@ Default form is configurable in settings.
 - SELECT (incl. multi-table JOIN, subqueries, aggregation)
 - UPDATE (incl. multi-field SET)
 - DELETE (incl. multi-condition WHERE)
-- INSERT (incl. batch VALUES)
+- INSERT (incl. batch VALUES, `NULL` values)
 
-## Call Class & VO
+## Statement Coverage
 
-Optionally specify:
-- Call class (Service / Mapper)
-- Return VO type
-- Generated code compiles directly
+Beyond JOIN / subqueries / aggregation, the SELECT side also covers shapes that used to lose their semantics:
+
+- `GROUP BY` → `.groupBy(...)`; `HAVING` → `.having("...")` (aggregate expressions passed through verbatim)
+- `SELECT DISTINCT` → `.select("DISTINCT ...")`
+- `FOR UPDATE` → `.last("FOR UPDATE")` (merged into a single `last` when pagination is also present)
+- Aggregate / function columns (`COUNT(*) AS cnt`, `MAX(price)`, …) keep their source text in `.select("COUNT(*) AS cnt")` instead of being expanded into all columns and losing the aggregation
+- `INSERT ... NULL` values generate a Java `null`
+- `UNION / UNION ALL`: the SQL layer round-trips; MyBatis-Plus core has no `union()` method, so the Java generation layer degrades to a source-text comment
+
+## Dialect Tolerance
+
+Parsing doesn't get blocked by dialect spellings — double-quoted identifiers (`"member"`), `0x` hex literals, backslash string escapes (`'a\'b'`) and `DATE` / `TIMESTAMP '...'` type literals are all recognized. Forms that cannot be mapped statically — arithmetic expressions, `<=>` null-safe comparison, `ILIKE` and the like — degrade to an `apply()` pass-through instead of blocking the conversion; condition values are parameterized too, so `DATE_FORMAT(...) = '2024'` generates `apply("... = {0}", "2024")`, keeping the value separate from the expression.
+
+## Call Class & Return Type
+
+Optional generation context:
+
+- **Call class** (Service / Mapper) — decides the generated call family, e.g. `service.list(wrapper)`, `mapper.selectList(wrapper)`
+- **Return type** — one editable field carries every return shape; type any return declaration freely:
+  - contains `Map` → the `selectJoinMaps(wrapper)` / paged `selectJoinMapsPage(page, wrapper)` family (JOIN, MPJ) or `selectMaps` / `listMaps` (single table)
+  - contains `Object` → the `selectObjs` / `listObjs` family (single table; there is no such method for JOIN, and the error points the way)
+  - a class name (VO) → VO semantics via `selectJoinList(Vo.class, wrapper)` + `selectAs` alias driving
+  - left empty = auto: an entity is inferred when one exists, otherwise a Map list
+
+The class-picker button beside the field fills in a class from your project, and the fixed candidates include common declarations such as `List<Map<String, Object>>` and `Page<Map<String, Object>>`.
+
+Generated code compiles directly.
 
 ## Example
 

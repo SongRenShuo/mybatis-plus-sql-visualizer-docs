@@ -29,6 +29,7 @@ Enhanced capture asks for injection consent before any run happens — the dialo
 - Real parameter values (desensitization off by default, can be enabled in settings), millisecond-accurate execution durations, affected-row counts and execution error messages
 - Entries carry a database badge (`[MySQL]`, `[DM (Dameng)]` etc.), inferred from the JDBC URL — all 11 dialect databases plus HSQL / GBASE covered
 - Source locations come from the real call stack, jumping straight to the code line that executed the SQL (see "Jump to Source" below)
+- Entries carry the full call-stack snapshot — hover the preview panel to see the whole call chain and click any frame to jump to that frame's source (see "Jump from the Call Stack" below)
 - Collected data is only displayed inside the IDE on your machine — nothing is sent to any server; turning the switch off stops collection (attached capture points remain but stay idle)
 
 ::: details Startup injection and consent behavior (When to read: you care about JVM injection mechanics or run into an injection prompt)
@@ -152,6 +153,17 @@ Right-click a log entry → "Jump to Source". How the position is resolved depen
 Framework frames are filtered by origin (business classes come from directories in dev, third-party dependencies from JARs), so framework or data-layer plugin frames cannot mislead the jump. Both frame filtering and JAR business-frame ownership are configurable in settings: register your framework engine chain's packages under "Source-capture frame skip prefixes" (one per line), and your JAR-packaged business tool libraries' packages under "JAR business-frame prefixes" — registered jumps then land inside the tool class where the SQL runs, instead of the caller line above it. Both fields are validated as you type (format and cross-field conflicts) with one-click fix. The live list and history panel share the same resolver.
 :::
 
+#### Jump from the Call Stack
+
+An enhanced-capture entry carries more than a single execution point — it carries the whole call stack. Preview such an entry and hover the "Call stack:" area on the panel's meta line; after a moment a debugger-style **Frames** popup appears:
+
+- Frames are listed as structured rows — method name, fully-qualified class name and `:line`, with the class name middle-ellipsized when too wide so the line number always stays visible; the top frame is selected by default and the plugin's own capture frames are dimmed gray
+- **Clicking any frame jumps to that frame's source line** (resolved by class name across the whole project, library classes landing in the decompiled view, just like the debugger). When a frame cannot be resolved the popup stays open — no false "jumped" impression
+- Infrastructure frames at the tail (Tomcat / thread-pool tails and the like) are skipped when resolving, so the popup anchors on the deepest business frame and you see the Controller → Service path at a glance
+- "Copy full call stack" at the bottom copies the raw snapshot verbatim, ready to paste into an issue or a chat
+
+How many frames are kept is configurable — "Call-stack snapshot frames" in settings (default 24, range 12–64): sampled at both ends, the top keeps JDBC / engine-side frames and the bottom always keeps 8 business-side frames, joined by an omission marker in the middle. Changes take effect via a hot push on save — no application restart.
+
 **Console-capture entries**: SQL logs contain no call-site info, so the plugin ships an optional runtime interceptor — copy the self-contained sample `SqlSourceInterceptor` into your project and register it as a MyBatis-Plus `InnerInterceptor` for precise resolution.
 
 The interceptor sample file ships with the plugin repository: `docs/instrumentation/SqlSourceInterceptor.kt`.
@@ -239,13 +251,16 @@ List entries use two-level previewing, consistent across the SQL log list, the H
 - **Multi-select and right-click**: right-clicking a row already in the selection keeps the selection, while the other menu actions still apply to the right-clicked row.
 - **Double-click dialog**: vertical layout annotates each INSERT value line end with a `-- column` tag (can be disabled in settings), and IN lists expand vertically element by element — any list with a comma (≥2 elements) puts `(` on its own line with one element per line, while single-element forms (`IN (1)` / `IN (?)`) stay on one line, and IN subqueries and LIMIT pagination parameters are never expanded. The display mode you switch to survives parameter refill instead of being wiped by re-rendering (Refresh resets it). The dialog is non-modal: when a data source password expires during execution, IDEA's password prompt can be raised on top as usual; with no data source configured, preview prepares silently — it no longer raises the Database tool window over the sidebar, and only an explicit run guides you through configuration.
 - **Auto-fold**: with "Auto-fold long field lists" enabled in settings (off by default, threshold adjustable, default 10), preview editors collapse long SELECT / INSERT column lists, VALUES groups and UPDATE SET lists into a "… N columns" placeholder — click the fold marker to expand. This applies consistently across the main preview dialog, single-click preview, history preview, the Log → SQL result area and the native Database console.
+- **Identical Ctrl+C semantics everywhere**: in every surface with a SQL editor (main preview panel, single-click preview popup, "Recent Executions", suppression rules, rollback SQL, the SQL → Java input area, parameter import) Ctrl+C means the same thing — with no selection it copies the whole SQL, with a selection it copies just the fragment (Ctrl+C and Ctrl+Insert are synonyms); Ctrl+C on a list copies the plain SQL rather than the rendered text.
 :::
 
 How entries render is controlled by the "List display" option in settings (see the section above).
 
 ## SQL History
 
-Enable "Auto-save SQL history" in settings (off by default) and captured entries are saved to disk in full (not limited by the list's max-entry count); when the save directory holds more history files than the retention limit (default 30, configurable, 0 = keep everything), the oldest files are cleaned up automatically to keep the disk in check.
+The "SQL History" tab is always present on the panel — you don't have to enable auto-save first to see the entry point (it shows an empty state when auto-save is off and the directory holds no history files). Previously the tab was only mounted once certain conditions were met.
+
+Enable "Auto-save SQL history" in settings (off by default) and captured entries are saved to disk in full (not limited by the list's max-entry count); when the save directory holds more history files than the retention limit (default 30, configurable, 0 = keep everything), the oldest files are cleaned up automatically to keep the disk in check. Reading and writing go through the same directory resolution: files written after you customize the save directory are visible on the History page too, and changing the save directory triggers a rescan.
 
 - **Level 1 (default view)**: file list — each row shows file name, size and SQL count; search box filters by file name
 - **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info, and a `#N` number per in-file entry order); large files load in batches as you scroll — the first 30 entries up front, more appended as you near the bottom; single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text

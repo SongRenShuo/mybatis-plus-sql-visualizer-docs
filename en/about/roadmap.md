@@ -13,7 +13,7 @@ Planned features and progress.
 
 Completed capabilities are grouped by module — click a title to expand.
 
-::: details Preview & Diagnostics (30)
+::: details Preview & Diagnostics (31)
 - [x] Wrapper → SQL static parsing (Lambda / String / MPJ / Kotlin)
 - [x] XML / annotation dynamic SQL preview (OGNL panel)
 - [x] HQL / JPQL / JPA Criteria preview (entity-alias expansion)
@@ -23,6 +23,7 @@ Completed capabilities are grouped by module — click a title to expand.
 - [x] Other ORM chain-framework preview (xbatis / Easy-Query / Querydsl, etc.)
 - [x] Custom-DAO string SQL method anchors
 - [x] Gutter anchor: left-click preview, right-click recent executions
+- [x] Recent Executions as a dialog (editable pane / multi-select / context menu)
 - [x] Auto-fold long field lists in SQL preview
 - [x] INSERT target-column inlay hints
 - [x] SQL embedded in generic XML
@@ -46,8 +47,9 @@ Completed capabilities are grouped by module — click a title to expand.
 - [x] Preview panel data-source binding indicator
 :::
 
-::: details Conversion & Completion (7)
+::: details Conversion & Completion (8)
 - [x] SQL → Java reverse conversion (five forms, multi-table JOIN)
+- [x] SQL → Java coverage & dialect tolerance (grouping / aggregation / union / free-form return type)
 - [x] SQL code completion (table columns / comments / parameter names)
 - [x] Wrapper method-chain smart completion
 - [x] Batch operation parameter panel (column-level toggle)
@@ -56,10 +58,12 @@ Completed capabilities are grouped by module — click a title to expand.
 - [x] Portable export of CRUD / rollback SQL
 :::
 
-::: details Log & History (30)
+::: details Log & History (32)
 - [x] SQL log tool window (multi-framework capture, Log → SQL restore)
 - [x] Duration display & slow-query detection
 - [x] Precise jump to source (interceptor-marked call sites)
+- [x] SQL log call-stack popup with click-a-frame-to-jump
+- [x] SQL History tab always present (same directory resolution for reads and writes)
 - [x] Auto-open log tool window on first SQL
 - [x] Auto-start listening on project launch
 - [x] SQL log entry sequence numbers (#N)
@@ -103,7 +107,7 @@ Completed capabilities are grouped by module — click a title to expand.
 - [x] Settings & onboarding discoverability polish
 :::
 
-> Everything above has shipped with v2026.9.8 ~ v2026.10.7; see the [changelog](./changelog) for version details. Highlights of v2026.9.23: the ten MCP Server tools, premain capture at startup, method-level / request-level focus tabs, one-click rollback SQL, dialect auto-inference, cross-namespace include resolution, and more; highlights of v2026.10.6: embedded value objects (@Embedded) support, SQL log suppression, SQL embedded in generic XML, alias-free HQL mapping, the OceanBase / openGauss dialects, empty parameters defaulting to a `?` placeholder, enhanced-capture consent moved ahead of any run (asked on enable or project open), JAR business-frame registration and jump-landing fixes, and more; highlights of v2026.10.7: SQL log scroll-to-bottom with tail following, JPA setParameter auto-prefill (literals / enum constants) with fill-by-name, and loading performance improvements under concurrent log storms. Preview parameter presets, mapper XML syntax highlighting, full-dialect EXPLAIN with structured rendering, IPage pagination simulation, ShardingSphere log capture, the MCP history-search tool, history diff & export, full-width parenthesis tolerance, the preview data-source binding indicator, preview parameter memory and more have landed on the dev branch first and will ship with a later release.
+> Everything above has shipped with v2026.9.8 ~ v2026.10.9; see the [changelog](./changelog) for version details. Highlights of v2026.9.23: the ten MCP Server tools, premain capture at startup, method-level / request-level focus tabs, one-click rollback SQL, dialect auto-inference, cross-namespace include resolution, and more; highlights of v2026.10.6: embedded value objects (@Embedded) support, SQL log suppression, SQL embedded in generic XML, alias-free HQL mapping, the OceanBase / openGauss dialects, empty parameters defaulting to a `?` placeholder, enhanced-capture consent moved ahead of any run (asked on enable or project open), JAR business-frame registration and jump-landing fixes, and more; highlights of v2026.10.7: SQL log scroll-to-bottom with tail following, JPA setParameter auto-prefill (literals / enum constants) with fill-by-name, and loading performance improvements under concurrent log storms; highlights of v2026.10.9: the SQL-log call-stack popup with click-a-frame-to-jump, the always-present SQL History tab, Recent Executions as a dialog (editable / multi-select / context menu), SQL → Java coverage expansion (GROUP BY / HAVING / DISTINCT / UNION plus dialect tolerance) and a free-form return type. Preview parameter presets, mapper XML syntax highlighting, full-dialect EXPLAIN with structured rendering, IPage pagination simulation, ShardingSphere log capture, the MCP history-search tool, history diff & export, full-width parenthesis tolerance, the preview data-source binding indicator, preview parameter memory — plus display/export literal masking, Copy as AI Context, three-state update-failure diagnosis, history parameter snapshots restored to the preview, cross-run EXPLAIN comparison, replay-script export, the capture status bar with a pause action, and the dialect capability matrix with pre-execution self-checks — have landed on the dev branch first and will ship with a later release.
 
 ## Planned
 

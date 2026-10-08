@@ -29,4 +29,5 @@ Windows / Linux 与 macOS 的默认键位，以及各功能的入口方式。
 
 - 预览弹窗是非模态窗口，可以边看 SQL 边改代码
 - SQL → Java 支持四种目标形态，转换结果可直接粘贴回项目
+- Ctrl+C 在所有带 SQL 编辑器的界面里语义一致：无选中复制全文、圈选后只复制片段（Ctrl+Insert 同义）；列表上的 Ctrl+C 复制纯 SQL，而不是渲染出来的文本
 - macOS 上如果 `Option+Shift+Q` 打出了特殊字符，是输入法拦截，可在 Keymap 中改绑

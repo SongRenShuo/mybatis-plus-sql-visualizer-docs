@@ -29,4 +29,5 @@ Bindings can be changed in `Settings` > `Keymap` by searching for the plugin act
 
 - The preview popup is non-modal — you can keep editing code while inspecting SQL
 - SQL → Java supports four target forms; results can be pasted straight back into your project
+- Ctrl+C means the same thing in every surface with a SQL editor: no selection copies the whole SQL, a selection copies just the fragment (Ctrl+Insert is a synonym); on a list it copies the plain SQL rather than the rendered text
 - On macOS, if `Option+Shift+Q` types a special character instead, your input source is intercepting it — rebind in Keymap
