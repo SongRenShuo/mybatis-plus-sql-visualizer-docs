@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vitepress build --ignoreDeadLinks && node scripts/prepare-pagefind.mjs && pagefind --site .vitepress/dist --exclude-selectors \"[data-nosnippet], .VPNav, .VPSidebar, .VPFooter, .VPBackToTop, .pf-trigger, .VPLocalNav, .VPSkipLink\"",
+    "build": "node scripts/sync-plugin-version.mjs && vitepress build --ignoreDeadLinks && node scripts/prepare-pagefind.mjs && pagefind --site .vitepress/dist --exclude-selectors \"[data-nosnippet], .VPNav, .VPSidebar, .VPFooter, .VPBackToTop, .pf-trigger, .VPLocalNav, .VPSkipLink\"",
     "preview": "vitepress preview",
     "changelog": "node scripts/update-changelog.mjs",
-    "deploy": "vitepress build --ignoreDeadLinks && node scripts/prepare-pagefind.mjs && pagefind --site .vitepress/dist --exclude-selectors \"[data-nosnippet], .VPNav, .VPSidebar, .VPFooter, .VPBackToTop, .pf-trigger, .VPLocalNav, .VPSkipLink\" && wrangler pages deploy .vitepress/dist --project-name sql-visualizer-docs --branch main --commit-dirty=true"
+    "deploy": "node scripts/sync-plugin-version.mjs && vitepress build --ignoreDeadLinks && node scripts/prepare-pagefind.mjs && pagefind --site .vitepress/dist --exclude-selectors \"[data-nosnippet], .VPNav, .VPSidebar, .VPFooter, .VPBackToTop, .pf-trigger, .VPLocalNav, .VPSkipLink\" && wrangler pages deploy .vitepress/dist --project-name sql-visualizer-docs --branch main --commit-dirty=true"
   },
   "devDependencies": {
     "marked": "^15.0.12",

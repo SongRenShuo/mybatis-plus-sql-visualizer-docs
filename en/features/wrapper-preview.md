@@ -101,7 +101,10 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | engine-level unit tests |
 | OceanBase (MySQL mode) | `EXPLAIN <sql>` (table rows) | verified against official docs (real-DB check pending) |
 | openGauss | `EXPLAIN (FORMAT JSON) <sql>` | verified on real DB |
-| Oracle / SQL Server | not supported yet; clicking shows a fallback hint | — |
+| Oracle | `EXPLAIN PLAN FOR <sql>` (plan goes to the session-level `PLAN_TABLE`) | verified on real DB (Free 23 / XE 11g) |
+| SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | official grammar; real-DB check pending |
+
+Oracle's plan rows land in the session-level `PLAN_TABLE` while the statement itself returns 0 rows, so the panel points you to run `SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY)` on the database side over the same connection. SQL Server returns the plan XML as an additional result set after the statement, visible in the native console's extra result tabs.
 
 Like "Execute SQL", EXPLAIN requires a configured data source (Ultimate's Database tool window); without one you'll be asked to configure it first.
 

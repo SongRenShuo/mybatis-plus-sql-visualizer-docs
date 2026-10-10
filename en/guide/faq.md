@@ -39,7 +39,7 @@ Yes. The left panel input supports comma-separated multi-value fill-in (input `1
 
 ## EXPLAIN click fails or does nothing?
 
-The most common cause is a missing data source: like "Execute SQL", "EXPLAIN" relies on the Database tool window of IntelliJ IDEA Ultimate — configure a data source there first, then retry. Oracle / SQL Server don't support EXPLAIN yet; clicking shows a hint in the panel. Execution errors are reported inline in the panel, never as a popup dialog.
+The most common cause is a missing data source: like "Execute SQL", "EXPLAIN" relies on the Database tool window of IntelliJ IDEA Ultimate — configure a data source there first, then retry. Oracle registers the plan into the session-level `PLAN_TABLE` and the statement returns 0 rows, so follow the panel's hint and query `DBMS_XPLAN.DISPLAY` on the database side over the same connection; SQL Server returns the plan XML in an extra result tab of the native console. Execution errors are reported inline in the panel, never as a popup dialog.
 
 ## SQL log not capturing SQL?
 

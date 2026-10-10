@@ -1,5 +1,20 @@
 import { defineConfig } from 'vitepress'
 import llmstxt from 'vitepress-plugin-llms'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
+
+// 插件版本单一来源：构建前由 scripts/sync-plugin-version.mjs 写入
+// （同级插件仓 gradle.properties → Marketplace API → 保留现值），
+// 这里读它注入 JSON-LD softwareVersion；前端兜底见 theme/composables/usePluginVersion.js。
+const pluginVersion: string = (() => {
+  try {
+    const p = resolve(dirname(fileURLToPath(import.meta.url)), 'data/plugin-version.json')
+    return JSON.parse(readFileSync(p, 'utf8')).version
+  } catch {
+    return 'unknown'
+  }
+})()
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -44,7 +59,7 @@ export default defineConfig({
       'operatingSystem': 'Windows, macOS, Linux',
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus / MPJ / JPA / Hibernate 的 SQL 调试利器',
       'url': 'https://sql-visualizer.jvtools.cn',
-      'softwareVersion': '2026.10.9',
+      'softwareVersion': pluginVersion,
       'featureList': [
         'Wrapper chain to SQL live preview',
         'XML / annotation / HQL dynamic SQL preview',

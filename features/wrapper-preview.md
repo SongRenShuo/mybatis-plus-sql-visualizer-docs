@@ -102,7 +102,10 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | 引擎级单测 |
 | OceanBase（MySQL 模式） | `EXPLAIN <sql>`（表格行） | 官方文档级验证（真机留账） |
 | openGauss | `EXPLAIN (FORMAT JSON) <sql>` | 真机通过 |
-| Oracle / SQL Server | 暂不支持，点击后提示降级 | — |
+| Oracle | `EXPLAIN PLAN FOR <sql>`（计划写入会话级 `PLAN_TABLE`） | 真机通过（Free 23 / XE 11g） |
+| SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | 官方文法落地，真机未验证 |
+
+Oracle 的计划行落在会话级 `PLAN_TABLE` 里、语句本身返回 0 行，面板会给出指引：在同一连接的数据库端另执行 `SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY)` 查看。SQL Server 的计划 XML 是语句执行后的附加结果集，在原生控制台的多结果页签里可见。
 
 「执行计划」与「执行 SQL」一样依赖已配置的数据源（Ultimate 的 Database 工具窗），未配置时会提示先配置。
 

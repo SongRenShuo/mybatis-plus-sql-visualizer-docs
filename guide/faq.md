@@ -39,7 +39,7 @@ JPA 派生查询的第一批尚未包含 `findAllById` 这类 IN 展开形态，
 
 ## EXPLAIN 点击失败或没反应？
 
-最常见原因是未配置数据源：「EXPLAIN」与「执行 SQL」一样依赖 IntelliJ IDEA Ultimate 的 Database 工具窗，先在里面配好数据源再试。Oracle / SQL Server 暂不支持 EXPLAIN，点击后面板内会给出提示。执行出错时错误信息直接显示在面板内，不会弹窗。
+最常见原因是未配置数据源：「EXPLAIN」与「执行 SQL」一样依赖 IntelliJ IDEA Ultimate 的 Database 工具窗，先在里面配好数据源再试。Oracle 的计划行落在会话级 `PLAN_TABLE`、语句本身返回 0 行，按面板指引在同一连接的数据库端查 `DBMS_XPLAN.DISPLAY` 即可看到；SQL Server 的计划 XML 出现在原生控制台的附加结果页签里。执行出错时错误信息直接显示在面板内，不会弹窗。
 
 ## SQL 日志捕获不到 SQL 怎么办？
 

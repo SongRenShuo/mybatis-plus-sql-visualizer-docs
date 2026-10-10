@@ -1,7 +1,10 @@
 import { ref } from 'vue'
+import pluginVersion from '../../data/plugin-version.json'
 
-// Marketplace API 不可用时的静态兜底，随发版手动同步
-const FALLBACK_VERSION = 'v2026.9.18'
+// Marketplace API 不可用时的静态兜底。值来自构建期注入的单一来源
+// （scripts/sync-plugin-version.mjs 写 .vitepress/data/plugin-version.json）——
+// 此前是手写字符串，实测会静默滞后（曾停在 v2026.9.18）。
+const FALLBACK_VERSION = `v${pluginVersion.version}`
 
 export function usePluginVersion() {
   const version = ref(FALLBACK_VERSION)
