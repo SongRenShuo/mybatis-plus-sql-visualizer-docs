@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useHomeContent } from '../../composables/useHomeContent'
 
+const { c } = useHomeContent()
 const cardRef = ref(null)
 
 function handleMouseMove(e) {
@@ -34,7 +36,7 @@ function handleMouseLeave() {
 <template>
   <section id="sec-opensource" class="welfare-section">
     <div class="container">
-      <span class="section-eyebrow welfare-eyebrow mp-reveal">Open Source</span>
+      <span class="section-eyebrow welfare-eyebrow mp-reveal">{{ c.welfare.eyebrow }}</span>
       <div
         ref="cardRef"
         class="welfare-card mp-reveal"
@@ -48,50 +50,26 @@ function handleMouseLeave() {
         <div class="welfare-info">
           <div class="welfare-tag">
             <span class="welfare-tag-dot"></span>
-            开源免费 · 永久使用
+            {{ c.welfare.tag }}
           </div>
 
           <h2 class="welfare-title">
-            完全免费<br />
-            <span class="welfare-title-accent">基于 Apache-2.0 协议</span>
+            {{ c.welfare.titleLine1 }}<br />
+            <span class="welfare-title-accent">{{ c.welfare.titleLine2 }}</span>
           </h2>
 
           <p class="welfare-desc">
-            SQL Visualizer 所有功能永久免费使用。无需注册、无需登录，安装即用。
+            {{ c.welfare.description }}
           </p>
 
           <ul class="welfare-list">
-            <li>
+            <li v-for="item in c.welfare.items" :key="item">
               <span class="welfare-list-icon">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="11" height="11">
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                 </svg>
               </span>
-              <span>所有功能完全免费</span>
-            </li>
-            <li>
-              <span class="welfare-list-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="11" height="11">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                </svg>
-              </span>
-              <span>开源透明，代码可查</span>
-            </li>
-            <li>
-              <span class="welfare-list-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="11" height="11">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                </svg>
-              </span>
-              <span>持续更新，社区驱动</span>
-            </li>
-            <li>
-              <span class="welfare-list-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="11" height="11">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                </svg>
-              </span>
-              <span>无需注册，开箱即用</span>
+              <span>{{ item }}</span>
             </li>
           </ul>
         </div>
@@ -105,7 +83,7 @@ function handleMouseLeave() {
           >
             <img src="/gitee-icon.png" alt="Gitee Logo" class="welfare-gitee-logo" />
           </a>
-          <div class="welfare-qr-caption">点击 · 前往 Gitee 仓库</div>
+          <div class="welfare-qr-caption">{{ c.welfare.giteeCaption }}</div>
         </div>
       </div>
     </div>

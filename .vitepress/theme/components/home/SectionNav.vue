@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useHomeContent } from '../../composables/useHomeContent'
 
 /**
  * 首页吸顶章节导航（T1）。
@@ -22,64 +23,49 @@ const props = defineProps({
   suppressed: { type: Boolean, default: false },
 })
 
-const sections = [
-  { id: 'sec-tech', label: '技术栈' },
-  { id: 'sec-capability', label: '核心能力' },
-  { id: 'sec-preview', label: '预览能力' },
-  { id: 'sec-features', label: '更多特性' },
-  { id: 'sec-opensource', label: '开源免费' },
-  { id: 'sec-testimonials', label: '用户评价' },
-  { id: 'sec-pricing', label: '免费下载' },
-  { id: 'sec-start', label: '开始使用' },
-]
+const { c } = useHomeContent()
+
+const sections = computed(() => c.value.sectionNav.items)
 
 const pastHero = ref(false)
 const activeId = ref(null)
 const progress = ref(0)
 
 // 判定「当前区块」的阈值线：区块顶边越过视口 y=140 即成为当前项。
-// 与 style.css 里 section[id] 的 scroll-margin-top(112px) 保持约 28px 余量，
-// 使点击跳转后的落点必然命中同一项，不会出现「点了却不亮」。
+// 必须大于 style.css 的 --home-anchor-offset(124px)，否则跳转后的落点算不出
+// 当前项，会出现「点了却不亮」。
 const ACTIVE_LINE = 140
 
-let offsets = []
-let heroHeight = 0
 let scrollHandler = null
 let resizeHandler = null
-let rafId = 0
 
 const isVisible = computed(() => pastHero.value && !props.suppressed)
 
-function measure() {
-  heroHeight = document.querySelector('.hero-section')?.offsetHeight ?? window.innerHeight
-  offsets = sections.map((s) => {
-    const el = document.getElementById(s.id)
-    if (!el) return Number.POSITIVE_INFINITY
-    // offsetTop 相对 offsetParent，逐级累加得到文档绝对位置
-    let top = 0
-    let node = el
-    while (node) {
-      top += node.offsetTop
-      node = node.offsetParent
-    }
-    return top
-  })
-}
-
+/**
+ * 每次滚动都直接读元素矩形，不缓存偏移量。
+ *
+ * 起初缓存了各区块的文档绝对位置（挂载时量一次 + resize/load 时重量），实测在
+ * 英文首页上会系统性失准——点「更多特性」高亮停在「预览能力」，即整体慢一项；
+ * 原因是页面在挂载后仍有 ~70px 级别的布局增长（懒加载素材与文字回流），缓存
+ * 一旦过期，阈值比较就整体偏移。改成每帧读 8 个 getBoundingClientRect 后，
+ * 这类问题从根上消失，代价是每帧一次布局读取，可接受。
+ */
 function update() {
-  rafId = 0
   const y = window.scrollY
 
-  pastHero.value = y > heroHeight - ACTIVE_LINE
+  const hero = document.querySelector('.hero-section')
+  pastHero.value = hero ? hero.getBoundingClientRect().bottom <= ACTIVE_LINE : y > 400
 
-  const pos = y + ACTIVE_LINE
+  const list = sections.value
   let current = null
-  for (let i = 0; i < offsets.length; i += 1) {
-    if (offsets[i] <= pos) current = sections[i].id
+  for (let i = 0; i < list.length; i += 1) {
+    const el = document.getElementById(list[i].id)
+    if (!el) continue
+    if (el.getBoundingClientRect().top <= ACTIVE_LINE) current = list[i].id
   }
   // 触底时强制选中最后一项：末节高度可能不足以把顶边推到阈值线以上
   if (window.innerHeight + y >= document.documentElement.scrollHeight - 2) {
-    current = sections[sections.length - 1].id
+    current = list[list.length - 1].id
   }
   activeId.value = current
 
@@ -87,66 +73,89 @@ function update() {
   progress.value = scrollable > 0 ? Math.min(1, Math.max(0, y / scrollable)) : 0
 }
 
+// 直接调用，不用 rAF 节流：滚动事件本身已按帧合并，update() 只是 8 次
+// getBoundingClientRect 读取；而该宿主 requestAnimationFrame 不触发，
+// 用 rAF 节流会让高亮完全不更新。
 function onScroll() {
-  if (rafId) return
-  rafId = window.requestAnimationFrame(update)
+  update()
 }
 
 function onResize() {
-  measure()
   update()
+}
+
+/**
+ * 点击落点显式计算，不交给 scrollIntoView 的 scroll-margin。
+ *
+ * 实测（内嵌 webview）：同一份布局下 `scrollIntoView({behavior:'smooth'})` 与
+ * 瞬时分支给出不同落点——smooth 只避让了 54px，瞬时避让 124px（后者才是 CSS 里
+ * scroll-margin-top 的值）。所以自己算 `元素文档绝对位置 - 避让量`，避让量从
+ * CSS 变量读，保证与 style.css 的 scroll-margin-top 同源。
+ */
+function anchorOffset() {
+  const root = document.querySelector('.cool-home')
+  const raw = root ? getComputedStyle(root).getPropertyValue('--home-anchor-offset') : ''
+  const parsed = Number.parseFloat(raw)
+  return Number.isFinite(parsed) ? parsed : 124
+}
+
+function documentTop(el) {
+  let top = 0
+  let node = el
+  while (node) {
+    top += node.offsetTop
+    node = node.offsetParent
+  }
+  return top
+}
+
+/**
+ * 瞬时跳转，不用原生平滑，也不用 rAF 自己动画。
+ *
+ * 实测（内嵌 webview，三者都踩过）：
+ * ① 原生 `scrollIntoView({behavior:'smooth'})` 的落点不可信——同一份布局下只避让
+ *    54px，瞬时分支避让 124px（后者才是 CSS 的 scroll-margin-top）；
+ * ② 该宿主 `requestAnimationFrame` 完全不触发（1.5s 超时未回调），自己写的
+ *    逐帧动画会一帧都不跑；
+ * ③ `setTimeout` 被节流到约 1s 一帧，也撑不起动画。
+ *
+ * 所以落点由自己算、跳转瞬时完成：结果确定、与宿主能力无关，也不会出现
+ * 「点了没反应」。跳转语义上瞬时跳转本就是页内锚点的常规做法。
+ * prefers-reduced-motion 无需特殊处理——本来就没有动画。
+ */
+function scrollToTarget(target) {
+  window.scrollTo(0, target)
 }
 
 function onClick(event, id) {
   const el = document.getElementById(id)
   if (!el) return
   event.preventDefault()
-  const reduceMotion =
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  // 落点由 CSS 的 scroll-margin-top 负责避让两级吸顶导航
-  const before = window.scrollY
-  el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
-
-  if (!reduceMotion) {
-    // 平滑滚动不被支持的宿主会「完全不动」（实测内嵌 webview 即如此：
-    // scrollIntoView 与 scrollTo 的 smooth 均无效，瞬时调用正常）。
-    // 下一拍仍未位移则退回瞬时跳转，保证落点在所有宿主都正确。
-    window.setTimeout(() => {
-      if (Math.abs(window.scrollY - before) < 2) {
-        el.scrollIntoView({ block: 'start' })
-      }
-    }, 160)
-  }
+  scrollToTarget(Math.max(0, documentTop(el) - anchorOffset()))
 
   history.replaceState(null, '', `#${id}`)
   activeId.value = id
 }
 
 onMounted(() => {
-  measure()
   scrollHandler = onScroll
   resizeHandler = onResize
   window.addEventListener('scroll', scrollHandler, { passive: true })
   window.addEventListener('resize', resizeHandler)
-  // 懒加载图片落位后偏移会变，加载完成再量一次
-  window.addEventListener('load', resizeHandler, { once: true })
   update()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', scrollHandler)
   window.removeEventListener('resize', resizeHandler)
-  window.removeEventListener('load', resizeHandler)
-  if (rafId) window.cancelAnimationFrame(rafId)
 })
 </script>
 
 <template>
   <div class="section-nav" :class="{ 'is-visible': isVisible }">
     <div class="section-nav__viewport">
-      <nav class="section-nav__links" aria-label="页内章节导航">
+      <nav class="section-nav__links" :aria-label="c.sectionNav.label">
         <a
           v-for="s in sections"
           :key="s.id"

@@ -1,8 +1,13 @@
 /**
  * 中英首页「功能宣传点」唯一数据源
- * - coolCards:       中文首页特性卡片（index.md → CoolHome → FeaturesGrid 渲染）
- * - enCards:         英文首页特性卡片（en/index.md 顶部卡片，EnHomeFeatures 渲染）
- * - enFeatureMatrix: 英文首页 Feature Matrix 三组表格（EnFeatureMatrix 渲染）
+ * - coolCards:   中文首页特性卡片（index.md → CoolHome → FeaturesGrid 渲染）
+ * - enCoolCards: 英文首页特性卡片（en/index.md → CoolHome → FeaturesGrid 渲染）
+ *                与 coolCards 逐项对应（同 icon / color / 主题），只换语言，
+ *                保证中英首页的卡片区结构一致
+ * - enCards / enFeatureMatrix: 旧英文首页（layout:home + EnHomeFeatures +
+ *                 EnFeatureMatrix）用的数据，2026-10-10 英文首页改挂 CoolHome
+ *                 后不再渲染，保留以免丢失内容；对应能力面已在
+ *                 en/guide/comparison.md 的对比表中有覆盖
  * 以后增删改宣传点文案 / 链接 / 表格行，只改这个文件。
  */
 
@@ -46,7 +51,54 @@ export const coolCards = [
   },
 ]
 
+// 英文首页 6 张卡片：与 coolCards 逐项对应（同 icon / color / 主题），只换语言
+export const enCoolCards = [
+  {
+    icon: 'code',
+    color: 'purple',
+    title: 'Multi-framework support',
+    description:
+      'MyBatis-Plus / MPJ joins / JPA·Hibernate / XML mapper / annotation SQL, with xbatis, Easy-Query, Querydsl and more ORMs following.',
+  },
+  {
+    icon: 'gauge',
+    color: 'blue',
+    title: 'Performance',
+    description:
+      'Static parsing, lightweight by design. Previews appear instantly, and enabling capture halves console log parsing overhead. Failures report inside the panel without interrupting you, and large log streams render without stutter.',
+  },
+  {
+    icon: 'bulb',
+    color: 'green',
+    title: 'Smart detection',
+    description:
+      'Wrapper endpoints in your project are scanned automatically and parameter types resolved. Nothing to configure, works out of the box.',
+  },
+  {
+    icon: 'cog',
+    color: 'yellow',
+    title: 'Broad integration',
+    description:
+      'Beyond XML / annotation / HQL·JPQL / .hbm.xml named queries / SQL log tracking / batch operations: CRUD SQL generation from entity classes and database tables, real EXPLAIN plans, automatic listener on project start, and eleven MCP Server tools for AI agents (IDEA 2025.2+).',
+  },
+  {
+    icon: 'shield',
+    color: 'orange',
+    title: 'Safety',
+    description:
+      'Red warnings on UPDATE / DELETE without a WHERE clause with unbounded-write findings listed, a second confirmation before ${} substitution, an execution timeout guard, and logic-delete plus optimistic-lock conditions injected automatically.',
+  },
+  {
+    icon: 'history',
+    color: 'indigo',
+    title: 'History',
+    description:
+      'Every preview and reverse conversion is saved. The history panel offers two-level navigation, SQL with highlighting and durations, and precise jumps back to source.',
+  },
+]
+
 // 英文首页 6 张卡片：icon 为 emoji，link 为站内路径（原 en/index.md frontmatter features）
+// 2026-10-10 起不再渲染（英文首页改挂 CoolHome），保留备查
 export const enCards = [
   {
     icon: '⚡',

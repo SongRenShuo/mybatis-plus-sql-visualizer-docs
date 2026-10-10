@@ -10,6 +10,9 @@ import Testimonials from './Testimonials.vue'
 import PricingSection from './PricingSection.vue'
 import CtaSection from './CtaSection.vue'
 import { useReveal } from '../../composables/useReveal'
+import { useHomeContent } from '../../composables/useHomeContent'
+
+const { c } = useHomeContent()
 
 // 滚动揭示全页共用一个观察器：各区块自带 mp-reveal 类，这里统一挂观察。
 // Vue 子组件先于父组件挂载，此处执行时子组件 DOM 已就位。
@@ -32,7 +35,7 @@ useReveal()
     </main>
     <footer class="mp-footer">
       <div class="container">
-        <p class="mp-footer__text">基于 Apache-2.0 协议开源发布 · Copyright © 2026-present SongRenShuo</p>
+        <p class="mp-footer__text">{{ c.footer }}</p>
       </div>
     </footer>
   </div>

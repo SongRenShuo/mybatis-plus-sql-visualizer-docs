@@ -1,24 +1,13 @@
 <script setup>
-// 技术栈条。原实现是 flex-wrap 静态列表，1440 视口下 8 项刚好放不下而折成两行
-// （末项独占一行），观感不平衡；且计划里的「两端渐隐」对静态列表无意义——没有东西
-// 被裁切。改为无限横向跑马灯后，渐隐遮罩才真正承担「内容继续延伸」的暗示，
-// 同时消除折行。prefers-reduced-motion 下退回静态居中换行列表。
-const frameworks = [
-  'MyBatis-Plus',
-  'MPJ 联表',
-  'Spring Boot',
-  'XML Mapper',
-  '注解 SQL',
-  'SQL 日志',
-  '批量操作',
-  'SQL 补全',
-]
+import { useHomeContent } from '../../composables/useHomeContent'
+
+const { c } = useHomeContent()
 </script>
 
 <template>
   <section id="sec-tech" class="social-proof-section">
     <div class="container">
-      <p class="social-proof-text">支持多种 SQL 调试场景</p>
+      <p class="social-proof-text">{{ c.socialProof.caption }}</p>
       <div class="social-proof-marquee mp-reveal">
         <div class="social-proof-logos">
           <!-- 轨道渲染两份，动画位移 -50% 时首尾无缝衔接 -->
@@ -28,7 +17,7 @@ const frameworks = [
             class="social-proof-logos__group"
             :aria-hidden="copy === 2 ? 'true' : undefined"
           >
-            <div v-for="fw in frameworks" :key="fw" class="social-proof-logo">
+            <div v-for="fw in c.socialProof.items" :key="fw" class="social-proof-logo">
               {{ fw }}
             </div>
           </div>

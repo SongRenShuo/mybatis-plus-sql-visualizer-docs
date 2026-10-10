@@ -1,39 +1,31 @@
 <script setup>
-const features = [
-  'Wrapper → SQL 实时预览',
-  'XML / 注解动态 SQL 预览',
-  'MPJ 联表 JOIN 反向解析',
-  'SQL → Java 反向转换',
-  '控制台日志一键还原',
-  '批量操作参数面板',
-  'SQL 代码补全',
-  '逻辑删除自动注入',
-  '11 种数据库方言支持',
-]
+import { useHomeContent } from '../../composables/useHomeContent'
+
+const { c } = useHomeContent()
 </script>
 
 <template>
   <section id="sec-pricing" class="pricing-section">
     <div class="container">
       <div class="pricing-header mp-reveal">
-        <span class="section-eyebrow">Pricing</span>
-        <h2 class="section-title">完全免费</h2>
+        <span class="section-eyebrow">{{ c.pricing.eyebrow }}</span>
+        <h2 class="section-title">{{ c.pricing.title }}</h2>
         <p class="section-description">
-          所有功能永久免费使用，无需注册，无需登录
+          {{ c.pricing.description }}
         </p>
       </div>
 
       <div class="pricing-card mp-reveal">
         <div class="pricing-card-header">
-          <div class="pricing-plan-name">免费版</div>
+          <div class="pricing-plan-name">{{ c.pricing.plan }}</div>
           <div class="pricing-plan-price">
-            <span class="pricing-price">¥0</span>
-            <span class="pricing-period">永久免费</span>
+            <span class="pricing-price">{{ c.pricing.price }}</span>
+            <span class="pricing-period">{{ c.pricing.period }}</span>
           </div>
         </div>
 
         <ul class="pricing-features">
-          <li v-for="(feature, i) in features" :key="i" class="pricing-feature">
+          <li v-for="(feature, i) in c.pricing.features" :key="i" class="pricing-feature">
             <svg class="pricing-check" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
             </svg>
@@ -47,7 +39,7 @@ const features = [
           rel="noopener noreferrer"
           class="pricing-btn"
         >
-          立即免费下载
+          {{ c.pricing.button }}
         </a>
       </div>
     </div>

@@ -1,7 +1,9 @@
 <script setup>
 import { usePluginVersion } from '../../composables/usePluginVersion'
+import { useHomeContent } from '../../composables/useHomeContent'
 
 const { version } = usePluginVersion()
+const { c } = useHomeContent()
 </script>
 
 <template>
@@ -10,12 +12,12 @@ const { version } = usePluginVersion()
       <div class="hero-grid">
         <div class="hero-content">
           <h1 class="hero-title">
-            服务未启，<br />
-            <span class="hero-title-highlight">SQL 先知</span>
+            {{ c.hero.titleLine1 }}<br />
+            <span class="hero-title-highlight">{{ c.hero.titleLine2 }}</span>
           </h1>
 
           <p class="hero-description">
-            IntelliJ IDEA 插件：写代码时就看见最终 SQL——Wrapper 链、XML/注解/HQL 动态 SQL（含 MPJ 联表 JOIN）实时预览；跑起来后真实参数与耗时自动捕获，慢查询标红、EXPLAIN 看计划、一键跳回源码；SQL 也能反向转成 Java 代码。不启服务、不翻日志、不手拼参数。
+            {{ c.hero.description }}
           </p>
 
           <div class="btn-group">
@@ -28,7 +30,7 @@ const { version } = usePluginVersion()
               <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
               </svg>
-              <span>在 Marketplace 中安装</span>
+              <span>{{ c.hero.install }}</span>
             </a>
             <a
               href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases"
@@ -39,43 +41,31 @@ const { version } = usePluginVersion()
               <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                 <path d="M12 3v10m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
               </svg>
-              <span>下载离线包</span>
+              <span>{{ c.hero.offline }}</span>
             </a>
           </div>
 
           <ul class="hero-highlights">
-            <li class="hero-highlight">
+            <li v-for="h in c.hero.highlights" :key="h" class="hero-highlight">
               <svg class="highlight-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
               </svg>
-              <span>更新无需重启 IDEA</span>
-            </li>
-            <li class="hero-highlight">
-              <svg class="highlight-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-              </svg>
-              <span>内网环境离线可用</span>
-            </li>
-            <li class="hero-highlight">
-              <svg class="highlight-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-              </svg>
-              <span>无遥测 · 代码不出本机</span>
+              <span>{{ h }}</span>
             </li>
           </ul>
 
           <div class="hero-stats">
             <div class="hero-stat">
               <span class="hero-stat-value">{{ version }}</span>
-              <span class="hero-stat-label">最新版本</span>
+              <span class="hero-stat-label">{{ c.hero.statLabels[0] }}</span>
             </div>
             <div class="hero-stat">
               <span class="hero-stat-value">2024.3+</span>
-              <span class="hero-stat-label">IDEA 支持</span>
+              <span class="hero-stat-label">{{ c.hero.statLabels[1] }}</span>
             </div>
             <div class="hero-stat">
               <span class="hero-stat-value">Apache-2.0</span>
-              <span class="hero-stat-label">开源协议</span>
+              <span class="hero-stat-label">{{ c.hero.statLabels[2] }}</span>
             </div>
           </div>
         </div>
@@ -91,7 +81,7 @@ const { version } = usePluginVersion()
             <div class="hero-code__pane">
               <div class="hero-code__bar">
                 <span class="hero-code__dot"></span>
-                <span class="hero-code__label">UserService.java</span>
+                <span class="hero-code__label">{{ c.hero.codeJavaLabel }}</span>
               </div>
               <pre class="hero-code__body"><code><span class="tk-type">LambdaQueryWrapper</span>&lt;<span class="tk-type">DeviceInfoEntity</span>&gt; wrapper = <span class="tk-key">new</span> <span class="tk-type">LambdaQueryWrapper</span>&lt;&gt;()
     .<span class="tk-fn">eq</span>(<span class="tk-type">DeviceInfoEntity</span>::<span class="tk-fn">getId</span>, <span class="tk-num">1001L</span>)
@@ -105,7 +95,7 @@ const { version } = usePluginVersion()
             <div class="hero-code__pane">
               <div class="hero-code__bar">
                 <span class="hero-code__dot hero-code__dot--sql"></span>
-                <span class="hero-code__label">实时预览 · 生成的 SQL</span>
+                <span class="hero-code__label">{{ c.hero.codeSqlLabel }}</span>
               </div>
               <pre class="hero-code__body"><code><span class="tk-kw">SELECT</span> id, station_id, share_scheme_id
 <span class="tk-kw">FROM</span> device_info_entity

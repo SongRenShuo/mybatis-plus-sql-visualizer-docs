@@ -1,23 +1,29 @@
 <script setup>
-// 卡片数据来自中英首页宣传点唯一数据源（改文案只改 data/homeHighlights.js）
-import { coolCards } from '../../data/homeHighlights.js'
+// 卡片数据来自中英首页宣传点唯一数据源（改文案只改 data/homeHighlights.js）；
+// 按当前 locale 选中文 coolCards 或英文 enCoolCards，两者逐项对应
+import { computed } from 'vue'
+import { coolCards, enCoolCards } from '../../data/homeHighlights.js'
+import { useHomeContent } from '../../composables/useHomeContent'
+
+const { isEnglish, c } = useHomeContent()
+const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
 </script>
 
 <template>
   <section id="sec-features" class="more-features-section">
     <div class="container">
       <div class="more-features-header mp-reveal">
-        <span class="section-eyebrow">More Features</span>
-        <div class="more-features-badge">更多特性</div>
-        <h2 class="section-title">我们为您考虑周全</h2>
+        <span class="section-eyebrow">{{ c.features.eyebrow }}</span>
+        <div class="more-features-badge">{{ c.features.badge }}</div>
+        <h2 class="section-title">{{ c.features.title }}</h2>
         <p class="section-description">
-          SQL Visualizer 涵盖了 SQL 调试所需的一切功能。
+          {{ c.features.description }}
         </p>
       </div>
 
       <div class="features-grid">
         <div
-          v-for="(card, index) in coolCards"
+          v-for="(card, index) in cards"
           :key="index"
           class="feature-card mp-reveal"
           :style="{ '--mp-reveal-delay': `${(index % 3) * 80}ms` }"

@@ -3,8 +3,10 @@ import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
 import PagefindSearch from '../PagefindSearch.vue'
 import SectionNav from './SectionNav.vue'
+import { useHomeContent } from '../../composables/useHomeContent'
 
 const { isDark } = useData()
+const { c } = useHomeContent()
 
 const scrolled = ref(false)
 const mobileOpen = ref(false)
@@ -64,10 +66,9 @@ onUnmounted(() => {
         </div>
 
         <nav class="nav-links">
-          <a href="/features/wrapper-preview" class="nav-link">功能详解</a>
-          <a href="/guide/getting-started" class="nav-link">使用指南</a>
-          <a href="/about/feedback" class="nav-link">需求池</a>
-          <a href="/about/" class="nav-link">关于</a>
+          <a v-for="link in c.nav.links" :key="link.href" :href="link.href" class="nav-link">
+            {{ link.text }}
+          </a>
         </nav>
 
         <div class="nav-actions">
@@ -78,7 +79,7 @@ onUnmounted(() => {
               class="nav-lang-btn"
               :aria-expanded="langOpen"
               aria-haspopup="true"
-              title="切换语言"
+              :title="c.nav.langMenuLabel"
               @click="langOpen = !langOpen"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-lang-icon">
@@ -86,7 +87,7 @@ onUnmounted(() => {
                 <path d="M6 9.2c1.2 2.1 3 3.6 5.2 4.5" />
                 <path d="M13 20l4-10 4 10M14.4 17h5.2" />
               </svg>
-              <span class="nav-lang-label">简体中文</span>
+              <span class="nav-lang-label">{{ c.nav.langLabel }}</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-lang-chevron">
                 <path d="M6 9l6 6 6-6" />
               </svg>
@@ -94,16 +95,24 @@ onUnmounted(() => {
 
             <Transition name="lang-fade">
               <div v-if="langOpen" class="nav-lang-menu">
-                <a href="/" class="nav-lang-item is-active" aria-current="true">简体中文</a>
-                <a href="/en/" class="nav-lang-item">English</a>
+                <a
+                  v-for="l in c.nav.langs"
+                  :key="l.href"
+                  :href="l.href"
+                  class="nav-lang-item"
+                  :class="{ 'is-active': l.active }"
+                  :aria-current="l.active ? 'true' : undefined"
+                >
+                  {{ l.text }}
+                </a>
               </div>
             </Transition>
           </div>
 
           <button
             class="theme-toggle"
-            :title="isDark ? '切换到亮色' : '切换到暗色'"
-            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            :title="isDark ? c.nav.themeToLight : c.nav.themeToDark"
+            :aria-label="isDark ? c.nav.themeAriaLight : c.nav.themeAriaDark"
             @click="isDark = !isDark"
           >
             <svg v-if="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -119,7 +128,7 @@ onUnmounted(() => {
             target="_blank"
             rel="noopener noreferrer"
             class="nav-gitee"
-            title="Gitee 源码仓库"
+            :title="c.nav.giteeTitle"
           >
             <img src="/gitee-icon.png" alt="Gitee" class="nav-gitee-icon" />
           </a>
@@ -129,13 +138,13 @@ onUnmounted(() => {
             rel="noopener noreferrer"
             class="btn-primary"
           >
-            免费下载
+            {{ c.nav.download }}
           </a>
           <button
             class="nav-hamburger"
             :class="{ open: mobileOpen }"
             :aria-expanded="mobileOpen"
-            aria-label="导航菜单"
+            :aria-label="c.nav.menuLabel"
             @click="mobileOpen = !mobileOpen"
           >
             <span class="hamburger-bar"></span>
@@ -157,18 +166,27 @@ onUnmounted(() => {
       <div v-if="mobileOpen" class="mobile-menu">
         <div class="mobile-menu-container">
           <nav class="mobile-links">
-            <a href="/features/wrapper-preview" class="mobile-link" @click="mobileOpen = false">功能详解</a>
-            <a href="/guide/getting-started" class="mobile-link" @click="mobileOpen = false">使用指南</a>
-            <a href="/about/feedback" class="mobile-link" @click="mobileOpen = false">需求池</a>
-            <a href="/about/" class="mobile-link" @click="mobileOpen = false">关于</a>
+            <a
+              v-for="link in c.nav.links"
+              :key="link.href"
+              :href="link.href"
+              class="mobile-link"
+              @click="mobileOpen = false"
+            >{{ link.text }}</a>
           </nav>
 
-          <!-- 语言切换在移动端不进下拉，直接平铺两项 -->
+          <!-- 语言切换在移动端不进下拉，直接平铺各项 -->
           <div class="mobile-lang">
-            <span class="mobile-lang-title">语言</span>
+            <span class="mobile-lang-title">{{ c.nav.langTitle }}</span>
             <div class="mobile-lang-items">
-              <a href="/" class="mobile-lang-item is-active" @click="mobileOpen = false">简体中文</a>
-              <a href="/en/" class="mobile-lang-item" @click="mobileOpen = false">English</a>
+              <a
+                v-for="l in c.nav.langs"
+                :key="l.href"
+                :href="l.href"
+                class="mobile-lang-item"
+                :class="{ 'is-active': l.active }"
+                @click="mobileOpen = false"
+              >{{ l.text }}</a>
             </div>
           </div>
         </div>

@@ -1,47 +1,26 @@
 <script setup>
-const testimonials = [
-  {
-    quote: '接手的项目一半是 MP 一半是 JdbcTemplate 的字符串 SQL，之前想看真实执行的 SQL 只能跑一遍再翻日志。现在两种写法行首都有图标，点一下直接出 SQL，StringBuilder 拼的也能聚合，上周排查一个分页翻错的问题没启动项目就定位了。',
-    name: '夜航船',
-    role: 'Java 开发工程师',
-    initials: '夜',
-    color: '#6366f1',
-  },
-  {
-    quote: '我们组维护一个 Hibernate 老项目，实体还挂在 .hbm.xml 上，Criteria 查询根本看不出最后跑的是什么语句。这插件不用启容器就能把 HQL 和 Criteria 链还原成 SQL，hbm 里的命名查询也能认，改一版查询不用再拉同事帮忙跑项目了。',
-    name: '不写注释的人',
-    role: '后端开发',
-    initials: '不',
-    color: '#0ea5e9',
-  },
-  {
-    quote: 'SQL 日志窗口现在是开项目自动抓，参数拼好还能点回源码位置，慢查询直接标红。上次压测就靠它挑出两条没走索引的语句。更新也免得重启 IDE，点一下装完接着用，比很多插件都省心。',
-    name: '半糖不加冰',
-    role: '全栈开发工程师',
-    initials: '半',
-    color: '#10b981',
-  },
-]
+import { useHomeContent } from '../../composables/useHomeContent'
+
+const { c } = useHomeContent()
 </script>
 
 <template>
   <section id="sec-testimonials" class="testimonials-section">
     <div class="container">
       <div class="testimonials-header mp-reveal">
-        <span class="section-eyebrow">Testimonials</span>
-        <!-- 徽章原为英文 "Testimonials"，与眉题完全重复；改为中文，与「更多特性」「SQL 预览」等同级徽章口径一致 -->
-        <span class="testimonials-badge">用户评价</span>
+        <span class="section-eyebrow">{{ c.testimonials.eyebrow }}</span>
+        <span class="testimonials-badge">{{ c.testimonials.badge }}</span>
         <h2 class="testimonials-title">
-          深受 <span class="testimonials-title-accent">开发团队信赖</span>
+          {{ c.testimonials.titlePrefix }}<span class="testimonials-title-accent">{{ c.testimonials.titleAccent }}</span>
         </h2>
         <p class="testimonials-subtitle">
-          听听那些每天使用 SQL Visualizer 的工程师们怎么说。
+          {{ c.testimonials.subtitle }}
         </p>
       </div>
 
       <div class="testimonials-grid">
         <div
-          v-for="(t, i) in testimonials"
+          v-for="(t, i) in c.testimonials.items"
           :key="i"
           class="testimonial-card mp-reveal"
           :style="{ '--mp-reveal-delay': `${i * 80}ms` }"

@@ -1,22 +1,25 @@
 <script setup>
+import { useHomeContent } from '../../composables/useHomeContent'
+
+const { c, localePath } = useHomeContent()
 </script>
 
 <template>
   <section id="sec-start" class="cta-section section-dark">
     <div class="cta-card mp-reveal">
-      <span class="section-eyebrow">Get Started</span>
+      <span class="section-eyebrow">{{ c.cta.eyebrow }}</span>
       <div class="cta-badge">
         <span class="cta-badge-icon">✨</span>
-        立即体验
+        {{ c.cta.badge }}
       </div>
 
       <h2 class="cta-title">
-        准备好告别繁琐的<br />
-        <span class="cta-title-accent">SQL 调试方式了吗？</span>
+        {{ c.cta.titleLine1 }}<br />
+        <span class="cta-title-accent">{{ c.cta.titleLine2 }}</span>
       </h2>
 
       <p class="cta-subtitle">
-        加入超过 500 名开发者的行列，在 IntelliJ IDEA 中享受更高效的 SQL 调试体验。所有功能永久免费。
+        {{ c.cta.subtitle }}
       </p>
 
       <div class="cta-buttons">
@@ -26,22 +29,21 @@
           rel="noopener noreferrer"
           class="cta-btn-primary"
         >
-          立即免费下载
+          {{ c.cta.primary }}
           <svg class="cta-btn-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
             <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
           </svg>
         </a>
-        <a href="/guide/getting-started" class="cta-btn-secondary">
-          查看文档
+        <a :href="localePath('/guide/getting-started')" class="cta-btn-secondary">
+          {{ c.cta.secondary }}
         </a>
       </div>
 
       <div class="cta-trust">
-        <span>永久免费使用</span>
-        <span class="cta-trust-dot">·</span>
-        <span>开箱即用</span>
-        <span class="cta-trust-dot">·</span>
-        <span>无需注册</span>
+        <template v-for="(item, i) in c.cta.trust" :key="item">
+          <span v-if="i > 0" class="cta-trust-dot">·</span>
+          <span>{{ item }}</span>
+        </template>
       </div>
     </div>
   </section>

@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useHomeContent } from '../../composables/useHomeContent'
+
+const { c, localePath } = useHomeContent()
 
 /** T9c：poster 常驻底层，GIF 就绪后淡入覆盖；失败摘除 GIF 叠层，poster 永久兜底 */
 const gifReady = ref(false)
@@ -21,16 +24,16 @@ onMounted(() => {
     <div class="container">
       <div class="docs-showcase">
         <div class="docs-showcase-content mp-reveal">
-          <span class="section-eyebrow">Live Preview</span>
-          <div class="feature-badge">SQL 预览</div>
+          <span class="section-eyebrow">{{ c.preview.eyebrow }}</span>
+          <div class="feature-badge">{{ c.preview.badge }}</div>
 
           <h2 class="docs-showcase-title">
-            强大的 SQL 预览能力<br />
-            多方言、多场景全覆盖
+            {{ c.preview.titleLine1 }}<br />
+            {{ c.preview.titleLine2 }}
           </h2>
 
           <p class="docs-showcase-description">
-            支持 11 种数据库方言分页渲染，参数自动替换为实际值，LIKE 自动拼百分号，动态条件面板勾选实时预览。
+            {{ c.preview.description }}
           </p>
 
           <div class="docs-showcase-points">
@@ -41,9 +44,9 @@ onMounted(() => {
                 </svg>
               </div>
               <div>
-                <div class="feature-point-title">多方言支持</div>
+                <div class="feature-point-title">{{ c.preview.points[0].title }}</div>
                 <div class="feature-point-description">
-                  MySQL / PostgreSQL / Oracle / SQLServer 等 11 种方言分页语法
+                  {{ c.preview.points[0].description }}
                 </div>
               </div>
             </div>
@@ -55,16 +58,16 @@ onMounted(() => {
                 </svg>
               </div>
               <div>
-                <div class="feature-point-title">参数自动替换</div>
+                <div class="feature-point-title">{{ c.preview.points[1].title }}</div>
                 <div class="feature-point-description">
-                  ? 占位符替换为实际值，按字段类型自动加引号
+                  {{ c.preview.points[1].description }}
                 </div>
               </div>
             </div>
           </div>
 
-          <a href="/features/wrapper-preview" class="docs-showcase-link">
-            查看预览能力
+          <a :href="localePath('/features/wrapper-preview')" class="docs-showcase-link">
+            {{ c.preview.link }}
           </a>
         </div>
 

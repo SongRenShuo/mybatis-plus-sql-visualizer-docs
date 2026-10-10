@@ -1,12 +1,31 @@
 <script setup>
-import { reactive, ref, onMounted } from 'vue'
+import { computed, reactive, ref, onMounted } from 'vue'
+import { useHomeContent } from '../../composables/useHomeContent'
 
+const { c } = useHomeContent()
 const sectionEl = ref(null)
 
-/** GIF 加载失败时置 gifError 摘除 GIF 叠层，poster 常驻兜底 */
-function onImgError(e, item) {
-  item.gifError = true
-}
+/**
+ * 素材与排布是与语言无关的元数据，留在组件里；
+ * 文案（badge / title / description / points）按 locale 从 homeContent 取，
+ * 两边按数组下标一一对应，改文案不需要碰这个文件。
+ */
+const media = [
+  { imageSrc: '/demo/wrapper-preview.gif', poster: '/demo/wrapper-preview.png' },
+  { imageSrc: '/demo/sql-log.gif', poster: '/demo/sql-log.png', reverse: true },
+  { imageSrc: '/demo/sql-to-java.gif', poster: '/demo/sql-to-java.png' },
+  { imageSrc: '/demo/crud-sql.gif', poster: '/demo/crud-sql.png', reverse: true },
+  { imageSrc: '/demo/xml-preview.gif', poster: '/demo/xml-preview.png' },
+  { imageSrc: '/demo/jpa-preview.gif', poster: '/demo/jpa-preview.png', reverse: true },
+  { imageSrc: '/demo/mcp-agent.gif', poster: '/demo/mcp-agent.png' },
+]
+
+// GIF 加载状态与文案无关，独立保存，避免 computed 重算时丢掉
+const gifStates = reactive(media.map(() => ({ gifReady: false, gifError: false })))
+
+const features = computed(() =>
+  c.value.capability.items.map((item, i) => ({ ...item, ...media[i], ...gifStates[i] })),
+)
 
 // GIF 命中 HTTP 缓存时 load 事件可能早于 Vue 挂载监听器触发（hydration 输掉竞态，
 // gifReady 永不置位 → 叠层恒透明退化为静态 poster），挂载后按 complete 状态直接补位；
@@ -15,127 +34,21 @@ onMounted(() => {
   if (!sectionEl.value) return
   const imgs = sectionEl.value.querySelectorAll('img.feature-video--gif')
   imgs.forEach((img, index) => {
-    if (!img.complete || !features[index]) return
-    if (img.naturalWidth > 0) features[index].gifReady = true
-    else features[index].gifError = true
+    if (!img.complete || !gifStates[index]) return
+    if (img.naturalWidth > 0) gifStates[index].gifReady = true
+    else gifStates[index].gifError = true
   })
 })
-
-const features = reactive([
-  {
-    badge: 'Wrapper 预览',
-    title: 'Wrapper → SQL 实时预览',
-    description: 'LambdaQueryWrapper / MPJLambdaWrapper 等全类型静态解析，无需启动项目，直接预览最终 SQL',
-    features: [
-      { title: 'Lambda 链静态解析', description: '无需运行项目即可预览完整 SQL' },
-      { title: '动态条件勾选', description: 'if / choose / where 等标签按需渲染' },
-      { title: '11 种方言分页', description: 'MySQL / PG / Oracle 等全方言分页语法' },
-    ],
-    imageSrc: '/demo/wrapper-preview.gif',
-    poster: '/demo/wrapper-preview.png',
-    gifReady: false,
-    gifError: false,
-  },
-  {
-    badge: '日志还原',
-    title: '控制台日志一键还原',
-    description: '增强捕获为默认通道，无需应用开启 SQL 日志即得真实参数与耗时；控制台日志自动捕获还原',
-    features: [
-      { title: '增强捕获默认通道', description: '首次运行项目确认后自动采集，真实参数、精确耗时、影响行数开箱即得' },
-      { title: '并发日志分桶还原', description: '自动识别 Preparing / Parameters，多线程交错按线程分桶，参数不错挂' },
-      { title: '目标库角标', description: '条目标注 [MySQL]、[DM（达梦）] 等，11 种方言与 HSQL / GBASE 全识别' },
-    ],
-    imageSrc: '/demo/sql-log.gif',
-    poster: '/demo/sql-log.png',
-    gifReady: false,
-    gifError: false,
-    reverse: true,
-  },
-  {
-    badge: '反向转换',
-    title: 'SQL → Java 反向转换',
-    description: '选中 SQL 一键生成可编译的 MyBatis-Plus 代码，支持四形态输出',
-    features: [
-      { title: '四形态输出', description: 'QueryWrapper / Lambda / Wrappers / MPJ' },
-      { title: '增删改查全覆盖', description: 'SELECT / INSERT / UPDATE / DELETE 全支持' },
-      { title: '多表 JOIN', description: '联表查询自动生成 MPJLambdaWrapper' },
-    ],
-    imageSrc: '/demo/sql-to-java.gif',
-    poster: '/demo/sql-to-java.png',
-    gifReady: false,
-    gifError: false,
-  },
-  {
-    badge: '智能生成',
-    title: 'CRUD SQL 一键生成',
-    description: '实体类 / 数据库表右键即出 SELECT / INSERT / UPDATE / DELETE 候选，选定进预览直接编辑、复制',
-    features: [
-      { title: '三入口覆盖', description: '实体类文件、项目视图节点、Database 表节点（Ultimate）' },
-      { title: '候选浮层秒选', description: '打字即过滤，Enter / 双击选定，ESC 关闭' },
-      { title: '语义对齐 MP 运行时', description: '乐观锁进 WHERE、自增主键默认不勾、逻辑删除出专用 DELETE 变体' },
-    ],
-    imageSrc: '/demo/crud-sql.gif',
-    poster: '/demo/crud-sql.png',
-    gifReady: false,
-    gifError: false,
-    reverse: true,
-  },
-  {
-    badge: '多框架支持',
-    title: 'XML / 注解 / MPJ 全覆盖',
-    description: 'mapper XML 全动态标签按 MyBatis 语义渲染，注解 SQL 同样支持',
-    features: [
-      { title: 'XML 动态标签', description: 'if / choose / foreach / bind 等全支持' },
-      { title: '注解 SQL', description: '@Select / @Update / @Delete / @Insert' },
-      { title: 'OGNL 表达式', description: '面板勾选动态条件，实时预览结果' },
-    ],
-    imageSrc: '/demo/xml-preview.gif',
-    poster: '/demo/xml-preview.png',
-    gifReady: false,
-    gifError: false,
-  },
-  {
-    badge: '跨生态',
-    title: 'JPA / Hibernate SQL 预览',
-    description: 'Repository 派生方法、JPQL / HQL、Criteria 链静态解析出 SQL，不启动 Spring 容器、不连数据库',
-    features: [
-      { title: '派生方法解析', description: 'findByXxx 命名规则全支持，gutter 图标点击即出' },
-      { title: '@Query 全兼容', description: 'JPQL / 原生 SQL / @Modifying DML 直接预览' },
-      { title: 'Criteria 链与 .hbm.xml', description: '静态解析，不依赖容器与数据库' },
-    ],
-    imageSrc: '/demo/jpa-preview.gif',
-    poster: '/demo/jpa-preview.png',
-    gifReady: false,
-    gifError: false,
-    reverse: true,
-  },
-  {
-    badge: 'AI Agent 集成',
-    title: 'MCP Server：给 AI Agent 的 SQL 工具',
-    description: 'Claude Code / Cursor / AI Assistant / Codex 经 IDEA 内置 MCP Server 直连插件能力，IDE 里照常写代码，agent 在旁边干活',
-    features: [
-      { title: '确定性证据', description: '渲染链真实产出的可执行 SQL 本体交给 agent，不是置信度评分' },
-      { title: '十一个只读工具', description: '渲染还原、表结构、EXPLAIN、写风险核查、回滚预案、性能建议、历史检索（IDEA 2025.2+）' },
-      { title: '可控可审计', description: '设置页逐工具启停即时生效，SELECT 白名单拦截 + 每次调用审计留痕' },
-    ],
-    // 20260920 首页卡用「真实调用」那张（agent 经 ACP 调 sqlv_check_sql）；
-    // 「开启设置」那张移到功能页「典型工作流」节。示意 SVG 仍保留在 features/mcp.md 开篇
-    imageSrc: '/demo/mcp-agent.gif',
-    poster: '/demo/mcp-agent.png',
-    gifReady: false,
-    gifError: false,
-  },
-])
 </script>
 
 <template>
   <section id="sec-capability" ref="sectionEl" class="features-section">
     <div class="container">
       <div class="section-header mp-reveal">
-        <span class="section-eyebrow">Core Capabilities</span>
-        <h2 class="section-title">大幅提升您的 SQL 调试效率</h2>
+        <span class="section-eyebrow">{{ c.capability.eyebrow }}</span>
+        <h2 class="section-title">{{ c.capability.title }}</h2>
         <p class="section-description">
-          更简单的工具，更清晰的逻辑。旨在优化每一个研发细节，让您在更短的时间内成就更多
+          {{ c.capability.description }}
         </p>
       </div>
 
@@ -160,8 +73,8 @@ const features = reactive([
               loading="lazy"
               class="feature-video feature-video--gif"
               :class="{ 'feature-video--gif-ready': item.gifReady }"
-              @load="item.gifReady = true"
-              @error="onImgError($event, item)"
+              @load="gifStates[index].gifReady = true"
+              @error="gifStates[index].gifError = true"
             />
           </div>
 
@@ -171,7 +84,7 @@ const features = reactive([
             <p class="feature-description">{{ item.description }}</p>
             <div class="feature-points">
               <div
-                v-for="(point, pIndex) in item.features"
+                v-for="(point, pIndex) in item.points"
                 :key="pIndex"
                 class="feature-point"
               >

@@ -805,9 +805,14 @@ kbd {
 
 /* 页内跳转落点避让：两级吸顶导航（主导航 60px + 章节条 44px）实测合计 108px，
    留 124px 让区块顶部与吸顶栏之间保有约 16px 空隙。
-   SectionNav 的阈值线 ACTIVE_LINE(140) 必须大于该值，否则跳转后当前项不亮。 */
+   定义成 CSS 变量供 SectionNav 的点击落点复用，保证「原生锚点跳转」与
+   「脚本跳转」两个路径的避让量同源，不会各改各的。 */
+.cool-home {
+  --home-anchor-offset: 124px;
+}
+
 .cool-home main section[id] {
-  scroll-margin-top: 124px;
+  scroll-margin-top: var(--home-anchor-offset);
 }
 
 /* 暗色模式适配（首页组件使用 :global(.dark) 无法覆盖的场景） */
