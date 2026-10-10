@@ -47,6 +47,15 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
             <svg v-else-if="card.icon === 'history'" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
               <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
             </svg>
+            <svg v-else-if="card.icon === 'timer'" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42A8.962 8.962 0 0 0 12 4a9 9 0 1 0 9 9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+            </svg>
+            <svg v-else-if="card.icon === 'target'" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+            <svg v-else-if="card.icon === 'swap'" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/>
+            </svg>
           </div>
           <h3 class="feature-card-title">{{ card.title }}</h3>
           <p class="feature-card-description">{{ card.description }}</p>
@@ -152,16 +161,31 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
 .feature-icon.indigo { background-color: #e0e7ff; }
 .feature-icon.indigo svg { color: var(--primary-color); }
 
+.feature-icon.teal { background-color: #ccfbf1; }
+.feature-icon.teal svg { color: #0d9488; }
+
+.feature-icon.rose { background-color: #ffe4e6; }
+.feature-icon.rose svg { color: #e11d48; }
+
+.feature-icon.fuchsia { background-color: #fae8ff; }
+.feature-icon.fuchsia svg { color: #c026d3; }
+
 :global(.dark) .feature-icon.purple { background-color: rgba(139, 92, 246, 0.16); }
 :global(.dark) .feature-icon.blue { background-color: rgba(37, 99, 235, 0.16); }
 :global(.dark) .feature-icon.green { background-color: rgba(16, 185, 129, 0.16); }
 :global(.dark) .feature-icon.yellow { background-color: rgba(245, 158, 11, 0.16); }
 :global(.dark) .feature-icon.orange { background-color: rgba(249, 115, 22, 0.16); }
 :global(.dark) .feature-icon.indigo { background-color: rgba(99, 102, 241, 0.16); }
+:global(.dark) .feature-icon.teal { background-color: rgba(20, 184, 166, 0.16); }
+:global(.dark) .feature-icon.rose { background-color: rgba(244, 63, 94, 0.16); }
+:global(.dark) .feature-icon.fuchsia { background-color: rgba(217, 70, 239, 0.16); }
 :global(.dark) .feature-icon.blue svg { color: #60a5fa; }
 :global(.dark) .feature-icon.green svg { color: #34d399; }
 :global(.dark) .feature-icon.yellow svg { color: #fbbf24; }
 :global(.dark) .feature-icon.orange svg { color: #fb923c; }
+:global(.dark) .feature-icon.teal svg { color: #2dd4bf; }
+:global(.dark) .feature-icon.rose svg { color: #fb7185; }
+:global(.dark) .feature-icon.fuchsia svg { color: #e879f9; }
 
 .feature-card-title {
   font-size: 1.25rem;

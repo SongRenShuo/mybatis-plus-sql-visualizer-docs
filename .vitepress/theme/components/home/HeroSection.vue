@@ -82,25 +82,50 @@ const { c } = useHomeContent()
               <div class="hero-code__bar">
                 <span class="hero-code__dot"></span>
                 <span class="hero-code__label">{{ c.hero.codeJavaLabel }}</span>
+                <span class="hero-code__chip">Java</span>
               </div>
-              <pre class="hero-code__body"><code><span class="tk-type">LambdaQueryWrapper</span>&lt;<span class="tk-type">DeviceInfoEntity</span>&gt; wrapper = <span class="tk-key">new</span> <span class="tk-type">LambdaQueryWrapper</span>&lt;&gt;()
-    .<span class="tk-fn">eq</span>(<span class="tk-type">DeviceInfoEntity</span>::<span class="tk-fn">getId</span>, <span class="tk-num">1001L</span>)
-    .<span class="tk-fn">isNotNull</span>(<span class="tk-type">DeviceInfoEntity</span>::<span class="tk-fn">getStationId</span>);</code></pre>
+              <div class="hero-code__body">
+                <div class="hero-code__line">
+                  <span class="hero-code__ln">1</span><code><span class="tk-type">LambdaQueryWrapper</span>&lt;<span class="tk-type">DeviceInfoEntity</span>&gt; wrapper = <span class="tk-key">new</span> <span class="tk-type">LambdaQueryWrapper</span>&lt;&gt;()</code>
+                </div>
+                <div class="hero-code__line">
+                  <span class="hero-code__ln">2</span><code>    .<span class="tk-fn">eq</span>(<span class="tk-type">DeviceInfoEntity</span>::<span class="tk-fn">getId</span>, <span class="tk-num">1001L</span>)</code>
+                </div>
+                <div class="hero-code__line">
+                  <span class="hero-code__ln">3</span><code>    .<span class="tk-fn">isNotNull</span>(<span class="tk-type">DeviceInfoEntity</span>::<span class="tk-fn">getStationId</span>);</code>
+                </div>
+              </div>
             </div>
 
             <div class="hero-code__divider">
-              <span class="hero-code__divider-text">Alt + Shift + Q</span>
+              <span class="hero-code__divider-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 5v14M5 12l7 7 7-7" />
+                </svg>
+                Alt + Shift + Q
+              </span>
             </div>
 
             <div class="hero-code__pane">
               <div class="hero-code__bar">
                 <span class="hero-code__dot hero-code__dot--sql"></span>
                 <span class="hero-code__label">{{ c.hero.codeSqlLabel }}</span>
+                <span class="hero-code__chip hero-code__chip--sql">SQL</span>
               </div>
-              <pre class="hero-code__body"><code><span class="tk-kw">SELECT</span> id, station_id, share_scheme_id
-<span class="tk-kw">FROM</span> device_info_entity
-<span class="tk-kw">WHERE</span> id = <span class="tk-num">1001</span>
-    <span class="tk-kw">AND</span> station_id <span class="tk-kw">IS NOT NULL</span></code></pre>
+              <div class="hero-code__body hero-code__body--result">
+                <div class="hero-code__line">
+                  <span class="hero-code__ln">1</span><code><span class="tk-kw">SELECT</span> id, station_id, share_scheme_id</code>
+                </div>
+                <div class="hero-code__line">
+                  <span class="hero-code__ln">2</span><code><span class="tk-kw">FROM</span> device_info_entity</code>
+                </div>
+                <div class="hero-code__line">
+                  <span class="hero-code__ln">3</span><code><span class="tk-kw">WHERE</span> id = <span class="tk-num">1001</span></code>
+                </div>
+                <div class="hero-code__line">
+                  <span class="hero-code__ln">4</span><code>    <span class="tk-kw">AND</span> station_id <span class="tk-kw">IS NOT NULL</span></code>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -313,11 +338,13 @@ const { c } = useHomeContent()
 .hero-code {
   position: relative;
   z-index: 10;
-  border-radius: 1rem;
+  border-radius: 14px;
   overflow: hidden;
-  background-color: #10141b;
-  border: 1px solid #2c3542;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  background-color: #0e1218;
+  border: 1px solid #2a3340;
+  box-shadow:
+    0 24px 48px -20px rgba(11, 20, 34, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
 }
 
@@ -325,56 +352,130 @@ const { c } = useHomeContent()
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.625rem 1rem;
-  background-color: #171d26;
-  border-bottom: 1px solid #2c3542;
+  padding: 0.625rem 0.875rem;
+  background-color: #161d27;
+  border-bottom: 1px solid #232c38;
 }
 
 .hero-code__dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background-color: #86eaff;
-  opacity: 0.85;
+  box-shadow: 0 0 0 3px rgba(134, 234, 255, 0.12);
   flex-shrink: 0;
 }
 
 .hero-code__dot--sql {
   background-color: #ff997b;
+  box-shadow: 0 0 0 3px rgba(255, 153, 123, 0.12);
 }
 
 .hero-code__label {
   font-size: 0.75rem;
   color: #a4adbc;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 右上角语言标签：一眼分清哪块是 Java、哪块是 SQL */
+.hero-code__chip {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0.125rem 0.4375rem;
+  border-radius: 5px;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #86eaff;
+  background-color: rgba(134, 234, 255, 0.1);
+  border: 1px solid rgba(134, 234, 255, 0.22);
+}
+
+.hero-code__chip--sql {
+  color: #ff997b;
+  background-color: rgba(255, 153, 123, 0.1);
+  border-color: rgba(255, 153, 123, 0.22);
 }
 
 .hero-code__body {
-  margin: 0;
-  padding: 1rem;
+  padding: 0.75rem 0;
   font-size: 0.75rem;
-  line-height: 1.7;
+  line-height: 1.75;
   color: #e5e8ed;
-  white-space: pre;
   overflow-x: auto;
   scrollbar-width: thin;
 }
 
+/* 结果面板：极淡的品牌色底 + 左侧强调条，一眼区分「这块是生成出来的 SQL」 */
+.hero-code__body--result {
+  background-image: linear-gradient(180deg, rgba(46, 106, 224, 0.09), rgba(46, 106, 224, 0.02));
+  box-shadow: inset 2px 0 0 rgba(134, 234, 255, 0.45);
+}
+
+.hero-code__line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0 0.875rem;
+}
+
+.hero-code__line code {
+  white-space: pre;
+  font: inherit;
+}
+
+/* 行号：不可选中，避免复制代码时把行号带进去 */
+.hero-code__ln {
+  flex-shrink: 0;
+  width: 1ch;
+  text-align: right;
+  color: #46505f;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+/* 转换分隔：细线 + 居中胶囊，比整幅色带更轻，也不抢代码的注意力 */
 .hero-code__divider {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.4375rem 1rem;
-  background-color: #0d1016;
-  border-top: 1px solid #2c3542;
-  border-bottom: 1px solid #2c3542;
+  padding: 0.375rem 0;
+  background-color: #0b0e13;
 }
 
-.hero-code__divider-text {
-  font-size: 0.6875rem;
-  letter-spacing: 0.16em;
+.hero-code__divider::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background-color: #232c38;
+}
+
+.hero-code__divider-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #77818f;
+  color: #8e99a9;
+  background-color: #12181f;
+  border: 1px solid #232c38;
+}
+
+.hero-code__divider-chip svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  color: #86eaff;
 }
 
 /* 语法着色：取参考页（Payathon）的深色配色，青为主、橙为辅 */
@@ -385,10 +486,22 @@ const { c } = useHomeContent()
 .tk-kw { color: #ff997b; font-weight: 600; }
 
 @media (max-width: 767px) {
+  /* 窄屏缩一档并让出行号宽度，让最长的 Java 行尽量不触发横向滚动 */
   .hero-code__body {
-    /* 窄屏缩一档，让最长的 Java 行尽量不触发横向滚动 */
     font-size: 0.6875rem;
-    padding: 0.875rem;
+  }
+
+  .hero-code__ln {
+    display: none;
+  }
+
+  .hero-code__line {
+    padding: 0 0.75rem;
+    gap: 0;
+  }
+
+  .hero-code__label {
+    font-size: 0.6875rem;
   }
 }
 </style>

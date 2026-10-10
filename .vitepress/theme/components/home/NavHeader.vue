@@ -72,8 +72,6 @@ onUnmounted(() => {
         </nav>
 
         <div class="nav-actions">
-          <PagefindSearch compact />
-
           <div ref="langRef" class="nav-lang">
             <button
               class="nav-lang-btn"
@@ -132,6 +130,11 @@ onUnmounted(() => {
           >
             <img src="/gitee-icon.png" alt="Gitee" class="nav-gitee-icon" />
           </a>
+
+          <!-- 搜索挨着下载按钮收在右端（对齐 VitePress 默认导航「搜索在 CTA 之前」的排布），
+               原先它排在动作区最左，视觉上离导航链接太近、显得偏中 -->
+          <PagefindSearch compact />
+
           <a
             href="https://plugins.jetbrains.com/plugin/33633-sql-visualizer"
             target="_blank"

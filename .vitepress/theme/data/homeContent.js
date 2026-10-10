@@ -5,6 +5,8 @@
  * EnFeatureMatrix 的另一套实现，与中文的 CoolHome 九组件树结构完全不同，两边的
  * 区块、卡片主题、带图模块都对不上。现在英文首页改挂同一棵 CoolHome 组件树，
  * 差异只留在文案层，所以文案集中到这里，组件按当前 locale 取值。
+ * （旧英文首页的两个组件与它们的数据已于 2026-10-10 删除；那张 Feature Matrix
+ * 的能力面在 en/guide/comparison.md 的对比表里有覆盖。）
  *
  * 取 locale 用 VitePress 的 `useData().lang`（root=zh-CN / en=en-US），
  * 不能用 window.location：SSR 阶段没有 window，用它会产出中英不一致的
