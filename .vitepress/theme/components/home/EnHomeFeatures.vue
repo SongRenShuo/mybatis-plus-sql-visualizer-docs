@@ -17,7 +17,12 @@ const toHref = (link) => {
   <section class="VPFeatures en-home-features">
     <div class="container">
       <div class="items">
-        <div v-for="card in enCards" :key="card.title" class="item">
+        <div
+          v-for="(card, i) in enCards"
+          :key="card.title"
+          class="item mp-reveal"
+          :style="{ '--mp-reveal-delay': `${(i % 3) * 80}ms` }"
+        >
           <a class="card" :href="toHref(card.link)">
             <article class="box">
               <div class="icon">{{ card.icon }}</div>

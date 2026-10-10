@@ -4,9 +4,10 @@ import { coolCards } from '../../data/homeHighlights.js'
 </script>
 
 <template>
-  <section class="more-features-section">
+  <section id="sec-features" class="more-features-section">
     <div class="container">
-      <div class="more-features-header">
+      <div class="more-features-header mp-reveal">
+        <span class="section-eyebrow">More Features</span>
         <div class="more-features-badge">更多特性</div>
         <h2 class="section-title">我们为您考虑周全</h2>
         <p class="section-description">
@@ -15,7 +16,12 @@ import { coolCards } from '../../data/homeHighlights.js'
       </div>
 
       <div class="features-grid">
-        <div v-for="(card, index) in coolCards" :key="index" class="feature-card">
+        <div
+          v-for="(card, index) in coolCards"
+          :key="index"
+          class="feature-card mp-reveal"
+          :style="{ '--mp-reveal-delay': `${(index % 3) * 80}ms` }"
+        >
           <div class="feature-icon" :class="card.color">
             <svg v-if="card.icon === 'code'" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
               <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>

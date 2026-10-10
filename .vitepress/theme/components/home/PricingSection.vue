@@ -13,16 +13,17 @@ const features = [
 </script>
 
 <template>
-  <section class="pricing-section">
+  <section id="sec-pricing" class="pricing-section">
     <div class="container">
-      <div class="pricing-header">
+      <div class="pricing-header mp-reveal">
+        <span class="section-eyebrow">Pricing</span>
         <h2 class="section-title">完全免费</h2>
         <p class="section-description">
           所有功能永久免费使用，无需注册，无需登录
         </p>
       </div>
 
-      <div class="pricing-card">
+      <div class="pricing-card mp-reveal">
         <div class="pricing-card-header">
           <div class="pricing-plan-name">免费版</div>
           <div class="pricing-plan-price">

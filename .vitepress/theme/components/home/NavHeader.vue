@@ -2,16 +2,30 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
 import PagefindSearch from '../PagefindSearch.vue'
+import SectionNav from './SectionNav.vue'
 
 const { isDark } = useData()
 
 const scrolled = ref(false)
 const mobileOpen = ref(false)
+// 首页走自定义导航（CoolHome，layout:false），拿不到 VitePress 自带的
+// VPNavBarTranslations，语言切换需要自建；文档页仍是 VitePress 默认那一套。
+const langOpen = ref(false)
+const langRef = ref(null)
 
 let scrollHandler = null
 
 function onKeydown(e) {
-  if (e.key === 'Escape') mobileOpen.value = false
+  if (e.key === 'Escape') {
+    mobileOpen.value = false
+    langOpen.value = false
+  }
+}
+
+// 点击语言菜单以外的地方收起
+function onDocumentClick(e) {
+  if (!langOpen.value) return
+  if (langRef.value && !langRef.value.contains(e.target)) langOpen.value = false
 }
 
 // 全屏菜单展开期间锁定背景滚动，收起/卸载时兜底恢复
@@ -25,12 +39,14 @@ onMounted(() => {
   }
   window.addEventListener('scroll', scrollHandler, { passive: true })
   window.addEventListener('keydown', onKeydown)
+  document.addEventListener('click', onDocumentClick)
   scrollHandler()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', scrollHandler)
   window.removeEventListener('keydown', onKeydown)
+  document.removeEventListener('click', onDocumentClick)
   document.documentElement.style.overflow = ''
 })
 </script>
@@ -56,6 +72,34 @@ onUnmounted(() => {
 
         <div class="nav-actions">
           <PagefindSearch compact />
+
+          <div ref="langRef" class="nav-lang">
+            <button
+              class="nav-lang-btn"
+              :aria-expanded="langOpen"
+              aria-haspopup="true"
+              title="切换语言"
+              @click="langOpen = !langOpen"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-lang-icon">
+                <path d="M4 5h9M8.5 5c0 3.5-1.8 6.4-4.5 8.2" />
+                <path d="M6 9.2c1.2 2.1 3 3.6 5.2 4.5" />
+                <path d="M13 20l4-10 4 10M14.4 17h5.2" />
+              </svg>
+              <span class="nav-lang-label">简体中文</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-lang-chevron">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+
+            <Transition name="lang-fade">
+              <div v-if="langOpen" class="nav-lang-menu">
+                <a href="/" class="nav-lang-item is-active" aria-current="true">简体中文</a>
+                <a href="/en/" class="nav-lang-item">English</a>
+              </div>
+            </Transition>
+          </div>
+
           <button
             class="theme-toggle"
             :title="isDark ? '切换到亮色' : '切换到暗色'"
@@ -102,6 +146,10 @@ onUnmounted(() => {
       </div>
     </div>
 
+    <!-- 页内章节导航：作为 header 的第二行，共用吸顶背景与投影，避免两条固定栏之间出现接缝。
+         收起时高度为 0，顶栏在首屏维持原高度 -->
+    <SectionNav :suppressed="mobileOpen" />
+
     <!-- 全屏导航层（对齐文档页 VPNavScreen 交互）：z-index -1 压在 header 背景之上、
          nav-content 之下，不依赖顶栏具体高度，logo 与关闭按钮保持可点；
          动画与 VPNavScreen 同配方——整屏 opacity .25s + 内部容器 translateY(-8px)→0 滑入 -->
@@ -114,6 +162,15 @@ onUnmounted(() => {
             <a href="/about/feedback" class="mobile-link" @click="mobileOpen = false">需求池</a>
             <a href="/about/" class="mobile-link" @click="mobileOpen = false">关于</a>
           </nav>
+
+          <!-- 语言切换在移动端不进下拉，直接平铺两项 -->
+          <div class="mobile-lang">
+            <span class="mobile-lang-title">语言</span>
+            <div class="mobile-lang-items">
+              <a href="/" class="mobile-lang-item is-active" @click="mobileOpen = false">简体中文</a>
+              <a href="/en/" class="mobile-lang-item" @click="mobileOpen = false">English</a>
+            </div>
+          </div>
         </div>
       </div>
     </Transition>
@@ -204,27 +261,103 @@ onUnmounted(() => {
   align-items: center;
 }
 
+/* 语言切换与明暗切换共用同一套按钮外观（对齐英文版 VitePress 默认导航的
+   「图标按钮 + 悬浮软底」）：同高、同圆角、同悬浮反馈，避免两个控件观感不一致 */
+.nav-lang-btn,
 .theme-toggle {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 2.25rem;
+  gap: 0.25rem;
   height: 2.25rem;
+  padding: 0 0.5rem;
   border: none;
-  border-radius: 9999px;
+  border-radius: 0.5rem;
   background-color: transparent;
   color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  line-height: 1;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: color 0.25s, background-color 0.25s;
 }
 
+.nav-lang-btn:hover,
 .theme-toggle:hover {
-  color: var(--primary-color);
+  color: var(--text-primary);
+  background-color: var(--bg-hover);
 }
 
+.nav-lang-btn svg,
 .theme-toggle svg {
   width: 1.125rem;
   height: 1.125rem;
+  flex-shrink: 0;
+}
+
+.nav-lang-chevron {
+  width: 0.75rem !important;
+  height: 0.75rem !important;
+  opacity: 0.7;
+}
+
+.nav-lang {
+  position: relative;
+}
+
+.nav-lang-menu {
+  position: absolute;
+  top: calc(100% + 0.375rem);
+  right: 0;
+  min-width: 8.5rem;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.28);
+  z-index: 60;
+}
+
+.nav-lang-item {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.nav-lang-item:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-hover);
+}
+
+.nav-lang-item.is-active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.lang-fade-enter-active,
+.lang-fade-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.lang-fade-enter-from,
+.lang-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+@media (max-width: 480px) {
+  /* 窄屏只留图标，避免顶栏拥挤溢出 */
+  .nav-lang-label {
+    display: none;
+  }
+
+  .nav-lang-chevron {
+    display: none;
+  }
 }
 
 .nav-gitee-icon {
@@ -334,6 +467,41 @@ onUnmounted(() => {
 
 .mobile-link:last-child {
   border-bottom: none;
+}
+
+.mobile-lang {
+  margin-top: 1.5rem;
+}
+
+.mobile-lang-title {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.625rem;
+}
+
+.mobile-lang-items {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mobile-lang-item {
+  flex: 1;
+  text-align: center;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.mobile-lang-item.is-active {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  font-weight: 600;
 }
 
 .mobile-link:hover {

@@ -17,10 +17,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="docs-showcase-section">
+  <section id="sec-preview" class="docs-showcase-section section-dark">
     <div class="container">
       <div class="docs-showcase">
-        <div class="docs-showcase-content">
+        <div class="docs-showcase-content mp-reveal">
+          <span class="section-eyebrow">Live Preview</span>
           <div class="feature-badge">SQL 预览</div>
 
           <h2 class="docs-showcase-title">
@@ -67,7 +68,7 @@ onMounted(() => {
           </a>
         </div>
 
-        <div class="docs-showcase-video-wrap">
+        <div class="docs-showcase-video-wrap mp-reveal">
           <img
             src="/demo/wrapper-preview.png"
             alt="Wrapper → SQL 预览演示"

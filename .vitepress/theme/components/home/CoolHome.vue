@@ -9,6 +9,11 @@ import WelfareCard from './WelfareCard.vue'
 import Testimonials from './Testimonials.vue'
 import PricingSection from './PricingSection.vue'
 import CtaSection from './CtaSection.vue'
+import { useReveal } from '../../composables/useReveal'
+
+// 滚动揭示全页共用一个观察器：各区块自带 mp-reveal 类，这里统一挂观察。
+// Vue 子组件先于父组件挂载，此处执行时子组件 DOM 已就位。
+useReveal()
 </script>
 
 <template>

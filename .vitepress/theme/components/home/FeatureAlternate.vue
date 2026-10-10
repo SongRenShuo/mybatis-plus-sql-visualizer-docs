@@ -129,9 +129,10 @@ const features = reactive([
 </script>
 
 <template>
-  <section ref="sectionEl" class="features-section">
+  <section id="sec-capability" ref="sectionEl" class="features-section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header mp-reveal">
+        <span class="section-eyebrow">Core Capabilities</span>
         <h2 class="section-title">大幅提升您的 SQL 调试效率</h2>
         <p class="section-description">
           更简单的工具，更清晰的逻辑。旨在优化每一个研发细节，让您在更短的时间内成就更多
@@ -142,7 +143,7 @@ const features = reactive([
         <div
           v-for="(item, index) in features"
           :key="index"
-          class="feature-item"
+          class="feature-item mp-reveal"
           :class="{ reverse: item.reverse }"
         >
           <div class="feature-video-wrapper" :class="{ reverse: item.reverse }">

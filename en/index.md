@@ -26,6 +26,12 @@ import BadgeBar from '../.vitepress/theme/components/BadgeBar.vue'
 import CodeTabs from '../.vitepress/theme/components/CodeTabs.vue'
 import EnHomeFeatures from '../.vitepress/theme/components/home/EnHomeFeatures.vue'
 import EnFeatureMatrix from '../.vitepress/theme/components/home/EnFeatureMatrix.vue'
+import { useReveal } from '../.vitepress/theme/composables/useReveal'
+
+// 滚动揭示（与中文首页同一机制）。放在页面级而不是 EnHomeFeatures 内：
+// 页面组件是这些区块的父级，其 onMounted 执行时全部子区块的 DOM 已就位；
+// 若放在子组件里，排在它之后的兄弟区块（BadgeBar / CodeTabs / 收尾块）尚未挂载。
+useReveal()
 
 const codeExamples = [
   {
@@ -90,6 +96,8 @@ ORDER BY t1.create_time DESC
 
 <BadgeBar />
 
+<span class="section-eyebrow mp-reveal">Live Preview</span>
+
 <CodeTabs :tabs="codeExamples" />
 
 ## Feature Matrix
@@ -101,11 +109,11 @@ ORDER BY t1.create_time DESC
 
 ## Get Started
 
-<div style="text-align: center; padding: 48px 0 24px;">
-  <p style="font-size: 18px; color: var(--vp-c-text-2); margin-bottom: 24px;">
+<div class="section-dark mp-en-cta mp-reveal">
+  <p class="mp-en-cta__lead">
     Supports IntelliJ IDEA 2024.3+, install and go
   </p>
-  <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+  <div class="mp-en-cta__actions">
     <a href="https://plugins.jetbrains.com/plugin/33633-sql-visualizer" class="mp-cta mp-cta--primary">
       🚀 Install from Marketplace
     </a>

@@ -714,7 +714,31 @@ kbd {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.VPFeatures { animation: mp-fade-up 0.6s ease; }
+/* 英文首页改为逐卡滚动揭示（mp-reveal），此处排除以免整体动画与逐卡动画叠加 */
+.VPFeatures:not(.en-home-features) { animation: mp-fade-up 0.6s ease; }
+
+/* ---------- 英文首页收尾块（对齐中文首页的深色收尾分区） ----------
+   英文首页是 layout:home，正文受 .vp-doc 容器宽度约束，做不成整幅通栏，
+   故做成深色卡片。取色与文字色由 .section-dark 局部变量提供。 */
+.mp-en-cta {
+  margin: 8px 0 24px;
+  padding: 40px 24px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.mp-en-cta__lead {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin: 0 0 24px;
+}
+
+.mp-en-cta__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
 /* ---------- 页脚 ---------- */
 .VPFooter {
@@ -779,6 +803,13 @@ kbd {
   line-height: 1.25;
 }
 
+/* 页内跳转落点避让：两级吸顶导航（主导航 60px + 章节条 44px）实测合计 108px，
+   留 124px 让区块顶部与吸顶栏之间保有约 16px 空隙。
+   SectionNav 的阈值线 ACTIVE_LINE(140) 必须大于该值，否则跳转后当前项不亮。 */
+.cool-home main section[id] {
+  scroll-margin-top: 124px;
+}
+
 /* 暗色模式适配（首页组件使用 :global(.dark) 无法覆盖的场景） */
 .dark .cool-home {
   --bg-primary: #2b2d30;
@@ -786,6 +817,85 @@ kbd {
   --text-primary: #f9fafb;
   --text-secondary: #9ca3af;
   --border-color: #374151;
+}
+
+/* ============================================
+   首页章节眉题（T2）
+   ============================================
+   每节顶部一行全大写大字距英文，承担「进入新章节」的信号。
+   颜色取 --text-secondary 而非 --text-muted：后者在亮色下对白底只有 2.4:1，
+   低于大字号文本 3:1 的可读门槛；--text-secondary 亮色 4.8:1、暗色 5.5:1，
+   且因字号大、字距宽、全大写，观感上仍明显次于中文主标题。
+   深色分区（.section-dark）内该变量被局部覆盖，眉题自动跟随。 */
+.section-eyebrow {
+  display: block;
+  /* 尺寸刻意压在主标题之下：主标题在 1440 视口是 3rem，眉题取 2rem 上限，
+     靠字距与全大写承担「章节标记」的辨识度，而不是靠字号去和标题抢层级 */
+  font-size: clamp(1.25rem, 2.6vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 0 0 0.75rem;
+}
+
+/* ============================================
+   滚动揭示（T6）
+   ============================================
+   约定：脚本只切 is-revealed 类，动画全部写在这里。
+   首屏元素不加此类，避免推迟 LCP。 */
+.mp-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  /* 网格类区块用行内样式给每张卡错峰，值由模板按索引写入 */
+  transition-delay: var(--mp-reveal-delay, 0s);
+}
+
+.mp-reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mp-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ============================================
+   深色分区（T5）
+   ============================================
+   局部覆盖一组语义变量，区块内所有用 var() 取色的子组件自动跟随，
+   无需逐个组件写深色样式。暗色模式下页面本身已是深色，深色分区改用
+   更深的底并加上下描边，避免与页面糊成一片。 */
+.section-dark {
+  --bg-primary: #10141b;
+  --bg-secondary: #171d26;
+  --bg-card: #171d26;
+  --bg-hover: #202834;
+  --text-primary: #f3f4f6;
+  --text-secondary: #a4adbc;
+  --text-muted: #77818f;
+  --border-color: #2c3542;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark .section-dark {
+  --bg-primary: #16181b;
+  --bg-secondary: #1c1f23;
+  --bg-card: #1c1f23;
+  --bg-hover: #24282d;
+  --border-color: #343a43;
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 /* ============================================

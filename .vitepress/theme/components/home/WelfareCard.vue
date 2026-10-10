@@ -32,11 +32,12 @@ function handleMouseLeave() {
 </script>
 
 <template>
-  <section class="welfare-section">
+  <section id="sec-opensource" class="welfare-section">
     <div class="container">
+      <span class="section-eyebrow welfare-eyebrow mp-reveal">Open Source</span>
       <div
         ref="cardRef"
-        class="welfare-card"
+        class="welfare-card mp-reveal"
         @mousemove="handleMouseMove"
         @mouseleave="handleMouseLeave"
       >
@@ -116,6 +117,13 @@ function handleMouseLeave() {
   padding: 5rem 1.5rem;
   background-color: var(--bg-primary);
   perspective: 1400px;
+}
+
+/* 眉题居中于卡片上方（卡片自身没有章节标题栏，眉题放在卡外保持卡片造型完整） */
+.welfare-eyebrow {
+  text-align: center;
+  max-width: 72rem;
+  margin: 0 auto 2rem;
 }
 
 .welfare-card {

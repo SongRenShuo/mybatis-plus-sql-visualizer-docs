@@ -25,10 +25,12 @@ const testimonials = [
 </script>
 
 <template>
-  <section class="testimonials-section">
+  <section id="sec-testimonials" class="testimonials-section">
     <div class="container">
-      <div class="testimonials-header">
-        <span class="testimonials-badge">Testimonials</span>
+      <div class="testimonials-header mp-reveal">
+        <span class="section-eyebrow">Testimonials</span>
+        <!-- 徽章原为英文 "Testimonials"，与眉题完全重复；改为中文，与「更多特性」「SQL 预览」等同级徽章口径一致 -->
+        <span class="testimonials-badge">用户评价</span>
         <h2 class="testimonials-title">
           深受 <span class="testimonials-title-accent">开发团队信赖</span>
         </h2>
@@ -38,7 +40,12 @@ const testimonials = [
       </div>
 
       <div class="testimonials-grid">
-        <div v-for="(t, i) in testimonials" :key="i" class="testimonial-card">
+        <div
+          v-for="(t, i) in testimonials"
+          :key="i"
+          class="testimonial-card mp-reveal"
+          :style="{ '--mp-reveal-delay': `${i * 80}ms` }"
+        >
           <div class="testimonial-stars">
             <svg
               v-for="s in 5"

@@ -2,8 +2,9 @@
 </script>
 
 <template>
-  <section class="cta-section">
-    <div class="cta-card">
+  <section id="sec-start" class="cta-section section-dark">
+    <div class="cta-card mp-reveal">
+      <span class="section-eyebrow">Get Started</span>
       <div class="cta-badge">
         <span class="cta-badge-icon">✨</span>
         立即体验
