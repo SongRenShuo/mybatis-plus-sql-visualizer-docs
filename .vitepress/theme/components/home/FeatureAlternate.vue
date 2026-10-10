@@ -13,11 +13,12 @@ const sectionEl = ref(null)
 const media = [
   { imageSrc: '/demo/wrapper-preview.gif', poster: '/demo/wrapper-preview.png' },
   { imageSrc: '/demo/sql-log.gif', poster: '/demo/sql-log.png', reverse: true },
-  { imageSrc: '/demo/sql-to-java.gif', poster: '/demo/sql-to-java.png' },
-  { imageSrc: '/demo/crud-sql.gif', poster: '/demo/crud-sql.png', reverse: true },
-  { imageSrc: '/demo/xml-preview.gif', poster: '/demo/xml-preview.png' },
-  { imageSrc: '/demo/jpa-preview.gif', poster: '/demo/jpa-preview.png', reverse: true },
-  { imageSrc: '/demo/mcp-agent.gif', poster: '/demo/mcp-agent.png' },
+  { imageSrc: '/demo/sql-log-jump-source.gif', poster: '/demo/sql-log-jump-source.png' },
+  { imageSrc: '/demo/sql-to-java.gif', poster: '/demo/sql-to-java.png', reverse: true },
+  { imageSrc: '/demo/crud-sql.gif', poster: '/demo/crud-sql.png' },
+  { imageSrc: '/demo/xml-preview.gif', poster: '/demo/xml-preview.png', reverse: true },
+  { imageSrc: '/demo/jpa-preview.gif', poster: '/demo/jpa-preview.png' },
+  { imageSrc: '/demo/mcp-agent.gif', poster: '/demo/mcp-agent.png', reverse: true },
 ]
 
 // GIF 加载状态与文案无关，独立保存，避免 computed 重算时丢掉

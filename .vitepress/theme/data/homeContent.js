@@ -105,6 +105,17 @@ export const homeContent = {
           ],
         },
         {
+          badge: '日志溯源',
+          title: 'SQL 溯源 · 日志直达源码',
+          description:
+            '执行日志一键回到发出 SQL 的那一行；预览面板的调用栈逐帧列出，点哪一帧跳哪一帧。',
+          points: [
+            { title: '精确落点', description: '日志条目右键即跳到执行 SQL 的代码行，真实调用栈定位不做表名猜测' },
+            { title: '调用栈逐帧', description: '预览面板悬停展开完整调用链，帧数可配（12~64），基础设施帧自动跳过' },
+            { title: '两种通道都能用', description: '增强捕获免配置直达；控制台通道配拦截器后同样精确' },
+          ],
+        },
+        {
           badge: '反向转换',
           title: 'SQL → Java 反向转换',
           description: '选中 SQL 一键生成可编译的 MyBatis-Plus 代码，支持四形态输出',
@@ -389,6 +400,29 @@ export const homeContent = {
               title: 'Target database badges',
               description:
                 'Entries tagged [MySQL], [DM] and so on, across 11 dialects plus HSQL / GBASE',
+            },
+          ],
+        },
+        {
+          badge: 'Log Tracing',
+          title: 'SQL Tracing · From Log to Source Line',
+          description:
+            'Jump from any executed log entry straight back to the line that issued the SQL; the preview panel lists the full call stack frame by frame — click a frame, land on its source.',
+          points: [
+            {
+              title: 'Exact landing',
+              description:
+                'Right-click an entry to jump to the executing line; located by the real call stack, never guessed from table names',
+            },
+            {
+              title: 'Frame-by-frame stack',
+              description:
+                'Hover the preview panel for the full call chain, 12–64 frames configurable, infrastructure frames skipped automatically',
+            },
+            {
+              title: 'Works on both channels',
+              description:
+                'Enhanced capture needs zero configuration; the console channel is just as precise with the interceptor installed',
             },
           ],
         },

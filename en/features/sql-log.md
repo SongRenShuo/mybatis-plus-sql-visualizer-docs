@@ -2,6 +2,10 @@
 
 <GifPlayer src="/demo/sql-log.gif" alt="SQL log capture and restore demo" />
 
+<GifPlayer src="/demo/enhanced-capture.gif" alt="Enhanced capture: entries stream in with real parameters, millisecond durations, database badges and execution errors side by side" />
+
+The enhanced-capture channel in action — a parameterized query and a duplicate-key failure arrive one after another; open an entry to see the restored SQL with literal parameters.
+
 Auto-captures SQL as it runs, restores everything into a unified list of executable statements, and jumps precisely to the source line that fired each SQL. Enhanced capture is the default channel and works out of the box; console capture is the no-code-change fallback.
 
 ## Trigger Method
@@ -31,6 +35,10 @@ Enhanced capture asks for injection consent before any run happens — the dialo
 - Source locations come from the real call stack, jumping straight to the code line that executed the SQL with no configuration at all (see "Jump to Source" below); console capture needs its own interceptor for the same precision
 - Entries carry the full call-stack snapshot — hover the preview panel to see the whole call chain and click any frame to jump to that frame's source (see "Jump from the Call Stack" below)
 - Collected data is only displayed inside the IDE on your machine — nothing is sent to any server; turning the switch off stops collection (attached capture points remain but stay idle)
+
+<GifPlayer src="/demo/datasource-badge.gif" alt="Enabling Show full data-source badge context in settings instantly switches entry badges from [MySQL] to [MySQL · database@host:port]" />
+
+Database badges show only the database type by default; enabling "Show full data-source badge context" in settings switches them to the full `dialect · database@host:port` form instantly (the clip above shows the switch).
 
 ::: details Startup injection and consent behavior (When to read: you care about JVM injection mechanics or run into an injection prompt)
 - **When consent is asked**: the injection consent dialog pops as soon as you enable enhanced capture (in settings or via the guide flow) or open the project (the fresh enabled-but-not-authorized state), before any Run; burst requests milliseconds apart collapse into a single dialog.
@@ -157,6 +165,8 @@ Right-click a log entry → "Jump to Source". How the position is resolved depen
 
 **Enhanced-capture entries**: the source location comes from the real call stack at SQL execution time, straight to the code line that ran the query. Calls entering through a self-developed framework's unified entry point are traced up the stack automatically, skipping framework frames to land on your business code.
 
+<GifPlayer src="/demo/sql-log-jump-source.gif" alt="Right-click a log entry, choose Jump to Source, and the editor opens UserServiceImpl on the exact line that executed the SQL" />
+
 ::: details Framework-frame filtering and business-frame registration (When to read: jumps keep landing in framework code or tool libraries)
 Framework frames are filtered by origin (business classes come from directories in dev, third-party dependencies from JARs), so framework or data-layer plugin frames cannot mislead the jump. Both frame filtering and JAR business-frame ownership are configurable in settings: register your framework engine chain's packages under "Source-capture frame skip prefixes" (one per line), and your JAR-packaged business tool libraries' packages under "JAR business-frame prefixes" — registered jumps then land inside the tool class where the SQL runs, instead of the caller line above it. Both fields are validated as you type (format and cross-field conflicts) with one-click fix. The live list and history panel share the same resolver.
 :::
@@ -164,6 +174,8 @@ Framework frames are filtered by origin (business classes come from directories 
 #### Jump from the Call Stack
 
 An enhanced-capture entry carries more than a single execution point — it carries the whole call stack. Preview such an entry and hover the "Call stack:" area on the panel's meta line; after a moment a debugger-style **Frames** popup appears:
+
+<GifPlayer src="/demo/sql-log-stack-jump.gif" alt="Hovering the preview panel's Call stack area opens a Frames-style popup; clicking the Controller frame lands on the matching source line in UserController" />
 
 - Frames are listed as structured rows — method name, fully-qualified class name and `:line`, with the class name middle-ellipsized when too wide so the line number always stays visible; the top frame is selected by default and the plugin's own capture frames are dimmed gray
 - **Clicking any frame jumps to that frame's source line** (resolved by class name across the whole project, library classes landing in the decompiled view, just like the debugger). When a frame cannot be resolved the popup stays open — no false "jumped" impression
@@ -173,7 +185,9 @@ An enhanced-capture entry carries more than a single execution point — it carr
 How many frames are kept is configurable — "Call-stack snapshot frames" in settings (default 24, range 12–64): sampled at both ends, the top keeps JDBC / engine-side frames and the bottom always keeps 8 business-side frames, joined by an omission marker in the middle. Changes take effect via a hot push on save — no application restart.
 
 ::: details The console channel's interceptor route (When to read: you use console capture and still need precise landing)
-Enhanced capture needs none of this — its source location comes from the real call stack. Console logs carry no call-site info, so the plugin ships an optional runtime interceptor: copy the self-contained sample `SqlSourceInterceptor` (shipped with the plugin repository at `docs/instrumentation/SqlSourceInterceptor.kt`) into your project and register it as a MyBatis-Plus `InnerInterceptor`.
+Enhanced capture needs none of this — its source location comes from the real call stack. Console logs carry no call-site info, so the plugin ships an optional runtime interceptor: copy the self-contained sample `SqlSourceInterceptor` (shipped with the plugin repository at `docs/instrumentation/SqlSourceInterceptor.kt`) into your project and register it as a MyBatis-Plus `InnerInterceptor`. To skip the manual copy, enable "Auto-inject source-capture interceptor" in settings — pick the modules and the interceptor is generated and registered into `mybatis-config.xml` for you:
+
+<GifPlayer src="/demo/interceptor-inject.gif" alt="Enabling auto-injection in settings and picking a module generates SqlSourceInterceptor and registers it in mybatis-config.xml, with a dialog confirming a restart applies it" />
 
 ```java
 @Bean
