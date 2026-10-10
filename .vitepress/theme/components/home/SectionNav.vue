@@ -110,31 +110,40 @@ function documentTop(el) {
 }
 
 /**
- * 瞬时跳转，不用原生平滑，也不用 rAF 自己动画。
+ * 落点自己算、跳转瞬时完成，不用原生平滑、也不用 rAF 自己动画。
  *
- * 实测（内嵌 webview，三者都踩过）：
- * ① 原生 `scrollIntoView({behavior:'smooth'})` 的落点不可信——同一份布局下只避让
- *    54px，瞬时分支避让 124px（后者才是 CSS 的 scroll-margin-top）；
- * ② 该宿主 `requestAnimationFrame` 完全不触发（1.5s 超时未回调），自己写的
- *    逐帧动画会一帧都不跑；
- * ③ `setTimeout` 被节流到约 1s 一帧，也撑不起动画。
+ * ① 原生平滑的落点不可信：实测同一份布局下 `scrollIntoView({behavior:'smooth'})`
+ *    避让 54px、瞬时分支避让 124px（后者才是 CSS 的 scroll-margin-top）；
+ * ② 内嵌 webview 上 `requestAnimationFrame` 完全不触发（1.5s 未回调），自己写的
+ *    逐帧动画一帧都不会跑；`setTimeout` 又被节流到约 1s 一帧，也撑不起动画。
  *
- * 所以落点由自己算、跳转瞬时完成：结果确定、与宿主能力无关，也不会出现
- * 「点了没反应」。跳转语义上瞬时跳转本就是页内锚点的常规做法。
- * prefers-reduced-motion 无需特殊处理——本来就没有动画。
+ * 所以落点由 `元素文档绝对位置 - --home-anchor-offset` 唯一决定，跳转瞬时完成：
+ * 结果确定、与宿主能力无关，也不会出现「点了没反应」。页内锚点用瞬时跳转本就是
+ * 常规做法，prefers-reduced-motion 因此无需特殊处理。
  */
-function scrollToTarget(target) {
-  window.scrollTo(0, target)
-}
-
 function onClick(event, id) {
   const el = document.getElementById(id)
   if (!el) return
   event.preventDefault()
 
-  scrollToTarget(Math.max(0, documentTop(el) - anchorOffset()))
+  const target = Math.max(0, documentTop(el) - anchorOffset())
+  window.scrollTo(0, target)
 
+  // 收口再滚一次。
+  //
+  // 原因（真实 Chromium 插桩实证）：改 hash 会触发浏览器自己的「滚动到片段」，
+  // 而它按约 54px 避让、并不等于 CSS 的 scroll-margin-top(124px)，且那次滚动排在
+  // 我们的 scrollTo 之后才落地，于是把落点带偏 70px——实测原始坐标点击落到 54px，
+  // 章节标题会被两级吸顶导航（108px）遮住。排除了滚动锚定（overflow-anchor:none
+  // 无效），确认是片段滚动本身。合成 click 不触发片段滚动，所以只有真实鼠标/键盘
+  // 激活才暴露这个问题。
+  //
+  // 这里在它落地后按 target 收口一次；偏差 ≤4px 不动手，避免正常情况下的无谓抖动。
   history.replaceState(null, '', `#${id}`)
+  window.setTimeout(() => {
+    if (Math.abs(window.scrollY - target) > 4) window.scrollTo(0, target)
+  }, 100)
+
   activeId.value = id
 }
 
