@@ -15,7 +15,7 @@ const { version } = usePluginVersion()
           </h1>
 
           <p class="hero-description">
-            IntelliJ IDEA 插件：Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），控制台日志一键还原并精确跳转源码，SQL 反向转 Java 代码。告别翻日志、手拼参数。
+            IntelliJ IDEA 插件：写代码时就看见最终 SQL——Wrapper 链、XML/注解/HQL 动态 SQL（含 MPJ 联表 JOIN）实时预览；跑起来后真实参数与耗时自动捕获，慢查询标红、EXPLAIN 看计划、一键跳回源码；SQL 也能反向转成 Java 代码。不启服务、不翻日志、不手拼参数。
           </p>
 
           <div class="btn-group">

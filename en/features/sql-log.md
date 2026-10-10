@@ -85,6 +85,26 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 - Enhanced-capture entries carry structured durations (millisecond-accurate), affected-row counts and execution error messages directly — no log parsing involved.
 :::
 
+### Slow Queries & Performance Advice
+
+Hunting a slow SQL has two steps: **find it** in the list, then **understand it** in the preview.
+
+**Find it in the list** (details in the previous section): entries whose duration reaches the slow-query threshold (default 1000ms, configurable in settings) are marked red and counted as slow queries; switch the sort button to "duration descending" and the slowest ones rise to the top. Repeated statements are also clustered — **once three entries share the same structure**, a "N same-structure entries" badge appears on the meta line, and right-clicking it opens a focus tab showing only that structure. Different literals still count as the same structure (`IN ('a')` and `IN ('b')` group together), so an N+1 loop becomes obvious at a glance. The log page and the History page share these markers.
+
+**Understand it in the preview**: open any preview (double-click a log entry, or use a Wrapper / XML / JPA gutter icon) and the panel's meta line is followed by static performance advice — each item starts with `⚠` (warning, red) or `ℹ` (suggestion, blue) and items are separated by `；`; when the line runs out of room it truncates with an ellipsis and the full text appears on hover. The rules target the usual "index unusable / full scan / oversized result set" shapes, for example:
+
+- `SELECT *` (worse with JOIN, where redundant columns are transferred)
+- A query or write without a `WHERE` condition (full-scan / full-table-update risk)
+- `LIKE '%xxx'` with a leading wildcard (a B-tree index cannot be used)
+- `ORDER BY` without `LIMIT`, `ORDER BY RAND()`, or an `ORDER BY` column missing from the SELECT list
+- `JOIN` without an `ON` condition (Cartesian-product risk)
+- A column wrapped in a function, or an implicit type conversion (both disable the index)
+- Deeply nested subqueries, correlated subqueries (executed once per outer row)
+- An overlong `IN` clause, or deep pagination with a large `OFFSET`
+- `UNION` where `UNION ALL` would do, `GROUP BY` with no aggregate function
+
+Static advice only says "this looks problematic"; to see the real cost, click "EXPLAIN" in the preview panel — the static rules and the plan the database actually returns are shown side by side. See [Wrapper → SQL Preview · Real EXPLAIN Plan](/en/features/wrapper-preview#real-explain-plan). With MCP connected, an agent can pull the same advice through `sqlv_perf_advice` (see [MCP Server Tools](/en/features/mcp)).
+
 ### Execution Errors Inline
 
 Enhanced-capture entries bring their own execution errors (the failure cause and full error text are collected with the entry), so failures are visible at a glance with no parsing at all.

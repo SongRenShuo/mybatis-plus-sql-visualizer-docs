@@ -8,7 +8,7 @@ export default defineConfig({
 
   title: 'SQL Visualizer',
   description:
-    'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），真实 EXPLAIN 执行计划，控制台日志一键还原，SQL 反向转 Java 代码。',
+    'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），真实 EXPLAIN 执行计划，运行期捕获真实参数与耗时（慢查询标红与静态性能建议），日志一键跳回源码，SQL 反向转 Java 代码。',
 
   // 默认语言
   lang: 'zh-CN',
@@ -44,17 +44,20 @@ export default defineConfig({
       'operatingSystem': 'Windows, macOS, Linux',
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus / MPJ / JPA / Hibernate 的 SQL 调试利器',
       'url': 'https://sql-visualizer.jvtools.cn',
-      'softwareVersion': '2026.9.4',
+      'softwareVersion': '2026.10.9',
       'featureList': [
         'Wrapper chain to SQL live preview',
         'XML / annotation / HQL dynamic SQL preview',
         'Real EXPLAIN execution plans',
         '.hbm.xml named query preview',
         'SQL to Java reverse conversion',
-        'Console log restore with parameters',
+        'Runtime SQL capture with real parameters and durations',
+        'Slow-query highlighting with static performance advice',
+        'Jump from a captured SQL back to its source line',
+        'Call-stack popup with click-a-frame-to-jump',
         'JPA / Hibernate derived query and CRUD preview',
         'MPJ join query live preview',
-        '9-dialect pagination rendering'
+        '11-dialect pagination rendering'
       ],
       'offers': {
         '@type': 'Offer',
