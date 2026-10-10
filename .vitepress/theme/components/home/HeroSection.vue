@@ -486,11 +486,9 @@ const { c } = useHomeContent()
 .tk-kw { color: #ff997b; font-weight: 600; }
 
 @media (max-width: 767px) {
-  /* 窄屏缩一档并让出行号宽度，让最长的 Java 行尽量不触发横向滚动 */
-  .hero-code__body {
-    font-size: 0.6875rem;
-  }
-
+  /* 窄屏只隐藏行号、让出行号那点宽度。字号保持 0.75rem（12px）——T4 验收线
+     要求移动端代码字号不低于 12px；代价是最长的 Java 行会超出容器宽度，
+     由 .hero-code__body 的 overflow-x 内部横滑消化（代码块内部横滑是常规行为）。 */
   .hero-code__ln {
     display: none;
   }
