@@ -30,7 +30,7 @@ export const coolCards = [
     icon: 'cog',
     color: 'yellow',
     title: '广泛集成',
-    description: 'XML / 注解 / HQL·JPQL / .hbm.xml 命名查询 / SQL 日志追踪 / 批量操作之外，还支持实体类与数据库表右键生成 CRUD SQL、真实 EXPLAIN 执行计划、项目启动自动监听，以及面向 AI Agent 的 MCP Server 十工具（IDEA 2025.2+）。',
+    description: 'XML / 注解 / HQL·JPQL / .hbm.xml 命名查询 / SQL 日志追踪 / 批量操作之外，还支持实体类与数据库表右键生成 CRUD SQL、真实 EXPLAIN 执行计划、项目启动自动监听，以及面向 AI Agent 的 MCP Server 十一工具（IDEA 2025.2+）。',
   },
   {
     icon: 'shield',
@@ -196,7 +196,7 @@ export const enFeatureMatrix = [
       ],
       [
         'MCP Server Tools',
-        'Ten read-only SQL tools for external AI agents (Claude Code / Cursor / AI Assistant / Codex) via the built-in MCP Server — per-tool gating in settings, instant effect; requires IDEA 2025.2+',
+        'Eleven read-only SQL tools for external AI agents (Claude Code / Cursor / AI Assistant / Codex) via the built-in MCP Server — per-tool gating in settings, instant effect; requires IDEA 2025.2+',
       ],
       [
         'CRUD SQL Generation',

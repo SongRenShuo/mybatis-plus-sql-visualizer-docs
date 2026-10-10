@@ -82,14 +82,14 @@
     <text x="860" y="238" text-anchor="middle" font-size="17" fill="#94a3b8">IntelliJ IDEA（2025.2+ 内置 MCP Server）</text>
     <text x="558" y="292" font-size="24" font-weight="600" fill="#ffffff">SQL Visualizer 插件</text>
     <text x="558" y="328" font-size="19" fill="#cbd5e1">渲染链 · 数据源 · 执行计划 · 校验器</text>
-    <text x="558" y="378" font-size="18" fill="#93c5fd">sqlv_* 十工具注册进平台 MCP Server</text>
+    <text x="558" y="378" font-size="18" fill="#93c5fd">sqlv_* 十一工具注册进平台 MCP Server</text>
     <text x="1184" y="378" text-anchor="end" font-size="16" fill="#64748b">SELECT 白名单 · 零弹窗 · 审计留痕</text>
   </g>
 
   <!-- 分组说明 -->
-  <text x="640" y="458" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="16" fill="#94a3b8">十个工具 · 按 agent 工作流分组</text>
+  <text x="640" y="458" text-anchor="middle" font-family="system-ui, 'Segoe UI', sans-serif" font-size="16" fill="#94a3b8">十一个工具 · 按 agent 工作流分组</text>
 
-  <!-- 下：工具三组 -->
+  <!-- 下：工具三组（行距 60；拿 SQL 组 5 行） -->
   <g font-family="system-ui, 'Segoe UI', sans-serif">
     <!-- 拿 SQL -->
     <g filter="url(#ds)">
@@ -98,18 +98,20 @@
     <path d="M 80 530 v -44 a 12 12 0 0 1 12 -12 h 336 a 12 12 0 0 1 12 12 v 44 z" fill="#3b82f6"/>
     <text x="236" y="510" text-anchor="middle" font-size="21" font-weight="600" fill="#ffffff">拿 SQL</text>
     <rect x="382" y="492" width="34" height="24" rx="12" fill="#ffffff" opacity="0.25"/>
-    <text x="399" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">4</text>
-    <g font-size="20" font-weight="600" fill="#1d4ed8" font-family="Consolas, 'JetBrains Mono', monospace">
-      <text x="108" y="566">sqlv_render_sql</text>
-      <text x="108" y="638">sqlv_render_logs</text>
-      <text x="108" y="710">sqlv_crud_sql</text>
-      <text x="108" y="782">sqlv_reverse_sql</text>
+    <text x="399" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">5</text>
+    <g font-size="19" font-weight="600" fill="#1d4ed8" font-family="Consolas, 'JetBrains Mono', monospace">
+      <text x="108" y="560">sqlv_render_sql</text>
+      <text x="108" y="620">sqlv_render_logs</text>
+      <text x="108" y="680">sqlv_crud_sql</text>
+      <text x="108" y="740">sqlv_reverse_sql</text>
+      <text x="108" y="800">sqlv_history_search</text>
     </g>
-    <g font-size="17" fill="#64748b">
-      <text x="108" y="592">文件+行号 / XML 片段 → 可执行 SQL</text>
-      <text x="108" y="664">控制台日志还原真实参数 SQL</text>
-      <text x="108" y="736">实体类 → CRUD 四件套</text>
-      <text x="108" y="808">SQL → MyBatis-Plus 代码</text>
+    <g font-size="16" fill="#64748b">
+      <text x="108" y="584">文件+行号 / XML 片段 → 可执行 SQL</text>
+      <text x="108" y="644">控制台日志还原真实参数 SQL</text>
+      <text x="108" y="704">实体类 → CRUD 四件套</text>
+      <text x="108" y="764">SQL → MyBatis-Plus 代码</text>
+      <text x="108" y="824">历史落盘 SQL 四维检索</text>
     </g>
 
     <!-- 看库 -->
@@ -120,14 +122,14 @@
     <text x="616" y="510" text-anchor="middle" font-size="21" font-weight="600" fill="#ffffff">看库</text>
     <rect x="762" y="492" width="34" height="24" rx="12" fill="#ffffff" opacity="0.25"/>
     <text x="779" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">2</text>
-    <g font-size="20" font-weight="600" fill="#0369a1" font-family="Consolas, 'JetBrains Mono', monospace">
-      <text x="488" y="566">sqlv_schema_context</text>
-      <text x="488" y="638">sqlv_explain</text>
+    <g font-size="19" font-weight="600" fill="#0369a1" font-family="Consolas, 'JetBrains Mono', monospace">
+      <text x="488" y="560">sqlv_schema_context</text>
+      <text x="488" y="620">sqlv_explain</text>
     </g>
-    <g font-size="17" fill="#64748b">
-      <text x="488" y="592">表名白名单 → 表列注释上下文</text>
-      <text x="488" y="664">七方言 EXPLAIN 执行计划文本</text>
-      <text x="488" y="692">附驱动 notices 与 index hints 建议</text>
+    <g font-size="16" fill="#64748b">
+      <text x="488" y="584">表名白名单 → 表列注释上下文</text>
+      <text x="488" y="644">按方言派发 EXPLAIN 执行计划文本</text>
+      <text x="488" y="666">附驱动 notices 与 index hints 建议</text>
     </g>
 
     <!-- 执行前把关 -->
@@ -138,17 +140,17 @@
     <text x="996" y="510" text-anchor="middle" font-size="21" font-weight="600" fill="#ffffff">执行前把关</text>
     <rect x="1142" y="492" width="34" height="24" rx="12" fill="#ffffff" opacity="0.25"/>
     <text x="1159" y="509" text-anchor="middle" font-size="15" font-weight="600" fill="#ffffff">4</text>
-    <g font-size="20" font-weight="600" fill="#047857" font-family="Consolas, 'JetBrains Mono', monospace">
-      <text x="868" y="566">sqlv_check_sql</text>
-      <text x="868" y="638">sqlv_mapper_check</text>
-      <text x="868" y="710">sqlv_rollback_plan</text>
-      <text x="868" y="782">sqlv_perf_advice</text>
+    <g font-size="19" font-weight="600" fill="#047857" font-family="Consolas, 'JetBrains Mono', monospace">
+      <text x="868" y="560">sqlv_check_sql</text>
+      <text x="868" y="620">sqlv_mapper_check</text>
+      <text x="868" y="680">sqlv_rollback_plan</text>
+      <text x="868" y="740">sqlv_perf_advice</text>
     </g>
-    <g font-size="17" fill="#64748b">
-      <text x="868" y="592">静态写风险与类型核查</text>
-      <text x="868" y="664">契约核查 + simulate 实证</text>
-      <text x="868" y="736">回滚预案，只产出不执行</text>
-      <text x="868" y="808">20 条规则性能建议 · 至多 30 条</text>
+    <g font-size="16" fill="#64748b">
+      <text x="868" y="584">静态写风险与类型核查</text>
+      <text x="868" y="644">契约核查 + simulate 实证</text>
+      <text x="868" y="704">回滚预案，只产出不执行</text>
+      <text x="868" y="764">20 条规则性能建议 · 至多 30 条</text>
     </g>
   </g>
 

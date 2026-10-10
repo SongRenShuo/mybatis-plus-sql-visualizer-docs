@@ -1,18 +1,18 @@
 # MCP Server：给 AI Agent 的 SQL 工具
 
-插件向 IDEA 内置 MCP Server 注册了十个工具，让 Claude Code、Cursor、JetBrains AI Assistant、Codex 这类外部 agent 能直接调用插件的 SQL 能力：渲染可执行 SQL、查表结构、拿执行计划。你在 IDE 里照常写代码，agent 在旁边干活，两边互不打扰。
+插件向 IDEA 内置 MCP Server 注册了十一个工具，让 Claude Code、Cursor、JetBrains AI Assistant、Codex 这类外部 agent 能直接调用插件的 SQL 能力：渲染可执行 SQL、查表结构、拿执行计划。你在 IDE 里照常写代码，agent 在旁边干活，两边互不打扰。
 
-![SQL Visualizer MCP Server：十个只读工具按 agent 工作流分组](/demo/mcp-overview.svg)
+![SQL Visualizer MCP Server：十一个只读工具按 agent 工作流分组](/demo/mcp-overview.svg)
 
 ## 快速上手
 
 1. 确认 IDEA 为 2025.2 及以上——MCP Server 为平台内置，无需另装插件
-2. 在支持 MCP 的 agent 里添加当前 IDE 的 MCP Server 连接（如 Claude Code 的 `use_idea_mcp`），工具列表里即可看到 `sqlv_*` 十个工具
+2. 在支持 MCP 的 agent 里添加当前 IDE 的 MCP Server 连接（如 Claude Code 的 `use_idea_mcp`），工具列表里即可看到 `sqlv_*` 十一个工具
 3. 直接调用。比如把一段 mapper XML 丢给 `sqlv_render_sql`，拿回来的就是参数已回填、可直接执行的真 SQL
 
 不需要改一行项目代码，也不用在插件里做额外配置；想控制哪些工具对 agent 可见，见下文「设置页门控」。
 
-## 十个工具
+## 十一个工具
 
 按 agent 的工作流分三组：先拿到 SQL，再了解数据库，最后执行前把关。
 
@@ -24,13 +24,14 @@
 | `sqlv_render_logs` | `logText` 整段控制台日志原文（可选自定义 `sqlPrefix` / `paramPrefix` 等前缀） | MyBatis / Hibernate / JdbcTemplate 日志还原成的可执行 SQL |
 | `sqlv_crud_sql` | `filePath` 或 `className`（MyBatis-Plus 实体类） | INSERT / UPDATE / SELECT / DELETE 四件套 |
 | `sqlv_reverse_sql` | `sql` 一条 SQL | 反向生成的 MyBatis-Plus Java 代码 |
+| `sqlv_history_search` | 关键词 / 正则 / 时间范围 / 来源文件四维过滤（默认只搜当日，`allDates=true` 搜全量） | 历史落盘 SQL 的命中摘要与计数（时间戳、SQL 预览、来源位置、耗时、mapper 语句 id），新的在前、有上限不整段倾倒 |
 
 ### 看库
 
 | 工具 | 输入 | 产出 |
 |------|------|------|
 | `sqlv_schema_context` | `tables` 表名清单（可选 `dataSource`、`maxTables`，默认最多 8 张、上限 20） | 数据源真实的表列结构、类型与注释，紧凑上下文 |
-| `sqlv_explain` | `selectSql` 单条 SELECT（可选 `dataSource`；`dialect` 可省略，按数据源 URL 自动识别） | 九方言 EXPLAIN 执行计划文本，附驱动 notices 与 index hints 建议 |
+| `sqlv_explain` | `selectSql` 单条 SELECT（可选 `dataSource`；`dialect` 可省略，按数据源 URL 自动识别） | 按方言派发的 EXPLAIN 执行计划文本，附驱动 notices 与 index hints 建议 |
 
 ### 执行前把关
 
@@ -81,18 +82,18 @@
 设置 → 「MCP 工具」子页提供门控区：
 
 - 总开关：整体启停插件的 MCP 功能
-- 十个工具逐项启用 / 禁用
+- 十一个工具逐项启用 / 禁用
 - 「全部启用」「全部禁用」快捷切换
 
 所有变更即时生效：下一次工具列表刷新或工具调用就按新配置走，无需重启 IDE。
 
 ::: details 与平台 MCP 开关的关系（何时看：关了插件开关 agent 仍能看到别的工具，或想彻底关闭 MCP 服务时）
-这里的开关只管插件的十个工具对 agent 是否可见，与 IDE「工具 → MCP 服务器」页的「启用 MCP 服务器」相互独立——后者是平台内置 MCP 服务（127.0.0.1:64342）的总开关，其他插件与平台自带的工具都挂在同一个服务下。关掉插件开关不会动平台开关：服务照常，插件经平台的工具过滤扩展（`mcpToolFilterProvider`）把 `sqlv_*` 从 agent 的工具清单摘掉——下一次列表刷新或新会话即生效，已连接的客户端刷新后可见。
+这里的开关只管插件的十一个工具对 agent 是否可见，与 IDE「工具 → MCP 服务器」页的「启用 MCP 服务器」相互独立——后者是平台内置 MCP 服务（127.0.0.1:64342）的总开关，其他插件与平台自带的工具都挂在同一个服务下。关掉插件开关不会动平台开关：服务照常，插件经平台的工具过滤扩展（`mcpToolFilterProvider`）把 `sqlv_*` 从 agent 的工具清单摘掉——下一次列表刷新或新会话即生效，已连接的客户端刷新后可见。
 :::
 
 ## 只读与安全
 
-十个工具全部向 agent 显式声明只读、幂等、非破坏性，可以放心交给 agent 自动调用。除此之外还有几道防线：
+十一个工具全部向 agent 显式声明只读、幂等、非破坏性，可以放心交给 agent 自动调用。除此之外还有几道防线：
 
 - 查询白名单：需要连库执行的入口只接受 SELECT——语句结构判定加关键字粗扫两道保险，判不了的一律拒绝而不是放行；判定前会剥离字符串字面量，避免字面量里的关键字造成误判
 - 全程零弹窗：MCP 调用链不会在 IDE 里弹任何对话框打断你——不合规的请求以错误消息返回给 agent，数据库建连也不会弹密码询问

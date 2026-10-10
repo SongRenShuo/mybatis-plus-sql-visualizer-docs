@@ -101,12 +101,12 @@ History SQL and execution temp files live under `.idea/sql-visualizer/` in your 
 
 ## MCP Tools
 
-The plugin exposes 10 read-only tools to AI agents (Claude Code / Cursor / AI Assistant, etc.) through the platform's MCP Server; the "MCP Tools" subpage in settings provides the gating:
+The plugin exposes 11 read-only tools to AI agents (Claude Code / Cursor / AI Assistant, etc.) through the platform's MCP Server; the "MCP Tools" subpage in settings provides the gating:
 
 For the tool surface and version requirements, see [MCP Server Tools](/en/features/mcp).
 
 - Master switch: enable/disable the plugin's MCP functionality as a whole
-- Per-tool enable/disable for all ten tools, plus "Enable All / Disable All" quick buttons
+- Per-tool enable/disable for all eleven tools, plus "Enable All / Disable All" quick buttons
 - Changes take effect immediately — no IDE restart needed
 - These switches gate the plugin's own tools only; the IDE-wide "Enable MCP Server" toggle under Tools → MCP Server is the platform master switch (other plugins and platform tools share the same service), and the two are independent — with the plugin's switch off, the platform service keeps running, while the plugin removes the `sqlv_*` tools from the agent's tool list dynamically through the platform's tool-filter extension, no restart needed
 

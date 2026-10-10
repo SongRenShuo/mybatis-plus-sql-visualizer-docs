@@ -1,18 +1,18 @@
 # MCP Server: SQL Tools for AI Agents
 
-The plugin registers ten tools with IDEA's built-in MCP Server, letting external agents such as Claude Code, Cursor, JetBrains AI Assistant, and Codex call the plugin's SQL capabilities directly: render executable SQL, inspect table structures, fetch execution plans. You keep writing code in the IDE as usual while the agent works alongside — neither side interrupts the other.
+The plugin registers eleven tools with IDEA's built-in MCP Server, letting external agents such as Claude Code, Cursor, JetBrains AI Assistant, and Codex call the plugin's SQL capabilities directly: render executable SQL, inspect table structures, fetch execution plans. You keep writing code in the IDE as usual while the agent works alongside — neither side interrupts the other.
 
-![SQL Visualizer MCP Server: ten read-only tools grouped by agent workflow](/demo/mcp-overview.svg)
+![SQL Visualizer MCP Server: eleven read-only tools grouped by agent workflow](/demo/mcp-overview.svg)
 
 ## Quick Start
 
 1. Make sure you run IDEA 2025.2 or later — the MCP Server is built into the platform, nothing extra to install
-2. Add the IDE's MCP Server connection in your MCP-capable agent (e.g. `use_idea_mcp` in Claude Code); the ten `sqlv_*` tools show up in its tool list
+2. Add the IDE's MCP Server connection in your MCP-capable agent (e.g. `use_idea_mcp` in Claude Code); the eleven `sqlv_*` tools show up in its tool list
 3. Call them. Feed a mapper XML fragment to `sqlv_render_sql` and you get real executable SQL back — parameters filled in, ready to run
 
 No project code changes, no extra plugin configuration. To control which tools the agent can see, see "Settings and Gating" below.
 
-## The Ten Tools
+## The Eleven Tools
 
 Grouped the way an agent works: get the SQL first, then understand the database, then check before execution.
 
@@ -24,13 +24,14 @@ Grouped the way an agent works: get the SQL first, then understand the database,
 | `sqlv_render_logs` | `logText`, the raw console log (optional custom `sqlPrefix` / `paramPrefix` etc.) | Executable SQL restored from MyBatis / Hibernate / JdbcTemplate logs |
 | `sqlv_crud_sql` | `filePath` or `className` of a MyBatis-Plus entity | INSERT / UPDATE / SELECT / DELETE set |
 | `sqlv_reverse_sql` | `sql`, one SQL statement | MyBatis-Plus Java code generated in reverse |
+| `sqlv_history_search` | Four-way filters — keyword / regex / time range / source file (today only by default; `allDates=true` searches everything) | Match summaries and hit counts from the persisted SQL history (timestamp, SQL preview, source location, duration, mapper statement id), newest first, capped — never a full dump |
 
 ### Understand the Database
 
 | Tool | Input | Output |
 |------|-------|--------|
 | `sqlv_schema_context` | `tables`, a list of table names (optional `dataSource`, `maxTables` — default 8, cap 20) | Compact context of the data source's real columns, types and comments |
-| `sqlv_explain` | `selectSql`, a single SELECT (optional `dataSource`; omit `dialect` to auto-detect from the data source URL) | EXPLAIN plan text for nine dialects, with driver notices and index hints |
+| `sqlv_explain` | `selectSql`, a single SELECT (optional `dataSource`; omit `dialect` to auto-detect from the data source URL) | EXPLAIN plan text dispatched by dialect, with driver notices and index hints |
 
 ### Check Before Execution
 
@@ -81,18 +82,18 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 Settings → the "MCP Tools" page provides a gating area:
 
 - Master switch: enable or disable the plugin's MCP functionality as a whole
-- Per-tool enable / disable for all ten tools
+- Per-tool enable / disable for all eleven tools
 - "Enable all" / "Disable all" shortcuts
 
 Every change takes effect immediately: the next tool-list refresh or tool call follows the new configuration — no IDE restart needed.
 
 ::: details Relationship with the platform MCP switch (When to read: the agent still sees other tools after you turn off the plugin's switch, or you want to shut down the MCP service entirely)
-These switches only control whether the plugin's ten tools are visible to the agent. They are independent of the "Enable MCP Server" toggle under Tools → MCP Server — the latter is the master switch for the platform's built-in MCP service (127.0.0.1:64342), which also serves tools from other plugins and the platform itself. Turning off the plugin's switch leaves that service running: through the platform's tool-filter extension (`mcpToolFilterProvider`), the plugin removes the `sqlv_*` tools from the agent's tool list — effective at the next listing refresh or new session, visible to connected clients once they refresh.
+These switches only control whether the plugin's eleven tools are visible to the agent. They are independent of the "Enable MCP Server" toggle under Tools → MCP Server — the latter is the master switch for the platform's built-in MCP service (127.0.0.1:64342), which also serves tools from other plugins and the platform itself. Turning off the plugin's switch leaves that service running: through the platform's tool-filter extension (`mcpToolFilterProvider`), the plugin removes the `sqlv_*` tools from the agent's tool list — effective at the next listing refresh or new session, visible to connected clients once they refresh.
 :::
 
 ## Read-Only and Safety
 
-All ten tools declare themselves to the agent as read-only, idempotent and non-destructive — safe to let the agent call them autonomously. On top of that:
+All eleven tools declare themselves to the agent as read-only, idempotent and non-destructive — safe to let the agent call them autonomously. On top of that:
 
 - SELECT whitelist: entry points that hit the database accept SELECT only — structural judgment plus keyword scanning as two independent checks; anything undecidable is rejected rather than allowed through. String literals are stripped before checking so keywords inside literals can't cause false passes
 - Zero dialogs: the MCP call chain never pops a dialog in your IDE — non-compliant requests come back to the agent as error messages, and database connections never prompt for passwords

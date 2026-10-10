@@ -101,12 +101,12 @@
 
 ## MCP 工具
 
-插件在平台 MCP Server 上向 AI agent（Claude Code / Cursor / AI Assistant 等）暴露 10 个只读工具，设置页「MCP 工具」子页提供门控：
+插件在平台 MCP Server 上向 AI agent（Claude Code / Cursor / AI Assistant 等）暴露 11 个只读工具，设置页「MCP 工具」子页提供门控：
 
 工具能力面与版本要求详见 [MCP Server 工具](../features/mcp)。
 
 - 总开关：整体启停插件的 MCP 功能
-- 十个工具逐项启用 / 禁用，另有「全部启用 / 全部禁用」快捷按钮
+- 十一个工具逐项启用 / 禁用，另有「全部启用 / 全部禁用」快捷按钮
 - 切换即时生效，无需重启 IDE
 - 这里的开关只管插件自有工具是否暴露；IDE「工具 → MCP 服务器」页的「启用 MCP 服务器」是平台总开关（其他插件与平台自带的工具同挂一个服务），两者相互独立——关掉插件开关平台服务照常，插件经平台工具过滤扩展把 `sqlv_*` 从 agent 工具清单动态摘除，无需重启
 
