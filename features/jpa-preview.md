@@ -73,6 +73,8 @@
 
 派生查询方法名里的嵌入段驼峰路径（`findByUpdateInfoCreatedTimeAfter` 这类）也能解析到真实展平列——WHERE / ORDER BY 不再产出 `update_info_created_time` 这类伪列。
 
+<GifPlayer src="/demo/jpa-embedded.gif" alt="嵌套嵌入派生查询预览：address.zipcode.zip 逐段穿透展平为 cust_zip，bizAddress.street 按 prefix 展平为 biz_street（前缀只拼一次、不出现 biz_biz_street）" />
+
 ::: details 展平规则细节（何时看：嵌入字段列名不符预期时）
 - 嵌套嵌入的 `@AttributeOverride` 支持 JPA 规范的点路径覆写（`name="zipcode.zip"`）——点路径优先、裸名兜底，类级覆写键随嵌套链传递
 - Spring Data 形态：裸 `@Embedded` 按 `prefix` 前缀展平列名，`@Embedded.Nullable` / `@Embedded.Empty` 捷径注解正确识别（同一值对象多处嵌入各按前缀展开，防撞车）

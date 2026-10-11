@@ -74,6 +74,8 @@ Fields of embedded value objects (`@Embedded` / `@Embeddable` / `@EmbeddedId`) a
 
 Camel-case embedded paths in derived method names (`findByUpdateInfoCreatedTimeAfter` and the like) also resolve to the real flattened column — WHERE / ORDER BY no longer produce pseudo columns like `update_info_created_time`.
 
+<GifPlayer src="/demo/jpa-embedded.gif" alt="Derived-query preview over nested embeds: address.zipcode.zip flattens segment by segment to cust_zip, and bizAddress.street flattens under its prefix to biz_street (the prefix is applied once — no biz_biz_street)" />
+
 ::: details Flattening rules in detail (When to read: an embedded field's column name doesn't match expectations)
 - Nested `@AttributeOverride` supports the JPA-spec dot-path form (`name="zipcode.zip"`) — dot paths take priority with bare-name fallback, and class-level override keys propagate down the nesting chain
 - Spring Data shapes: a bare `@Embedded` flattens column names under its `prefix`, and the `@Embedded.Nullable` / `@Embedded.Empty` shortcut annotations are recognized (multiple embeds of the same value object expand under their own prefixes, no collisions)
