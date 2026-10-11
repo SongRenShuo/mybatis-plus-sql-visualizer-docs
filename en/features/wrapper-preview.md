@@ -77,9 +77,17 @@ JOIN tables are drawn with the same full entity column list as the main table �
 
 ### Safety Warning
 
-UPDATE / DELETE without WHERE shows a red warning:
+<GifPlayer src="/demo/danger-warning.gif" alt="Editing the previewed SQL into a WHERE-less UPDATE and clicking Execute SQL escalates the confirm dialog into an unbounded-write warning that lists each matched trait" />
 
-> ⚠ No WHERE clause — will update/delete all rows in the table!
+When an UPDATE / DELETE lacks an effective filter, the Execute SQL confirmation is escalated into an unbounded-write warning: the title and buttons stay the same (still Confirm Execution with Yes / No — no extra step), while the body lists each trait the static check matched:
+
+- No WHERE clause — the statement will hit the whole table
+- A tautology such as `1=1` — WHERE does not filter anything
+- An OR branch containing a tautology — every row matches
+- A pure-wildcard LIKE such as `'%'` — equivalent to no filtering
+- A WHERE made only of constant expressions — no column reference at all
+
+The verdict comes from static analysis of the SQL syntax tree (the same source as the snapshot weak-predicate warning in the rollback view); a parse failure is treated as the highest risk, but it is still this one single confirmation with no extra blocking. Without any of the traits above the message stays unchanged.
 
 ### Logic Delete Injection
 
