@@ -156,6 +156,8 @@ Each checkbox in the log page's "Type Filter" popup carries a matching color swa
 
 ### Scroll to Bottom & Tail Following
 
+<GifPlayer src="/demo/sql-log-tail-follow.gif" alt="Under a concurrent flood the viewport pins to the bottom; scrolling up pauses following, and the toolbar Scroll to Bottom action jumps back and resumes it" />
+
 The log list has tail following on by default: the view sticks to the bottom as new SQL arrives, always showing the latest entries; scrolling up to read history pauses following automatically, and scrolling back to the bottom or clicking the toolbar's "Scroll to Bottom" action resumes it — the same habit as the IDE console.
 
 ::: details Details (When to read: the list is not at the bottom, or you are looking for the action)
@@ -230,6 +232,8 @@ If the XML doesn't exist (annotation SQL, MP built-in statements) or locating fa
 
 ### SQL Suppression
 
+<GifPlayer src="/demo/sql-suppress.gif" alt="Right-click a heartbeat entry and choose Suppress this SQL: buffered rows vanish with a balloon, and the rules dialog lists the rule, its hit count and a read-only preview" />
+
 When keep-alive heartbeat SQL (such as `SELECT 1`) keeps flooding the list, you can suppress it out of the list:
 
 - Right-click an entry → "Suppress this SQL" to suppress in one click; multi-select works (different statements become separate rules, existing ones are skipped automatically). Existing rows vanish from the list immediately, a balloon notification can jump straight to the management dialog, and the management dialog shows live hit counts
@@ -265,6 +269,8 @@ The "List display" dropdown under the "SQL Log" group in settings controls how S
 The SQL log page and the History page share the same setting, which survives IDE restarts. In any mode, Ctrl+C on a selected entry copies the plain SQL, not the rendered text.
 
 ### Single-Click Preview & Double-Click Dialog
+
+<GifPlayer src="/demo/sql-click-preview.gif" alt="Single-click an entry for the editable lightweight popup whose copy button flashes to a check; double-click for the full preview dialog and switch keyword wrapping" />
 
 List entries use two-level previewing, consistent across the SQL log list, the History tab's second-level list and the history tool window:
 
