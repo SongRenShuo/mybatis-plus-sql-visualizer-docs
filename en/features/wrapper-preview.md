@@ -77,6 +77,8 @@ Statements taking a `Page` / `IPage` argument simulate pagination the way MyBati
 
 JOIN query previews ship with a relationship diagram rendered by IDEA's native Diagrams engine (the built-in renderer can be restored in settings).
 
+<GifPlayer src="/demo/join-diagram.gif" alt="JOIN diagram: switching an MPJ join preview to the JOIN Diagram tab renders the user / user_address / area tables as nodes (columns, types and database comments) wired by their ON relations with IDEA's native Diagrams engine, switchable back and forth with the SQL tab" />
+
 ::: details Node column scope and rendering behavior (When to read: diagram nodes show incomplete columns or rendering misbehaves)
 JOIN tables are drawn with the same full entity column list as the main table — wide tables over 50 columns keep only primary-key columns, and columns referenced by the SQL are appended after the entity columns. Columns that exist in the data source but are not mapped by the entity are added to the node as well, with the database COMMENT and real type. Column comments come from two sources — entity comments and database COMMENTs — falling back to the database when the entity has none. A loading indicator is visible while rendering; if rendering fails, an error page shows a summary of the cause.
 :::

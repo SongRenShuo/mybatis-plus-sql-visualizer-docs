@@ -78,6 +78,8 @@ OceanBase 与 openGauss 的 upsert 冲突子句亦按各自真实形态渲染（
 
 联表查询预览附带 JOIN 关系图，走 IDEA 原生 Diagrams 引擎渲染（设置页可切回自绘渲染）。
 
+<GifPlayer src="/demo/join-diagram.gif" alt="JOIN 关系图：MPJ 联表预览切到「JOIN 图」标签页，IDEA 原生 Diagrams 渲染 user / user_address / area 三表节点（列、类型与数据库注释）与 ON 关系连线，可与 SQL 标签页来回对照" />
+
 ::: details 节点列口径与渲染行为（何时看：关系图节点列不全或渲染异常时）
 JOIN 表与主表同口径绘制实体整表列——超过 50 列的宽表只留主键列，SQL 引用到的列追加在实体列之后；数据源里存在而实体未映射的列也会补进节点，带数据库 COMMENT 与真实类型。列注释来自实体注释与数据库 COMMENT 两路，实体没写注释时取数据库。渲染期间显示加载指示，渲染失败时落错误页并显示原因摘要。
 :::
