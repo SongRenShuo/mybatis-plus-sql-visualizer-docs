@@ -39,6 +39,8 @@ This is the first batch (MVP): common chain queries are covered; rarer method sh
 
 ### Dynamic Condition Toggles
 
+<GifPlayer src="/demo/wrapper-params.gif" alt="Toggle the username condition off in the preview panel and WHERE loses a condition in real time; typing a value replaces the placeholder instantly" />
+
 Boolean-overloaded conditions like `.eq(true, ...)` can be toggled in the left panel, re-rendering SQL in real time.
 
 ### Parameter Fill-in

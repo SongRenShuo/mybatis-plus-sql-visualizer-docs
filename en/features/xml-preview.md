@@ -39,6 +39,8 @@ When the target can't be resolved the preview continues, with the warning naming
 
 ## OGNL Expression Panel
 
+<GifPlayer src="/demo/xml-ognl.gif" alt="OGNL expression panel: condition lines carry their evaluated result, toggling one off narrows WHERE in real time, and typing a parameter value substitutes it" />
+
 OGNL expressions in dynamic conditions (e.g. `name != null and name != ''`) can be toggled in the left panel, with SQL updating in real time.
 
 When an `if` test fails to evaluate, the preview no longer silently expands it as true — a visible error is recorded ("expanded as true; override with the panel toggle"), putting the divergence between preview and runtime on the table.

@@ -42,6 +42,8 @@
 
 `.eq(true, ...)` 等布尔重载条件可在左侧面板勾选/取消，SQL 实时重渲染。
 
+<GifPlayer src="/demo/wrapper-params.gif" alt="预览面板动态条件勾掉 username 后 WHERE 实时少一个条件，参数框填值后 ? 即时替换为实值" />
+
 ### 参数回填
 
 - `?` 占位符替换为实际值
