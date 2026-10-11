@@ -60,6 +60,10 @@ With enhanced capture none of this applies — skip it, along with the "log form
 - **Statement-line-only projects**: after 1 second of silence the statement is judged complete and handed over (JdbcTemplate on DEBUG only, Tomcat spawning a thread per request), instead of staying stuck at "N lines scanned / 0 produced"
 :::
 
+Manual log pasting lives in the panel's "Log → SQL" tab — paste MyBatis / Hibernate / JdbcTemplate log text and it is restored into executable SQL, or read straight from the clipboard in one click:
+
+<GifPlayer src="/demo/log-to-sql-clipboard.gif" alt="Log to SQL tab: paste Preparing/Parameters log lines and the formatted SQL is restored automatically" />
+
 ## Features
 
 ### Auto-Open Tool Window
@@ -268,6 +272,8 @@ List entries use two-level previewing, consistent across the SQL log list, the H
 - **Multi-select batch copy**: after Ctrl / Shift multi-select, right-click → "Copy" copies all selected SQL at once (the menu item shows the count, e.g. "Copy selected SQL (3)", each statement semicolon-terminated and newline-joined)
 - **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The toolbar offers layout toggles — horizontal / vertical / keyword wrap — plus a "More" menu gathering low-frequency actions (import parameters, diff, share)
 
+<GifPlayer src="/demo/recent-executions.gif" alt="Right-click a gutter icon to open Recent Executions: execution history on the left, SQL preview on the right, multi-select with right-click batch actions" />
+
 ::: details Preview behavior details (When to read: preview rendering or dialog behavior differs from what you expect)
 - **Single-click preview**: its display follows the "Format SQL on preview" setting (on by default), so long SQL opens multi-line indented, or as original text when off. Literal SQL with zero placeholders (values inlined in the SQL text) and IN lists are recognized into editable parameter rows as well. The popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately. While a Ctrl / Shift multi-select is in progress, single-clicks no longer trigger the preview (any open popup closes with it); single-select resumes normal previewing.
 - **Multi-select and right-click**: right-clicking a row already in the selection keeps the selection, while the other menu actions still apply to the right-clicked row.
@@ -280,6 +286,8 @@ How entries render is controlled by the "List display" option in settings (see t
 
 ## SQL History
 
+<GifPlayer src="/demo/sql-history.gif" alt="SQL History tab: double-click a file for its entries, batch loading on scroll, regex search filtering" />
+
 The "SQL History" tab is always present on the panel — you don't have to enable auto-save first to see the entry point (it shows an empty state when auto-save is off and the directory holds no history files). Previously the tab was only mounted once certain conditions were met.
 
 Enable "Auto-save SQL history" in settings (off by default) and captured entries are saved to disk in full (not limited by the list's max-entry count); when the save directory holds more history files than the retention limit (default 30, configurable, 0 = keep everything), the oldest files are cleaned up automatically to keep the disk in check. Reading and writing go through the same directory resolution: files written after you customize the save directory are visible on the History page too, and changing the save directory triggers a rescan.
@@ -288,6 +296,11 @@ Enable "Auto-save SQL history" in settings (off by default) and captured entries
 - **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info, and a `#N` number per in-file entry order); large files load in batches as you scroll — the first 30 entries up front, more appended as you near the bottom; single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically, without interrupting browsing while the file you're viewing still exists
 - **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same
+- **Export & compare**: right-click the second-level list for "Export SQL" (CSV/TSV/TXT/SQL, SQL by default with a timestamped file name) and "Compare two selected" (line-by-line diff, the dialog title carries the structural fingerprint verdict) —
+
+<GifPlayer src="/demo/history-export.gif" alt="Right-click history list to export SQL; a balloon confirms the file path after choosing a format" />
+
+<GifPlayer src="/demo/history-compare.gif" alt="Select two history SQL entries and compare; a two-pane diff view titles the structural fingerprint verdict" />
 
 ::: details History storage and version compatibility (When to read: you use a custom save location or mix old and new plugin versions)
 - History files are saved under `.idea/sql-visualizer/sql-history/` in your project by default (the directory was renamed from `mybatis-plus-sql-visualizer` in v2026.9.2 — old directories are no longer read). Save location and file name pattern are configurable in settings.

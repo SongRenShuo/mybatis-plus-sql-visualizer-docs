@@ -60,6 +60,8 @@ SELECT 侧除 JOIN / 子查询 / 聚合之外，还覆盖这些此前会丢失�
 
 生成的代码可直接编译。
 
+<GifPlayer src="/demo/sql-to-java-return-type.gif" alt="贴入 GROUP BY 聚合 SQL 转换生成 Wrapper 链，返回类型选 List<Map<String, Object>> 后调用行变为 this.listMaps(wrapper)" />
+
 ## 示例
 
 输入 SQL：

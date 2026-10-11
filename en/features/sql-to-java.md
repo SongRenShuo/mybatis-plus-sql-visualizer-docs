@@ -60,6 +60,8 @@ The class-picker button beside the field fills in a class from your project, and
 
 Generated code compiles directly.
 
+<GifPlayer src="/demo/sql-to-java-return-type.gif" alt="Paste an aggregated GROUP BY SQL, convert to a Wrapper chain, then pick List<Map<String, Object>> as the return type — the call line becomes this.listMaps(wrapper)" />
+
 ## Example
 
 Input SQL:
