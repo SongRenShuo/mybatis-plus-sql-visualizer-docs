@@ -94,6 +94,8 @@ UPDATE / DELETE 缺少有效过滤条件时，点「执行 SQL」的确认弹窗
 
 实体含 `@TableLogic` 时自动追加 `AND deleted = 值`（值可在设置页配置，默认 0）。
 
+<GifPlayer src="/demo/interceptor-injection.gif" alt="逻辑删除注入开关：设置页 SQL 预览子页关掉「逻辑删除实体查询/删除自动追加 AND deleted = 0」后，同一处重新预览，WHERE 末行的 AND deleted = 0 立刻消失、下面的 ORDER BY 上移一行" />
+
 ### 执行 SQL
 
 IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 .sql 文件，`Ctrl+Enter` 执行。预览弹窗为非模态窗口，执行时如数据源密码过期，IDEA 的密码输入框不会被弹窗遮挡，可直接输入。执行失败时错误直接显示在面板内，不再弹模态框打断操作。

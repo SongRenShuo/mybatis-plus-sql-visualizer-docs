@@ -93,6 +93,8 @@ The verdict comes from static analysis of the SQL syntax tree (the same source a
 
 Entities with `@TableLogic` auto-append `AND deleted = value` (the value is configurable in settings, default 0).
 
+<GifPlayer src="/demo/interceptor-injection.gif" alt="Logic-delete injection toggle: after switching off “logic-delete queries/deletes auto-append AND deleted = 0” on the settings page's SQL Preview tab, re-previewing at the same place drops the AND deleted = 0 line and pulls ORDER BY up one row" />
+
 ### Execute SQL
 
 With IntelliJ IDEA Ultimate + Database plugin, a temporary `.sql` file is created automatically after preview, then executed with `Ctrl+Enter`. The preview dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it, so you can type right away. Execution failures are reported inline in the panel instead of a modal dialog interrupting you.
