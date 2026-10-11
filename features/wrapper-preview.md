@@ -68,6 +68,8 @@
 
 OceanBase 与 openGauss 的 upsert 冲突子句亦按各自真实形态渲染（openGauss 实为 `ON DUPLICATE KEY UPDATE` MySQL 形态，非 PG 的 `ON CONFLICT`）。
 
+<GifPlayer src="/demo/dialect-pagination.gif" alt="方言分页：设置页数据库方言从 MySQL 切到 Oracle 后，同一处重新预览，分页子句由 LIMIT 5, 5 变为 ORDER BY id DESC OFFSET 5 ROWS FETCH NEXT 5 ROWS ONLY，表名引号也从反引号换成双引号" />
+
 带 `Page` / `IPage` 参数的语句按 MyBatis-Plus `PaginationInnerInterceptor` 的运行时行为模拟分页：预览在原语句后**尾追分页子句**，并**并列产出**一条 COUNT 包裹语句（`SELECT COUNT(*) FROM (原SQL) TOTAL`，带注释说明出处）；`searchCount=false` 与手写 LIMIT 的语句只产其一。COUNT 产物附在面板底部，需要滚到底才看得到。设置页「SQL 预览」子页可关掉整个模拟，或用「附分页 COUNT 查询预览」单独关掉 COUNT 那半。
 
 <GifPlayer src="/demo/pagination-sim.gif" alt="分页拦截器模拟：XML 语句带 IPage 形参时，预览在原 SQL 后尾追 LIMIT 并并列产出带注释的 COUNT 包裹语句 SELECT COUNT(*) FROM (…) TOTAL" />
