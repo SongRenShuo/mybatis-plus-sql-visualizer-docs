@@ -61,6 +61,10 @@ To distribute plugin updates inside your network without any external traffic, o
 
 Set it in the IDE's `vmoptions` file, its launch script, or alongside `idea.properties`.
 
+Both the channel switch and the version info live in the settings page's "Update & Diagnostics" area (`Settings > Tools > SQL Visualizer > About`):
+
+![SQL Visualizer settings "Update & Diagnostics" area: plugin cache size and entry count, current version with Check-Update, the "Early access: enable Gitee update channel" switch, the Report-an-issue / Feedback-board entries, the internal build number, and settings import / export](/demo/update-channel.png)
+
 ### Manifest format
 
 A JSON document; only `version` and `downloadUrl` are required:

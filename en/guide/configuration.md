@@ -139,6 +139,10 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 | Internal Build Number | - | Unique per build, one-click copy for bug reports |
 | Settings Import / Export | - | Import / export settings as JSON; covers global settings only (project-level settings are not included), with the result shown inline next to the buttons |
 
+The settings page's "Update & Diagnostics" area (`Settings > Tools > SQL Visualizer > About`) gathers these entries in one place, and "Report a Problem…" opens this dialog:
+
+![SQL Visualizer "Report to the feedback pool" dialog: title, type, category and description are required, an exception-stack .txt can be attached, nickname and email are optional, and it supports anonymous submission or handing off to the browser](/demo/feedback-dialog.png)
+
 ::: details Privacy and dedup rules of the feedback dialog (When to read: you care about the upload scope or about duplicate reports)
 "Report a Problem / Feedback Pool": by default only the exception class name and a stack-frame summary are prefilled; the full exception message and complete stack, plus the stack attachment, are opt-in checkboxes — uploaded only when checked, and they may contain local paths and class names. The same exception is deduplicated for 24 hours; the Help menu's "SQL Visualizer Feedback / Feedback Pool" entry and the IDE's internal error dialog offer one-click reporting too; reporting several entries selected in the IDE error list merges them into a single post (items beyond the rate-limit threshold are queued and sent staggered automatically); when a submission is rejected the dialog stays open and the status line shows the exact reason returned by the server — fix it and retry directly.
 :::
