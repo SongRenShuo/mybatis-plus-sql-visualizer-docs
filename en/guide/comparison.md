@@ -24,6 +24,8 @@ For the same problem — seeing what SQL MyBatis actually produces — there are
 
 ## Two different routes
 
+![Three routes to the same result: static analysis (no project startup) / runtime capture (enhanced capture with real parameters and timings) / console restore (the fallback that needs no project change), all sharing one output](/demo/comparison-routes.svg)
+
 **Static preview** (the core of this plugin): place the caret on a Wrapper chain or mapper statement and get the SQL with real parameters immediately — no Spring context, no database connection. Great for verifying logic while coding, reviewing SQL in code review, or teaching newcomers what each API call produces.
 
 **Log restore** (the route of MyBatis Log Plugin family): after the application starts, stitch the `Preparing:` and `Parameters:` lines from the console into a complete SQL. Great for inspecting real execution in staging or production.
