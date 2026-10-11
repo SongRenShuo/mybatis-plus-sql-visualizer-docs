@@ -60,6 +60,8 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 
 ## JPA Parameter Chains (setParameter)
 
+<GifPlayer src="/demo/jpa-param-chain.gif" alt="Previewing a setParameter chain: literals and enum constants already prefill the parameter boxes, a duplicate parameter name gets a grey hint, and typing a value into a formal parameter turns its placeholder into the real value immediately" />
+
 Chained `em.createQuery(...).setParameter(...)` calls fully take part in the preview, and the parameter panel stays consistent with the rendered SQL:
 
 - **Auto-prefill for literals and enum constants**: calls whose argument is a literal or enum constant (`setParameter("status", OrderStatus.PAID)`) prefill the parameter box automatically — no manual typing

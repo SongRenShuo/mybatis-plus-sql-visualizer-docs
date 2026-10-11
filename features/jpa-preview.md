@@ -59,6 +59,8 @@
 
 ## JPA 参数链（setParameter）
 
+<GifPlayer src="/demo/jpa-param-chain.gif" alt="setParameter 链预览：字面量与枚举常量已自动预填参数框、同名参数多次设置给出灰字提示，往形参填值后 SQL 里的占位即时变成实值" />
+
 `em.createQuery(...).setParameter(...)` 链式调用完整参与预览，参数面板与渲染结果保持一致：
 
 - **字面量与枚举常量自动预填**：实参为字面量或枚举常量的调用（`setParameter("status", OrderStatus.PAID)`）自动把值预填进参数框，无需手动录入
