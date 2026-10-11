@@ -120,6 +120,8 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 
 `Settings > Tools > SQL Visualizer (Current Project)` offers 10 project-level controls: the enhanced-capture switch, database dialect, 3 checkboxes, logic-delete value, table prefix / suffix, table-name strategy, and ignored fields.
 
+![SQL Visualizer project-level settings page (Tools > SQL Visualizer (Current Project)): with the master switch off, every row below grays out and shows the effective global values](/demo/settings-project.png)
+
 - When the "Use project settings" master switch is off, the 9 override rows gray out and show the effective global values — what you see is what runs; a "Reset to follow global" button clears this project's overrides in one click
 - With the dialect on "Auto-infer", the project level takes precedence over the global decision
 - Settings search hits entries on both the global page and the project page
