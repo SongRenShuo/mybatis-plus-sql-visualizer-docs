@@ -77,6 +77,8 @@
 - 嵌套嵌入的 `@AttributeOverride` 支持 JPA 规范的点路径覆写（`name="zipcode.zip"`）——点路径优先、裸名兜底，类级覆写键随嵌套链传递
 - Spring Data 形态：裸 `@Embedded` 按 `prefix` 前缀展平列名，`@Embedded.Nullable` / `@Embedded.Empty` 捷径注解正确识别（同一值对象多处嵌入各按前缀展开，防撞车）
 - 派生查询的嵌入段解析覆盖 WHERE / ORDER BY（含 `Sort.by` 字面量属性）；SELECT 全列展开与 `@Query` JPQL 链本就正确
+- 嵌套点路径按**逐段累积**解析（`address.zipcode.zip` → 覆写列 `cust_zip`），中间段（`Zipcode`）参与匹配，不再退化成下划线拼接的伪列
+- `prefix` 与 `@AttributeOverride` 同时出现时，**覆写名即最终列名**——`prefix` 只拼在没有覆写声明的列上，不会出现 `biz_biz_street` 这类双拼
 - MyBatis-Plus 与 jakarta 嵌入注解共存的混合注解实体（`@TableName` + `@Embedded`）在 Wrapper 预览、批量模板与 CRUD 生成里同样展平为宿主表列，不再出现值对象伪列
 :::
 

@@ -78,6 +78,8 @@ Camel-case embedded paths in derived method names (`findByUpdateInfoCreatedTimeA
 - Nested `@AttributeOverride` supports the JPA-spec dot-path form (`name="zipcode.zip"`) — dot paths take priority with bare-name fallback, and class-level override keys propagate down the nesting chain
 - Spring Data shapes: a bare `@Embedded` flattens column names under its `prefix`, and the `@Embedded.Nullable` / `@Embedded.Empty` shortcut annotations are recognized (multiple embeds of the same value object expand under their own prefixes, no collisions)
 - Embedded-segment resolution for derived queries covers WHERE / ORDER BY (including `Sort.by` literal properties); full SELECT expansion and the `@Query` JPQL path were already correct
+- Nested dot paths resolve **segment by segment** (`address.zipcode.zip` → the overridden column `cust_zip`), so intermediate segments (`Zipcode`) take part in the match instead of degrading into an underscore-joined pseudo column
+- When `prefix` and `@AttributeOverride` meet, **the override name is the final column name** — `prefix` is only prepended to columns with no override declaration, so doubles like `biz_biz_street` cannot occur
 - Mixed-annotation entities with MyBatis-Plus and jakarta embed annotations coexisting (`@TableName` + `@Embedded`) flatten into owner-table columns in Wrapper preview, batch templates and CRUD generation as well — value-object pseudo columns are gone there too
 :::
 
