@@ -53,6 +53,10 @@
 
 ## SQL 日志
 
+![设置页「源码位置捕获」分组：增强捕获开关、增强捕获脱敏、调用栈快照帧数（12~64）、授权状态行与两组帧过滤前缀](/demo/settings-enhanced-capture.png)
+
+![设置页「列表显示 / CRUD 颜色标记 / 慢查询阈值」等分组：SQL 显示模式、四类语句的颜色标记与恢复默认、慢查询阈值、列表缓存与去重窗口](/demo/settings-log-list.png)
+
 | 配置项 | 默认值 | 作用 |
 |--------|--------|------|
 | SQL / 参数前缀 | `Preparing:` / `Parameters:` | 控制台日志识别前缀 |
@@ -100,6 +104,8 @@
 | 快捷键 | `Alt+Shift+Q` / `Alt+Shift+J` | 分别对应 SQL 预览与 SQL→Java |
 
 ## MCP 工具
+
+![设置页 MCP 子页：总开关 + 十一个只读工具的逐项启用复选框](/demo/settings-mcp.png)
 
 插件在平台 MCP Server 上向 AI agent（Claude Code / Cursor / AI Assistant 等）暴露 11 个只读工具，设置页「MCP 工具」子页提供门控：
 

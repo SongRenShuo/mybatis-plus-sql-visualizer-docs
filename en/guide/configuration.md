@@ -53,6 +53,10 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 
 ## SQL Log
 
+![Settings page, Source Location Capture group: enhanced capture switch, redaction, call-stack snapshot frame count (12–64), authorization status line and the two frame filter lists](/demo/settings-enhanced-capture.png)
+
+![Settings page groups for List Display / CRUD color marking / slow-query threshold: SQL display mode, per-statement color markers with reset, slow-query threshold, list cache and dedup window](/demo/settings-log-list.png)
+
 | Setting | Default | Description |
 |---------|---------|-------------|
 | SQL / Param Prefix | `Preparing:` / `Parameters:` | Console log recognition prefix |
@@ -100,6 +104,8 @@ History SQL and execution temp files live under `.idea/sql-visualizer/` in your 
 | Shortcuts | `Alt+Shift+Q` / `Alt+Shift+J` | SQL preview / SQL → Java respectively |
 
 ## MCP Tools
+
+![Settings page, MCP subpage: the master switch plus a per-tool enable checkbox for each of the eleven read-only tools](/demo/settings-mcp.png)
 
 The plugin exposes 11 read-only tools to AI agents (Claude Code / Cursor / AI Assistant, etc.) through the platform's MCP Server; the "MCP Tools" subpage in settings provides the gating:
 
