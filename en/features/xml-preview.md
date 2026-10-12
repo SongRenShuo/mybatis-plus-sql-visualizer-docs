@@ -80,6 +80,8 @@ ORDER BY create_time DESC
 - "Execute SQL" and "EXPLAIN" pop a confirmation first, noting that raw segments are currently filled with mock values — choosing No aborts; after confirming once, the same panel won't ask again
 - Copying executable SQL doesn't prompt; instead the output carries a `-- contains ${} raw segments (mock values)` header comment so the risk travels with the artifact
 
+<GifPlayer src="/demo/xml-exec-guard.gif" alt="Previewing a statement with ${} direct substitution: a banner appears at the top of the panel reading 'preview contains 1 ${} direct substitution — the text is not escaped, mind the SQL injection surface' with a close button on its right, and ORDER BY ${orderBy} in the SQL renders with a mock value as ORDER BY 1; clicking Execute SQL first pops the confirmation gate 'SQL contains ${} raw segments (currently filled with mock values); confirm the values are trustworthy before executing. Continue? Yes / No', and No aborts" />
+
 ## Parameter Panel
 
 Parameters are typed by signature into categories, and input rows show matching placeholder hints:

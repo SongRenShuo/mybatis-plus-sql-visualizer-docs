@@ -80,6 +80,8 @@ ORDER BY create_time DESC
 - 「执行 SQL」与「EXPLAIN」前会弹确认框，说明 raw 段当前以模拟值填充，选否即中止；确认一次后同一面板不再重复弹
 - 复制可执行 SQL 不弹窗，产物头部带一行 `-- contains ${} raw segments (mock values)` 注释，让风险随产物走
 
+<GifPlayer src="/demo/xml-exec-guard.gif" alt="含 ${} 直替的语句预览：面板顶部出现「⚠ 预览含 1 处 ${} 直接替换——替换文本未转义，注意 SQL 注入面」横幅（右侧带关闭 ✕），SQL 里 ORDER BY ${orderBy} 以模拟值渲染成 ORDER BY 1；点「执行 SQL」后先弹出确认闸门「SQL 含 ${} 原文拼接段（当前以模拟值填充），执行前请确认值的真实性。继续？Yes / No」，选 No 即中止" />
+
 ## 参数面板
 
 参数按签名识别类型类别，输入行给对应占位提示：
