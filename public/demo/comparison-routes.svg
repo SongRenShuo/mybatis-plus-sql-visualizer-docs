@@ -26,51 +26,51 @@
   <g font-family="system-ui, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
 
     <!-- ================= 标题区 ================= -->
-    <text x="640" y="88" text-anchor="middle" font-size="32" font-weight="700" fill="#0f172a">两条路线，同一个出口</text>
-    <text x="640" y="124" text-anchor="middle" font-size="16" fill="#64748b">静态预览（不启动项目）· 日志还原（应用跑起来之后）—— 两条路线，一套还原能力</text>
+    <text x="640" y="88" text-anchor="middle" font-size="35" font-weight="700" fill="#0f172a">两条路线，同一个出口</text>
+    <text x="640" y="126" text-anchor="middle" font-size="17.5" fill="#64748b">静态预览（不启动项目）· 日志还原（应用跑起来之后）—— 两条路线，一套还原能力</text>
 
     <!-- ================= 左：两条路线 ================= -->
-    <text x="64" y="178" font-size="13" font-weight="600" fill="#94a3b8" letter-spacing="1.5">两条路线</text>
+    <text x="64" y="178" font-size="14" font-weight="600" fill="#94a3b8" letter-spacing="1.5">两条路线</text>
     <rect x="64" y="194" width="432" height="566" rx="16" fill="#f8fafc" stroke="#e8edf4"/>
 
     <!-- ① 静态预览 -->
     <g filter="url(#soft)">
       <rect x="80" y="210" width="400" height="158" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
-      <circle cx="106" cy="240" r="11" fill="#2563eb"/>
-      <text x="106" y="244.5" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">1</text>
-      <text x="128" y="246" font-size="18" font-weight="600" fill="#0f172a">静态预览</text>
+      <circle cx="106" cy="240" r="12" fill="#2563eb"/>
+      <text x="106" y="245" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">1</text>
+      <text x="128" y="246" font-size="20" font-weight="600" fill="#0f172a">静态预览</text>
       <rect x="228" y="229" width="132" height="23" rx="11.5" fill="#eff6ff"/>
-      <text x="294" y="245" text-anchor="middle" font-size="12.5" fill="#2563eb">不启动项目 · 不连库</text>
-      <text x="106" y="290" font-size="14.5" fill="#334155">Wrapper 链 · mapper XML · 注解 SQL</text>
-      <text x="106" y="318" font-size="14.5" fill="#334155">JPA 派生方法 · CRUD 写路径 · JPQL</text>
-      <text x="106" y="346" font-size="14.5" fill="#334155">MPJ 联表 · 其他 ORM 链式框架</text>
+      <text x="294" y="245" text-anchor="middle" font-size="13.5" fill="#2563eb">不启动项目 · 不连库</text>
+      <text x="106" y="290" font-size="16" fill="#334155">Wrapper 链 · mapper XML · 注解 SQL</text>
+      <text x="106" y="318" font-size="16" fill="#334155">JPA 派生方法 · CRUD 写路径 · JPQL</text>
+      <text x="106" y="346" font-size="16" fill="#334155">MPJ 联表 · 其他 ORM 链式框架</text>
     </g>
 
     <!-- ② 日志还原（含两条通道） -->
     <g filter="url(#soft)">
       <rect x="80" y="382" width="400" height="362" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
-      <circle cx="106" cy="412" r="11" fill="#7c3aed"/>
-      <text x="106" y="416.5" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">2</text>
-      <text x="128" y="418" font-size="18" font-weight="600" fill="#0f172a">日志还原</text>
+      <circle cx="106" cy="412" r="12" fill="#7c3aed"/>
+      <text x="106" y="417" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">2</text>
+      <text x="128" y="418" font-size="20" font-weight="600" fill="#0f172a">日志还原</text>
       <rect x="228" y="401" width="132" height="23" rx="11.5" fill="#f5f3ff"/>
-      <text x="294" y="417" text-anchor="middle" font-size="12.5" fill="#7c3aed">应用跑起来之后</text>
+      <text x="294" y="417" text-anchor="middle" font-size="13.5" fill="#7c3aed">应用跑起来之后</text>
 
       <!-- 通道 A：增强捕获（默认） -->
       <rect x="100" y="440" width="360" height="134" rx="10" fill="#faf8ff" stroke="#e4ddfb"/>
       <rect x="116" y="458" width="52" height="22" rx="11" fill="#7c3aed"/>
-      <text x="142" y="473" text-anchor="middle" font-size="11.5" font-weight="600" fill="#ffffff">默认</text>
-      <text x="178" y="474" font-size="15" font-weight="600" fill="#4c1d95">增强捕获</text>
-      <text x="116" y="506" font-size="13.5" fill="#475569">本机应用 JVM · JDBC 层采集，免开应用日志</text>
-      <text x="116" y="530" font-size="13.5" fill="#475569">真实参数 · 耗时 · 影响行数</text>
-      <text x="116" y="554" font-size="13.5" fill="#475569">自带调用栈与源码位置</text>
+      <text x="142" y="473" text-anchor="middle" font-size="12.5" font-weight="600" fill="#ffffff">默认</text>
+      <text x="178" y="474" font-size="16.5" font-weight="600" fill="#4c1d95">增强捕获</text>
+      <text x="116" y="506" font-size="15" fill="#475569">本机 JVM · JDBC 层采集，免开应用日志</text>
+      <text x="116" y="530" font-size="15" fill="#475569">真实参数 · 耗时 · 影响行数</text>
+      <text x="116" y="554" font-size="15" fill="#475569">自带调用栈与源码位置</text>
 
       <!-- 通道 B：控制台还原（回落） -->
       <rect x="100" y="588" width="360" height="134" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-dasharray="5 4"/>
       <rect x="116" y="606" width="52" height="22" rx="11" fill="#f1f5f9" stroke="#e2e8f0"/>
-      <text x="142" y="621" text-anchor="middle" font-size="11.5" font-weight="600" fill="#64748b">回落</text>
-      <text x="178" y="622" font-size="15" font-weight="600" fill="#334155">控制台还原</text>
-      <text x="116" y="654" font-size="13.5" fill="#475569">拼装 <tspan font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" fill="#0f172a">Preparing:</tspan> 与 <tspan font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" fill="#0f172a">Parameters:</tspan> 两行</text>
-      <text x="116" y="678" font-size="13.5" fill="#475569">不改工程，面向已有日志</text>
+      <text x="142" y="621" text-anchor="middle" font-size="12.5" font-weight="600" fill="#64748b">回落</text>
+      <text x="178" y="622" font-size="16.5" font-weight="600" fill="#334155">控制台还原</text>
+      <text x="116" y="654" font-size="13.5" fill="#475569">拼装 <tspan font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" fill="#0f172a">Preparing:</tspan> 与 <tspan font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" fill="#0f172a">Parameters:</tspan></text>
+      <text x="116" y="678" font-size="15" fill="#475569">不改工程，面向已有日志</text>
     </g>
 
     <!-- 汇聚连接 -->
@@ -82,20 +82,20 @@
     <g filter="url(#card)">
       <rect x="536" y="296" width="256" height="368" rx="16" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5"/>
       <rect x="536" y="296" width="256" height="4" rx="2" fill="#3b82f6"/>
-      <text x="664" y="348" text-anchor="middle" font-size="21" font-weight="700" fill="#1d4ed8">SQL Visualizer</text>
-      <text x="664" y="372" text-anchor="middle" font-size="13" fill="#93b4f0">统一还原出口</text>
+      <text x="664" y="348" text-anchor="middle" font-size="23" font-weight="700" fill="#1d4ed8">SQL Visualizer</text>
+      <text x="664" y="372" text-anchor="middle" font-size="14.5" fill="#93b4f0">统一还原出口</text>
       <line x1="560" y1="396" x2="768" y2="396" stroke="#eaf1fe" stroke-width="2"/>
 
       <g fill="#3b82f6">
         <circle cx="570" cy="432" r="3.5"/><circle cx="570" cy="478" r="3.5"/>
         <circle cx="570" cy="524" r="3.5"/><circle cx="570" cy="570" r="3.5"/>
       </g>
-      <text x="586" y="437" font-size="14.5" fill="#334155">带真实参数的完整 SQL</text>
-      <text x="586" y="483" font-size="14.5" fill="#334155">跳回源码位置 / 调用栈</text>
-      <text x="586" y="529" font-size="14.5" fill="#334155">语法高亮 · 参数回填</text>
-      <text x="586" y="575" font-size="14.5" fill="#334155">方言分页 · EXPLAIN 计划</text>
-      <text x="586" y="621" font-size="14.5" fill="#334155">历史落盘 · 导出与对比</text>
-      <text x="664" y="646" text-anchor="middle" font-size="12.5" fill="#94a3b8">两条路线共用同一套列表与弹窗</text>
+      <text x="586" y="437" font-size="16" fill="#334155">带真实参数的完整 SQL</text>
+      <text x="586" y="483" font-size="16" fill="#334155">跳回源码位置 / 调用栈</text>
+      <text x="586" y="529" font-size="16" fill="#334155">语法高亮 · 参数回填</text>
+      <text x="586" y="575" font-size="16" fill="#334155">方言分页 · 执行计划</text>
+      <text x="586" y="621" font-size="16" fill="#334155">历史落盘 · 导出对比</text>
+      <text x="664" y="646" text-anchor="middle" font-size="13.5" fill="#94a3b8">两条路线共用同一套列表与弹窗</text>
     </g>
 
     <path d="M 792 480 L 830 480" fill="none" stroke="#cbd5e1" stroke-width="1.6" marker-end="url(#arrow)"/>
@@ -105,34 +105,34 @@
 
     <g filter="url(#soft)">
       <rect x="832" y="194" width="384" height="170" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
-      <text x="856" y="240" font-size="16.5" font-weight="600" fill="#0f172a">写代码时确认逻辑</text>
-      <text x="856" y="276" font-size="14" fill="#475569">光标压在链上即出 SQL，不必等容器起来</text>
-      <text x="856" y="302" font-size="14" fill="#475569">review 时核对条件拼接与列清单</text>
+      <text x="856" y="240" font-size="18" font-weight="600" fill="#0f172a">写代码时确认逻辑</text>
+      <text x="856" y="276" font-size="15.5" fill="#475569">光标压在链上即出 SQL，不必等容器起来</text>
+      <text x="856" y="302" font-size="15.5" fill="#475569">review 时核对条件拼接与列清单</text>
       <rect x="856" y="322" width="96" height="23" rx="11.5" fill="#eff6ff"/>
-      <text x="904" y="338" text-anchor="middle" font-size="12.5" fill="#2563eb">静态预览</text>
+      <text x="904" y="338" text-anchor="middle" font-size="13.5" fill="#2563eb">静态预览</text>
     </g>
 
     <g filter="url(#soft)">
       <rect x="832" y="388" width="384" height="170" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
-      <text x="856" y="434" font-size="16.5" font-weight="600" fill="#0f172a">联调与线上排查</text>
-      <text x="856" y="470" font-size="14" fill="#475569">按请求聚焦、慢查询标红，心跳噪声可屏蔽</text>
-      <text x="856" y="496" font-size="14" fill="#475569">拿到真实参数与耗时，点一下跳回源码</text>
+      <text x="856" y="434" font-size="18" font-weight="600" fill="#0f172a">联调与线上排查</text>
+      <text x="856" y="470" font-size="15.5" fill="#475569">按请求聚焦、慢查询标红，心跳噪声可屏蔽</text>
+      <text x="856" y="496" font-size="15.5" fill="#475569">拿到真实参数与耗时，点一下跳回源码</text>
       <rect x="856" y="516" width="96" height="23" rx="11.5" fill="#f5f3ff"/>
-      <text x="904" y="532" text-anchor="middle" font-size="12.5" fill="#7c3aed">日志还原</text>
+      <text x="904" y="532" text-anchor="middle" font-size="13.5" fill="#7c3aed">日志还原</text>
     </g>
 
     <g filter="url(#soft)">
       <rect x="832" y="582" width="384" height="170" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
-      <text x="856" y="628" font-size="16.5" font-weight="600" fill="#0f172a">回归与留档</text>
-      <text x="856" y="664" font-size="14" fill="#475569">历史自动落盘、正则检索，两条 SQL 直接对比</text>
-      <text x="856" y="690" font-size="14" fill="#475569">批量写操作前先看清 WHERE 条件</text>
+      <text x="856" y="628" font-size="18" font-weight="600" fill="#0f172a">回归与留档</text>
+      <text x="856" y="664" font-size="15.5" fill="#475569">历史自动落盘、正则检索，两条 SQL 直接对比</text>
+      <text x="856" y="690" font-size="15.5" fill="#475569">批量写操作前先看清 WHERE 条件</text>
       <rect x="856" y="710" width="96" height="23" rx="11.5" fill="#f1f5f9"/>
-      <text x="904" y="726" text-anchor="middle" font-size="12.5" fill="#64748b">两条皆可</text>
+      <text x="904" y="726" text-anchor="middle" font-size="13.5" fill="#64748b">两条皆可</text>
     </g>
 
     <!-- ================= 页脚注解 ================= -->
     <line x1="64" y1="792" x2="1216" y2="792" stroke="#eef2f7"/>
-    <text x="640" y="826" text-anchor="middle" font-size="15.5" fill="#64748b">两条路线不互斥：写代码时走静态预览；要看实际执行就挂增强捕获，控制台还原是不改工程的回落通道</text>
-    <text x="640" y="856" text-anchor="middle" font-size="13.5" fill="#94a3b8">两者还原出的 SQL 进入同一套列表 / 历史 / 导出能力，操作习惯一致</text>
+    <text x="640" y="826" text-anchor="middle" font-size="17" fill="#64748b">两条路线不互斥：写代码时走静态预览；要看实际执行就挂增强捕获，控制台还原是不改工程的回落通道</text>
+    <text x="640" y="856" text-anchor="middle" font-size="15" fill="#94a3b8">两者还原出的 SQL 进入同一套列表 / 历史 / 导出能力，操作习惯一致</text>
   </g>
 </svg>
