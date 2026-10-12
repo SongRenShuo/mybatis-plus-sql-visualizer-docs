@@ -15,6 +15,28 @@ The gutter icon appears only at:
 
 Ensure the cursor is at one of these positions. If it still doesn't show, check that "Show Preview SQL Icon in Gutter" is enabled in settings. HQL strings concatenated across multiple lines with `+` support gutter icons too.
 
+## Why is there no SQL syntax highlighting or completion in mapper XML?
+
+Syntax highlighting inside mapper XML statements (keyword / string / comment coloring, `#{}` / `${}` placeholder shading, expression coloring in attributes such as `test`) and in-statement completion are **provided by this plugin itself** (language injection + a built-in highlighter) — you do **not** need to configure an SQL dialect. If nothing shows at all, check in this order:
+
+1. **Does your plugin version include it?** Mapper XML injection coloring is a recent capability — releases 2026.10.9 and earlier do not have it; upgrade to 2026.10.13 or later.
+2. **Is the file recognized as a mapper?** The root tag must be `<mapper>` (with a `namespace`) — injection is enabled only when `mapper` is the root tag.
+3. **Is another MyBatis plugin interfering?** With another MyBatis plugin installed (e.g. MyBatisCodeHelperPro), this plugin yields only on the **ranges the other one already occupies** (for example the `#{}` parameter placeholders); the rest of the statement stays colored and does not go blank.
+4. **Completion depends on indexing:** candidates come from "entity classes / Mapper interfaces are resolvable", so project dependencies must be imported and indexing finished (no candidates while dependencies are missing or indexing is in progress).
+5. In-statement completion is triggered manually with `Ctrl+Space`.
+
+Highlighting is governed by the **"Syntax highlighting for mapper XML (keywords + parameter placeholders)"** toggle under "UI & Operations" in settings (on by default) — if it was turned off, the whole statement goes uncolored, so confirm it first.
+
+## Do I need to configure an SQL dialect to get highlighting?
+
+No. SQL highlighting and completion inside mapper XML are provided by this plugin and **do not depend on any SQL dialect configuration**.
+
+If the editor shows `SQL dialect is not configured.`, that is an **IDE platform** message — a weak warning from Ultimate's SQL injection on the mapper XML statement text, **not an error from this plugin**. To clear it, or to use the platform's SQL features (statement parsing, object navigation, direct execution), point the project (or the mapper file's directory) at the real dialect under `Settings → Languages & Frameworks → SQL Dialects`. Configuring it is a bonus; skipping it does not affect this plugin's highlighting.
+
+## Is configuring a data source what makes XML highlighting work?
+
+No. A data source is a prerequisite for **execution-class** features: running SQL and EXPLAIN require a data source configured in the Database tool window first (Ultimate's Database plugin). The editor's syntax highlighting and completion do not read the data source — you get highlighting without one. Once a data source is configured, column completion additionally merges in the database's real columns and comments (see [Features · SQL Code Completion](/en/features/code-completion)), and JOIN diagram nodes carry real column comments.
+
 ## Does it support MyBatis-Plus-Join (MPJ) JOIN queries?
 
 Yes. `MPJLambdaWrapper` and `MPJQueryWrapper` JOIN preview, as well as MPJ-form SQL → Java reverse conversion, are all implemented. When selecting the MPJ form for reverse conversion, the project needs the `mybatis-plus-join` dependency (1.5.6+).
