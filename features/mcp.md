@@ -78,7 +78,7 @@
 
 ## 设置页门控
 
-<GifPlayer src="/demo/mcp.gif" alt="插件设置页 MCP 工具门控与平台 Exposed Tools 注册面" />
+<GifPlayer src="/demo/mcp.gif" alt="插件设置页「MCP 工具」子页门控：横幅提示 11 个 AI 工具已注册，总开关关闭时十一项整组置灰；重新开启后单独停用 sqlv_rollback_plan，横幅即时变为「已停用 1 个工具——停用的工具不会出现在 AI 助手的工具清单」；左树同屏可见平台 Tools > MCP Server > Exposed Tools 入口" />
 设置 → 「MCP 工具」子页提供门控区：
 
 - 总开关：整体启停插件的 MCP 功能

@@ -78,7 +78,7 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 
 ## Settings and Gating
 
-<GifPlayer src="/demo/mcp.gif" alt="Plugin settings MCP tool gating and the platform Exposed Tools list" />
+<GifPlayer src="/demo/mcp.gif" alt="Gating on the plugin's MCP Tools settings page: the banner reports 11 registered AI tools; turning the master switch off greys out all eleven; after switching it back on, disabling sqlv_rollback_plan alone flips the banner to '1 tool disabled — disabled tools do not appear in the AI assistant tool list'; the platform Tools > MCP Server > Exposed Tools entry is visible in the same tree" />
 Settings → the "MCP Tools" page provides a gating area:
 
 - Master switch: enable or disable the plugin's MCP functionality as a whole
