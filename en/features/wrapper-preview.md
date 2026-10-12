@@ -113,6 +113,8 @@ Entities with `@TableLogic` auto-append `AND deleted = value` (the value is conf
 
 With IntelliJ IDEA Ultimate + Database plugin, a temporary `.sql` file is created automatically after preview, then executed with `Ctrl+Enter`. The preview dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it, so you can type right away. Execution failures are reported inline in the panel instead of a modal dialog interrupting you.
 
+<GifPlayer src="/demo/execute-sql.gif" alt="The full Execute SQL flow: preview a car_device_info LEFT JOIN station_info chain, click Execute SQL, the plugin creates the temporary file mpsql-exec.sql and submits it to mpj_demo@localhost, and the Output / Result 1 tab inside the preview dialog returns a real data grid (2 rows, e.g. 充电桩A-01) alongside the native console at the bottom" />
+
 ### Real EXPLAIN Plan
 
 The "EXPLAIN" button in the preview panel's button row: pick a data source, click, and the plugin wraps the SQL into an EXPLAIN statement for the current dialect and submits it to the native database console — the real execution plan sits side by side with the panel's static performance-rule annotations. EXPLAIN counts as confirmation-free, so there is no DML confirm dialog.

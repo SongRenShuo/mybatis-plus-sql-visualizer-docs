@@ -114,6 +114,8 @@ UPDATE / DELETE 缺少有效过滤条件时，点「执行 SQL」的确认弹窗
 
 IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 .sql 文件，`Ctrl+Enter` 执行。预览弹窗为非模态窗口，执行时如数据源密码过期，IDEA 的密码输入框不会被弹窗遮挡，可直接输入。执行失败时错误直接显示在面板内，不再弹模态框打断操作。
 
+<GifPlayer src="/demo/execute-sql.gif" alt="执行 SQL 全流程：预览 car_device_info LEFT JOIN station_info 的联表链 → 点「执行 SQL」→ 生成临时文件 mpsql-exec.sql 并提交 mpj_demo@localhost 执行 → 预览窗内 Output / Result 1 页签返回真实数据网格（2 行，如 充电桩A-01），底部原生控制台同屏" />
+
 ### EXPLAIN 真实执行计划
 
 预览面板按钮行的「执行计划」（英文界面 EXPLAIN）按钮：选中数据源后点击，插件按当前方言把 SQL 包装成 EXPLAIN 语句提交原生数据库控制台执行，真实执行计划与面板顶部的静态性能规则标注同屏对照。EXPLAIN 属免确认类操作，无 DML 二次确认弹窗。
