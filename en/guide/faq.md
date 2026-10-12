@@ -19,7 +19,7 @@ Ensure the cursor is at one of these positions. If it still doesn't show, check 
 
 Syntax highlighting inside mapper XML statements (keyword / string / comment coloring, `#{}` / `${}` placeholder shading, expression coloring in attributes such as `test`) and in-statement completion are **provided by this plugin itself** (language injection + a built-in highlighter) — you do **not** need to configure an SQL dialect. If nothing shows at all, check in this order:
 
-1. **Does your plugin version include it?** Mapper XML injection coloring is a recent capability — releases 2026.10.9 and earlier do not have it; upgrade to 2026.10.13 or later.
+1. **Does your plugin version include it?** Mapper XML injection coloring is a recent capability — **releases 2026.10.9 and earlier do not have it**. It is provided from 2026.10.13 onward; upgrade to the latest version (then restart the IDE).
 2. **Is the file recognized as a mapper?** The root tag must be `<mapper>` (with a `namespace`) — injection is enabled only when `mapper` is the root tag.
 3. **Is another MyBatis plugin interfering?** With another MyBatis plugin installed (e.g. MyBatisCodeHelperPro), this plugin yields only on the **ranges the other one already occupies** (for example the `#{}` parameter placeholders); the rest of the statement stays colored and does not go blank.
 4. **Completion depends on indexing:** candidates come from "entity classes / Mapper interfaces are resolvable", so project dependencies must be imported and indexing finished (no candidates while dependencies are missing or indexing is in progress).
