@@ -101,7 +101,7 @@ The verdict comes from static analysis of the SQL syntax tree (the same source a
 
 <GifPlayer src="/demo/perf-advice.gif" alt="Previewing a join-chain SQL shows a static performance-advice segment right below the panel meta row: ORDER BY without LIMIT — may return a large result set, consider adding LIMIT (a red prefix marks ERROR/WARN, a blue prefix marks INFO)" />
 
-As soon as the preview renders SQL, the panel lists static performance advice line by line below the meta row (`ORDER BY` without `LIMIT`, `LIKE` with a leading wildcard, a missing `WHERE`, overly deep subqueries and so on). A red `⚠` prefix marks warnings and a blue `ℹ` prefix marks hints, sitting side by side with the real EXPLAIN plan.
+As soon as the preview renders SQL, the panel lists static performance advice line by line below the meta row (`ORDER BY` without `LIMIT`, `LIKE` with a leading wildcard, a missing `WHERE`, overly deep subqueries and so on). A red `⚠` prefix marks warnings and a blue `ℹ` prefix marks hints, sitting side by side with the real EXPLAIN plan. The visible text is truncated to a width budget (an ellipsis at the end); **hover to read the full text of every suggestion**.
 
 ### Logic Delete Injection
 
