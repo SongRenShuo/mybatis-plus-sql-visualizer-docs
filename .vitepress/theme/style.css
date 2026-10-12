@@ -577,6 +577,17 @@ kbd {
   --vp-layout-max-width: 1680px;
 }
 
+/* 暗色主题下的手绘示意图：/demo/*.svg 是浅色底手绘（与站点其余素材相反——IDE 截图
+   本身是深色的），在暗色页面上会成为整屏最亮的一块（实测页面底 #2b2d30 vs 图内白卡
+   #ffffff）。这里用反相 + 色相回正把它翻成暗色底，蓝紫强调色基本保留；实测效果可接受，
+   故**不维护两份文件**（真要精细再上「两份 + html.dark 切换」）。
+   选择器只认 .vp-doc 内 src 以 /demo/ 开头的 .svg：
+   - 只作用 SVG（GIF/PNG 是深色 IDE 截图，反相会毁图）；
+   - 不波及 /cool-request-icon.svg（友链品牌图）与 /logo.svg（导航 logo）。 */
+html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
+  filter: invert(1) hue-rotate(180deg) saturate(1.05);
+}
+
 /* 桌面/平板端：宽幅演示图（GIF 与示意 SVG）越过正文行宽上限
    （.VPDoc.has-aside .content-container{max-width:688px}）多占一点，
    但**必须留在左侧栏与右侧大纲之间**并留出安全间距。

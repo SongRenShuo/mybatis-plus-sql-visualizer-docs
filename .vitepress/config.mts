@@ -168,12 +168,12 @@ export default defineConfig({
           '/guide/': {
             text: '使用指南',
             items: [
-              { text: '为什么选择 SQL Visualizer', link: '/guide/comparison' },
               { text: '快速开始', link: '/guide/getting-started' },
               { text: '配置详解', link: '/guide/configuration' },
               { text: '快捷键速查', link: '/guide/shortcuts' },
               { text: '版本兼容', link: '/guide/compatibility' },
               { text: '内网与离线环境', link: '/guide/offline' },
+              { text: '为什么选择 SQL Visualizer', link: '/guide/comparison' },
               { text: '常见问题 FAQ', link: '/guide/faq' }
             ]
           },
