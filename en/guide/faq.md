@@ -109,6 +109,26 @@ Two more things to note for intranet deployment: the JDBC drivers needed by "Exe
 
 In the plugin settings page, click the "Edit" button next to the shortcut to re-record it. If it conflicts with another plugin, the dialog offers "Use" (coexist) or "Force use" (override). You can also change it directly in `Settings → Keymap`.
 
+## Where does the COUNT statement in a paginated preview come from?
+
+It is produced by the "simulate pagination interceptor" switch, which mirrors MyBatis-Plus `PaginationInnerInterceptor` runtime behaviour: when a mapper method / XML / annotation statement takes a `Page` / `IPage` argument, the preview **appends the pagination clause** to the original statement (e.g. `LIMIT ?, ?`) and **emits a COUNT wrapper alongside** it (`SELECT COUNT(*) FROM (...) TOTAL`, annotated with its origin). Statements with `searchCount=false` or a handwritten LIMIT produce only one of the two, and the COUNT product sits at the bottom of the panel — scroll to see it. To opt out, switch the master toggle off on the settings page's "SQL Preview" tab, or drop just the COUNT half with the "append paginated COUNT preview" sub-switch.
+
+## Can a preview show the effect of data permissions (DataPermission)?
+
+Data permissions are appended dynamically by the interceptor at runtime, so a static preview cannot see them. The plugin offers two aids on the settings page's "SQL Preview" tab: a **"data-permission mock condition"** where you type a WHERE fragment (e.g. `dept_id IN (1,2,3)`) that is appended to the end of SELECT / UPDATE / DELETE so you can preview the post-permission shape, and a **"show DataPermissionInterceptor runtime-difference hint"** switch that makes the preview's warning area note that the statement will be rewritten at runtime.
+
+## Can handwritten string SQL inside JdbcTemplate be previewed?
+
+Yes. "Enable JdbcTemplate string-SQL preview" on the settings page's "SQL Preview" tab is on by default: string SQL arguments of `queryForList` / `update` and friends get a preview icon and can be triggered with `Alt+Shift+Q`; `NamedParameterJdbcTemplate` `:name` parameters are filled in.
+
+## Why isn't the execution plan rendered as a table inside the panel?
+
+By default it goes to the native database console — "structured EXPLAIN rendering inside the preview panel" is an **experimental feature, off by default** (the tabular interaction was reviewed and judged worse than the native console). To render inside the panel, turn it on in settings: MySQL-family plans render as tabular rows, PostgreSQL-family as a FORMAT JSON tree with index suggestions, while other dialects (TEXT / XML, not hard-parsed) and every failure path fall back to the native console — both channels coexist.
+
+## Do I have to retype parameter values every time?
+
+No. The parameter area of the preview panel has **presets**: the **default preset** remembers the values you typed and recalls them the next time you preview the same statement, and **Manage Presets** lets you save several named parameter sets (e.g. "staging sample", "boundary values") and switch between them; the conditions area also offers "deselect all / clear" to wipe the current conditions quickly.
+
 ## What to include when reporting issues?
 
 Please submit feedback at the [Feedback Pool](https://sql-visualizer.jvtools.cn/en/about/feedback). Suggested attachments:

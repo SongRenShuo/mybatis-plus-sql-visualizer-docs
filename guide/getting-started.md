@@ -26,9 +26,15 @@
 
 安装完成后，在任何 MyBatis-Plus Wrapper 代码上：
 
-1. 将光标置于 Wrapper 链上（如 `.eq()` 所在行）
+1. 点代码左侧 gutter 的插件图标（它落在**变量声明行**上，如 `queryWrapper` 那一行）；也可以把光标**压在链内任一 token 上**再按键
 2. 按 <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>（macOS <kbd>Option</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>）
 3. 弹窗显示生成的 SQL
+
+::: tip 光标要压在 token 上，别停在行首缩进
+快捷键触发时插件要求光标落在**代码 token** 上（如变量名 `queryWrapper`、方法名 `eq`、链式调用的 `.list()`）。停在行首空白处只会得到一条「未在光标处找到可预览的 SQL 源」的提示；而链内 `.eq/.ge` 这类**中间行按设计没有 gutter 图标**（图标只标在变量声明行），所以点图标是更省心的入口。
+:::
+
+
 
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper 预览演示：光标置于 Wrapper 链，弹窗实时生成 SQL" />
 

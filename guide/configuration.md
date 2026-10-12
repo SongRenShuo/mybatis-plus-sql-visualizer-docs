@@ -23,6 +23,12 @@
 | 租户列名 | `tenant_id` | 注入的租户列列名，可按业务调整（如 `org_id` / `shop_id`） |
 | 租户列默认值 | 1 | UPDATE SET / INSERT 追加租户列时的字面量默认值 |
 | INSERT 时追加租户列 | 开 | 子开关：开启后 INSERT 列清单追加租户列（对齐 MP `TenantLineInnerInterceptor` INSERT 语义）；仅 INSERT 生效，需同时开启多租户注入，UPDATE / DELETE 不受影响 |
+| 模拟分页拦截器（COUNT 查询预览） | 开 | mapper 方法 / XML / 注解语句带 `Page` / `IPage` 参数时，预览**尾追分页子句**并**并列产出** COUNT 包裹（`SELECT COUNT(*) FROM (...) TOTAL`），对齐 MyBatis-Plus `PaginationInnerInterceptor` 运行时行为（`searchCount=false` 时跳过）。详见 [Wrapper → SQL 预览 · 分页模拟](../features/wrapper-preview.md#_11-种方言分页渲染) |
+| 附分页 COUNT 查询预览 | 开 | 分页模拟的子开关：关闭后只追加 `LIMIT`、不再生成 COUNT 语句；总开关关闭时本项不生效（父开关优先） |
+| 启用 JdbcTemplate SQL 字符串预览 | 开 | 为 `queryForList` / `update` 等方法的字符串 SQL 实参显示预览图标并支持 `Alt+Shift+Q`；命名参数（`NamedParameterJdbcTemplate` 的 `:name` 占位符）可回填 |
+| 显示 DataPermissionInterceptor 运行时差异提示 | 关 | 开启后 SELECT / UPDATE / DELETE 预览的警告区提示「运行时该拦截器会动态追加条件」 |
+| 数据权限模拟条件 | 空 | 手动填写的 WHERE 片段（如 `dept_id IN (1,2,3)`），追加到 SELECT / UPDATE / DELETE 语句末尾，用于预览数据权限生效后的形态 |
+| 预览面板内结构化渲染 EXPLAIN | 关（实验特性） | 默认走原生数据库控制台；开启后 MySQL 家族（表格行）与 PostgreSQL 家族（FORMAT JSON 树）的计划在预览面板内结构化渲染并附索引建议，其余方言与任何失败路径自动回退原生控制台（双通道并存） |
 | 执行超时 | 30 秒 | 执行 / EXPLAIN 链的超时护栏（0 = 不限）：挂死的查询不再永远停在加载态，超时先请求取消再报错；多语句脚本的预算随语句数放大（封顶 8 倍） |
 | 按数据源校正列名 | 开 | 实体字段名与库真实列名不一致时，用数据源真实列集合纠正预览 SQL 的列名；全局与项目级各有开关。详见 [Wrapper → SQL 预览 · 参数回填](../features/wrapper-preview.md#参数回填) |
 | 空参数填充策略 | 占位符 `?` | 带签名信息的参数输入行留空时的填充方式，占位符 `?`（默认）/ NULL 字面量 / 空字符串三选一。详见 [XML / HQL 动态 SQL 预览 · 参数面板](../features/xml-preview.md#参数面板) |

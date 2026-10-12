@@ -26,9 +26,14 @@ Get up and running with SQL Visualizer in 3 minutes.
 
 Once installed, on any MyBatis-Plus Wrapper code:
 
-1. Place cursor on the Wrapper chain (e.g. the line with `.eq()`)
+1. Click the plugin icon in the gutter on the left (it sits on the **variable declaration line**, e.g. the `queryWrapper` line); or put the caret **on any token of the chain** and use the shortcut
 2. Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd> (macOS <kbd>Option</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>)
 3. Dialog shows the generated SQL
+
+::: tip The caret must sit on a token — not on leading indentation
+The shortcut requires the caret to be **on a code token** (a variable name like `queryWrapper`, a method name like `eq`, or the chain call `.list()`). Parking it in the leading whitespace only yields a "no previewable SQL source at caret" notice; and the `.eq/.ge` in-chain lines carry **no gutter icon by design** (icons mark the variable declaration line only), so clicking the icon is the more forgiving entry point.
+:::
+
 
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper preview demo: cursor on a Wrapper chain, SQL generated in a popup" />
 
