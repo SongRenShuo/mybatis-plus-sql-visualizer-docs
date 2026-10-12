@@ -111,6 +111,8 @@ With IntelliJ IDEA Ultimate + Database plugin, a temporary `.sql` file is create
 
 The "EXPLAIN" button in the preview panel's button row: pick a data source, click, and the plugin wraps the SQL into an EXPLAIN statement for the current dialect and submits it to the native database console — the real execution plan sits side by side with the panel's static performance-rule annotations. EXPLAIN counts as confirmation-free, so there is no DML confirm dialog.
 
+<GifPlayer src="/demo/explain-plan.gif" alt="Real EXPLAIN plan: click EXPLAIN in the preview panel, pick the mpj_demo@localhost data source, and the plugin wraps the SQL into an EXPLAIN statement submitted to the native database console; the Output tab returns the real plan table (id / select_type / table / partitions / type) side by side with the panel's static 'ORDER BY without LIMIT' rule annotation" />
+
 | Dialect | Rendered Form | Verification |
 |---------|---------------|--------------|
 | MySQL / MariaDB | `EXPLAIN <sql>` (native table rows) | verified on real DB |

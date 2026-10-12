@@ -112,6 +112,8 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 
 预览面板按钮行的「执行计划」（英文界面 EXPLAIN）按钮：选中数据源后点击，插件按当前方言把 SQL 包装成 EXPLAIN 语句提交原生数据库控制台执行，真实执行计划与面板顶部的静态性能规则标注同屏对照。EXPLAIN 属免确认类操作，无 DML 二次确认弹窗。
 
+<GifPlayer src="/demo/explain-plan.gif" alt="EXPLAIN 真实执行计划：预览面板点「执行计划」→ 选数据源 mpj_demo@localhost → 插件把 SQL 包装成 EXPLAIN 提交原生数据库控制台执行，下方 Output 页签返回真实计划表（id / select_type / table / partitions / type），与面板顶部「ORDER BY 无 LIMIT」静态性能规则标注同屏对照" />
+
 | 方言 | 渲染形态 | 验证程度 |
 |------|----------|----------|
 | MySQL / MariaDB | `EXPLAIN <sql>`（原生表格行） | 真机通过 |
