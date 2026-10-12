@@ -53,6 +53,8 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 - `JpaSpecificationExecutor` `findAll(Specification)` chains: `root.get` / `cb.equal` / `cb.and` combinations resolve into WHERE conditions
 - `QueryByExampleExecutor`: `Example.of(probe)` builds equality conditions from the probe's non-null fields (`ExampleMatcher` customizers participate)
 
+<GifPlayer src="/demo/jpa-criteria.gif" alt="Static preview of a CriteriaBuilder composite condition: with the caret on the cq.where(cb.and(...)) call line the preview opens, listing #username / #ageStart / #ageEnd / #statuses parameter boxes on the left while the SQL on the right translates cb.like / cb.between / cb.in / cb.isNull / cb.not and cb.and/or one by one into WHERE username LIKE ? AND age BETWEEN ? AND ? AND status IN (?) AND email IS NULL AND NOT (status = 0) ..." />
+
 ## JPQL / HQL Deepening
 
 - JOIN resolution: association paths expand into real ON conditions via entity mappings; the JOIN diagram works too

@@ -52,6 +52,8 @@
 - `JpaSpecificationExecutor` 的 `findAll(Specification)` 链：`root.get` / `cb.equal` / `cb.and` 组合解析为 WHERE 条件
 - `QueryByExampleExecutor`：`Example.of(probe)` 按 probe 实体非空字段生成等值条件（`ExampleMatcher` 定制器参与解析）
 
+<GifPlayer src="/demo/jpa-criteria.gif" alt="CriteriaBuilder 组合条件的静态预览：光标压在 cq.where(cb.and(...)) 调用行上唤起预览，左侧列出 #username / #ageStart / #ageEnd / #statuses 参数框，右侧 SQL 把 cb.like / cb.between / cb.in / cb.isNull / cb.not 与 cb.and/or 逐条翻译成 WHERE username LIKE ? AND age BETWEEN ? AND ? AND status IN (?) AND email IS NULL AND NOT (status = 0) …" />
+
 ## JPQL / HQL 深化
 
 - JOIN 关系解析：关联路径按实体映射展开为真实 ON 条件，JOIN 图可视化可用
