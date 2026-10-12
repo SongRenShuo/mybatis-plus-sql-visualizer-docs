@@ -569,6 +569,46 @@ kbd {
 
 .mp-gif-player img { display: block; max-width: 100%; }
 
+/* 桌面/平板端：宽幅演示图（GIF 与示意 SVG）允许越过 VitePress 的正文行宽上限
+   （.VPDoc.has-aside .content-container{max-width:688px}），用满容器内的空白。
+   为什么需要：688px 是给正文可读性设的文本 measure，图片继承它后被压到 54%
+   （1280×920 的 IDE 截图只剩 688 宽），图内文字实际只有 8px 左右；两侧空白本就空着，
+   收窄侧栏并不能解决——必须放开 measure。
+   出血量按「可用空白」分档给，**实测校准过**（脚本量各视口 img 宽度与 scrollWidth）：
+   ≥1280px 两侧各余 160px（实测 1600/1440/1280 均无横向溢出，图片 1008/1008/896）；
+   1024–1279px 余量骤降（1024 时右侧仅约 88px，取 56 留余量）；
+   768–1023px 更窄，取 24。
+   width 用 calc 同步加宽——组件根元素带 width:100%，只给负边距会把盒子左移并右侧溢出。 */
+@media (min-width: 1280px) {
+  .mp-gif-player,
+  .vp-doc p > img[src^="/demo/"] {
+    max-width: none;
+    width: calc(100% + 320px);
+    margin-left: -160px;
+    margin-right: -160px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .mp-gif-player,
+  .vp-doc p > img[src^="/demo/"] {
+    max-width: none;
+    width: calc(100% + 112px);
+    margin-left: -56px;
+    margin-right: -56px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .mp-gif-player,
+  .vp-doc p > img[src^="/demo/"] {
+    max-width: none;
+    width: calc(100% + 48px);
+    margin-left: -24px;
+    margin-right: -24px;
+  }
+}
+
 @media (max-width: 767px) {
   /* 手机端演示图整行出血：抵消 VitePress 主题 .VPDoc/.container 两侧各 48px 的水平内边距
      （实测 375px 视口里内容区只剩 279px，1280px 宽的 IDE 截图压到 22%）。
