@@ -26,6 +26,10 @@ When the Wrapper anchor involves batch operations, the dialog auto-switches to t
 - UPDATE: SET columns toggleable, WHERE PK + @Version fixed (cannot be unchecked)
 - UPSERT: All columns including PK toggleable
 
+For `saveOrUpdateBatch`, the per-column toggles and the conflict clause move together: uncheck a column in the "Parameter Columns" list on the left and it disappears from both the INSERT column list and the `ON DUPLICATE KEY UPDATE` section.
+
+<GifPlayer src="/demo/batch-columns.gif" alt="Per-column toggles on the batch parameter panel: a saveOrUpdateBatch preview first renders INSERT INTO user (id, password, age, email, role_id, dept_id, status, username, ...) together with ON DUPLICATE KEY UPDATE password = VALUES(password), age = VALUES(age), email = VALUES(email), ...; after unchecking email in the Parameter Columns list, email disappears from both the INSERT column list and the ON DUPLICATE KEY UPDATE section, the checkbox goes back to unchecked and the button label switches from Uncheck All to Check All" />
+
 ### Quote Fill-in
 
 Auto-determine quoting by field type:
