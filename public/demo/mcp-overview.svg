@@ -1,10 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="920" viewBox="0 0 1280 920">
   <title>SQL Visualizer · MCP Server：十一个只读工具按 agent 工作流分三组——拿 SQL、看库、执行前把关</title>
-  <desc>外部 agent（Claude Code / Cursor / JetBrains AI Assistant / Codex）经 MCP 连到 IDEA 内置 MCP Server，调用插件注册的十一个 sqlv_* 工具。</desc>
-  <!-- SQL Visualizer MCP Server 官方配图（2026-10-12 按 comparison-routes 视觉语言重绘；用于 features/mcp.md 中英两页）
-       口径来源：features/mcp.md（十一工具 5/2/4 分组、只读幂等非破坏性、查询白名单只收 SELECT、
-       全程零弹窗、审计留痕 [MCP-AUDIT]、IDEA 2025.2+ 内置 MCP Server）。
-       视觉：与 comparison-routes.svg 同一套语言——中性底 + 分组语义色 + 发丝边框 + 极淡投影。 -->
+  <desc>外部 agent（Claude Code / Cursor / JetBrains AI Assistant / Codex）经 MCP 连到 IDEA 内置 MCP Server，调用插件注册的十一个 sqlv_* 工具；工具全部只读、幂等、非破坏性，连库入口只收 SELECT，全程零弹窗并留审计记录。</desc>
+  <!-- SQL Visualizer MCP Server 官方配图（features/mcp.md 中英两页共用）
+       口径来源 features/mcp.md：十一工具 5/2/4 分组、只读·幂等·非破坏性、查询白名单只收 SELECT、
+       全程零弹窗、审计留痕 [MCP-AUDIT]、IDEA 2025.2+ 内置 MCP Server。
+       第三版视觉（2026-10-12）：强分组标题条（浅色底 + 强调色标题 + 计数徽标）+ 步骤编号 +
+       每项线性图标 + 窗口框代表 IDE；安全属性独立成条，不再塞成 chip 行。 -->
   <defs>
     <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#f8fafc"/>
@@ -27,27 +28,29 @@
   <g font-family="system-ui, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
 
     <!-- ================= 标题区 ================= -->
-    <text x="640" y="88" text-anchor="middle" font-size="35" font-weight="700" fill="#0f172a">SQL Visualizer · MCP Server</text>
-    <text x="640" y="126" text-anchor="middle" font-size="17.5" fill="#64748b">给 AI Agent 的确定性 SQL 工具 —— 证据而非置信度</text>
+    <text x="640" y="84" text-anchor="middle" font-size="34" font-weight="700" fill="#0f172a">SQL Visualizer · MCP Server</text>
+    <text x="640" y="120" text-anchor="middle" font-size="17" fill="#64748b">给 AI Agent 的确定性 SQL 工具 —— 证据而非置信度</text>
 
-    <!-- ================= 连接条：外部 agent → MCP → IDE 内置 Server ================= -->
-    <text x="64" y="180" font-size="14" font-weight="600" fill="#94a3b8" letter-spacing="1.5">连接方式</text>
+    <!-- ================= 连接流程 ================= -->
+    <text x="64" y="172" font-size="13.5" font-weight="600" fill="#94a3b8" letter-spacing="1.5">连接方式</text>
 
-    <!-- 外部 agent -->
+    <!-- ① 外部 agent -->
     <g filter="url(#soft)">
-      <rect x="64" y="196" width="316" height="132" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+      <rect x="64" y="188" width="292" height="136" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
     </g>
-    <text x="86" y="228" font-size="15" font-weight="600" fill="#334155">外部 AGENT</text>
+    <text x="86" y="218" font-size="15.5" font-weight="600" fill="#0f172a">外部 AGENT</text>
     <g font-size="14" fill="#475569">
-      <circle cx="94" cy="256" r="5" fill="#d97757"/><text x="108" y="261">Claude Code</text>
-      <circle cx="94" cy="284" r="5" fill="#2563eb"/><text x="108" y="289">Cursor</text>
-      <circle cx="240" cy="256" r="5" fill="#8b5cf6"/><text x="254" y="261">AI Assistant</text>
-      <circle cx="240" cy="284" r="5" fill="#10a37f"/><text x="254" y="289">Codex</text>
+      <circle cx="94" cy="248" r="5" fill="#d97757"/><text x="110" y="253">Claude Code</text>
+      <circle cx="94" cy="276" r="5" fill="#2563eb"/><text x="110" y="281">Cursor</text>
+      <circle cx="94" cy="304" r="5" fill="#8b5cf6"/><text x="110" y="309">AI Assistant</text>
+      <circle cx="240" cy="248" r="5" fill="#10a37f"/><text x="256" y="253">Codex</text>
     </g>
 
-    <!-- MCP 官方标识（modelcontextprotocol.io favicon 同款：黑底白色连接链路） -->
+    <path d="M 356 256 L 386 256" fill="none" stroke="#cbd5e1" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+    <!-- ② MCP -->
     <g filter="url(#soft)">
-      <svg x="404" y="228" width="64" height="64" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg x="396" y="220" width="72" height="72" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="180" height="180" rx="24" fill="black"/>
         <mask id="mcp-official-mask" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="7" y="7" width="166" height="166">
           <path d="M173 7H7V173H173V7Z" fill="white"/>
@@ -59,95 +62,135 @@
         </g>
       </svg>
     </g>
-    <text x="436" y="312" text-anchor="middle" font-size="13.5" font-weight="600" fill="#64748b">MCP</text>
+    <text x="432" y="312" text-anchor="middle" font-size="13.5" font-weight="600" fill="#334155">MCP</text>
 
-    <!-- IDE 内置 Server -->
+    <path d="M 478 256 L 508 256" fill="none" stroke="#cbd5e1" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+    <!-- ③ IDE（窗口框） -->
     <g filter="url(#soft)">
-      <rect x="492" y="196" width="724" height="132" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
-      <rect x="492" y="196" width="724" height="4" rx="2" fill="#3b82f6"/>
+      <rect x="518" y="188" width="698" height="136" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+      <path d="M 518 200 a 12 12 0 0 1 12 -12 h 674 a 12 12 0 0 1 12 12 v 26 h -698 z" fill="#f1f5f9"/>
+      <line x1="518" y1="226" x2="1216" y2="226" stroke="#e2e8f0"/>
+      <circle cx="540" cy="207" r="5.5" fill="#f87171"/>
+      <circle cx="558" cy="207" r="5.5" fill="#fbbf24"/>
+      <circle cx="576" cy="207" r="5.5" fill="#34d399"/>
     </g>
-    <text x="516" y="228" font-size="15" font-weight="600" fill="#334155">IntelliJ IDEA 2025.2+ 内置 MCP Server</text>
-    <text x="516" y="254" font-size="14" fill="#475569">SQL Visualizer 插件注册 <tspan font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" fill="#1d4ed8">sqlv_*</tspan> 十一个工具，agent 直接调用；IDE 里照常写代码，两边互不打扰</text>
-    <g font-size="13" fill="#2563eb">
-      <rect x="516" y="272" width="96" height="23" rx="11.5" fill="#eff6ff"/><text x="564" y="288" text-anchor="middle">只读 · 幂等</text>
-      <rect x="620" y="272" width="150" height="23" rx="11.5" fill="#eff6ff"/><text x="695" y="288" text-anchor="middle">非破坏性声明</text>
-      <rect x="778" y="272" width="184" height="23" rx="11.5" fill="#eff6ff"/><text x="870" y="288" text-anchor="middle">查询白名单（只收 SELECT）</text>
-      <rect x="970" y="272" width="96" height="23" rx="11.5" fill="#eff6ff"/><text x="1018" y="288" text-anchor="middle">全程零弹窗</text>
-      <rect x="1074" y="272" width="118" height="23" rx="11.5" fill="#eff6ff"/><text x="1133" y="288" text-anchor="middle">审计留痕</text>
-    </g>
+    <text x="612" y="212" font-size="14.5" font-weight="600" fill="#334155">IntelliJ IDEA 2025.2+ · 内置 MCP Server</text>
+    <text x="542" y="264" font-size="19" font-weight="600" fill="#0f172a">SQL Visualizer 插件</text>
+    <rect x="742" y="246" width="238" height="25" rx="12.5" fill="#eff6ff"/>
+    <text x="861" y="263" text-anchor="middle" font-size="13.5" fill="#2563eb">注册 <tspan font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace">sqlv_*</tspan> 十一个只读工具</text>
+    <text x="542" y="300" font-size="14.5" fill="#475569">agent 直接调用插件的渲染链 / 数据源 / 执行计划能力；你在 IDE 里照常写代码，两边互不打扰</text>
 
-    <!-- 连接箭头 -->
-    <path d="M 380 262 L 400 262" fill="none" stroke="#cbd5e1" stroke-width="1.6" marker-end="url(#arrow)"/>
-    <path d="M 468 262 L 488 262" fill="none" stroke="#cbd5e1" stroke-width="1.6" marker-end="url(#arrow)"/>
+    <!-- ================= 安全边界（独立成条） ================= -->
+    <g filter="url(#soft)">
+      <rect x="64" y="340" width="1152" height="52" rx="12" fill="#f8fafc" stroke="#e8edf4"/>
+    </g>
+    <g fill="#475569" font-size="14">
+      <path d="M 92 359 l 4.5 4.5 L 104 356" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="114" y="371">全部只读 · 幂等 · 非破坏性</text>
+      <path d="M 336 359 l 4.5 4.5 L 348 356" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="358" y="371">查询白名单：连库入口只收 SELECT</text>
+      <path d="M 640 359 l 4.5 4.5 L 652 356" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="662" y="371">全程零弹窗，不合规请求以错误消息返回</text>
+      <path d="M 954 359 l 4.5 4.5 L 966 356" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="976" y="371">每次调用写一条 <tspan font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" fill="#0f172a">[MCP-AUDIT]</tspan> 审计</text>
+    </g>
 
     <!-- ================= 工具三组 ================= -->
-    <text x="64" y="366" font-size="14" font-weight="600" fill="#94a3b8" letter-spacing="1.5">十一个工具 · 按 agent 工作流分组</text>
+    <text x="64" y="428" font-size="13.5" font-weight="600" fill="#94a3b8" letter-spacing="1.5">十一个工具 · 按 agent 工作流分组</text>
 
     <!-- ① 拿 SQL -->
     <g filter="url(#card)">
-      <rect x="64" y="382" width="388" height="392" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+      <rect x="64" y="444" width="388" height="384" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+      <path d="M 64 458 a 14 14 0 0 1 14 -14 h 360 a 14 14 0 0 1 14 14 v 40 h -388 z" fill="#eff6ff"/>
+      <line x1="64" y1="498" x2="452" y2="498" stroke="#bfdbfe" stroke-width="2"/>
     </g>
-    <circle cx="90" cy="414" r="6" fill="#2563eb"/>
-    <text x="108" y="420" font-size="19" font-weight="600" fill="#0f172a">拿 SQL</text>
-    <rect x="392" y="401" width="38" height="24" rx="12" fill="#eff6ff"/>
-    <text x="411" y="418" text-anchor="middle" font-size="13.5" font-weight="600" fill="#2563eb">5</text>
-    <g font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="15.5" font-weight="600" fill="#1d4ed8">
-      <text x="90" y="462">sqlv_render_sql</text>
-      <text x="90" y="524">sqlv_render_logs</text>
-      <text x="90" y="586">sqlv_crud_sql</text>
-      <text x="90" y="648">sqlv_reverse_sql</text>
-      <text x="90" y="710">sqlv_history_search</text>
+    <circle cx="92" cy="478" r="12" fill="#2563eb"/>
+    <text x="92" y="483" text-anchor="middle" font-size="13.5" font-weight="700" fill="#ffffff">1</text>
+    <text x="114" y="485" font-size="21" font-weight="700" fill="#1d4ed8">拿 SQL</text>
+    <rect x="388" y="466" width="44" height="24" rx="12" fill="#ffffff"/>
+    <text x="410" y="483" text-anchor="middle" font-size="13.5" font-weight="700" fill="#2563eb">5</text>
+
+    <g stroke="#2563eb" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M96 524h5l3 3v8a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-10a1 1 0 0 1 1-1z"/><path d="M99 531h4M99 534h4"/>
+      <path d="M96 586h11v9h-11z"/><path d="M99 589l2 2-2 2M104 593h2.5"/>
+      <path d="M96 648h11v9h-11z"/><path d="M96 652h11M100 652v5"/>
+      <path d="M101 651l-3 4 3 4M106 651l3 4-3 4"/>
+      <circle cx="102" cy="651" r="3.6"/><path d="M105 654l3.4 3.4"/>
+    </g>
+    <g font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="16.5" font-weight="600" fill="#1d4ed8">
+      <text x="122" y="532">sqlv_render_sql</text>
+      <text x="122" y="594">sqlv_render_logs</text>
+      <text x="122" y="656">sqlv_crud_sql</text>
+      <text x="122" y="718">sqlv_reverse_sql</text>
+      <text x="122" y="780">sqlv_history_search</text>
     </g>
     <g font-size="13.5" fill="#64748b">
-      <text x="90" y="484">文件 + 行号 / XML 片段 → 可执行 SQL</text>
-      <text x="90" y="546">控制台日志还原真实参数 SQL</text>
-      <text x="90" y="608">实体类 → INSERT / UPDATE / SELECT / DELETE</text>
-      <text x="90" y="670">一条 SQL → MyBatis-Plus Java 代码</text>
-      <text x="90" y="732">历史落盘 SQL 四维检索</text>
+      <text x="122" y="553">文件 + 行号 / XML 片段 → 可执行 SQL</text>
+      <text x="122" y="615">控制台日志还原真实参数 SQL</text>
+      <text x="122" y="677">实体类 → INSERT / UPDATE / SELECT / DELETE</text>
+      <text x="122" y="739">一条 SQL → MyBatis-Plus Java 代码</text>
+      <text x="122" y="801">历史落盘 SQL 四维检索</text>
     </g>
 
     <!-- ② 看库 -->
     <g filter="url(#card)">
-      <rect x="464" y="382" width="352" height="392" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+      <rect x="464" y="444" width="352" height="384" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+      <path d="M 464 458 a 14 14 0 0 1 14 -14 h 324 a 14 14 0 0 1 14 14 v 40 h -352 z" fill="#e0f2fe"/>
+      <line x1="464" y1="498" x2="816" y2="498" stroke="#bae6fd" stroke-width="2"/>
     </g>
-    <circle cx="490" cy="414" r="6" fill="#0284c7"/>
-    <text x="508" y="420" font-size="19" font-weight="600" fill="#0f172a">看库</text>
-    <rect x="756" y="401" width="38" height="24" rx="12" fill="#e0f2fe"/>
-    <text x="775" y="418" text-anchor="middle" font-size="13.5" font-weight="600" fill="#0284c7">2</text>
-    <g font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="15.5" font-weight="600" fill="#0369a1">
-      <text x="490" y="462">sqlv_schema_context</text>
-      <text x="490" y="524">sqlv_explain</text>
+    <circle cx="492" cy="478" r="12" fill="#0284c7"/>
+    <text x="492" y="483" text-anchor="middle" font-size="13.5" font-weight="700" fill="#ffffff">2</text>
+    <text x="514" y="485" font-size="21" font-weight="700" fill="#0369a1">看库</text>
+    <rect x="752" y="466" width="44" height="24" rx="12" fill="#ffffff"/>
+    <text x="774" y="483" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0284c7">2</text>
+
+    <g stroke="#0284c7" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="496" cy="528" rx="5.5" ry="2.4"/><path d="M490.5 528v7.5c0 1.3 2.5 2.4 5.5 2.4s5.5-1.1 5.5-2.4V528"/><path d="M490.5 532c0 1.3 2.5 2.4 5.5 2.4s5.5-1.1 5.5-2.4"/>
+      <path d="M491 597v-4M495.5 597v-7M500 597v-10M490 597h11"/>
+    </g>
+    <g font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="16.5" font-weight="600" fill="#0369a1">
+      <text x="522" y="532">sqlv_schema_context</text>
+      <text x="522" y="594">sqlv_explain</text>
     </g>
     <g font-size="13.5" fill="#64748b">
-      <text x="490" y="484">表名清单 → 真实表列结构 / 类型 / 注释</text>
-      <text x="490" y="546">单条 SELECT → 按方言派发 EXPLAIN 计划</text>
+      <text x="522" y="553">表名清单 → 真实表列结构 / 类型 / 注释</text>
+      <text x="522" y="615">单条 SELECT → 按方言派发 EXPLAIN 计划</text>
     </g>
-    <text x="490" y="600" font-size="13" fill="#94a3b8">连库类工具需已配置数据源</text>
+    <text x="522" y="668" font-size="13" fill="#94a3b8">连库类工具需已配置数据源</text>
 
     <!-- ③ 执行前把关 -->
     <g filter="url(#card)">
-      <rect x="828" y="382" width="388" height="392" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+      <rect x="828" y="444" width="388" height="384" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+      <path d="M 828 458 a 14 14 0 0 1 14 -14 h 360 a 14 14 0 0 1 14 14 v 40 h -388 z" fill="#ecfdf5"/>
+      <line x1="828" y1="498" x2="1216" y2="498" stroke="#a7f3d0" stroke-width="2"/>
     </g>
-    <circle cx="854" cy="414" r="6" fill="#059669"/>
-    <text x="872" y="420" font-size="19" font-weight="600" fill="#0f172a">执行前把关</text>
-    <rect x="1156" y="401" width="38" height="24" rx="12" fill="#ecfdf5"/>
-    <text x="1175" y="418" text-anchor="middle" font-size="13.5" font-weight="600" fill="#059669">4</text>
-    <g font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="15.5" font-weight="600" fill="#047857">
-      <text x="854" y="462">sqlv_check_sql</text>
-      <text x="854" y="524">sqlv_mapper_check</text>
-      <text x="854" y="586">sqlv_rollback_plan</text>
-      <text x="854" y="648">sqlv_perf_advice</text>
+    <circle cx="856" cy="478" r="12" fill="#059669"/>
+    <text x="856" y="483" text-anchor="middle" font-size="13.5" font-weight="700" fill="#ffffff">3</text>
+    <text x="878" y="485" font-size="21" font-weight="700" fill="#047857">执行前把关</text>
+    <rect x="1152" y="466" width="44" height="24" rx="12" fill="#ffffff"/>
+    <text x="1174" y="483" text-anchor="middle" font-size="13.5" font-weight="700" fill="#059669">4</text>
+
+    <g stroke="#059669" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M866 524l5 2v5c0 3-2.2 4.6-5 5.5-2.8-.9-5-2.5-5-5.5v-5z"/><path d="M864 531l1.6 1.6 3-3.1"/>
+      <path d="M866 587h5l3 3v8a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-10a1 1 0 0 1 1-1z"/><path d="M869 594l1.5 1.5 3-3"/>
+      <path d="M865 655a5.5 5.5 0 1 0 2-4.2"/><path d="M865 646.5v4h4"/>
+      <path d="M861 718a5.5 5.5 0 0 1 11 0"/><path d="M866.5 718l3-3.2"/>
+    </g>
+    <g font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="16.5" font-weight="600" fill="#047857">
+      <text x="886" y="532">sqlv_check_sql</text>
+      <text x="886" y="594">sqlv_mapper_check</text>
+      <text x="886" y="656">sqlv_rollback_plan</text>
+      <text x="886" y="718">sqlv_perf_advice</text>
     </g>
     <g font-size="13.5" fill="#64748b">
-      <text x="854" y="484">静态写风险与类型核查</text>
-      <text x="854" y="546">mapper 契约核查（simulate 可带写风险/性能分析）</text>
-      <text x="854" y="608">回滚预案 —— 只产出，不执行任何语句</text>
-      <text x="854" y="670">按 20 条规则给性能建议</text>
+      <text x="886" y="553">静态写风险与类型核查</text>
+      <text x="886" y="615">mapper 契约核查（simulate 可带写风险 / 性能分析）</text>
+      <text x="886" y="677">回滚预案 —— 只产出，不执行任何语句</text>
+      <text x="886" y="739">按 20 条内置规则给性能建议</text>
     </g>
 
     <!-- ================= 页脚 ================= -->
-    <line x1="64" y1="812" x2="1216" y2="812" stroke="#eef2f7"/>
-    <text x="640" y="844" text-anchor="middle" font-size="15.5" fill="#64748b">十一个工具全部向 agent 显式声明只读、幂等、非破坏性；不合规请求以错误消息返回，不在 IDE 里弹框打断你</text>
-    <text x="640" y="874" text-anchor="middle" font-size="13.5" fill="#94a3b8">IDEA 2025.2+ 内置 MCP Server（无需另装）· 设置页可逐项启停，变更即时生效免重启 · 每次调用写一条 [MCP-AUDIT] 审计记录</text>
+    <text x="640" y="866" text-anchor="middle" font-size="14.5" fill="#94a3b8">IDEA 2025.2+ 内置 MCP Server（无需另装）· 设置页可逐项启停，变更即时生效免重启</text>
   </g>
 </svg>
