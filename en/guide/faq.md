@@ -25,7 +25,7 @@ Syntax highlighting inside mapper XML statements (keyword / string / comment col
 4. **Completion depends on indexing:** candidates come from "entity classes / Mapper interfaces are resolvable", so project dependencies must be imported and indexing finished (no candidates while dependencies are missing or indexing is in progress).
 5. In-statement completion is triggered manually with `Ctrl+Space`.
 
-Highlighting is governed by the **"Syntax highlighting for mapper XML (keywords + parameter placeholders)"** toggle under "UI & Operations" in settings (on by default) — if it was turned off, the whole statement goes uncolored, so confirm it first.
+Highlighting is governed by the **"Syntax highlighting for mapper XML (keywords + parameter placeholders)"** toggle under **UI and Actions** in settings (on by default) — if it was turned off, the whole statement goes uncolored, so confirm it first.
 
 ## Do I need to configure an SQL dialect to get highlighting?
 
