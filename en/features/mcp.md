@@ -40,7 +40,7 @@ Grouped the way an agent works: get the SQL first, then understand the database,
 | `sqlv_check_sql` | `sql`, one SQL statement | Static write-risk and type check results |
 | `sqlv_mapper_check` | mapper XML as `xmlSnippet` or `filePath`, optional `simulate` | Mapper contract check; simulate mode analyzes rendered output for write risks and performance — evidence no static verifier can produce |
 | `sqlv_rollback_plan` | `sql`, one INSERT / UPDATE / DELETE (optional `primaryKeyColumns`) | A rollback plan — produced only, never executed |
-| `sqlv_perf_advice` | `sql`, one SQL statement | Advice from 20 built-in rules, capped at 30 entries and trimmed by severity when over |
+| `sqlv_perf_advice` | `sql`, one SQL statement | Advice from 21 built-in rules, capped at 30 entries and trimmed by severity when over |
 
 ## Verifiers Give Confidence, MCP Gives Evidence
 

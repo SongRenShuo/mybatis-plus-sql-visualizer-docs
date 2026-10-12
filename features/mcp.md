@@ -40,7 +40,7 @@
 | `sqlv_check_sql` | `sql` 一条 SQL | 静态写风险与类型核查结论 |
 | `sqlv_mapper_check` | mapper XML（`xmlSnippet` 或 `filePath`），可选 `simulate` | mapper 契约核查；simulate 模式对渲染产物做写风险与性能分析——校验器给不出的证据形态 |
 | `sqlv_rollback_plan` | `sql` 一条 INSERT / UPDATE / DELETE（可选 `primaryKeyColumns`） | 回滚预案——只产出预案，不执行任何语句 |
-| `sqlv_perf_advice` | `sql` 一条 SQL | 按 20 条内置规则给性能建议，最多 30 条、超限按严重级别裁剪保留高危 |
+| `sqlv_perf_advice` | `sql` 一条 SQL | 按 21 条内置规则给性能建议，最多 30 条、超限按严重级别裁剪保留高危 |
 
 ## 校验给置信度，这里给证据
 
@@ -55,7 +55,7 @@
 
 1. `sqlv_render_sql` 按文件与行号拿到真实可执行 SQL（参数已回填，不是源码里的 `?` 占位）
 2. `sqlv_explain` 对这条 SELECT 拿执行计划——末尾如果命中全表扫描、filesort 之类模式，还会附 `index hints` 建议
-3. `sqlv_perf_advice` 按 20 条规则拿性能建议；`sqlv_schema_context` 顺带取回表的列注释与结构佐证
+3. `sqlv_perf_advice` 按 21 条规则拿性能建议；`sqlv_schema_context` 顺带取回表的列注释与结构佐证
 4. 改完代码再用 `sqlv_render_sql` 复验渲染产物；写操作改动前可用 `sqlv_rollback_plan` 备好回滚预案
 
 每一步都是确定性输出：SQL 是渲染链的真实产物，计划是数据库真实返回，建议有规则出处——不掺杂「我觉得」。
