@@ -20,6 +20,10 @@ const pluginVersion: string = (() => {
 export default defineConfig({
   // 忽略死链接（开发计划中的 localhost 链接）
   ignoreDeadLinks: true,
+  // 无后缀（clean）URL：VitePress 生成的站内链接（导航 / 侧栏 / 正文 / sitemap）一律不带 .html，
+  // 与生产环境一致——CF Pages 默认把 `x.html` 308 跳到无后缀，站点若发 .html 链接等于每次多一跳
+  //（实测 `/features/wrapper-preview.html` → 308 → 无后缀 200）。产物仍是 .html 文件，只是链接不带后缀。
+  cleanUrls: true,
 
   title: 'SQL Visualizer',
   description:
