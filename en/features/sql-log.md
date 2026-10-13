@@ -85,6 +85,8 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 | Re-authorize | During the 24-hour cooldown after declining, the "Re-authorize" button in settings clears the cooldown and re-opens the consent dialog in one click — no switch toggling needed |
 | Three-state consent dialog | The confirmation dialog records all three outcomes faithfully — "Agree and enable / Cancel / Disable enhanced capture and don't ask again"; the third persists the opt-out in one click (re-enable any time in settings) |
 
+<GifPlayer src="/demo/capture-diagnostics.gif" alt="Capture diagnostics: the SQL log panel's empty state states 'no SQL captured yet' with three tiers of next steps (click Capture and run a console that emits SQL logs / restore manually from the Log to SQL tab / turn on enhanced capture in settings for real parameter values and precise timing); clicking the trailing Open Settings (jump to enhanced capture) link jumps straight to Settings > Tools > SQL Visualizer > SQL Log with the source-location capture group and its enhanced-capture toggle on screen" />
+
 ### SQL Highlighting & Execution Time
 
 - SQL summaries in the list are lexically colored: keywords, table names, strings, numbers and comments each in their own color; timestamps and durations are dimmed gray so they never steal focus
