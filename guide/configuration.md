@@ -4,6 +4,10 @@
 
 ![SQL Visualizer 设置主页面（Tools > SQL Visualizer）](/demo/settings.png)
 
+设置顶层「SQL Visualizer」页底部是**能力矩阵**——四行讲清这个插件做什么：运行期捕获真实参数与耗时、不启库的写前静态还原、MCP 十一工具给 AI agent 用、以及兼容矩阵与文档入口。
+
+![设置落地页底部的能力矩阵（增强捕获 / 免库预览 / MCP 十一工具 / 兼容矩阵与文档）](/demo/settings-landing.png)
+
 设置变更无需重启 IDE：重新触发预览即按新配置生效。
 
 ## SQL 预览
@@ -63,6 +67,8 @@
 
 ![设置页「列表显示 / CRUD 颜色标记 / 慢查询阈值」等分组：SQL 显示模式、四类语句的颜色标记与恢复默认、慢查询阈值、列表缓存与去重窗口](/demo/settings-log-list.png)
 
+![设置页「ORM 框架」分组：启用 Hibernate/JPA 日志捕获（含 SQL 与参数前缀）、启用 Spring JdbcTemplate 日志捕获、启用 ShardingSphere 日志捕获；下方为「自动保存」分组](/demo/settings-orm-capture.png)
+
 | 配置项 | 默认值 | 作用 |
 |--------|--------|------|
 | SQL / 参数前缀 | `Preparing:` / `Parameters:` | 控制台日志识别前缀 |
@@ -108,6 +114,14 @@
 | 使用 IDE 原生图框架渲染 JOIN 图 | 开 | JOIN 图走 IDEA 原生 Diagrams 引擎（缩放 / 自动布局 / 折叠 / 导出），Diagrams 插件缺席或渲染异常自动回退自绘渲染 |
 | 界面语言 | 简体中文 | 插件 UI 语言（English / 跟随系统可选） |
 | 快捷键 | `Alt+Shift+Q` / `Alt+Shift+J` | 分别对应 SQL 预览与 SQL→Java |
+
+**gutter 图标按来源分组显隐**：上表之外，左侧 gutter 的预览图标按语句来源分成六组独立开关（mapper XML 语句 / 注解 SQL（@Select 族）/ JPA·HQL 族 / JdbcTemplate 字符串 SQL / 通用 XML 内嵌兜底 / Wrapper 链与方法名字符串 SQL）——关掉哪组，哪类代码左侧就不再出图标，适合只想看某一类 SQL 的工程。
+
+![UI and Actions 页：六组 gutter 来源开关 + mapper XML 语法高亮总开关](/demo/settings-gutter-groups.png)
+
+**mapper XML 语法高亮注入**：插件给 mapper XML 注入一套语法着色——语句关键字、`#{}` / `${}` 参数占位、内联 SQL 文本分别着色（上图中那条「mapper XML 语法高亮（关键字 + 参数占位着色）」就是它的总开关）。关闭后 mapper XML 回落 IDE 原生 XML 着色。
+
+![OrderMapper.xml 的注入着色：select 标签与 SQL 关键字着色、${orderBy} 占位单独高亮](/demo/xml-syntax-highlight.gif)
 
 ## MCP 工具
 

@@ -13,6 +13,8 @@ Get up and running with SQL Visualizer in 3 minutes.
 3. Click <kbd>Install</kbd>
 4. Restart IDE
 
+![Searching "SQL Visualizer" in the Marketplace: the first result is this plugin (author SongRenShuo, 434 downloads), and the detail pane on the right carries the Install button and the version number](/demo/install-marketplace.png)
+
 ### Method 2: Manual Download & Install
 
 1. Download the plugin from [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) or [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases)

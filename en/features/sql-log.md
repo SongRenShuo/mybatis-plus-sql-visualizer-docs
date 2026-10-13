@@ -105,6 +105,10 @@ Hunting a slow SQL has two steps: **find it** in the list, then **understand it*
 
 **Find it in the list** (details in the previous section): entries whose duration reaches the slow-query threshold (default 1000ms, configurable in settings) are marked red and counted as slow queries; switch the sort button to "duration descending" and the slowest ones rise to the top. Repeated statements are also clustered — **once three entries share the same structure**, a "N same-structure entries" badge appears on the meta line, and right-clicking it opens a focus tab showing only that structure. Different literals still count as the same structure (`IN ('a')` and `IN ('b')` group together), so an N+1 loop becomes obvious at a glance. The log page and the History page share these markers.
 
+<GifPlayer src="/demo/slow-query-highlight.gif" alt="After several statements stream in, one taking 1208ms is marked red with its millisecond duration, a red slow-query counter badge appears in the toolbar, and another entry in the same list carries a '4 same-structure entries' badge" />
+
+<GifPlayer src="/demo/n1-badge.gif" alt="Looping a single-row lookup on the same table five times: the list fills with structurally identical SELECTs differing only in the WHERE id value, the meta line reports the same-structure count, and the context menu offers 'Show only this structure'" />
+
 **Understand it in the preview**: open any preview (double-click a log entry, or use a Wrapper / XML / JPA gutter icon) and the panel's meta line is followed by static performance advice — each item starts with `⚠` (warning, red) or `ℹ` (suggestion, blue) and items are separated by `；`; when the line runs out of room it truncates with an ellipsis and the full text appears on hover. The rules target the usual "index unusable / full scan / oversized result set" shapes, for example:
 
 - `SELECT *` (worse with JOIN, where redundant columns are transferred)
@@ -263,6 +267,8 @@ The entry context menu offers two focus modes, shown as tabs at the top of the p
 ### Three Display Modes
 
 The "List display" dropdown under the "SQL Log" group in settings controls how SQL renders inside entries, switching instantly:
+
+<GifPlayer src="/demo/sql-list-display.gif" alt="Switching the display mode in the settings' List Display → SQL display mode dropdown, then confirming and returning to the SQL log list, where each entry's SQL is re-laid-out in the new mode (from a single-line summary to a multi-line, clause-per-line expansion)" />
 
 - **Single line**: one fixed row per entry, long SQL truncated
 - **Keyword wrap** (default): SQL wraps at keywords, height growing with content

@@ -4,6 +4,10 @@ All settings are located at `Settings > Tools > SQL Visualizer`.
 
 ![SQL Visualizer main settings page (Tools > SQL Visualizer)](/demo/settings.png)
 
+The bottom of the top-level "SQL Visualizer" settings page carries a **capability matrix** — four lines stating what the plugin does: runtime capture of real parameters and timings, static pre-execution reconstruction without a database, eleven MCP tools for AI agents, and where the compatibility matrix and docs live.
+
+![Capability matrix at the bottom of the settings landing page (runtime capture / preview without a DB / eleven MCP tools / compatibility matrix and docs)](/demo/settings-landing.png)
+
 No IDE restart needed: re-trigger a preview and the new settings apply.
 
 ## SQL Preview
@@ -63,6 +67,8 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 
 ![Settings page groups for List Display / CRUD color marking / slow-query threshold: SQL display mode, per-statement color markers with reset, slow-query threshold, list cache and dedup window](/demo/settings-log-list.png)
 
+![Settings page "ORM Frameworks" group: enable Hibernate/JPA log capture (with SQL and parameter prefixes), enable Spring JdbcTemplate log capture, enable ShardingSphere log capture; the "Auto Save" group sits below](/demo/settings-orm-capture.png)
+
 | Setting | Default | Description |
 |---------|---------|-------------|
 | SQL / Param Prefix | `Preparing:` / `Parameters:` | Console log recognition prefix |
@@ -108,6 +114,14 @@ History SQL and execution temp files live under `.idea/sql-visualizer/` in your 
 | Render JOIN Diagram with IDE-Native Graph Framework | On | JOIN diagrams use IDEA's native Diagrams engine (zoom / auto layout / fold / export); falls back to the built-in renderer when the Diagrams plugin is absent or rendering fails |
 | UI Language | Simplified Chinese | Plugin UI language (English / Follow System selectable) |
 | Shortcuts | `Alt+Shift+Q` / `Alt+Shift+J` | SQL preview / SQL → Java respectively |
+
+**Gutter icons grouped by source**: beyond the table above, the preview icons in the left gutter are split into six independently toggled source groups (mapper XML statements / annotation SQL (@Select family) / JPA·HQL family / JdbcTemplate string SQL / generic embedded XML fallback / Wrapper chains and method-name string SQL) — switch a group off and that kind of code stops showing gutter icons, handy when you only care about one kind of SQL in a project.
+
+![UI and Actions page: the six gutter source-group switches plus the mapper XML syntax-highlighting master switch](/demo/settings-gutter-groups.png)
+
+**mapper XML syntax highlighting**: the plugin injects its own syntax colouring into mapper XML — statement keywords, `#{}` / `${}` parameter placeholders and inline SQL text are coloured separately (the "mapper XML syntax highlighting (keywords + parameter placeholders)" checkbox in the screenshot above is its master switch). Turn it off and mapper XML falls back to the IDE's native XML colouring.
+
+![Injected colouring in OrderMapper.xml: select tags and SQL keywords coloured, ${orderBy} placeholder highlighted separately](/demo/xml-syntax-highlight.gif)
 
 ## MCP Tools
 

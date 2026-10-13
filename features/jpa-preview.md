@@ -38,6 +38,8 @@
 
 ## 派生查询深化
 
+<GifPlayer src="/demo/jpa-derived-query.gif" alt="在 UserRepository 里逐个预览派生方法：findTop10ByOrderByCreateTimeDesc 生成 ORDER BY create_time DESC LIMIT 10；findByUsernameLike 生成 LIKE '%…%'；返回 Page 的 findByDepartmentIdAndStatus… 生成带 #pageSize/#pageOffset 参数面板的数据 SQL（LIMIT ?, ?）" />
+
 - 六种方法名前缀全部支持：`find` / `read` / `get` / `query` / `search` / `stream...By`
 - `Top N` / `First N` / `Distinct` / `OrderBy<prop>Asc|Desc` 多字段排序
 - 条件关键字：`Between`、`Like` 系列（`StartingWith` / `Containing` 等，参数自动补 `%`）、`In` / `NotIn`（面板多值编辑）、`IsNull`、`True/False`、`IgnoreCase`（生成 `LOWER(col)=LOWER(?)`）

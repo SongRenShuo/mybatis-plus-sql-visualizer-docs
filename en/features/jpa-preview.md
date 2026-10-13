@@ -39,6 +39,8 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 
 ## Derived Query Deepening
 
+<GifPlayer src="/demo/jpa-derived-query.gif" alt="Previewing derived methods in UserRepository one by one: findTop10ByOrderByCreateTimeDesc yields ORDER BY create_time DESC LIMIT 10; findByUsernameLike yields LIKE '%…%'; the Page-returning findByDepartmentIdAndStatus… yields a data SQL with a #pageSize/#pageOffset parameter panel (LIMIT ?, ?)" />
+
 - All six method-name prefixes: `find` / `read` / `get` / `query` / `search` / `stream...By`
 - `Top N` / `First N` / `Distinct` / multi-field `OrderBy<prop>Asc|Desc`
 - Condition keywords: `Between`, the `Like` family (`StartingWith` / `Containing` etc., `%` auto-appended), `In` / `NotIn` (multi-value editing in the panel), `IsNull`, `True/False`, `IgnoreCase` (renders `LOWER(col)=LOWER(?)`)
