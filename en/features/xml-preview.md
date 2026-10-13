@@ -153,6 +153,8 @@ Other statements (SELECT, MERGE, DDL and so on) do not open the dialog at all �
 
 Select text in a mapper XML or the preview editor and use the "SQL quick templates" context-menu group to run EXPLAIN / COUNT / a 10-row sample in one click, going through the native Database console chain. These three actions ship without default shortcuts; bind your own in Settings > Keymap or in the plugin's "Shortcuts" settings section.
 
+The selected text is used **verbatim as the table name** (no identifier validation, and no check of which database it belongs to) — selecting a fragment works too, but if the table is not in the **currently bound database** the execution fails; the failure message carries the current database and data source (e.g. `[当前库=mpj_demo, 数据源=mpj_demo@localhost, 数据源默认库=mpj_demo]`), which tells you whether to switch database or table. On failure the balloon offers "Locate error statement" and "Copy error message", the same actions the preview panel's Execute SQL failure provides.
+
 ## Render Annotations & Degradation Banners
 
 - In vertical layout, each UPDATE SET item gets a trailing "column (new) = expression" annotation (self-referencing forms like `a = a + 1` read as the new value as-is), making old-vs-new comparison easier
