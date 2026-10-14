@@ -4,6 +4,10 @@ All settings are located at `Settings > Tools > SQL Visualizer`.
 
 ![SQL Visualizer main settings page (Tools > SQL Visualizer)](/demo/settings.png)
 
+The bottom of the top-level "SQL Visualizer" settings page carries a **capability matrix** — four lines stating what the plugin does: runtime capture of real parameters and timings, static pre-execution reconstruction without a database, eleven MCP tools for AI agents, and where the compatibility matrix and docs live.
+
+![Capability matrix at the bottom of the settings landing page (runtime capture / preview without a DB / eleven MCP tools / compatibility matrix and docs)](/demo/settings-landing.png)
+
 No IDE restart needed: re-trigger a preview and the new settings apply.
 
 ## SQL Preview
@@ -23,6 +27,12 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 | Tenant Column Name | `tenant_id` | Column name used for tenant injection, adjustable per business (e.g. `org_id` / `shop_id`) |
 | Tenant Column Default | 1 | Literal default appended to UPDATE SET / INSERT tenant columns |
 | Append Tenant Column on INSERT | On | Sub-switch: the INSERT column list gets the tenant column appended (aligned with MP `TenantLineInnerInterceptor` INSERT semantics); INSERT only — requires Tenant Injection to be on, UPDATE / DELETE unaffected |
+| Simulate Pagination Interceptor (COUNT preview) | On | For mapper methods / XML / annotation statements taking a `Page` / `IPage` argument, the preview **appends the pagination clause** and **emits a COUNT wrapper alongside** (`SELECT COUNT(*) FROM (...) TOTAL`), matching MyBatis-Plus `PaginationInnerInterceptor` runtime behaviour (skipped when `searchCount=false`). See [Wrapper → SQL Preview · pagination simulation](/en/features/wrapper-preview#_11-dialect-pagination) |
+| Append paginated COUNT preview | On | Sub-switch of the simulation: when off, only `LIMIT` is appended and no COUNT statement is produced; has no effect while the master switch is off (parent wins) |
+| Enable JdbcTemplate string-SQL preview | On | Shows a preview icon for string SQL arguments of `queryForList` / `update` and friends, triggerable with `Alt+Shift+Q`; named parameters (`NamedParameterJdbcTemplate` `:name` placeholders) are filled in |
+| Show DataPermissionInterceptor runtime-difference hint | Off | When on, the warning area of SELECT / UPDATE / DELETE previews notes that the interceptor appends conditions dynamically at runtime |
+| Data-permission mock condition | empty | A hand-written WHERE fragment (e.g. `dept_id IN (1,2,3)`) appended to the end of SELECT / UPDATE / DELETE, for previewing the statement as data permissions would shape it |
+| Structured EXPLAIN rendering inside the preview panel | Off (experimental) | By default the plan goes to the native database console; when on, MySQL-family (tabular rows) and PostgreSQL-family (FORMAT JSON tree) plans render structurally inside the preview panel with index suggestions, while other dialects and any failure path fall back to the native console (both channels coexist) |
 | Execution Timeout | 30 s | Timeout guard for the execute / EXPLAIN chain (0 = unlimited): a hung query no longer sits in loading forever — the statement is cancelled first, then an error is reported; multi-statement scripts get a budget scaled by statement count (capped at 8x) |
 | Calibrate Column Names from the Data Source | On | When an entity field name differs from the real column name in the database, column names in the preview SQL are corrected against the data source's real column set; global and project-level switches each available. See [Wrapper → SQL Preview · Parameter Fill-in](/en/features/wrapper-preview#parameter-fill-in) |
 | Empty-Parameter Fill Strategy | Placeholder `?` | How a parameter input row with signature info is filled when left empty — Placeholder `?` (default) / NULL literal / empty string, three options. See [XML / HQL Dynamic SQL Preview · Parameter Panel](/en/features/xml-preview#parameter-panel) |
@@ -52,6 +62,12 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 | Allow Manual Entity Selection on Auto-Infer Failure | On | Off = pure auto-inference |
 
 ## SQL Log
+
+![Settings page, Source Location Capture group: enhanced capture switch, redaction, call-stack snapshot frame count (12–64), authorization status line and the two frame filter lists](/demo/settings-enhanced-capture.png)
+
+![Settings page groups for List Display / CRUD color marking / slow-query threshold: SQL display mode, per-statement color markers with reset, slow-query threshold, list cache and dedup window](/demo/settings-log-list.png)
+
+![Settings page "ORM Frameworks" group: enable Hibernate/JPA log capture (with SQL and parameter prefixes), enable Spring JdbcTemplate log capture, enable ShardingSphere log capture; the "Auto Save" group sits below](/demo/settings-orm-capture.png)
 
 | Setting | Default | Description |
 |---------|---------|-------------|
@@ -99,7 +115,17 @@ History SQL and execution temp files live under `.idea/sql-visualizer/` in your 
 | UI Language | Simplified Chinese | Plugin UI language (English / Follow System selectable) |
 | Shortcuts | `Alt+Shift+Q` / `Alt+Shift+J` | SQL preview / SQL → Java respectively |
 
+**Gutter icons grouped by source**: beyond the table above, the preview icons in the left gutter are split into six independently toggled source groups (mapper XML statements / annotation SQL (@Select family) / JPA·HQL family / JdbcTemplate string SQL / generic embedded XML fallback / Wrapper chains and method-name string SQL) — switch a group off and that kind of code stops showing gutter icons, handy when you only care about one kind of SQL in a project.
+
+![UI and Actions page: the six gutter source-group switches plus the mapper XML syntax-highlighting master switch](/demo/settings-gutter-groups.png)
+
+**mapper XML syntax highlighting**: the plugin injects its own syntax colouring into mapper XML — statement keywords, `#{}` / `${}` parameter placeholders and inline SQL text are coloured separately (the "mapper XML syntax highlighting (keywords + parameter placeholders)" checkbox in the screenshot above is its master switch). Turn it off and mapper XML falls back to the IDE's native XML colouring.
+
+![Injected colouring in OrderMapper.xml: select tags and SQL keywords coloured, ${orderBy} placeholder highlighted separately](/demo/xml-syntax-highlight.gif)
+
 ## MCP Tools
+
+![Settings page, MCP subpage: the master switch plus a per-tool enable checkbox for each of the eleven read-only tools](/demo/settings-mcp.png)
 
 The plugin exposes 11 read-only tools to AI agents (Claude Code / Cursor / AI Assistant, etc.) through the platform's MCP Server; the "MCP Tools" subpage in settings provides the gating:
 
@@ -113,6 +139,8 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 ## Project-Level Settings
 
 `Settings > Tools > SQL Visualizer (Current Project)` offers 10 project-level controls: the enhanced-capture switch, database dialect, 3 checkboxes, logic-delete value, table prefix / suffix, table-name strategy, and ignored fields.
+
+![SQL Visualizer project-level settings page (Tools > SQL Visualizer (Current Project)): with the master switch off, every row below grays out and shows the effective global values](/demo/settings-project.png)
 
 - When the "Use project settings" master switch is off, the 9 override rows gray out and show the effective global values — what you see is what runs; a "Reset to follow global" button clears this project's overrides in one click
 - With the dialect on "Auto-infer", the project level takes precedence over the global decision
@@ -130,6 +158,10 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 | Report a Problem / Feedback Pool | - | Manual feedback entry, opening a report dialog straight to the [feedback pool](/en/about/feedback); type / category / description required; IDE and plugin versions are attached automatically |
 | Internal Build Number | - | Unique per build, one-click copy for bug reports |
 | Settings Import / Export | - | Import / export settings as JSON; covers global settings only (project-level settings are not included), with the result shown inline next to the buttons |
+
+The settings page's "Update & Diagnostics" area (`Settings > Tools > SQL Visualizer > About`) gathers these entries in one place, and "Report a Problem…" opens this dialog:
+
+![SQL Visualizer "Report to the feedback pool" dialog: title, type, category and description are required, an exception-stack .txt can be attached, nickname and email are optional, and it supports anonymous submission or handing off to the browser](/demo/feedback-dialog.png)
 
 ::: details Privacy and dedup rules of the feedback dialog (When to read: you care about the upload scope or about duplicate reports)
 "Report a Problem / Feedback Pool": by default only the exception class name and a stack-frame summary are prefilled; the full exception message and complete stack, plus the stack attachment, are opt-in checkboxes — uploaded only when checked, and they may contain local paths and class names. The same exception is deduplicated for 24 hours; the Help menu's "SQL Visualizer Feedback / Feedback Pool" entry and the IDE's internal error dialog offer one-click reporting too; reporting several entries selected in the IDE error list merges them into a single post (items beyond the rate-limit threshold are queued and sent staggered automatically); when a submission is rejected the dialog stays open and the status line shows the exact reason returned by the server — fix it and retry directly.

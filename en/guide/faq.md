@@ -15,6 +15,28 @@ The gutter icon appears only at:
 
 Ensure the cursor is at one of these positions. If it still doesn't show, check that "Show Preview SQL Icon in Gutter" is enabled in settings. HQL strings concatenated across multiple lines with `+` support gutter icons too.
 
+## Why is there no SQL syntax highlighting or completion in mapper XML?
+
+Syntax highlighting inside mapper XML statements (keyword / string / comment coloring, `#{}` / `${}` placeholder shading, expression coloring in attributes such as `test`) and in-statement completion are **provided by this plugin itself** (language injection + a built-in highlighter) — you do **not** need to configure an SQL dialect. If nothing shows at all, check in this order:
+
+1. **Does your plugin version include it?** Mapper XML injection coloring is a recent capability — **releases 2026.10.9 and earlier do not have it**. It is provided from 2026.10.13 onward; upgrade to the latest version (then restart the IDE).
+2. **Is the file recognized as a mapper?** The root tag must be `<mapper>` (with a `namespace`) — injection is enabled only when `mapper` is the root tag.
+3. **Is another MyBatis plugin interfering?** With another MyBatis plugin installed (e.g. MyBatisCodeHelperPro), this plugin yields only on the **ranges the other one already occupies** (for example the `#{}` parameter placeholders); the rest of the statement stays colored and does not go blank.
+4. **Completion depends on indexing:** candidates come from "entity classes / Mapper interfaces are resolvable", so project dependencies must be imported and indexing finished (no candidates while dependencies are missing or indexing is in progress).
+5. In-statement completion is triggered manually with `Ctrl+Space`.
+
+Highlighting is governed by the **"Syntax highlighting for mapper XML (keywords + parameter placeholders)"** toggle under **UI and Actions** in settings (on by default) — if it was turned off, the whole statement goes uncolored, so confirm it first.
+
+## Do I need to configure an SQL dialect to get highlighting?
+
+No. SQL highlighting and completion inside mapper XML are provided by this plugin and **do not depend on any SQL dialect configuration**.
+
+If the editor shows `SQL dialect is not configured.`, that is an **IDE platform** message — a weak warning from Ultimate's SQL injection on the mapper XML statement text, **not an error from this plugin**. To clear it, or to use the platform's SQL features (statement parsing, object navigation, direct execution), point the project (or the mapper file's directory) at the real dialect under `Settings → Languages & Frameworks → SQL Dialects`. Configuring it is a bonus; skipping it does not affect this plugin's highlighting.
+
+## Is configuring a data source what makes XML highlighting work?
+
+No. A data source is a prerequisite for **execution-class** features: running SQL and EXPLAIN require a data source configured in the Database tool window first (Ultimate's Database plugin). The editor's syntax highlighting and completion do not read the data source — you get highlighting without one. Once a data source is configured, column completion additionally merges in the database's real columns and comments (see [Features · SQL Code Completion](/en/features/code-completion)), and JOIN diagram nodes carry real column comments.
+
 ## Does it support MyBatis-Plus-Join (MPJ) JOIN queries?
 
 Yes. `MPJLambdaWrapper` and `MPJQueryWrapper` JOIN preview, as well as MPJ-form SQL → Java reverse conversion, are all implemented. When selecting the MPJ form for reverse conversion, the project needs the `mybatis-plus-join` dependency (1.5.6+).
@@ -108,6 +130,26 @@ Two more things to note for intranet deployment: the JDBC drivers needed by "Exe
 ## Shortcut conflicts?
 
 In the plugin settings page, click the "Edit" button next to the shortcut to re-record it. If it conflicts with another plugin, the dialog offers "Use" (coexist) or "Force use" (override). You can also change it directly in `Settings → Keymap`.
+
+## Where does the COUNT statement in a paginated preview come from?
+
+It is produced by the "simulate pagination interceptor" switch, which mirrors MyBatis-Plus `PaginationInnerInterceptor` runtime behaviour: when a mapper method / XML / annotation statement takes a `Page` / `IPage` argument, the preview **appends the pagination clause** to the original statement (e.g. `LIMIT ?, ?`) and **emits a COUNT wrapper alongside** it (`SELECT COUNT(*) FROM (...) TOTAL`, annotated with its origin). Statements with `searchCount=false` or a handwritten LIMIT produce only one of the two, and the COUNT product sits at the bottom of the panel — scroll to see it. To opt out, switch the master toggle off on the settings page's "SQL Preview" tab, or drop just the COUNT half with the "append paginated COUNT preview" sub-switch.
+
+## Can a preview show the effect of data permissions (DataPermission)?
+
+Data permissions are appended dynamically by the interceptor at runtime, so a static preview cannot see them. The plugin offers two aids on the settings page's "SQL Preview" tab: a **"data-permission mock condition"** where you type a WHERE fragment (e.g. `dept_id IN (1,2,3)`) that is appended to the end of SELECT / UPDATE / DELETE so you can preview the post-permission shape, and a **"show DataPermissionInterceptor runtime-difference hint"** switch that makes the preview's warning area note that the statement will be rewritten at runtime.
+
+## Can handwritten string SQL inside JdbcTemplate be previewed?
+
+Yes. "Enable JdbcTemplate string-SQL preview" on the settings page's "SQL Preview" tab is on by default: string SQL arguments of `queryForList` / `update` and friends get a preview icon and can be triggered with `Alt+Shift+Q`; `NamedParameterJdbcTemplate` `:name` parameters are filled in.
+
+## Why isn't the execution plan rendered as a table inside the panel?
+
+By default it goes to the native database console — "structured EXPLAIN rendering inside the preview panel" is an **experimental feature, off by default** (the tabular interaction was reviewed and judged worse than the native console). To render inside the panel, turn it on in settings: MySQL-family plans render as tabular rows, PostgreSQL-family as a FORMAT JSON tree with index suggestions, while other dialects (TEXT / XML, not hard-parsed) and every failure path fall back to the native console — both channels coexist.
+
+## Do I have to retype parameter values every time?
+
+No. The parameter area of the preview panel has **presets**: the **default preset** remembers the values you typed and recalls them the next time you preview the same statement, and **Manage Presets** lets you save several named parameter sets (e.g. "staging sample", "boundary values") and switch between them; the conditions area also offers "deselect all / clear" to wipe the current conditions quickly.
 
 ## What to include when reporting issues?
 

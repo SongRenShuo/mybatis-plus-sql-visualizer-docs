@@ -23,6 +23,8 @@
 
 With a data source configured (IDEA Ultimate's Database tool window), column completion merges the data source's real columns into the candidate list alongside entity columns — entity columns first, data-source-only columns listed as well; for columns present in both, the comment and type come from the data source, and each candidate's tail text marks the database type. Warm-up runs in the background when the preview opens and when the console is ready, so completion never waits.
 
+<GifPlayer src="/demo/completion-datasource.gif" alt="Inside an INSERT statement in schema.sql, right after the column-list opening parenthesis, typing a letter pops up completion whose first candidates are the data source's real columns (share_scheme_id / station_id), each labelled with its owning table car_device_info and its database type INT" />
+
 After the embedded console runs DDL or a transaction commit (COMMIT / ROLLBACK), the table/column comment cache is invalidated automatically — previewing or completing right after an `ALTER TABLE` no longer hits the stale schema.
 
 > Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=completion)

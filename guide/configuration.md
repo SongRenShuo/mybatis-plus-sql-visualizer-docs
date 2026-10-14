@@ -4,6 +4,10 @@
 
 ![SQL Visualizer 设置主页面（Tools > SQL Visualizer）](/demo/settings.png)
 
+设置顶层「SQL Visualizer」页底部是**能力矩阵**——四行讲清这个插件做什么：运行期捕获真实参数与耗时、不启库的写前静态还原、MCP 十一工具给 AI agent 用、以及兼容矩阵与文档入口。
+
+![设置落地页底部的能力矩阵（增强捕获 / 免库预览 / MCP 十一工具 / 兼容矩阵与文档）](/demo/settings-landing.png)
+
 设置变更无需重启 IDE：重新触发预览即按新配置生效。
 
 ## SQL 预览
@@ -23,6 +27,12 @@
 | 租户列名 | `tenant_id` | 注入的租户列列名，可按业务调整（如 `org_id` / `shop_id`） |
 | 租户列默认值 | 1 | UPDATE SET / INSERT 追加租户列时的字面量默认值 |
 | INSERT 时追加租户列 | 开 | 子开关：开启后 INSERT 列清单追加租户列（对齐 MP `TenantLineInnerInterceptor` INSERT 语义）；仅 INSERT 生效，需同时开启多租户注入，UPDATE / DELETE 不受影响 |
+| 模拟分页拦截器（COUNT 查询预览） | 开 | mapper 方法 / XML / 注解语句带 `Page` / `IPage` 参数时，预览**尾追分页子句**并**并列产出** COUNT 包裹（`SELECT COUNT(*) FROM (...) TOTAL`），对齐 MyBatis-Plus `PaginationInnerInterceptor` 运行时行为（`searchCount=false` 时跳过）。详见 [Wrapper → SQL 预览 · 分页模拟](../features/wrapper-preview.md#_11-种方言分页渲染) |
+| 附分页 COUNT 查询预览 | 开 | 分页模拟的子开关：关闭后只追加 `LIMIT`、不再生成 COUNT 语句；总开关关闭时本项不生效（父开关优先） |
+| 启用 JdbcTemplate SQL 字符串预览 | 开 | 为 `queryForList` / `update` 等方法的字符串 SQL 实参显示预览图标并支持 `Alt+Shift+Q`；命名参数（`NamedParameterJdbcTemplate` 的 `:name` 占位符）可回填 |
+| 显示 DataPermissionInterceptor 运行时差异提示 | 关 | 开启后 SELECT / UPDATE / DELETE 预览的警告区提示「运行时该拦截器会动态追加条件」 |
+| 数据权限模拟条件 | 空 | 手动填写的 WHERE 片段（如 `dept_id IN (1,2,3)`），追加到 SELECT / UPDATE / DELETE 语句末尾，用于预览数据权限生效后的形态 |
+| 预览面板内结构化渲染 EXPLAIN | 关（实验特性） | 默认走原生数据库控制台；开启后 MySQL 家族（表格行）与 PostgreSQL 家族（FORMAT JSON 树）的计划在预览面板内结构化渲染并附索引建议，其余方言与任何失败路径自动回退原生控制台（双通道并存） |
 | 执行超时 | 30 秒 | 执行 / EXPLAIN 链的超时护栏（0 = 不限）：挂死的查询不再永远停在加载态，超时先请求取消再报错；多语句脚本的预算随语句数放大（封顶 8 倍） |
 | 按数据源校正列名 | 开 | 实体字段名与库真实列名不一致时，用数据源真实列集合纠正预览 SQL 的列名；全局与项目级各有开关。详见 [Wrapper → SQL 预览 · 参数回填](../features/wrapper-preview.md#参数回填) |
 | 空参数填充策略 | 占位符 `?` | 带签名信息的参数输入行留空时的填充方式，占位符 `?`（默认）/ NULL 字面量 / 空字符串三选一。详见 [XML / HQL 动态 SQL 预览 · 参数面板](../features/xml-preview.md#参数面板) |
@@ -52,6 +62,12 @@
 | 自动推断失败时允许手动选择实体类 | 开 | 关闭后纯自动推断 |
 
 ## SQL 日志
+
+![设置页「源码位置捕获」分组：增强捕获开关、增强捕获脱敏、调用栈快照帧数（12~64）、授权状态行与两组帧过滤前缀](/demo/settings-enhanced-capture.png)
+
+![设置页「列表显示 / CRUD 颜色标记 / 慢查询阈值」等分组：SQL 显示模式、四类语句的颜色标记与恢复默认、慢查询阈值、列表缓存与去重窗口](/demo/settings-log-list.png)
+
+![设置页「ORM 框架」分组：启用 Hibernate/JPA 日志捕获（含 SQL 与参数前缀）、启用 Spring JdbcTemplate 日志捕获、启用 ShardingSphere 日志捕获；下方为「自动保存」分组](/demo/settings-orm-capture.png)
 
 | 配置项 | 默认值 | 作用 |
 |--------|--------|------|
@@ -99,7 +115,17 @@
 | 界面语言 | 简体中文 | 插件 UI 语言（English / 跟随系统可选） |
 | 快捷键 | `Alt+Shift+Q` / `Alt+Shift+J` | 分别对应 SQL 预览与 SQL→Java |
 
+**gutter 图标按来源分组显隐**：上表之外，左侧 gutter 的预览图标按语句来源分成六组独立开关（mapper XML 语句 / 注解 SQL（@Select 族）/ JPA·HQL 族 / JdbcTemplate 字符串 SQL / 通用 XML 内嵌兜底 / Wrapper 链与方法名字符串 SQL）——关掉哪组，哪类代码左侧就不再出图标，适合只想看某一类 SQL 的工程。
+
+![UI and Actions 页：六组 gutter 来源开关 + mapper XML 语法高亮总开关](/demo/settings-gutter-groups.png)
+
+**mapper XML 语法高亮注入**：插件给 mapper XML 注入一套语法着色——语句关键字、`#{}` / `${}` 参数占位、内联 SQL 文本分别着色（上图中那条「mapper XML 语法高亮（关键字 + 参数占位着色）」就是它的总开关）。关闭后 mapper XML 回落 IDE 原生 XML 着色。
+
+![OrderMapper.xml 的注入着色：select 标签与 SQL 关键字着色、${orderBy} 占位单独高亮](/demo/xml-syntax-highlight.gif)
+
 ## MCP 工具
+
+![设置页 MCP 子页：总开关 + 十一个只读工具的逐项启用复选框](/demo/settings-mcp.png)
 
 插件在平台 MCP Server 上向 AI agent（Claude Code / Cursor / AI Assistant 等）暴露 11 个只读工具，设置页「MCP 工具」子页提供门控：
 
@@ -113,6 +139,8 @@
 ## 项目级设置
 
 `Settings > Tools > SQL Visualizer（当前项目）`提供 10 个项目级控件：增强捕获开关、数据库方言、3 项勾选、逻辑删除值、表前缀 / 表后缀、表名推断策略与忽略字段。
+
+![SQL Visualizer 项目级设置页（Tools > SQL Visualizer（当前项目））：总开关未开启时下列各项置灰并显示全局生效值](/demo/settings-project.png)
 
 - 总开关「使用项目设置」关闭时，9 项覆盖置灰并显示全局生效值——页面所见即运行时所用；「重置为跟随全局」一键清空本项目覆盖
 - 方言选「智能推断」时项目级优先于全局判定
@@ -130,6 +158,10 @@
 | 报告问题 / 需求池 | - | 手动反馈入口，弹出报告对话框直达[官网需求池](/about/feedback)，类型 / 分类 / 描述必填，IDE 与插件版本自动携带 |
 | 内部构建号 | - | 每次构建唯一，反馈问题时一键复制 |
 | 设置导入导出 | - | 导入 / 导出 JSON 设置文件，只覆盖全局设置（项目级配置不在其中），结果在按钮旁行内提示 |
+
+设置页的「更新与诊断」区（`设置 > Tools > SQL Visualizer > 关于`）把这些入口聚在一处，「报告问题…」弹出的是下面这个对话框：
+
+![SQL Visualizer 报告到需求池对话框：标题、类型、分类、描述四项必填，可勾选附带异常堆栈 .txt，昵称与邮箱选填，支持匿名提交或转浏览器填写](/demo/feedback-dialog.png)
 
 ::: details 反馈对话框的隐私与去重规则（何时看：关心上传内容范围或重复上报时）
 「报告问题 / 需求池」：默认仅预填异常类名与栈帧摘要；异常消息全文与完整堆栈、以及堆栈附件均为可勾选项，勾选后才上传，可能含本地路径与类名。同一异常 24 小时内去重；帮助菜单「SQL Visualizer 反馈 / 需求池」与 IDE 内部错误对话框亦可一键上报；从 IDE 错误列表勾选多条报告时合并为一条提交（超出限流阈值的条目自动错峰补发）；提交被拒时对话框不关闭，状态行给出服务端返回的具体原因，改完可直接重试。

@@ -23,6 +23,8 @@
 
 与 MyBatis-Plus 的 `save` 对齐，JPA Repository 的 CRUD 方法同样直接解析出 SQL：
 
+<GifPlayer src="/demo/jpa-write-path.gif" alt="Repository CRUD 写路径预览：save 出 INSERT（左侧「参数列」勾选面板，取消勾选 user.age 后 INSERT 列清单实时少一列），deleteById 出 DELETE 并附「逐实体 EntityManager.remove 语义（非 bulk DELETE）」注释" />
+
 | 方法 | 呈现 |
 |------|------|
 | `save` / `saveAll` / `saveAndFlush` | 新实体出 INSERT，有主键实体出 UPDATE（isNew 判定） |
@@ -35,6 +37,8 @@
 | `getReferenceById` | 标注「无查询」（延迟代理默认不发 SQL） |
 
 ## 派生查询深化
+
+<GifPlayer src="/demo/jpa-derived-query.gif" alt="在 UserRepository 里逐个预览派生方法：findTop10ByOrderByCreateTimeDesc 生成 ORDER BY create_time DESC LIMIT 10；findByUsernameLike 生成 LIKE '%…%'；返回 Page 的 findByDepartmentIdAndStatus… 生成带 #pageSize/#pageOffset 参数面板的数据 SQL（LIMIT ?, ?）" />
 
 - 六种方法名前缀全部支持：`find` / `read` / `get` / `query` / `search` / `stream...By`
 - `Top N` / `First N` / `Distinct` / `OrderBy<prop>Asc|Desc` 多字段排序
@@ -50,6 +54,8 @@
 - `JpaSpecificationExecutor` 的 `findAll(Specification)` 链：`root.get` / `cb.equal` / `cb.and` 组合解析为 WHERE 条件
 - `QueryByExampleExecutor`：`Example.of(probe)` 按 probe 实体非空字段生成等值条件（`ExampleMatcher` 定制器参与解析）
 
+<GifPlayer src="/demo/jpa-criteria.gif" alt="CriteriaBuilder 组合条件的静态预览：光标压在 cq.where(cb.and(...)) 调用行上唤起预览，左侧列出 #username / #ageStart / #ageEnd / #statuses 参数框，右侧 SQL 把 cb.like / cb.between / cb.in / cb.isNull / cb.not 与 cb.and/or 逐条翻译成 WHERE username LIKE ? AND age BETWEEN ? AND ? AND status IN (?) AND email IS NULL AND NOT (status = 0) …" />
+
 ## JPQL / HQL 深化
 
 - JOIN 关系解析：关联路径按实体映射展开为真实 ON 条件，JOIN 图可视化可用
@@ -58,6 +64,8 @@
 - 无别名形态的 HQL 同样映射：`WHERE stationCode = ?` 这类裸属性转列名（`STATION_CODE = ?`），嵌入段（如 `updateInfo.BE_DELETE`）占限定符位时按嵌入映射产出裸列名，与 Hibernate 真实语义一致
 
 ## JPA 参数链（setParameter）
+
+<GifPlayer src="/demo/jpa-param-chain.gif" alt="setParameter 链预览：字面量与枚举常量已自动预填参数框、同名参数多次设置给出灰字提示，往形参填值后 SQL 里的占位即时变成实值" />
 
 `em.createQuery(...).setParameter(...)` 链式调用完整参与预览，参数面板与渲染结果保持一致：
 
@@ -71,10 +79,14 @@
 
 派生查询方法名里的嵌入段驼峰路径（`findByUpdateInfoCreatedTimeAfter` 这类）也能解析到真实展平列——WHERE / ORDER BY 不再产出 `update_info_created_time` 这类伪列。
 
+<GifPlayer src="/demo/jpa-embedded.gif" alt="嵌套嵌入派生查询预览：address.zipcode.zip 逐段穿透展平为 cust_zip，bizAddress.street 按 prefix 展平为 biz_street（前缀只拼一次、不出现 biz_biz_street）" />
+
 ::: details 展平规则细节（何时看：嵌入字段列名不符预期时）
 - 嵌套嵌入的 `@AttributeOverride` 支持 JPA 规范的点路径覆写（`name="zipcode.zip"`）——点路径优先、裸名兜底，类级覆写键随嵌套链传递
 - Spring Data 形态：裸 `@Embedded` 按 `prefix` 前缀展平列名，`@Embedded.Nullable` / `@Embedded.Empty` 捷径注解正确识别（同一值对象多处嵌入各按前缀展开，防撞车）
 - 派生查询的嵌入段解析覆盖 WHERE / ORDER BY（含 `Sort.by` 字面量属性）；SELECT 全列展开与 `@Query` JPQL 链本就正确
+- 嵌套点路径按**逐段累积**解析（`address.zipcode.zip` → 覆写列 `cust_zip`），中间段（`Zipcode`）参与匹配，不再退化成下划线拼接的伪列
+- `prefix` 与 `@AttributeOverride` 同时出现时，**覆写名即最终列名**——`prefix` 只拼在没有覆写声明的列上，不会出现 `biz_biz_street` 这类双拼
 - MyBatis-Plus 与 jakarta 嵌入注解共存的混合注解实体（`@TableName` + `@Embedded`）在 Wrapper 预览、批量模板与 CRUD 生成里同样展平为宿主表列，不再出现值对象伪列
 :::
 

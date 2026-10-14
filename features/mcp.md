@@ -1,8 +1,8 @@
 # MCP Server：给 AI Agent 的 SQL 工具
 
-插件向 IDEA 内置 MCP Server 注册了十一个工具，让 Claude Code、Cursor、JetBrains AI Assistant、Codex 这类外部 agent 能直接调用插件的 SQL 能力：渲染可执行 SQL、查表结构、拿执行计划。你在 IDE 里照常写代码，agent 在旁边干活，两边互不打扰。
+插件向 IDEA 内置 MCP Server 注册了十一个工具，让 Claude Code、Cursor、JetBrains AI Assistant、Codex、ZCode、DeepSeek Harness 这类外部 agent 能直接调用插件的 SQL 能力：渲染可执行 SQL、查表结构、拿执行计划。你在 IDE 里照常写代码，agent 在旁边干活，两边互不打扰。
 
-![SQL Visualizer MCP Server：十一个只读工具按 agent 工作流分组](/demo/mcp-overview.svg)
+![SQL Visualizer MCP Server：外部 agent 经 MCP 连到 IDEA 内置 MCP Server，调用插件注册的十一个只读工具——按 agent 工作流分三组：拿 SQL（5 个）、看库（2 个）、执行前把关（4 个）](/demo/mcp-overview.svg)
 
 ## 快速上手
 
@@ -40,7 +40,7 @@
 | `sqlv_check_sql` | `sql` 一条 SQL | 静态写风险与类型核查结论 |
 | `sqlv_mapper_check` | mapper XML（`xmlSnippet` 或 `filePath`），可选 `simulate` | mapper 契约核查；simulate 模式对渲染产物做写风险与性能分析——校验器给不出的证据形态 |
 | `sqlv_rollback_plan` | `sql` 一条 INSERT / UPDATE / DELETE（可选 `primaryKeyColumns`） | 回滚预案——只产出预案，不执行任何语句 |
-| `sqlv_perf_advice` | `sql` 一条 SQL | 按 20 条内置规则给性能建议，最多 30 条、超限按严重级别裁剪保留高危 |
+| `sqlv_perf_advice` | `sql` 一条 SQL | 按 21 条内置规则给性能建议，最多 30 条、超限按严重级别裁剪保留高危 |
 
 ## 校验给置信度，这里给证据
 
@@ -55,7 +55,7 @@
 
 1. `sqlv_render_sql` 按文件与行号拿到真实可执行 SQL（参数已回填，不是源码里的 `?` 占位）
 2. `sqlv_explain` 对这条 SELECT 拿执行计划——末尾如果命中全表扫描、filesort 之类模式，还会附 `index hints` 建议
-3. `sqlv_perf_advice` 按 20 条规则拿性能建议；`sqlv_schema_context` 顺带取回表的列注释与结构佐证
+3. `sqlv_perf_advice` 按 21 条规则拿性能建议；`sqlv_schema_context` 顺带取回表的列注释与结构佐证
 4. 改完代码再用 `sqlv_render_sql` 复验渲染产物；写操作改动前可用 `sqlv_rollback_plan` 备好回滚预案
 
 每一步都是确定性输出：SQL 是渲染链的真实产物，计划是数据库真实返回，建议有规则出处——不掺杂「我觉得」。
@@ -78,7 +78,7 @@
 
 ## 设置页门控
 
-<GifPlayer src="/demo/mcp.gif" alt="插件设置页 MCP 工具门控与平台 Exposed Tools 注册面" />
+<GifPlayer src="/demo/mcp.gif" alt="插件设置页「MCP 工具」子页门控：横幅提示 11 个 AI 工具已注册，总开关关闭时十一项整组置灰；重新开启后单独停用 sqlv_rollback_plan，横幅即时变为「已停用 1 个工具——停用的工具不会出现在 AI 助手的工具清单」；左树同屏可见平台 Tools > MCP Server > Exposed Tools 入口" />
 设置 → 「MCP 工具」子页提供门控区：
 
 - 总开关：整体启停插件的 MCP 功能

@@ -39,6 +39,8 @@ When the target can't be resolved the preview continues, with the warning naming
 
 ## OGNL Expression Panel
 
+<GifPlayer src="/demo/xml-ognl.gif" alt="OGNL expression panel: condition lines carry their evaluated result, toggling one off narrows WHERE in real time, and typing a parameter value substitutes it" />
+
 OGNL expressions in dynamic conditions (e.g. `name != null and name != ''`) can be toggled in the left panel, with SQL updating in real time.
 
 When an `if` test fails to evaluate, the preview no longer silently expands it as true — a visible error is recorded ("expanded as true; override with the panel toggle"), putting the divergence between preview and runtime on the table.
@@ -77,6 +79,8 @@ ORDER BY create_time DESC
 - When a preview contains `${}` raw substitution, the panel shows a dismissible non-modal banner at the top ("preview contains N ${} direct substitutions — the text is not escaped, mind the SQL injection surface"); once dismissed it stays dismissed for the IDE session
 - "Execute SQL" and "EXPLAIN" pop a confirmation first, noting that raw segments are currently filled with mock values — choosing No aborts; after confirming once, the same panel won't ask again
 - Copying executable SQL doesn't prompt; instead the output carries a `-- contains ${} raw segments (mock values)` header comment so the risk travels with the artifact
+
+<GifPlayer src="/demo/xml-exec-guard.gif" alt="Previewing a statement with ${} direct substitution: a banner appears at the top of the panel reading 'preview contains 1 ${} direct substitution — the text is not escaped, mind the SQL injection surface' with a close button on its right, and ORDER BY ${orderBy} in the SQL renders with a mock value as ORDER BY 1; clicking Execute SQL first pops the confirmation gate 'SQL contains ${} raw segments (currently filled with mock values); confirm the values are trustworthy before executing. Continue? Yes / No', and No aborts" />
 
 ## Parameter Panel
 
@@ -148,6 +152,10 @@ Other statements (SELECT, MERGE, DDL and so on) do not open the dialog at all �
 ## SQL Quick Templates
 
 Select text in a mapper XML or the preview editor and use the "SQL quick templates" context-menu group to run EXPLAIN / COUNT / a 10-row sample in one click, going through the native Database console chain. These three actions ship without default shortcuts; bind your own in Settings > Keymap or in the plugin's "Shortcuts" settings section.
+
+<GifPlayer src="/demo/sql-snippets.gif" alt="With the caret on the table name car_device_info in schema.sql, the last context-menu group 'SQL quick templates' expands into EXPLAIN / COUNT / 10-row sample; picking one opens the native Database console and runs the generated statement" />
+
+The selected text is used **verbatim as the table name** (no identifier validation, and no check of which database it belongs to) — selecting a fragment works too, but if the table is not in the **currently bound database** the execution fails; the failure message carries the current database and data source (e.g. `[当前库=mpj_demo, 数据源=mpj_demo@localhost, 数据源默认库=mpj_demo]`), which tells you whether to switch database or table. On failure the balloon offers "Locate error statement" and "Copy error message", the same actions the preview panel's Execute SQL failure provides.
 
 ## Render Annotations & Degradation Banners
 

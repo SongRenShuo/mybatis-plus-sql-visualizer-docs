@@ -13,6 +13,8 @@ Get up and running with SQL Visualizer in 3 minutes.
 3. Click <kbd>Install</kbd>
 4. Restart IDE
 
+![Searching "SQL Visualizer" in the Marketplace: the first result is this plugin (author SongRenShuo, 434 downloads), and the detail pane on the right carries the Install button and the version number](/demo/install-marketplace.png)
+
 ### Method 2: Manual Download & Install
 
 1. Download the plugin from [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) or [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases)
@@ -26,9 +28,14 @@ Get up and running with SQL Visualizer in 3 minutes.
 
 Once installed, on any MyBatis-Plus Wrapper code:
 
-1. Place cursor on the Wrapper chain (e.g. the line with `.eq()`)
+1. Click the plugin icon in the gutter on the left (it sits on the **variable declaration line**, e.g. the `queryWrapper` line); or put the caret **on any identifier in the chain** (a variable or method name) and use the shortcut
 2. Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd> (macOS <kbd>Option</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>)
 3. Dialog shows the generated SQL
+
+::: tip The caret must sit on an identifier — not on leading indentation
+The shortcut requires the caret to be **on a concrete code element** — a variable name such as `queryWrapper`, a method name such as `eq`, or the chain call `.list()` all count; Parking it in the leading whitespace only yields a "no previewable SQL source at caret" notice; and the `.eq/.ge` in-chain lines carry **no gutter icon by design** (icons mark the variable declaration line only), so clicking the icon is the more forgiving entry point.
+:::
+
 
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper preview demo: cursor on a Wrapper chain, SQL generated in a popup" />
 

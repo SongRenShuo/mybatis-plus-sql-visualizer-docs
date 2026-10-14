@@ -13,6 +13,8 @@
 3. 点击 <kbd>Install</kbd> 安装
 4. 重启 IDE 生效
 
+![Marketplace 里搜索 SQL Visualizer：结果首条即本插件（作者 SongRenShuo、下载量 434），右侧详情页带「安装」按钮与版本号](/demo/install-marketplace.png)
+
 ### 方式二：手动下载插件安装
 
 1. 在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) 或 [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases) 下载插件包
@@ -26,9 +28,15 @@
 
 安装完成后，在任何 MyBatis-Plus Wrapper 代码上：
 
-1. 将光标置于 Wrapper 链上（如 `.eq()` 所在行）
+1. 点代码左侧 gutter 的插件图标（它落在**变量声明行**上，如 `queryWrapper` 那一行）；也可以把光标**压在链内任一标识符上**（变量名、方法名都行）再按键
 2. 按 <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>（macOS <kbd>Option</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>）
 3. 弹窗显示生成的 SQL
+
+::: tip 光标要落在标识符上，别停在行首缩进
+快捷键触发时插件要求光标落在**具体的代码元素上**——变量名（如 `queryWrapper`）、方法名（如 `eq`）或链式调用的 `.list()` 都算；停在行首空白处只会得到一条「未在光标处找到可预览的 SQL 源」的提示；而链内 `.eq/.ge` 这类**中间行按设计没有 gutter 图标**（图标只标在变量声明行），所以点图标是更省心的入口。
+:::
+
+
 
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper 预览演示：光标置于 Wrapper 链，弹窗实时生成 SQL" />
 

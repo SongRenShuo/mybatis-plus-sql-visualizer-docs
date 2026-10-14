@@ -39,6 +39,8 @@ mapper XML 的 `<select>` / `<update>` / `<delete>` / `<insert>` 行左侧 gutte
 
 ## OGNL 表达式面板
 
+<GifPlayer src="/demo/xml-ognl.gif" alt="OGNL 表达式面板：条件行带求值结果「真」，勾掉条件后 WHERE 实时收窄，参数框填值即替换" />
+
 动态条件的 OGNL 表达式（如 `name != null and name != ''`）可在左侧面板勾选，对应 SQL 实时变化。
 
 if 的 test 表达式求值失败时不再静默按 true 展开——会记一条可见错误「已按 true 展开，可用开关覆盖」，预览产物与真实运行时的分叉摆在明面上。
@@ -77,6 +79,8 @@ ORDER BY create_time DESC
 - 预览含 `${}` 直替时，面板顶部显示一条非模态提示横幅（「预览含 N 处 ${} 直接替换——替换文本未转义，注意 SQL 注入面」），可关闭，关闭后本 IDE 会话不再弹
 - 「执行 SQL」与「EXPLAIN」前会弹确认框，说明 raw 段当前以模拟值填充，选否即中止；确认一次后同一面板不再重复弹
 - 复制可执行 SQL 不弹窗，产物头部带一行 `-- contains ${} raw segments (mock values)` 注释，让风险随产物走
+
+<GifPlayer src="/demo/xml-exec-guard.gif" alt="含 ${} 直替的语句预览：面板顶部出现「⚠ 预览含 1 处 ${} 直接替换——替换文本未转义，注意 SQL 注入面」横幅（右侧带关闭 ✕），SQL 里 ORDER BY ${orderBy} 以模拟值渲染成 ORDER BY 1；点「执行 SQL」后先弹出确认闸门「SQL 含 ${} 原文拼接段（当前以模拟值填充），执行前请确认值的真实性。继续？Yes / No」，选 No 即中止" />
 
 ## 参数面板
 
@@ -148,6 +152,10 @@ SELECT、MERGE、DDL 等其余语句不打开弹窗，只给一条说明为什�
 ## SQL 快捷模板
 
 mapper XML 与预览编辑器里选中文本后，右键菜单「SQL 快捷模板」可一键 EXPLAIN / COUNT / 抽样 10 行，走原生 Database 控制台链路执行。这三个动作默认不占键位，如需快捷键可在 设置 > Keymap 或插件设置页「快捷键」节录制。
+
+<GifPlayer src="/demo/sql-snippets.gif" alt="光标停在 schema.sql 里的表名 car_device_info 上，右键菜单最后一项「SQL 快捷模板」展开出 EXPLAIN 选中表 / COUNT 选中表 / 抽样 10 行三项；点一项后原生 Database 控制台打开并执行生成的语句" />
+
+选中的文本**按表名原样使用**（不做标识符校验，也不判断它属于哪个库）——所以选中片段也行，但若该表不在**当前绑定库**里，执行会失败；失败信息里会带上当前库与数据源（形如 `[当前库=mpj_demo, 数据源=mpj_demo@localhost, 数据源默认库=mpj_demo]`），据此可判断是否要换个库或换个表名。执行失败时气泡上带「定位到出错语句」「复制错误信息」两个动作，与预览面板「执行 SQL」失败时的可操作项一致。
 
 ## 渲染标注与降级提示
 

@@ -2,6 +2,10 @@
 
 <GifPlayer src="/demo/sql-log.gif" alt="SQL log capture and restore demo" />
 
+<GifPlayer src="/demo/enhanced-capture.gif" alt="Enhanced capture: entries stream in with real parameters, millisecond durations, database badges and execution errors side by side" />
+
+The enhanced-capture channel in action — a parameterized query and a duplicate-key failure arrive one after another; open an entry to see the restored SQL with literal parameters.
+
 Auto-captures SQL as it runs, restores everything into a unified list of executable statements, and jumps precisely to the source line that fired each SQL. Enhanced capture is the default channel and works out of the box; console capture is the no-code-change fallback.
 
 ## Trigger Method
@@ -32,6 +36,10 @@ Enhanced capture asks for injection consent before any run happens — the dialo
 - Entries carry the full call-stack snapshot — hover the preview panel to see the whole call chain and click any frame to jump to that frame's source (see "Jump from the Call Stack" below)
 - Collected data is only displayed inside the IDE on your machine — nothing is sent to any server; turning the switch off stops collection (attached capture points remain but stay idle)
 
+<GifPlayer src="/demo/datasource-badge.gif" alt="Enabling Show full data-source badge context in settings instantly switches entry badges from [MySQL] to [MySQL · database@host:port]" />
+
+Database badges show only the database type by default; enabling "Show full data-source badge context" in settings switches them to the full `dialect · database@host:port` form instantly (the clip above shows the switch).
+
 ::: details Startup injection and consent behavior (When to read: you care about JVM injection mechanics or run into an injection prompt)
 - **When consent is asked**: the injection consent dialog pops as soon as you enable enhanced capture (in settings or via the guide flow) or open the project (the fresh enabled-but-not-authorized state), before any Run; burst requests milliseconds apart collapse into a single dialog.
 - **Rescan of running processes**: when listening starts, application processes already running are scanned automatically — the unconfirmed get the consent dialog first, the confirmed get attached directly.
@@ -51,6 +59,10 @@ With enhanced capture none of this applies — skip it, along with the "log form
 - **Missing-parameter hints**: if a statement had no parameter-binding log captured at all, the preview says so and guides you to enable TRACE level (for JdbcTemplate it names `org.springframework.jdbc.core` specifically); only genuinely incomplete parameters report a count mismatch
 - **Statement-line-only projects**: after 1 second of silence the statement is judged complete and handed over (JdbcTemplate on DEBUG only, Tomcat spawning a thread per request), instead of staying stuck at "N lines scanned / 0 produced"
 :::
+
+Manual log pasting lives in the panel's "Log → SQL" tab — paste MyBatis / Hibernate / JdbcTemplate log text and it is restored into executable SQL, or read straight from the clipboard in one click:
+
+<GifPlayer src="/demo/log-to-sql-clipboard.gif" alt="Log to SQL tab: paste Preparing/Parameters log lines and the formatted SQL is restored automatically" />
 
 ## Features
 
@@ -73,6 +85,8 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 | Re-authorize | During the 24-hour cooldown after declining, the "Re-authorize" button in settings clears the cooldown and re-opens the consent dialog in one click — no switch toggling needed |
 | Three-state consent dialog | The confirmation dialog records all three outcomes faithfully — "Agree and enable / Cancel / Disable enhanced capture and don't ask again"; the third persists the opt-out in one click (re-enable any time in settings) |
 
+<GifPlayer src="/demo/capture-diagnostics.gif" alt="Capture diagnostics: the SQL log panel's empty state states 'no SQL captured yet' with three tiers of next steps (click Capture and run a console that emits SQL logs / restore manually from the Log to SQL tab / turn on enhanced capture in settings for real parameter values and precise timing); clicking the trailing Open Settings (jump to enhanced capture) link jumps straight to Settings > Tools > SQL Visualizer > SQL Log with the source-location capture group and its enhanced-capture toggle on screen" />
+
 ### SQL Highlighting & Execution Time
 
 - SQL summaries in the list are lexically colored: keywords, table names, strings, numbers and comments each in their own color; timestamps and durations are dimmed gray so they never steal focus
@@ -90,6 +104,10 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 Hunting a slow SQL has two steps: **find it** in the list, then **understand it** in the preview.
 
 **Find it in the list** (details in the previous section): entries whose duration reaches the slow-query threshold (default 1000ms, configurable in settings) are marked red and counted as slow queries; switch the sort button to "duration descending" and the slowest ones rise to the top. Repeated statements are also clustered — **once three entries share the same structure**, a "N same-structure entries" badge appears on the meta line, and right-clicking it opens a focus tab showing only that structure. Different literals still count as the same structure (`IN ('a')` and `IN ('b')` group together), so an N+1 loop becomes obvious at a glance. The log page and the History page share these markers.
+
+<GifPlayer src="/demo/slow-query-highlight.gif" alt="After several statements stream in, one taking 1208ms is marked red with its millisecond duration, a red slow-query counter badge appears in the toolbar, and another entry in the same list carries a '4 same-structure entries' badge" />
+
+<GifPlayer src="/demo/n1-badge.gif" alt="Looping a single-row lookup on the same table five times: the list fills with structurally identical SELECTs differing only in the WHERE id value, the meta line reports the same-structure count, and the context menu offers 'Show only this structure'" />
 
 **Understand it in the preview**: open any preview (double-click a log entry, or use a Wrapper / XML / JPA gutter icon) and the panel's meta line is followed by static performance advice — each item starts with `⚠` (warning, red) or `ℹ` (suggestion, blue) and items are separated by `；`; when the line runs out of room it truncates with an ellipsis and the full text appears on hover. The rules target the usual "index unusable / full scan / oversized result set" shapes, for example:
 
@@ -144,6 +162,8 @@ Each checkbox in the log page's "Type Filter" popup carries a matching color swa
 
 ### Scroll to Bottom & Tail Following
 
+<GifPlayer src="/demo/sql-log-tail-follow.gif" alt="Under a concurrent flood the viewport pins to the bottom; scrolling up pauses following, and the toolbar Scroll to Bottom action jumps back and resumes it" />
+
 The log list has tail following on by default: the view sticks to the bottom as new SQL arrives, always showing the latest entries; scrolling up to read history pauses following automatically, and scrolling back to the bottom or clicking the toolbar's "Scroll to Bottom" action resumes it — the same habit as the IDE console.
 
 ::: details Details (When to read: the list is not at the bottom, or you are looking for the action)
@@ -157,6 +177,8 @@ Right-click a log entry → "Jump to Source". How the position is resolved depen
 
 **Enhanced-capture entries**: the source location comes from the real call stack at SQL execution time, straight to the code line that ran the query. Calls entering through a self-developed framework's unified entry point are traced up the stack automatically, skipping framework frames to land on your business code.
 
+<GifPlayer src="/demo/sql-log-jump-source.gif" alt="Right-click a log entry, choose Jump to Source, and the editor opens UserServiceImpl on the exact line that executed the SQL" />
+
 ::: details Framework-frame filtering and business-frame registration (When to read: jumps keep landing in framework code or tool libraries)
 Framework frames are filtered by origin (business classes come from directories in dev, third-party dependencies from JARs), so framework or data-layer plugin frames cannot mislead the jump. Both frame filtering and JAR business-frame ownership are configurable in settings: register your framework engine chain's packages under "Source-capture frame skip prefixes" (one per line), and your JAR-packaged business tool libraries' packages under "JAR business-frame prefixes" — registered jumps then land inside the tool class where the SQL runs, instead of the caller line above it. Both fields are validated as you type (format and cross-field conflicts) with one-click fix. The live list and history panel share the same resolver.
 :::
@@ -164,6 +186,8 @@ Framework frames are filtered by origin (business classes come from directories 
 #### Jump from the Call Stack
 
 An enhanced-capture entry carries more than a single execution point — it carries the whole call stack. Preview such an entry and hover the "Call stack:" area on the panel's meta line; after a moment a debugger-style **Frames** popup appears:
+
+<GifPlayer src="/demo/sql-log-stack-jump.gif" alt="Hovering the preview panel's Call stack area opens a Frames-style popup; clicking the Controller frame lands on the matching source line in UserController" />
 
 - Frames are listed as structured rows — method name, fully-qualified class name and `:line`, with the class name middle-ellipsized when too wide so the line number always stays visible; the top frame is selected by default and the plugin's own capture frames are dimmed gray
 - **Clicking any frame jumps to that frame's source line** (resolved by class name across the whole project, library classes landing in the decompiled view, just like the debugger). When a frame cannot be resolved the popup stays open — no false "jumped" impression
@@ -173,7 +197,9 @@ An enhanced-capture entry carries more than a single execution point — it carr
 How many frames are kept is configurable — "Call-stack snapshot frames" in settings (default 24, range 12–64): sampled at both ends, the top keeps JDBC / engine-side frames and the bottom always keeps 8 business-side frames, joined by an omission marker in the middle. Changes take effect via a hot push on save — no application restart.
 
 ::: details The console channel's interceptor route (When to read: you use console capture and still need precise landing)
-Enhanced capture needs none of this — its source location comes from the real call stack. Console logs carry no call-site info, so the plugin ships an optional runtime interceptor: copy the self-contained sample `SqlSourceInterceptor` (shipped with the plugin repository at `docs/instrumentation/SqlSourceInterceptor.kt`) into your project and register it as a MyBatis-Plus `InnerInterceptor`.
+Enhanced capture needs none of this — its source location comes from the real call stack. Console logs carry no call-site info, so the plugin ships an optional runtime interceptor: copy the self-contained sample `SqlSourceInterceptor` (shipped with the plugin repository at `docs/instrumentation/SqlSourceInterceptor.kt`) into your project and register it as a MyBatis-Plus `InnerInterceptor`. To skip the manual copy, enable "Auto-inject source-capture interceptor" in settings — pick the modules and the interceptor is generated and registered into `mybatis-config.xml` for you:
+
+<GifPlayer src="/demo/interceptor-inject.gif" alt="Enabling auto-injection in settings and picking a module generates SqlSourceInterceptor and registers it in mybatis-config.xml, with a dialog confirming a restart applies it" />
 
 ```java
 @Bean
@@ -212,6 +238,8 @@ If the XML doesn't exist (annotation SQL, MP built-in statements) or locating fa
 
 ### SQL Suppression
 
+<GifPlayer src="/demo/sql-suppress.gif" alt="Right-click a heartbeat entry and choose Suppress this SQL: buffered rows vanish with a balloon, and the rules dialog lists the rule, its hit count and a read-only preview" />
+
 When keep-alive heartbeat SQL (such as `SELECT 1`) keeps flooding the list, you can suppress it out of the list:
 
 - Right-click an entry → "Suppress this SQL" to suppress in one click; multi-select works (different statements become separate rules, existing ones are skipped automatically). Existing rows vanish from the list immediately, a balloon notification can jump straight to the management dialog, and the management dialog shows live hit counts
@@ -240,6 +268,8 @@ The entry context menu offers two focus modes, shown as tabs at the top of the p
 
 The "List display" dropdown under the "SQL Log" group in settings controls how SQL renders inside entries, switching instantly:
 
+<GifPlayer src="/demo/sql-list-display.gif" alt="Switching the display mode in the settings' List Display → SQL display mode dropdown, then confirming and returning to the SQL log list, where each entry's SQL is re-laid-out in the new mode (from a single-line summary to a multi-line, clause-per-line expansion)" />
+
 - **Single line**: one fixed row per entry, long SQL truncated
 - **Keyword wrap** (default): SQL wraps at keywords, height growing with content
 - **Formatted**: full pretty-print, long statements split clause by clause
@@ -248,11 +278,15 @@ The SQL log page and the History page share the same setting, which survives IDE
 
 ### Single-Click Preview & Double-Click Dialog
 
+<GifPlayer src="/demo/sql-click-preview.gif" alt="Single-click an entry for the editable lightweight popup whose copy button flashes to a check; double-click for the full preview dialog and switch keyword wrapping" />
+
 List entries use two-level previewing, consistent across the SQL log list, the History tab's second-level list and the history tool window:
 
 - **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; the "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, plus a "Close" button
 - **Multi-select batch copy**: after Ctrl / Shift multi-select, right-click → "Copy" copies all selected SQL at once (the menu item shows the count, e.g. "Copy selected SQL (3)", each statement semicolon-terminated and newline-joined)
 - **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The toolbar offers layout toggles — horizontal / vertical / keyword wrap — plus a "More" menu gathering low-frequency actions (import parameters, diff, share)
+
+<GifPlayer src="/demo/recent-executions.gif" alt="Right-click a gutter icon to open Recent Executions: execution history on the left, SQL preview on the right, multi-select with right-click batch actions" />
 
 ::: details Preview behavior details (When to read: preview rendering or dialog behavior differs from what you expect)
 - **Single-click preview**: its display follows the "Format SQL on preview" setting (on by default), so long SQL opens multi-line indented, or as original text when off. Literal SQL with zero placeholders (values inlined in the SQL text) and IN lists are recognized into editable parameter rows as well. The popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately. While a Ctrl / Shift multi-select is in progress, single-clicks no longer trigger the preview (any open popup closes with it); single-select resumes normal previewing.
@@ -266,6 +300,8 @@ How entries render is controlled by the "List display" option in settings (see t
 
 ## SQL History
 
+<GifPlayer src="/demo/sql-history.gif" alt="SQL History tab: double-click a file for its entries, batch loading on scroll, regex search filtering" />
+
 The "SQL History" tab is always present on the panel — you don't have to enable auto-save first to see the entry point (it shows an empty state when auto-save is off and the directory holds no history files). Previously the tab was only mounted once certain conditions were met.
 
 Enable "Auto-save SQL history" in settings (off by default) and captured entries are saved to disk in full (not limited by the list's max-entry count); when the save directory holds more history files than the retention limit (default 30, configurable, 0 = keep everything), the oldest files are cleaned up automatically to keep the disk in check. Reading and writing go through the same directory resolution: files written after you customize the save directory are visible on the History page too, and changing the save directory triggers a rescan.
@@ -274,6 +310,11 @@ Enable "Auto-save SQL history" in settings (off by default) and captured entries
 - **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info, and a `#N` number per in-file entry order); large files load in batches as you scroll — the first 30 entries up front, more appended as you near the bottom; single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically, without interrupting browsing while the file you're viewing still exists
 - **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same
+- **Export & compare**: right-click the second-level list for "Export SQL" (CSV/TSV/TXT/SQL, SQL by default with a timestamped file name) and "Compare two selected" (line-by-line diff, the dialog title carries the structural fingerprint verdict) —
+
+<GifPlayer src="/demo/history-export.gif" alt="Right-click history list to export SQL; a balloon confirms the file path after choosing a format" />
+
+<GifPlayer src="/demo/history-compare.gif" alt="Select two history SQL entries and compare; a two-pane diff view titles the structural fingerprint verdict" />
 
 ::: details History storage and version compatibility (When to read: you use a custom save location or mix old and new plugin versions)
 - History files are saved under `.idea/sql-visualizer/sql-history/` in your project by default (the directory was renamed from `mybatis-plus-sql-visualizer` in v2026.9.2 — old directories are no longer read). Save location and file name pattern are configurable in settings.

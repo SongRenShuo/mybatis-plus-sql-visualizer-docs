@@ -26,6 +26,10 @@ Wrapper 锚点涉及批量操作时，弹窗自动切换到批量参数面板。
 - UPDATE：SET 列可勾选，WHERE 主键 + @Version 固定不可取消
 - UPSERT：全列含主键均可勾选
 
+`saveOrUpdateBatch` 的列级勾选与冲突子句是联动的：在左栏「参数列」取消勾选一列，INSERT 的列清单与 `ON DUPLICATE KEY UPDATE` 段会同步少掉那一列。
+
+<GifPlayer src="/demo/batch-columns.gif" alt="批量参数面板的列级勾选：saveOrUpdateBatch 预览先渲染 INSERT INTO user (id, password, age, email, role_id, dept_id, status, username, …) 与 ON DUPLICATE KEY UPDATE password = VALUES(password), age = VALUES(age), email = VALUES(email), …；在左栏「参数列」取消勾选 email 后，INSERT 列清单与 ON DUPLICATE KEY UPDATE 段同步去掉 email，复选框恢复为未勾选、按钮由「全不选」变「全选」" />
+
 ### 引号回填
 
 按字段类型自动决定是否加引号：

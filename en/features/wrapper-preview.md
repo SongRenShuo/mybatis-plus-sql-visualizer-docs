@@ -39,6 +39,8 @@ This is the first batch (MVP): common chain queries are covered; rarer method sh
 
 ### Dynamic Condition Toggles
 
+<GifPlayer src="/demo/wrapper-params.gif" alt="Toggle the username condition off in the preview panel and WHERE loses a condition in real time; typing a value replaces the placeholder instantly" />
+
 Boolean-overloaded conditions like `.eq(true, ...)` can be toggled in the left panel, re-rendering SQL in real time.
 
 ### Parameter Fill-in
@@ -65,9 +67,17 @@ When an entity field name differs from the real column name (field `orderID`, co
 
 Upsert conflict clauses for OceanBase and openGauss also render in their real forms (openGauss uses the MySQL-style `ON DUPLICATE KEY UPDATE`, not PG's `ON CONFLICT`).
 
+<GifPlayer src="/demo/dialect-pagination.gif" alt="Dialect pagination: after switching the settings-page database dialect from MySQL to Oracle, re-previewing at the same place turns the pagination clause from LIMIT 5, 5 into ORDER BY id DESC OFFSET 5 ROWS FETCH NEXT 5 ROWS ONLY, and the table quoting changes from backticks to double quotes" />
+
+Statements taking a `Page` / `IPage` argument simulate pagination the way MyBatis-Plus' `PaginationInnerInterceptor` behaves at runtime: the preview **appends the pagination clause** to the original statement and **also emits a COUNT wrapper** as a second statement (`SELECT COUNT(*) FROM (original SQL) TOTAL`, annotated with its origin); statements with `searchCount=false` or a handwritten LIMIT produce only one of the two. The COUNT product sits at the bottom of the panel, so you have to scroll to see it. The settings page's "SQL Preview" tab can switch the whole simulation off, or drop just the COUNT half via "append paginated COUNT preview".
+
+<GifPlayer src="/demo/pagination-sim.gif" alt="Pagination interceptor simulation: for an XML statement taking an IPage argument, the preview appends LIMIT to the original SQL and emits an annotated COUNT wrapper alongside it — SELECT COUNT(*) FROM (…) TOTAL" />
+
 ### JOIN Diagram
 
 JOIN query previews ship with a relationship diagram rendered by IDEA's native Diagrams engine (the built-in renderer can be restored in settings).
+
+<GifPlayer src="/demo/join-diagram.gif" alt="JOIN diagram: switching an MPJ join preview to the JOIN Diagram tab renders the user / user_address / area tables as nodes (columns, types and database comments) wired by their ON relations with IDEA's native Diagrams engine, switchable back and forth with the SQL tab" />
 
 ::: details Node column scope and rendering behavior (When to read: diagram nodes show incomplete columns or rendering misbehaves)
 JOIN tables are drawn with the same full entity column list as the main table — wide tables over 50 columns keep only primary-key columns, and columns referenced by the SQL are appended after the entity columns. Columns that exist in the data source but are not mapped by the entity are added to the node as well, with the database COMMENT and real type. Column comments come from two sources — entity comments and database COMMENTs — falling back to the database when the entity has none. A loading indicator is visible while rendering; if rendering fails, an error page shows a summary of the cause.
@@ -75,21 +85,41 @@ JOIN tables are drawn with the same full entity column list as the main table �
 
 ### Safety Warning
 
-UPDATE / DELETE without WHERE shows a red warning:
+<GifPlayer src="/demo/danger-warning.gif" alt="Editing the previewed SQL into a WHERE-less UPDATE and clicking Execute SQL escalates the confirm dialog into an unbounded-write warning that lists each matched trait" />
 
-> ⚠ No WHERE clause — will update/delete all rows in the table!
+When an UPDATE / DELETE lacks an effective filter, the Execute SQL confirmation is escalated into an unbounded-write warning: the title and buttons stay the same (still Confirm Execution with Yes / No — no extra step), while the body lists each trait the static check matched:
+
+- No WHERE clause — the statement will hit the whole table
+- A tautology such as `1=1` — WHERE does not filter anything
+- An OR branch containing a tautology — every row matches
+- A pure-wildcard LIKE such as `'%'` — equivalent to no filtering
+- A WHERE made only of constant expressions — no column reference at all
+
+The verdict comes from static analysis of the SQL syntax tree (the same source as the snapshot weak-predicate warning in the rollback view); a parse failure is treated as the highest risk, but it is still this one single confirmation with no extra blocking. Without any of the traits above the message stays unchanged.
+
+### Static Performance Advice
+
+<GifPlayer src="/demo/perf-advice.gif" alt="Previewing a join-chain SQL shows a static performance-advice segment right below the panel meta row: ORDER BY without LIMIT — may return a large result set, consider adding LIMIT (a red prefix marks ERROR/WARN, a blue prefix marks INFO)" />
+
+As soon as the preview renders SQL, the panel lists static performance advice line by line below the meta row (`ORDER BY` without `LIMIT`, `LIKE` with a leading wildcard, a missing `WHERE`, overly deep subqueries and so on). A red `⚠` prefix marks warnings and a blue `ℹ` prefix marks hints, sitting side by side with the real EXPLAIN plan. The visible text is truncated to a width budget (an ellipsis at the end); **hover to read the full text of every suggestion**.
 
 ### Logic Delete Injection
 
 Entities with `@TableLogic` auto-append `AND deleted = value` (the value is configurable in settings, default 0).
 
+<GifPlayer src="/demo/interceptor-injection.gif" alt="Logic-delete injection toggle: after switching off “logic-delete queries/deletes auto-append AND deleted = 0” on the settings page's SQL Preview tab, re-previewing at the same place drops the AND deleted = 0 line and pulls ORDER BY up one row" />
+
 ### Execute SQL
 
 With IntelliJ IDEA Ultimate + Database plugin, a temporary `.sql` file is created automatically after preview, then executed with `Ctrl+Enter`. The preview dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it, so you can type right away. Execution failures are reported inline in the panel instead of a modal dialog interrupting you.
 
+<GifPlayer src="/demo/execute-sql.gif" alt="The full Execute SQL flow: preview a car_device_info LEFT JOIN station_info chain, click Execute SQL, the plugin creates the temporary file mpsql-exec.sql and submits it to mpj_demo@localhost, and the Output / Result 1 tab inside the preview dialog returns a real data grid (2 rows, e.g. 充电桩A-01) alongside the native console at the bottom" />
+
 ### Real EXPLAIN Plan
 
 The "EXPLAIN" button in the preview panel's button row: pick a data source, click, and the plugin wraps the SQL into an EXPLAIN statement for the current dialect and submits it to the native database console — the real execution plan sits side by side with the panel's static performance-rule annotations. EXPLAIN counts as confirmation-free, so there is no DML confirm dialog.
+
+<GifPlayer src="/demo/explain-plan.gif" alt="Real EXPLAIN plan: click EXPLAIN in the preview panel, pick the mpj_demo@localhost data source, and the plugin wraps the SQL into an EXPLAIN statement submitted to the native database console; the Output tab returns the real plan table (id / select_type / table / partitions / type) side by side with the panel's static 'ORDER BY without LIMIT' rule annotation" />
 
 | Dialect | Rendered Form | Verification |
 |---------|---------------|--------------|

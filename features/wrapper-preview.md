@@ -42,6 +42,8 @@
 
 `.eq(true, ...)` 等布尔重载条件可在左侧面板勾选/取消，SQL 实时重渲染。
 
+<GifPlayer src="/demo/wrapper-params.gif" alt="预览面板动态条件勾掉 username 后 WHERE 实时少一个条件，参数框填值后 ? 即时替换为实值" />
+
 ### 参数回填
 
 - `?` 占位符替换为实际值
@@ -66,9 +68,17 @@
 
 OceanBase 与 openGauss 的 upsert 冲突子句亦按各自真实形态渲染（openGauss 实为 `ON DUPLICATE KEY UPDATE` MySQL 形态，非 PG 的 `ON CONFLICT`）。
 
+<GifPlayer src="/demo/dialect-pagination.gif" alt="方言分页：设置页数据库方言从 MySQL 切到 Oracle 后，同一处重新预览，分页子句由 LIMIT 5, 5 变为 ORDER BY id DESC OFFSET 5 ROWS FETCH NEXT 5 ROWS ONLY，表名引号也从反引号换成双引号" />
+
+带 `Page` / `IPage` 参数的语句按 MyBatis-Plus `PaginationInnerInterceptor` 的运行时行为模拟分页：预览在原语句后**尾追分页子句**，并**并列产出**一条 COUNT 包裹语句（`SELECT COUNT(*) FROM (原SQL) TOTAL`，带注释说明出处）；`searchCount=false` 与手写 LIMIT 的语句只产其一。COUNT 产物附在面板底部，需要滚到底才看得到。设置页「SQL 预览」子页可关掉整个模拟，或用「附分页 COUNT 查询预览」单独关掉 COUNT 那半。
+
+<GifPlayer src="/demo/pagination-sim.gif" alt="分页拦截器模拟：XML 语句带 IPage 形参时，预览在原 SQL 后尾追 LIMIT 并并列产出带注释的 COUNT 包裹语句 SELECT COUNT(*) FROM (…) TOTAL" />
+
 ### JOIN 关系图
 
 联表查询预览附带 JOIN 关系图，走 IDEA 原生 Diagrams 引擎渲染（设置页可切回自绘渲染）。
+
+<GifPlayer src="/demo/join-diagram.gif" alt="JOIN 关系图：MPJ 联表预览切到「JOIN 图」标签页，IDEA 原生 Diagrams 渲染 user / user_address / area 三表节点（列、类型与数据库注释）与 ON 关系连线，可与 SQL 标签页来回对照" />
 
 ::: details 节点列口径与渲染行为（何时看：关系图节点列不全或渲染异常时）
 JOIN 表与主表同口径绘制实体整表列——超过 50 列的宽表只留主键列，SQL 引用到的列追加在实体列之后；数据源里存在而实体未映射的列也会补进节点，带数据库 COMMENT 与真实类型。列注释来自实体注释与数据库 COMMENT 两路，实体没写注释时取数据库。渲染期间显示加载指示，渲染失败时落错误页并显示原因摘要。
@@ -76,21 +86,41 @@ JOIN 表与主表同口径绘制实体整表列——超过 50 列的宽表只�
 
 ### 安全警示
 
-UPDATE / DELETE 无 WHERE 条件时，弹窗红色警示：
+<GifPlayer src="/demo/danger-warning.gif" alt="把预览 SQL 改成无 WHERE 的 UPDATE 后点「执行 SQL」，确认弹窗升级为无界写警示并逐类列出命中特征" />
 
-> ⚠ 无 WHERE 条件，将更新/删除全表数据！
+UPDATE / DELETE 缺少有效过滤条件时，点「执行 SQL」的确认弹窗升级为无界写警示：标题与按钮形态不变（仍是「确认执行」+ Yes / No，不多加一步），正文改为逐类列出静态检查命中的特征——
+
+- 无 WHERE 条件——语句将作用于全表
+- 存在恒真条件（如 `1=1`）——WHERE 不起过滤作用
+- OR 分支含恒真条件——任意行都会命中
+- LIKE 为纯通配（如 `'%'`）——等价于无过滤
+- WHERE 只有常量表达式——没有任何列引用
+
+判据是对 SQL 语法树的静态分析（与回滚视图的快照弱谓词警示同源）；解析失败按最高风险处理，但始终只走这一次确认、不额外拦断。不含上述特征时文案保持原样。
+
+### 静态性能建议
+
+<GifPlayer src="/demo/perf-advice.gif" alt="预览一条联表链 SQL 时，面板顶部元信息行下方出现静态性能建议分段：⚠ ORDER BY 无 LIMIT —— 可能返回大量结果集，建议添加 LIMIT（红前缀为 ERROR/WARN、蓝前缀 ℹ 为 INFO）" />
+
+预览出 SQL 的同时，面板顶部元信息行下方按静态规则逐条给出性能建议（如 `ORDER BY` 无 `LIMIT`、`LIKE` 含前导通配符、缺少 `WHERE`、子查询过深等）；红前缀 `⚠` 为警告、蓝前缀 `ℹ` 为提示，与 EXPLAIN 的真实执行计划同屏对照。可见文案按宽度预算截断（末尾补 `…`），**悬停可看全部建议的完整文本**。
 
 ### 逻辑删除注入
 
 实体含 `@TableLogic` 时自动追加 `AND deleted = 值`（值可在设置页配置，默认 0）。
 
+<GifPlayer src="/demo/interceptor-injection.gif" alt="逻辑删除注入开关：设置页 SQL 预览子页关掉「逻辑删除实体查询/删除自动追加 AND deleted = 0」后，同一处重新预览，WHERE 末行的 AND deleted = 0 立刻消失、下面的 ORDER BY 上移一行" />
+
 ### 执行 SQL
 
 IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 .sql 文件，`Ctrl+Enter` 执行。预览弹窗为非模态窗口，执行时如数据源密码过期，IDEA 的密码输入框不会被弹窗遮挡，可直接输入。执行失败时错误直接显示在面板内，不再弹模态框打断操作。
 
+<GifPlayer src="/demo/execute-sql.gif" alt="执行 SQL 全流程：预览 car_device_info LEFT JOIN station_info 的联表链 → 点「执行 SQL」→ 生成临时文件 mpsql-exec.sql 并提交 mpj_demo@localhost 执行 → 预览窗内 Output / Result 1 页签返回真实数据网格（2 行，如 充电桩A-01），底部原生控制台同屏" />
+
 ### EXPLAIN 真实执行计划
 
 预览面板按钮行的「执行计划」（英文界面 EXPLAIN）按钮：选中数据源后点击，插件按当前方言把 SQL 包装成 EXPLAIN 语句提交原生数据库控制台执行，真实执行计划与面板顶部的静态性能规则标注同屏对照。EXPLAIN 属免确认类操作，无 DML 二次确认弹窗。
+
+<GifPlayer src="/demo/explain-plan.gif" alt="EXPLAIN 真实执行计划：预览面板点「执行计划」→ 选数据源 mpj_demo@localhost → 插件把 SQL 包装成 EXPLAIN 提交原生数据库控制台执行，下方 Output 页签返回真实计划表（id / select_type / table / partitions / type），与面板顶部「ORDER BY 无 LIMIT」静态性能规则标注同屏对照" />
 
 | 方言 | 渲染形态 | 验证程度 |
 |------|----------|----------|
