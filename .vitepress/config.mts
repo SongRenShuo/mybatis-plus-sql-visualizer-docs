@@ -37,6 +37,8 @@ export default defineConfig({
 
   // 自定义 head
   head: [
+    ['link', { rel: 'icon', href: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' }],
+    ['link', { rel: 'icon', href: '/favicon-96.png', sizes: '96x96', type: 'image/png' }],
     ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'SQL Visualizer' }],

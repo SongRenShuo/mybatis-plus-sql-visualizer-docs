@@ -19,7 +19,7 @@ const { c, localePath } = useHomeContent()
       </h2>
 
       <p class="cta-subtitle">
-        {{ c.cta.subtitle }}
+        <span data-nosnippet>{{ c.cta.subtitle }}</span>
       </p>
 
       <div class="cta-buttons">
