@@ -9,6 +9,7 @@ import WelfareCard from './WelfareCard.vue'
 import Testimonials from './Testimonials.vue'
 import PricingSection from './PricingSection.vue'
 import CtaSection from './CtaSection.vue'
+import BackToTop from './BackToTop.vue'
 import { useReveal } from '../../composables/useReveal'
 import { useHomeContent } from '../../composables/useHomeContent'
 
@@ -38,6 +39,7 @@ useReveal()
         <p class="mp-footer__text">{{ c.footer }}</p>
       </div>
     </footer>
+    <BackToTop />
   </div>
 </template>
 

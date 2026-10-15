@@ -296,6 +296,8 @@ export const homeContent = {
       ],
     },
 
+    backToTop: { label: '返回顶部' },
+
     footer: '基于 Apache-2.0 协议开源发布 · Copyright © 2026-present SongRenShuo',
   },
 
@@ -644,6 +646,8 @@ export const homeContent = {
         { id: 'sec-start', label: 'Get Started' },
       ],
     },
+
+    backToTop: { label: 'Back to top' },
 
     footer: 'Open source under Apache-2.0 · Copyright © 2026-present SongRenShuo',
   },

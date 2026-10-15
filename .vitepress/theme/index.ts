@@ -17,6 +17,7 @@ import PagefindSearch from './components/PagefindSearch.vue'
 
 // 首页组件
 import CoolHome from './components/home/CoolHome.vue'
+import BackToTop from './components/home/BackToTop.vue'
 
 // 反馈池组件
 import FeedbackPage from './components/feedback/FeedbackPage.vue'
@@ -32,7 +33,7 @@ export default {
   Layout: () => {
     return h(DefaultTheme.Layout, null, {
       'home-hero-info-after': () => h(BadgeBar),
-      'layout-bottom': () => h(SiteNotice),
+      'layout-bottom': () => [h(SiteNotice), h(BackToTop)],
       'nav-bar-content-after': () => [h(NavBarGitee), h(PagefindSearch)],
       'nav-screen-content-after': () => h(PagefindSearch, { compact: true }),
       'not-found': () =>
