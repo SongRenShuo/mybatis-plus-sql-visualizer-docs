@@ -94,6 +94,12 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 - Duration is colored by threshold: gray under 100ms, orange at 100ms+, red once the slow-query threshold is reached (default 1000ms, adjustable); a slow-query counter appears when slow queries are detected
 - A persistent sort button on the list opens a single-choice menu: time ascending (default, i.e. capture order) / time descending / duration ascending / duration descending / line number
 
+::: warning dev preview: refreshed SQL log list
+The clip below is for reviewing the O-146 list colors, width-aware truncation, and same-structure badges. The sandbox title bar still says `Start Free Trial`. **It does not establish the O-148 manual-pause tail-follow behavior** and has not replaced the existing tail-follow demo. A final recording awaits visual and licensing acceptance.
+:::
+
+<GifPlayer src="/demo/sql-log-list-native-preview.gif" alt="dev-only preview of the refreshed SQL log list: MyBatis queries appear with IDE theme colors, width-aware truncation, and a same-structure count; this is not a final tail-follow acceptance clip" />
+
 ::: details Sorting and enhanced-channel details (When to read: sort results or duration data look wrong)
 - The sort button shows the current mode, with the full label on hover; entries missing duration or line number always sink to the bottom (in both directions, so empty values never float to the top); time sorting follows the list's time column (with "Log time" selected, entries are ordered by log time — the time you see matches the sort key).
 - Enhanced-capture entries carry structured durations (millisecond-accurate), affected-row counts and execution error messages directly — no log parsing involved.
