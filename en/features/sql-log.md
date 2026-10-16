@@ -94,9 +94,7 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 - With slow-query threshold T (default 1000ms, adjustable), durations `< T/2` are green, `T/2 ≤ duration < T` are orange, and `≥ T` are red; unknown durations are gray. A slow-query counter appears when slow queries are detected
 - The icon group on the left of the list provides sorting by time, duration and line number, plus same-structure clustering and grouping by target database; time and duration support ascending / descending order
 
-::: warning dev preview: refreshed SQL log list
-The clip below shows the refreshed list layout, semantic colors, width-aware truncation, and a "5 same-structure entries" badge for five actual SQL statements sharing the same structure. For pausing and resuming tail following, see the dedicated clip under "Scroll to Bottom & Tail Following" below.
-:::
+The clip below shows SQL log list colors, truncation of long SQL statements, and a clustering badge for five statements with the same structure. For pausing and resuming tail following, see "Scroll to Bottom & Tail Following" below.
 
 <GifPlayer src="/demo/sql-log-list-native-preview.gif" alt="Refreshed SQL log list layout preview: MyBatis queries appear with IDE theme colors and width-aware truncation; five actual SQL statements sharing the same structure show a '5 same-structure entries' badge" />
 
