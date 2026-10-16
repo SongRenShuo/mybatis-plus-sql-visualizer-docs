@@ -3,7 +3,7 @@ import { usePluginVersion } from '../../composables/usePluginVersion'
 import { useHomeContent } from '../../composables/useHomeContent'
 
 const { version } = usePluginVersion()
-const { c } = useHomeContent()
+const { c, isEnglish } = useHomeContent()
 </script>
 
 <template>
@@ -11,8 +11,8 @@ const { c } = useHomeContent()
     <div class="container">
       <div class="hero-grid">
         <div class="hero-content">
-          <h1 class="hero-title">
-            {{ c.hero.titleLine1 }}<br />
+          <h1 class="hero-title" :class="{ 'hero-title--zh': !isEnglish }">
+            <span>{{ c.hero.titleLine1 }}</span><br v-if="isEnglish" />
             <span class="hero-title-highlight">{{ c.hero.titleLine2 }}</span>
           </h1>
 
@@ -185,6 +185,11 @@ const { c } = useHomeContent()
   .hero-title {
     font-size: 3rem;
   }
+}
+
+.hero-title--zh > span {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .hero-title-highlight {
