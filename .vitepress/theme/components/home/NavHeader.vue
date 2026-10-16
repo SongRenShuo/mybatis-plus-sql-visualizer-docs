@@ -448,6 +448,11 @@ onUnmounted(() => {
 }
 
 @media (max-width: 767px) {
+  .nav-lang-menu {
+    left: 0;
+    right: auto;
+  }
+
   .nav-hamburger {
     display: flex;
   }
