@@ -4,7 +4,7 @@
 
 <GifPlayer src="/demo/enhanced-capture.gif" alt="Enhanced capture: entries stream in with real parameters, millisecond durations, database badges and execution errors side by side" />
 
-The enhanced-capture channel in action — a parameterized query and a duplicate-key failure arrive one after another; open an entry to see the restored SQL with literal parameters.
+The clip shows a parameterized SELECT, an UPDATE with `WHERE id=NULL` that matches no rows (0 rows), and a syntax error from a fixed read-only SELECT. The restored SQL, literal parameter values, affected-row counts and error appear directly in the list.
 
 Auto-captures SQL as it runs, restores everything into a unified list of executable statements, and jumps precisely to the source line that fired each SQL. Enhanced capture is the default channel and works out of the box; console capture is the no-code-change fallback.
 
@@ -89,19 +89,19 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 
 ### SQL Highlighting & Execution Time
 
-- SQL summaries in the list are lexically colored: keywords, table names, strings, numbers and comments each in their own color; timestamps and durations are dimmed gray so they never steal focus
+- SQL summaries in the list are lexically colored: keywords, table names, strings, numbers and comments each in their own color; timestamps are dimmed gray, while durations are colored relative to the slow-query threshold
 - Durations on enhanced-capture entries are the real measured execution time (millisecond-accurate); console capture instead parses them from the log, supporting p6spy `elapsed`, MyBatis-Plus `Time:` output and a custom time prefix (configurable in settings, default `Time:`)
-- Duration is colored by threshold: gray under 100ms, orange at 100ms+, red once the slow-query threshold is reached (default 1000ms, adjustable); a slow-query counter appears when slow queries are detected
-- A persistent sort button on the list opens a single-choice menu: time ascending (default, i.e. capture order) / time descending / duration ascending / duration descending / line number
+- With slow-query threshold T (default 1000ms, adjustable), durations `< T/2` are green, `T/2 ≤ duration < T` are orange, and `≥ T` are red; unknown durations are gray. A slow-query counter appears when slow queries are detected
+- The icon group on the left of the list provides sorting by time, duration and line number, plus same-structure clustering and grouping by target database; time and duration support ascending / descending order
 
 ::: warning dev preview: refreshed SQL log list
-The clip below is for reviewing the O-146 list colors, width-aware truncation, and same-structure badges. The sandbox title bar still says `Start Free Trial`. **It does not establish the O-148 manual-pause tail-follow behavior** and has not replaced the existing tail-follow demo. A final recording awaits visual and licensing acceptance.
+The clip below shows the refreshed list layout, semantic colors, width-aware truncation, and a "5 same-structure entries" badge for five actual SQL statements sharing the same structure. For pausing and resuming tail following, see the dedicated clip under "Scroll to Bottom & Tail Following" below.
 :::
 
-<GifPlayer src="/demo/sql-log-list-native-preview.gif" alt="dev-only preview of the refreshed SQL log list: MyBatis queries appear with IDE theme colors, width-aware truncation, and a same-structure count; this is not a final tail-follow acceptance clip" />
+<GifPlayer src="/demo/sql-log-list-native-preview.gif" alt="Refreshed SQL log list layout preview: MyBatis queries appear with IDE theme colors and width-aware truncation; five actual SQL statements sharing the same structure show a '5 same-structure entries' badge" />
 
 ::: details Sorting and enhanced-channel details (When to read: sort results or duration data look wrong)
-- The sort button shows the current mode, with the full label on hover; entries missing duration or line number always sink to the bottom (in both directions, so empty values never float to the top); time sorting follows the list's time column (with "Log time" selected, entries are ordered by log time — the time you see matches the sort key).
+- Hover the sorting and grouping icons on the left for their descriptions; entries missing duration or line number always sink to the bottom (in both directions, so empty values never float to the top); time sorting follows the list's time column (with "Log time" selected, entries are ordered by log time — the time you see matches the sort key).
 - Enhanced-capture entries carry structured durations (millisecond-accurate), affected-row counts and execution error messages directly — no log parsing involved.
 :::
 
@@ -109,9 +109,9 @@ The clip below is for reviewing the O-146 list colors, width-aware truncation, a
 
 Hunting a slow SQL has two steps: **find it** in the list, then **understand it** in the preview.
 
-**Find it in the list** (details in the previous section): entries whose duration reaches the slow-query threshold (default 1000ms, configurable in settings) are marked red and counted as slow queries; switch the sort button to "duration descending" and the slowest ones rise to the top. Repeated statements are also clustered — **once three entries share the same structure**, a "N same-structure entries" badge appears on the meta line, and right-clicking it opens a focus tab showing only that structure. Different literals still count as the same structure (`IN ('a')` and `IN ('b')` group together), so an N+1 loop becomes obvious at a glance. The log page and the History page share these markers.
+**Find it in the list** (details in the previous section): entries whose duration reaches the slow-query threshold (default 1000ms, configurable in settings) have their duration marked red, not the entire row, and are counted as slow queries. Use the "All" dropdown to show only slow queries, or switch to "duration descending" using the left-side icon group to bring the slowest ones to the top. Repeated statements are also clustered — **once three entries share the same structure**, a "N same-structure entries" badge appears on the meta line, and right-clicking it opens a focus tab showing only that structure. Different literals still count as the same structure (`IN ('a')` and `IN ('b')` group together), so an N+1 loop becomes obvious at a glance. The log page and the History page share these markers.
 
-<GifPlayer src="/demo/slow-query-highlight.gif" alt="After several statements stream in, one taking 1208ms is marked red with its millisecond duration, a red slow-query counter badge appears in the toolbar, and another entry in the same list carries a '4 same-structure entries' badge" />
+<GifPlayer src="/demo/slow-query-highlight.gif" alt="Slow-query durations appear in red, the panel shows a slow-query count, and the All dropdown is used to show only slow queries" />
 
 <GifPlayer src="/demo/n1-badge.gif" alt="Looping a single-row lookup on the same table five times: the list fills with structurally identical SELECTs differing only in the WHERE id value, the meta line reports the same-structure count, and the context menu offers 'Show only this structure'" />
 
@@ -168,13 +168,13 @@ Each checkbox in the log page's "Type Filter" popup carries a matching color swa
 
 ### Scroll to Bottom & Tail Following
 
-<GifPlayer src="/demo/sql-log-tail-follow.gif" alt="Under a concurrent flood the viewport pins to the bottom; scrolling up pauses following, and the toolbar Scroll to Bottom action jumps back and resumes it" />
+<GifPlayer src="/demo/sql-log-tail-follow.gif" alt="As SQL entries stream in, the viewport follows the bottom; dragging the scrollbar upward pauses following, and the toolbar Scroll to Bottom action jumps back and resumes it" />
 
-The log list has tail following on by default: the view sticks to the bottom as new SQL arrives, always showing the latest entries; scrolling up to read history pauses following automatically, and scrolling back to the bottom or clicking the toolbar's "Scroll to Bottom" action resumes it — the same habit as the IDE console.
+The log list has tail following on by default: the view sticks to the bottom as new SQL arrives, always showing the latest entries. Manual scrolling with the mouse wheel, scrollbar or keyboard pauses following. Scrolling back to the bottom does not resume it automatically; click the toolbar's "Scroll to Bottom" action to resume following.
 
 ::: details Details (When to read: the list is not at the bottom, or you are looking for the action)
 - The "Scroll to Bottom" action sits at the end of the toolbar's action group: one click jumps to the bottom of the list and resumes following.
-- Pausing and resuming are judged by scroll direction; programmatic appends (new entries arriving) never disturb the reading position you scrolled to.
+- Manual scrolling triggers the pause; scroll direction does not automatically resume following. Programmatic appends (new entries arriving) never disturb your reading position while following is paused.
 :::
 
 ### Jump to Source
@@ -237,14 +237,14 @@ If the XML doesn't exist (annotation SQL, MP built-in statements) or locating fa
 | Feature | Description |
 |---------|-------------|
 | Dedup window | Same SQL doesn't reappear within window (default 60000ms, adjustable; dedup ignores leading / trailing and repeated whitespace differences — different parameters still count as different statements) |
-| Instant dedup | Toggling "Remove duplicate SQL" immediately trims existing duplicates in the window and shows a `⨉N` badge with the dropped count |
+| Instant dedup | Enabling "SQL Deduplication" immediately trims existing duplicates in the window and shows a `⨉N` badge with the dropped count |
 | Keyword filter | Remove log lines containing specified keywords |
 | List search | The search box matches SQL content, source file, `#number` (`#5` or `5` hits exactly entry 5) and time text (search what you see, matched against the displayed format); available on both the log page and the History page |
 | Copy timestamps | Select entries (multi-select works), right-click → "Copy timestamp" to copy plain time text line by line (no display brackets; the menu item shows the count for multi-select); grayed out while timestamp display is off |
 
 ### SQL Suppression
 
-<GifPlayer src="/demo/sql-suppress.gif" alt="Right-click a heartbeat entry and choose Suppress this SQL: buffered rows vanish with a balloon, and the rules dialog lists the rule, its hit count and a read-only preview" />
+<GifPlayer src="/demo/sql-suppress.gif" alt="Right-click a heartbeat entry and choose Suppress this SQL: buffered rows disappear, and the rules dialog lists the rule, its hit count and a read-only preview; the clip is edited, with notification handling removed" />
 
 When keep-alive heartbeat SQL (such as `SELECT 1`) keeps flooding the list, you can suppress it out of the list:
 
@@ -274,7 +274,7 @@ The entry context menu offers two focus modes, shown as tabs at the top of the p
 
 The "List display" dropdown under the "SQL Log" group in settings controls how SQL renders inside entries, switching instantly:
 
-<GifPlayer src="/demo/sql-list-display.gif" alt="Switching the display mode in the settings' List Display → SQL display mode dropdown, then confirming and returning to the SQL log list, where each entry's SQL is re-laid-out in the new mode (from a single-line summary to a multi-line, clause-per-line expansion)" />
+<GifPlayer src="/demo/sql-list-display.gif" alt="In settings under List Display → SQL display mode, switch from the default Keyword wrap to Single line, then confirm and return to the SQL log list to see single-line summaries" />
 
 - **Single line**: one fixed row per entry, long SQL truncated
 - **Keyword wrap** (default): SQL wraps at keywords, height growing with content
@@ -282,43 +282,44 @@ The "List display" dropdown under the "SQL Log" group in settings controls how S
 
 The SQL log page and the History page share the same setting, which survives IDE restarts. In any mode, Ctrl+C on a selected entry copies the plain SQL, not the rendered text.
 
-### Single-Click Preview & Double-Click Dialog
+### Entry Selection, Quick Preview & Double-Click Dialog
 
-<GifPlayer src="/demo/sql-click-preview.gif" alt="Single-click an entry for the editable lightweight popup whose copy button flashes to a check; double-click for the full preview dialog and switch keyword wrapping" />
+<GifPlayer src="/demo/sql-click-preview.gif" alt="SQL entry selection, copying and full preview demo; single-click now only selects by default, and the bottom quick preview must be explicitly enabled in the toolbar" />
 
-List entries use two-level previewing, consistent across the SQL log list, the History tab's second-level list and the history tool window:
+Entry actions are consistent across the SQL log list, the History tab's second-level list and the history tool window:
 
-- **Single-click an entry**: after a short delay a lightweight preview pops up — SQL shown with lexical highlighting, editable in place; the "Copy" button in the header takes the currently edited text and flashes a check mark when clicked, plus a "Close" button
+- **Single-click an entry**: only selects it by default, without opening a preview popup. The selected entry's SQL appears in the bottom preview area only after you explicitly enable "Quick Preview" in the toolbar
+- **Copy SQL**: select an entry and press Ctrl+C or right-click → "Copy" to get the full SQL, unaffected by truncation in the list summary
 - **Multi-select batch copy**: after Ctrl / Shift multi-select, right-click → "Copy" copies all selected SQL at once (the menu item shows the count, e.g. "Copy selected SQL (3)", each statement semicolon-terminated and newline-joined)
 - **Double-click an entry**: opens the full preview dialog (same as Wrapper preview, supports parameter fill-in and formatting). The toolbar offers layout toggles — horizontal / vertical / keyword wrap — plus a "More" menu gathering low-frequency actions (import parameters, diff, share)
 
 <GifPlayer src="/demo/recent-executions.gif" alt="Right-click a gutter icon to open Recent Executions: execution history on the left, SQL preview on the right, multi-select with right-click batch actions" />
 
 ::: details Preview behavior details (When to read: preview rendering or dialog behavior differs from what you expect)
-- **Single-click preview**: its display follows the "Format SQL on preview" setting (on by default), so long SQL opens multi-line indented, or as original text when off. Literal SQL with zero placeholders (values inlined in the SQL text) and IN lists are recognized into editable parameter rows as well. The popup anchors right below the clicked row without covering list content, and focuses on open so you can type immediately. While a Ctrl / Shift multi-select is in progress, single-clicks no longer trigger the preview (any open popup closes with it); single-select resumes normal previewing.
+- **Quick preview**: the toolbar toggle controls the bottom SQL preview area and is off by default. Double-click an entry for the full preview and parameter fill-in. The full preview follows the "Format SQL on preview" setting (on by default), keeping the original text when off; literal SQL with zero placeholders (values inlined in the SQL text) and IN lists are recognized into editable parameter rows as well.
 - **Multi-select and right-click**: right-clicking a row already in the selection keeps the selection, while the other menu actions still apply to the right-clicked row.
 - **Double-click dialog**: vertical layout annotates each INSERT value line end with a `-- column` tag (can be disabled in settings), and IN lists expand vertically element by element — any list with a comma (≥2 elements) puts `(` on its own line with one element per line, while single-element forms (`IN (1)` / `IN (?)`) stay on one line, and IN subqueries and LIMIT pagination parameters are never expanded. The display mode you switch to survives parameter refill instead of being wiped by re-rendering (Refresh resets it). The dialog is non-modal: when a data source password expires during execution, IDEA's password prompt can be raised on top as usual; with no data source configured, preview prepares silently — it no longer raises the Database tool window over the sidebar, and only an explicit run guides you through configuration.
-- **Auto-fold**: with "Auto-fold long field lists" enabled in settings (off by default, threshold adjustable, default 10), preview editors collapse long SELECT / INSERT column lists, VALUES groups and UPDATE SET lists into a "… N columns" placeholder — click the fold marker to expand. This applies consistently across the main preview dialog, single-click preview, history preview, the Log → SQL result area and the native Database console.
-- **Identical Ctrl+C semantics everywhere**: in every surface with a SQL editor (main preview panel, single-click preview popup, "Recent Executions", suppression rules, rollback SQL, the SQL → Java input area, parameter import) Ctrl+C means the same thing — with no selection it copies the whole SQL, with a selection it copies just the fragment (Ctrl+C and Ctrl+Insert are synonyms); Ctrl+C on a list copies the plain SQL rather than the rendered text.
+- **Auto-fold**: with "Auto-fold long field lists" enabled in settings (off by default, threshold adjustable, default 10), preview editors collapse long SELECT / INSERT column lists, VALUES groups and UPDATE SET lists into a "… N columns" placeholder — click the fold marker to expand. This applies consistently across the main preview dialog, bottom quick preview, history preview, the Log → SQL result area and the native Database console.
+- **Identical Ctrl+C semantics everywhere**: in every surface with a SQL editor (main preview panel, bottom quick preview area, "Recent Executions", suppression rules, rollback SQL, the SQL → Java input area, parameter import) Ctrl+C means the same thing — with no selection it copies the whole SQL, with a selection it copies just the fragment (Ctrl+C and Ctrl+Insert are synonyms); Ctrl+C on a list copies the plain SQL rather than the rendered text.
 :::
 
 How entries render is controlled by the "List display" option in settings (see the section above).
 
 ## SQL History
 
-<GifPlayer src="/demo/sql-history.gif" alt="SQL History tab: double-click a file for its entries, batch loading on scroll, regex search filtering" />
+<GifPlayer src="/demo/sql-history.gif" alt="SQL History tab: open a history file, search for SLEEP, then double-click a matching SQL entry to open the full preview" />
 
 The "SQL History" tab is always present on the panel — you don't have to enable auto-save first to see the entry point (it shows an empty state when auto-save is off and the directory holds no history files). Previously the tab was only mounted once certain conditions were met.
 
 Enable "Auto-save SQL history" in settings (off by default) and captured entries are saved to disk in full (not limited by the list's max-entry count); when the save directory holds more history files than the retention limit (default 30, configurable, 0 = keep everything), the oldest files are cleaned up automatically to keep the disk in check. Reading and writing go through the same directory resolution: files written after you customize the save directory are visible on the History page too, and changing the save directory triggers a rescan.
 
 - **Level 1 (default view)**: file list — each row shows file name, size and SQL count; search box filters by file name
-- **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info, and a `#N` number per in-file entry order); large files load in batches as you scroll — the first 30 entries up front, more appended as you near the bottom; single-click an entry for a lightweight preview, double-click to open the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text
+- **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info, and a `#N` number per in-file entry order); large files load in batches as you scroll — the first 30 entries up front, more appended as you near the bottom; single-click only selects an entry by default, explicitly enabling "Quick Preview" in the toolbar shows its SQL at the bottom, and double-click opens the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically, without interrupting browsing while the file you're viewing still exists
 - **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same
 - **Export & compare**: right-click the second-level list for "Export SQL" (CSV/TSV/TXT/SQL, SQL by default with a timestamped file name) and "Compare two selected" (line-by-line diff, the dialog title carries the structural fingerprint verdict) —
 
-<GifPlayer src="/demo/history-export.gif" alt="Right-click history list to export SQL; a balloon confirms the file path after choosing a format" />
+<GifPlayer src="/demo/history-export.gif" alt="Right-click the history list to export SQL and enter a path in the save dialog; the success notification has been edited out of the clip" />
 
 <GifPlayer src="/demo/history-compare.gif" alt="Select two history SQL entries and compare; a two-pane diff view titles the structural fingerprint verdict" />
 
