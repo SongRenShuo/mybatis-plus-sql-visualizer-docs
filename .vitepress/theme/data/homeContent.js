@@ -92,7 +92,7 @@ export const homeContent = {
           points: [
             {
               title: '增强捕获默认通道',
-              description: '首次运行项目确认后自动采集，真实参数、精确耗时、影响行数开箱即得',
+              description: '开箱即采、无需逐次确认，真实参数、精确耗时、影响行数开箱即得',
             },
             {
               title: '并发日志分桶还原',
@@ -391,7 +391,7 @@ export const homeContent = {
             {
               title: 'Enhanced capture by default',
               description:
-                'One confirmation on first project run, then real parameters, exact durations and affected rows out of the box',
+                'Captures out of the box with no per-run confirmation — real parameters, exact durations and affected rows',
             },
             {
               title: 'Per-thread log buckets',

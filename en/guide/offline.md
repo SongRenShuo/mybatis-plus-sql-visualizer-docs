@@ -10,14 +10,14 @@ Every core capability of SQL Visualizer runs locally — the plugin **works full
 | `?` placeholder substitution, dialect formatting | No |
 | SQL → Java reverse conversion, CRUD SQL from entities and tables | No |
 | Console SQL log capture and restore, SQL history | No |
-| Enhanced capture (bytecode instrumentation) | No — capture points attach to your application's JVM on the local machine (with a consent dialog on first project run); data stays in the local IDE, generating no network traffic |
+| Enhanced capture (bytecode instrumentation) | No — capture points attach to your application's JVM on the local machine (on by default, no confirmation dialog); data stays in the local IDE, generating no network traffic |
 | JOIN diagram, PNG / SVG export | No |
 | Built-in help page | No (bundled local page) |
 | Check for plugin updates | Yes (optional, off by default) |
 | Submit feedback | Yes (optional, sent only when you click submit) |
 | Execute SQL / EXPLAIN | Needs a reachable database; **IDE downloads the driver when missing**, see below |
 
-Preview and restore run as local static analysis — no database connection involved. The one exception is the optional enhanced-capture channel: when enabled, capture points attach to your application's JVM on the local machine (a consent dialog asks on first project run, and you can decline), and the collected data is only displayed inside the local IDE — again with no network requests.
+Preview and restore run as local static analysis — no database connection involved. The one exception is the optional enhanced-capture channel: when enabled, capture points attach to your application's JVM on the local machine (on by default, no confirmation dialog — switch it off in settings), and the collected data is only displayed inside the local IDE — again with no network requests.
 
 ## Network behavior
 

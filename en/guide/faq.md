@@ -65,11 +65,11 @@ The most common cause is a missing data source: like "Execute SQL", "EXPLAIN" re
 
 ## SQL log not capturing SQL?
 
-Start with the diagnostics the panel's empty state gives you — it shows the enhanced-capture channel's current state (off / not authorized / waiting for the app process / attached / fallen back) plus the console channel's scanned line count, and names the next step for your case.
+Start with the diagnostics the panel's empty state gives you — it shows the enhanced-capture channel's current state (off / waiting for the app process / attached / fallen back) plus the console channel's scanned line count, and names the next step for your case.
 
 **Enhanced capture (default channel)**
 
-1. Injection not authorized yet: click "Agree and enable" in the dialog, or use "Re-authorize" under "Enhanced Capture" in settings; once authorized, the next project run captures fully
+1. The master switch is off: re-enable "Enhanced Capture" in settings — it is on by default and ticking it is the consent, no extra confirmation
 2. Project not run yet: enhanced capture attaches with the application process — run / debug the project once
 
 **Console channel (the fallback when enhanced capture is unavailable)**
