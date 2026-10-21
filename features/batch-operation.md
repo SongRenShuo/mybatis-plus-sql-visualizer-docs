@@ -52,4 +52,17 @@ Log → SQL 还原出的多语句产物一键执行时，单条直通执行，�
 
 foreach 批删还原出的多条同表等值删除，确认浮层会附一行合并参考：「检测到 N 条同表等值删除，可合并为 DELETE ... WHERE id IN (...)」。这只是预览参考，实际执行仍逐条原样；混有异构语句时按「N / M 条」如实披露。
 
+## FieldFill 安全模拟
+
+实体字段带 `@TableField(fill = INSERT / UPDATE / INSERT_UPDATE)` 时，参数区该字段名后会出现 `[fill=…]` 角标，说明运行时 `MetaObjectHandler` 会往这一列写值：
+
+<GifPlayer src="/demo/fieldfill-simulate.gif" alt="FieldFill 安全模拟：勾选「FieldFill 安全模拟」后，带 [fill=INSERT] 角标的字段下方出现「模拟值」输入行；填入值后 SQL 里该列取模拟值、同字段的普通参数框置灰" />
+
+- **模拟值行只在勾选「FieldFill 安全模拟」时出现**（勾选框默认关闭），角标则一直显示，用来提示「这一列运行时不是由你填的」
+- 填了模拟值后**模拟值优先**，同一字段的普通参数框置灰；清空模拟值即可改回手填
+- 只适配活跃的 INSERT / UPDATE 写列；**WHERE 条件与 UPSERT 不猜填**
+- 数值列只接受数字，不接受分号或脚本；输入无效时保留占位符并提示
+
+**说清楚边界**：模拟只用于预览，**不会执行你的 `MetaObjectHandler`**——它按你手填的内容拼 SQL，所以结果可能与真实运行时不同。要精确对齐，还得看应用真实执行（见 [SQL 日志工具窗口](./sql-log) 的增强捕获）。
+
 > 对批量操作面板有建议或遇到问题？[直达需求反馈池](/about/feedback?category=batch)

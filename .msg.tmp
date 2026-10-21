@@ -1,0 +1,36 @@
+docs(演示): T-DocsRefresh1023 十六张动图重录/新增 + 十五项正文同步
+
+重录 10 张（覆盖同名文件，旧片带试用横幅或旧 UI 按钮行）：
+crud-sql / wrapper-preview(1440) / annotation-preview / xml-preview /
+jpa-preview / batch-operation / code-completion / sql-to-java /
+xml-preview-rollback / sql-log。全部 1280 宽（wrapper 1440）、15fps，
+像素采样复核零试用横幅，接缝 0.04~7.88。
+
+新增 7 张：
+- preview-copy-and-close（复制 SQL 并关闭，剪贴板取证含完整三表 JOIN）
+- fieldfill-simulate（[fill=INSERT] 角标 + 模拟值行，滚动条拖拽才可见）
+- replay-script-export（事务包裹勾选联动）
+- ai-context-copy（默认出口 + 含表列名出口两条通知）
+- diagnostic-report（分享对话框七项 → Markdown / HTML）
+- history-jump-last（709 条一次补齐滚到末条）
+- log-community（弹框双二维码异步加载）
+
+正文 15 项：wrapper-preview 新增 DML 影响面预演 / 跨次对比与计划历史 /
+更多菜单九项 / 方言闸门 / 执行 SQL 补返回预览与复制并关闭；batch-operation
+新增 FieldFill 安全模拟；sql-log 新增展示脱敏与交流群、历史补直达末条与
+检索开关；xml-preview 补回滚快照双态；configuration 补 5 行设置项与三个
+清理入口；faq 补三条；roadmap 三分组补 14 项并按版本重写底注；shortcuts
+补 7 项入口。
+
+录制期踩坑与处置已写入验收文档：gutter 图标位置随滚动漂移改用快捷键选
+语句；JBPopup 菜单项须先悬停再点；Escape 会连预览一起关掉改用点标题栏；
+左栏 fill 字段需拖滚动条（滚轮无效）。
+
+5 张依赖数据源的动图待补录（dml-impact / explain-history-compare /
+dialect-gate / rollback-snapshot-dual / display-mask），正文已就绪、图引用
+已暂移避免死链；根因（mp_demo 缺 ANSI_QUOTES、数据源密码未持久化）已登记。
+
+验证：check-en-parity 一致；npm run build 退出码 0（46 页/2 语言）；
+139 处 demo 引用零缺失。
+
+只提交并推送，未部署，待逐图验收。
