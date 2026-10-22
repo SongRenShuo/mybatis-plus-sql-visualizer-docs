@@ -37,6 +37,7 @@ export const homeContent = {
       themeAriaLight: 'Switch to light mode',
       themeAriaDark: 'Switch to dark mode',
       giteeTitle: 'Gitee 源码仓库',
+      githubTitle: 'GitHub 镜像仓库',
       menuLabel: '导航菜单',
     },
 
@@ -212,7 +213,8 @@ export const homeContent = {
       titleLine2: '基于 Apache-2.0 协议',
       description: 'SQL Visualizer 所有功能永久免费使用。无需注册、无需登录，安装即用。',
       items: ['所有功能完全免费', '开源透明，代码可查', '持续更新，社区驱动', '无需注册，开箱即用'],
-      giteeCaption: '点击 · 前往 Gitee 仓库',
+      giteeCaption: '点击 · 前往源码仓库',
+      githubCaption: 'GitHub 镜像',
     },
 
     testimonials: {
@@ -322,6 +324,7 @@ export const homeContent = {
       themeAriaLight: 'Switch to light mode',
       themeAriaDark: 'Switch to dark mode',
       giteeTitle: 'Gitee repository',
+      githubTitle: 'GitHub mirror',
       menuLabel: 'Navigation menu',
     },
 
@@ -563,7 +566,8 @@ export const homeContent = {
         'Continuously updated, community-driven',
         'No registration, works out of the box',
       ],
-      giteeCaption: 'Click · visit the Gitee repository',
+      giteeCaption: 'Click · visit the source repository',
+      githubCaption: 'GitHub mirror',
     },
 
     testimonials: {

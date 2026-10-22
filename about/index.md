@@ -15,7 +15,8 @@ next:
 
 | 渠道 | 链接 |
 |------|------|
-| Gitee 仓库 | [songrenshuo/mybatis-plus-sql-visualizer](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer) |
+| 源码仓库（主） | [Gitee · songrenshuo/mybatis-plus-sql-visualizer](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer) |
+| 源码仓库（镜像） | [GitHub · SongRenShuo/mybatis-plus-sql-visualizer](https://github.com/SongRenShuo/mybatis-plus-sql-visualizer) |
 | 问题反馈 | [官网需求池](https://sql-visualizer.jvtools.cn/about/feedback) |
 | Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) |
 

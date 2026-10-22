@@ -75,14 +75,27 @@ function handleMouseLeave() {
         </div>
 
         <div class="welfare-qr">
-          <a
-            href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="welfare-gitee-link"
-          >
-            <img src="/gitee-icon.png" alt="Gitee Logo" class="welfare-gitee-logo" />
-          </a>
+          <div class="welfare-repo-row">
+            <a
+              href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="welfare-gitee-link"
+              title="Gitee（主仓）"
+            >
+              <img src="/gitee-icon.png" alt="Gitee Logo" class="welfare-gitee-logo" />
+            </a>
+            <!-- 2026-10-22 双仓：GitHub 镜像与 Gitee 并列 -->
+            <a
+              href="https://github.com/SongRenShuo/mybatis-plus-sql-visualizer"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="welfare-gitee-link"
+              title="GitHub（镜像）"
+            >
+              <img src="/github-icon.png" alt="GitHub Logo" class="welfare-gitee-logo" />
+            </a>
+          </div>
           <div class="welfare-qr-caption">{{ c.welfare.giteeCaption }}</div>
         </div>
       </div>
@@ -296,12 +309,20 @@ function handleMouseLeave() {
   gap: 12px;
 }
 
+/* 2026-10-22 双仓：两个图标卡并排（竖排会把右列撑高一倍）。96px 在两列 880px+ 断点下
+   仍留足留白，移动端（单列）也不会顶出容器。 */
+.welfare-repo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .welfare-gitee-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
+  width: 96px;
+  height: 96px;
   border-radius: 16px;
   background: #fff;
   border: 1px solid var(--border-color);
@@ -316,8 +337,8 @@ function handleMouseLeave() {
 
 .welfare-gitee-logo {
   display: block;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   object-fit: contain;
 }
 

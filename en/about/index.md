@@ -15,7 +15,8 @@ next:
 
 | Channel | Link |
 |---------|------|
-| Gitee Repo | [songrenshuo/mybatis-plus-sql-visualizer](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer) |
+| Source (primary) | [Gitee · songrenshuo/mybatis-plus-sql-visualizer](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer) |
+| Source (mirror) | [GitHub · SongRenShuo/mybatis-plus-sql-visualizer](https://github.com/SongRenShuo/mybatis-plus-sql-visualizer) |
 | Issues | [Feedback Pool](https://sql-visualizer.jvtools.cn/en/about/feedback) |
 | Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) |
 
