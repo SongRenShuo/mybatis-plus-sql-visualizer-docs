@@ -1,0 +1,9 @@
+docs(正文): 五处待补录图的 GifPlayer 以 HTML 注释占位
+
+dml-impact / dialect-gate / explain-history-compare / display-mask /
+rollback-snapshot-dual 五张待补录，正文已就绪。改为 HTML 注释块占位：
+构建产物零渲染（实测渲染产物 72 处图引用零缺失），补录后去掉注释标记即启用，
+无需再回正文定位插点。
+
+顺带修正：此前 dist/demo 被 preview 服务器占用导致 ENOTEMPTY 构建失败，
+清理后重建通过。
