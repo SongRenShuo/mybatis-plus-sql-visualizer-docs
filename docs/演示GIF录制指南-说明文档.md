@@ -120,6 +120,18 @@ search: false
 37. **IDE 启动气泡会落进录制区且很难点掉，开录前必须先清**。两个实测案例：① 「Full Line Code Completion offers an LLM for Java…」（LLM 模型下载提示）② 「New/updated database configurations found」（连库建议 + `Do not suggest again`）。它们固定在**右下角**、压在预览弹窗与原生控制台之上，末帧/poster 直接被污染。**关闭按钮只在悬停时才显示、且右缘常被 IDE 窗口边界裁掉**（本轮按截图目视连点十余次全落空）。**更稳的处置：重启沙盒**——① 重启后不再出现（② 可点它自带的 `Do not suggest again`）。
 38. **开录前先确认「前台不是别的应用」——盲点坐标会打进别人的窗口**。本轮清气泡时盲点了十余次，事后查 z 序发现**微信（`Weixin`）在最顶层且是前台**（其提示框正压在编辑器上），第 5 层还开着 `7-Tool`。这些点击可能落到别人窗口上（本轮微信弹了「你已退出微信」提示框，无法确认是否由此引起）。**纪律**：机器被别的应用占前台 → **立刻停手**、说明情况、让用户腾出屏幕，不抢置顶、不换工具硬试；清气泡这类操作前先 `locate.windows()` 看一眼 z 序与前台 PID。
 
+## 2026-10-21/22 T-DocsRefresh1023 轮补充
+
+39. **gutter 图标位置随滚动状态漂移，「取最接近视口中心」会选错行**。同一文件连续 `goto_line` 后图标 y 每次都变（实测 `[(363,95),(517,95)]` → `[(363,95),(561,95)]`），且条带里混着**编辑器折叠箭头**（x≈117~129，不是插件图标）。判据：`find_gutter_icons` 的返回里 x 落在 95~105 才是插件图标；更大的是折叠箭头。**更稳的替代**是绕开 gutter：`goto_line(目标行)` → 点编辑器行内 → `Alt+Shift+Q`。但要注意光标必须落在**可预览表达式上**（落在方法声明行会弹「未在光标处找到可预览的 SQL 源」，需落到 Wrapper 链的某一行）。
+40. **JBPopup 的菜单项必须「先悬停再点」**。预览面板的「更多」菜单、执行视图的数据源下拉都是 JBPopup：直接 `click` 有一半概率只把菜单关掉而不选中项（同一坐标前一秒成、后一秒败）。正解是 `moveTo` → 停 0.5s → `click`。这个坑让 N05 白录两轮。
+41. **`Escape` 在预览里会连预览一起关掉**，不只是关菜单。清残留菜单要**点预览标题栏空白处**（如 `(600,161)`，即「方言/类型/表」那一行的右侧空区）。
+42. **预览左栏的滚动条是唯一能滚的通道**。参数面板里 `fill` 字段（`create_time` / `update_time`）在列表下方，`pyautogui.scroll` 与 `PageDown` 全部无效，必须拖左栏滚动条（region 相对 x≈450）。同源现象见指南第 24 条（设置页）。
+43. **设置树滚动全部失效，定位只能靠搜索框，且必须单词查询**。`Visualizer` 能定位到插件设置页；`SQL Log`（两词）返回 `Nothing to show`。补全下拉要用 `Escape` 收（但注意第 41 条——在预览里别按，在设置对话框里可以）。设置内容区顶部那个带放大镜的输入框是**补全输入**，不是设置过滤器。
+44. **预览绑定哪个数据源由 `last.runner` 记忆决定，而这个记忆藏在项目 `workspace.xml`**。键名 `mpsql.visualizer.last.runner` / `.id`（`PropertiesComponent`，新版是 `keyToString` JSON 里的一行）。演示「执行 / EXPLAIN / 影响面」时若目标库 URL 与渲染方言不匹配（典型：`mp_demo` 无 `sql_mode=ANSI_QUOTES`，而 MPJ 渲染 `"user"`），会直接 `[1064]`。**改记忆比跟 JBPopup 下拉死磕可靠**——改完必须重启 IDE 才读入。
+45. **数据源密码不持久化时，报错是 `Access denied ... (using password: NO)`，不是驱动缺失**。右键菜单第一项 `Download Driver Files` 会误导（驱动其实在）。正解是数据源连接弹窗的 `Change Credentials` 补密码，凭据落 `dataSources.local.xml` 后下次启动直连。
+46. **反编译器弹窗会挡住 IDE 主窗口创建**。误点 gutter 可能打开某个 `.class`，弹出的 `JetBrains Decompiler` 许可对话框是**模态**的，IDE 主窗口（`SunAwtFrame`）迟迟不出现，`EnumWindows` 里只有一个 `SunAwtDialog`。判据：robot-server 已通（根节点 300+）但找不到 `SunAwtFrame` → 先关掉所有 `SunAwtDialog`。
+47. **`dist/demo` 被 preview 服务器占着时构建会失败**，报 `ENOTEMPTY: directory not empty, rmdir .../.vitepress/dist/demo`。这不是内容问题——先停掉 `vitepress preview`（或删 `dist`）再 build。
+
 ## 逐张场景速查（修订九实测）
 
 | 场景 | 文件 | 要点 |
@@ -132,6 +144,29 @@ search: false
 | jpa | t1 | 双弹窗：42 行窄窗直取 + goto(147) 中心取簇，结尾回跳 42 保证接缝 |
 | sql-log | t5 | 应用先跑（8081，选 MybatisPlusDemoApplication），捕捉后轮询触发查询 |
 | sql-to-java | t6 | 修订十一已重录（宽侧栏+Services 关闭构图）；回归已消失；tab 判定用暗蓝药丸（见 scene_t6 ensure_sqljava_tab）；复制按钮=输出区图标行左一（1187,421 旧标，宽侧栏下 (1038,582)） |
+
+### T-DocsRefresh1023 轮（2026-10-21/22）新增脚本
+
+| 场景 | 脚本 | 要点 |
+|------|------|------|
+| crud-sql（R01） | `scene_r01_crudsql.py` | 类名行右键 → robot 按 `//div[@text='Generate CRUD SQL']` 点菜单项；收尾点蓝色「复制 SQL 并关闭」；坐标用 `abs_pt()` 加 region 偏移 |
+| wrapper（R02） | `scene_r02_wrapper.py` | 1440 宽；prep 必须先关残留预览（否则首帧就是预览态、接缝必高） |
+| annotation（R03） | `scene_r03_annotation.py` | goto(37)（`@Select("<script>")` 行）；y_range=(370,440) 窄窗取图标；参数框 (303,436)/(303,484) |
+| xml（R04） | `scene_r04_xml.py` | **不用 gutter**：`Alt+Shift+Q` 在 XML 里弹「选择要预览的 SQL」候选框 → 点行 → 点 OK（(563,646)） |
+| jpa（R05） | `scene_r05_jpa.py` | goto(53)（`findByUsernameOrEmail`）；JPA 文件 gutter 在 x≈110 而非 95 |
+| batch（R06） | `scene_r06_batch.py` | 收尾用 `goto_line(211)` 而非 `Ctrl+Shift+Backspace`（后者会跑到别处，接缝从 0.29 变 14.1） |
+| completion（R07） | `scene_r07_completion.py` | 复用 t3，仅改输出名 |
+| sql-to-java（R08） | `scene_r08_sql2java.py` | SQL 用 `t_order` 不用 `user`（user 在多个 demo 模块都有实体 → 弹多候选框挡住画面） |
+| xml-rollback（R09） | `scene_r09_xml_rollback.py` | goto(28)；gutter 点不动 → 先点行内再快捷键；「更多」在 (1223,208) |
+| sql-log（R11） | `scene_r11_sqllog.py` | 列表组件已不是 `ViewportWidthSqlEntryList`，改为固定像素区域做变化对比；「清空」有两枚（日志页 + 日志转 SQL 页）按 y 取靠上的 |
+| execute（R12） | `scene_r12_execute.py` | 「返回预览」实测 (1213,313)；数据源下拉 (1193,352) |
+| DML 影响面（N02） | `scene_n02_dml_impact.py` | 需要 UPDATE 语句；菜单第九项「预估影响行数」在 (1233,434) |
+| EXPLAIN 对比（N03） | `scene_n03_explain_history.py` | **必须先开「结构化渲染 EXPLAIN」**（默认关），否则没有对比入口 |
+| 方言闸门（N08） | `scene_n08_dialect_gate.py` | **闸门在执行时触发**，先点「执行 SQL」；需先把方言改成与数据源不匹配 |
+| 回滚快照（N11） | `scene_n11_rollback_snapshot.py` | 需要 UPDATE；CSV 打开会新开页签，结束时 `Ctrl+W` 回收 |
+| 展示脱敏（N12） | `scene_n12_display_mask.py` | 设置页坐标待现场标定；退路是手工开好设置页只录勾选段 |
+| MCP agent（R10） | `scene_r10_mcp_agent.py` | 复用 m1c 分镜；对话面板是右侧工具窗，不是主工具栏 AI 按钮 |
+| 收尾入口 | `finish_remaining.py` | `--check` 离线列 6 个脚本状态 + 12 条人工前提；`--all` / `--only <key>` 串跑 |
 
 ## 落地清单（录完到 commit）
 
