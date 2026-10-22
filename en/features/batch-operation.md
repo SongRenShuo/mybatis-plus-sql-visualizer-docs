@@ -52,5 +52,18 @@ When a multi-statement product restored by Log → SQL is executed in one click,
 
 For multiple same-table equality deletes restored from a foreach batch delete, the confirmation popup shows a one-line merge hint: "Detected N same-table equality deletes that could be merged into DELETE ... WHERE id IN (...)". This is a preview hint only — execution still runs each statement as-is; with heterogeneous statements mixed in, the count is disclosed honestly as "N of M".
 
+## FieldFill Safe Simulation
+
+When an entity field carries `@TableField(fill = INSERT / UPDATE / INSERT_UPDATE)`, the parameter panel shows a `[fill=…]` badge after that field name, telling you the runtime `MetaObjectHandler` will write a value into that column:
+
+<GifPlayer src="/demo/fieldfill-simulate.gif" alt="FieldFill safe simulation: ticking FieldFill Safe Simulation makes a Simulated value row appear under fields tagged [fill=INSERT]; typing a value makes the SQL take that value while the normal parameter box for the same field greys out" />
+
+- **The simulated-value row only appears when "FieldFill Safe Simulation" is ticked** (the checkbox is off by default); the badge is always shown, as a reminder that "this column isn't yours to fill at runtime"
+- Once a simulated value is entered **it wins**, and the normal parameter box for that field greys out; clear the simulated value to go back to hand-filling
+- Only active INSERT / UPDATE write columns are covered; **WHERE conditions and UPSERT are never guessed**
+- Numeric columns accept digits only, no semicolons or scripts; invalid input keeps the placeholder and says so
+
+**The boundary, stated plainly**: simulation is for preview only and **never runs your `MetaObjectHandler`** — it builds SQL from what you typed, so the result may differ from real execution. To match runtime exactly, look at what the application actually executed (enhanced capture in the [SQL Log tool window](/en/features/sql-log)).
+
 > Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=batch)
 

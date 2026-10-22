@@ -102,6 +102,25 @@ The clip below shows SQL log list colors, truncation of long SQL statements, and
 - Enhanced-capture entries carry structured durations (millisecond-accurate), affected-row counts and execution error messages directly — no log parsing involved.
 :::
 
+### Display Masking
+
+Before you screenshot, record, or paste logs to a colleague, passwords and phone numbers in parameters should not travel with them. Turning on **"Display and export masking (mask sensitive literals)"** in the settings SQL Log group (off by default) masks sensitive values as `***` at the **display layer**:
+
+<!-- TODO(assets pending) remove the comment markers once display-mask.gif is recorded
+<GifPlayer src="/demo/display-mask.gif" alt="Display masking: after enabling Display and export masking in settings, password and phone-number-shaped literals in the log list and click preview become ***; exported CSV / TSV / TXT / SQL files are masked the same way" />
+-->
+
+Four outgoing paths are covered:
+
+- SQL summaries in the log list
+- The click-preview overlay
+- History / log export (CSV / TSV / TXT / SQL)
+- MCP's `sqlv_render_logs` (that one has its own separate switch, "MCP output masking" — see [MCP tools](/en/features/mcp))
+
+The criterion is twofold: either the column-name hint matches (`password` / `pwd` / `token` / `secret` / `idcard` / `mobile` / `phone` and their Chinese equivalents), or the value shape matches (ID-card, mobile number). The rules are shared with the collection-side masking in enhanced capture.
+
+**Display layer only**: entry data, parameter presets and history files keep their original values, and turning the switch off restores the display immediately. So it is a convenience for keeping sensitive values out of screenshots, not a security boundary.
+
 ### Slow Queries & Performance Advice
 
 Hunting a slow SQL has two steps: **find it** in the list, then **understand it** in the preview.
@@ -313,8 +332,12 @@ Enable "Auto-save SQL history" in settings (off by default) and captured entries
 - **Level 1 (default view)**: file list — each row shows file name, size and SQL count; search box filters by file name
 - **Level 2 (file content)**: double-click a file to list its SQL entries one by one (with the same highlighting, duration, timestamp and source info, and a `#N` number per in-file entry order); large files load in batches as you scroll — the first 30 entries up front, more appended as you near the bottom; single-click only selects an entry by default, explicitly enabling "Quick Preview" in the toolbar shows its SQL at the bottom, and double-click opens the full dialog, right-click to copy SQL, copy timestamps or jump to source; the search box matches SQL content / source file / `#number` / time text
 - **Back**: "← Back" returns to the file list; switching tabs refreshes automatically, without interrupting browsing while the file you're viewing still exists
+- **Jump to last entry**: the "↓≡" action in the second-level toolbar jumps straight to the last entry of the current filtered result — no more scrolling to the bottom of a file with thousands of rows. It loads the remaining entries in one go and then positions the view, rather than scrolling batch by batch
+- **Search toggles**: the two switches to the right of the search box mirror IDE find semantics — `.*` enables regex matching (equivalent to the `regex:` prefix) and `Aa` enables case sensitivity (off by default = ignore case); level-1 file-name filtering follows `Aa` too, while regex does not apply to file names
 - **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same
 - **Export & compare**: right-click the second-level list for "Export SQL" (CSV/TSV/TXT/SQL, SQL by default with a timestamped file name) and "Compare two selected" (line-by-line diff, the dialog title carries the structural fingerprint verdict) —
+
+<GifPlayer src="/demo/history-jump-last.gif" alt="Jump to last entry: the second-level list sits at entry 1; clicking the ↓≡ action in the toolbar loads the remainder in one go and jumps to entry 709, without scrolling batch by batch" />
 
 <GifPlayer src="/demo/history-export.gif" alt="Right-click the history list to export SQL and enter a path in the save dialog; the success notification has been edited out of the clip" />
 
@@ -325,5 +348,13 @@ Enable "Auto-save SQL history" in settings (off by default) and captured entries
 - History files (v2 format) store parameters per entry (inlined as a `-- pd:` comment line next to the statement), along with the original time and database info — older plugin versions ignore the extra fields and open the file as usual, while the new version reads all older files normally.
 - The second-level list's timestamp format and source follow the current settings configuration.
 :::
+
+## Join the Community
+
+The chat-bubble icon at the far right of the toolbar opens a native dialog showing the author's WeChat contact and community-group note side by side — if you want to ask something directly instead of digging through the docs.
+
+<GifPlayer src="/demo/log-community.gif" alt="Join the community: click the chat-bubble icon in the SQL log toolbar and a native dialog shows the author's WeChat contact and community-group note side by side; the QR codes load asynchronously when the dialog opens" />
+
+QR codes are fetched asynchronously from the website when the dialog opens; if loading fails the dialog offers an "open the community page" fallback instead of leaving a blank area.
 
 > Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=sql-log)

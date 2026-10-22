@@ -151,6 +151,18 @@ By default it goes to the native database console — "structured EXPLAIN render
 
 No. The parameter area of the preview panel has **presets**: the **default preset** remembers the values you typed and recalls them the next time you preview the same statement, and **Manage Presets** lets you save several named parameter sets (e.g. "staging sample", "boundary values") and switch between them; the conditions area also offers "deselect all / clear" to wipe the current conditions quickly.
 
+## Why is the affected-row estimate unavailable?
+
+The action only works for a single UPDATE / DELETE. These shapes report the reason instead of estimating: unparseable statement, multiple statements, not UPDATE / DELETE, JOIN / multi-table write (COUNT would count rows matched several times), no WHERE (a full-table COUNT is a full scan), and WHERE too complex (very long subquery predicate, uncontrollable cost). With no data source bound, a picker opens first and the probe retries once you choose one.
+
+## Why does the AI context block still contain original values?
+
+"Copy as AI Context" only masks literals that **match a rule** (password-like column names, ID-card / mobile-number shapes); ordinary strings keep their original text — `name = 'tom'` for instance is not treated as sensitive. So the block makes no promise of being entirely secret-free: read it over before pasting into an external AI. For a stricter exit, turn on "Display and export masking" or clean it up by hand before copying.
+
+## Why isn't EXPLAIN plan history saved by default?
+
+Raw execution plans are not redacted; predicates may contain business values, credentials or keys. "Keep raw EXPLAIN plans across sessions" is therefore off by default, which means plans are only comparable within the current session. Enabling it in settings saves plans isolated by project + data source UUID + dialect + SQL fingerprint; clearing preview history deletes them as well.
+
 ## What to include when reporting issues?
 
 Please submit feedback at the [Feedback Pool](https://sql-visualizer.jvtools.cn/en/about/feedback). Suggested attachments:

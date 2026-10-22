@@ -33,6 +33,7 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 | Show DataPermissionInterceptor runtime-difference hint | Off | When on, the warning area of SELECT / UPDATE / DELETE previews notes that the interceptor appends conditions dynamically at runtime |
 | Data-permission mock condition | empty | A hand-written WHERE fragment (e.g. `dept_id IN (1,2,3)`) appended to the end of SELECT / UPDATE / DELETE, for previewing the statement as data permissions would shape it |
 | Structured EXPLAIN rendering inside the preview panel | Off (experimental) | By default the plan goes to the native database console; when on, MySQL-family (tabular rows) and PostgreSQL-family (FORMAT JSON tree) plans render structurally inside the preview panel with index suggestions, while other dialects and any failure path fall back to the native console (both channels coexist) |
+| Keep raw EXPLAIN plans across sessions | Off | Off means plans are only comparable within the current session. When on, snapshots are saved by "project + data source UUID + dialect + format + SQL fingerprint" for later comparison, up to 5 per history entry and 256 KiB each. **Off by default**: raw plans are not redacted and predicates may contain business values or credentials; clearing preview history deletes retained plans too. See [Wrapper → SQL Preview · Cross-Run Comparison and Plan History](/en/features/wrapper-preview#cross-run-comparison-and-plan-history) |
 | Execution Timeout | 30 s | Timeout guard for the execute / EXPLAIN chain (0 = unlimited): a hung query no longer sits in loading forever — the statement is cancelled first, then an error is reported; multi-statement scripts get a budget scaled by statement count (capped at 8x) |
 | Calibrate Column Names from the Data Source | On | When an entity field name differs from the real column name in the database, column names in the preview SQL are corrected against the data source's real column set; global and project-level switches each available. See [Wrapper → SQL Preview · Parameter Fill-in](/en/features/wrapper-preview#parameter-fill-in) |
 | Empty-Parameter Fill Strategy | Placeholder `?` | How a parameter input row with signature info is filled when left empty — Placeholder `?` (default) / NULL literal / empty string, three options. See [XML / HQL Dynamic SQL Preview · Parameter Panel](/en/features/xml-preview#parameter-panel) |
@@ -60,6 +61,7 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 |---------|---------|-------------|
 | Default Wrapper Form | Auto | AUTO / QUERY / LAMBDA / WRAPPERS / MPJ |
 | Allow Manual Entity Selection on Auto-Infer Failure | On | Off = pure auto-inference |
+| Background scan of dependency libraries to reverse-look-up entities | On | When looking up an entity by table name, an entity inside a dependency JAR whose class name does not follow the table-name convention (e.g. `LegacyBooking` ↔ `t_booking`) can only be recognised through `@TableName`. When on, the scan runs once per project structure version in the background and is cached; when off it is not scheduled, and you can trigger it explicitly with "Find in dependency libraries" in the entity selection dialog |
 
 ## SQL Log
 
@@ -78,6 +80,7 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 | Auto-Inject Source-Capture Interceptor | Off | Trigger-style switch: checking it immediately generates the `SqlSourceInterceptor` and config class in your project once (skipped if already present); after restarting your app, live logs carry the source location. See [SQL Log Tool Window · Jump to Source](/en/features/sql-log#jump-to-source) |
 | Enhanced Capture | On | Bytecode-instrumentation capture channel, on by default and enabling it is the consent (no injection dialog): the very first run captures fully with the agent attached — no SQL logging setup needed on the application side, and real parameters, millisecond-accurate durations, affected rows and true source locations come out of the box; application processes already running are picked up by the rescan when listening starts; turning the switch off falls back to console capture; stopping listening also stops in-app collection |
 | Enhanced Capture Desensitization | Off | Masks parameter values that look sensitive (real values collected by default) |
+| Display and Export Masking | Off | Masks sensitive literals at the display layer: password-like column names and ID-card / mobile-number-shaped values become `***` in SQL log summaries, the click-preview overlay, and history / log export (CSV/TSV/TXT/SQL). Display text only — entry data, parameter presets and history files keep their original values, and turning it off restores the display. See [SQL Log Tool Window · Display Masking](/en/features/sql-log#display-masking) |
 | Call-Stack Snapshot Frames | 24 | Total frames kept in the preview's call stack (range 12–64); sampled at both ends — JDBC / engine-side frames at the top, 8 business-side frames always kept at the bottom, joined by an omission marker. Changes are hot-pushed to the agent on save, no application restart. See [SQL Log Tool Window · Jump from the Call Stack](/en/features/sql-log#jump-from-the-call-stack) |
 | Source-Capture Frame Skip Prefixes | Empty | Framework frame prefixes skipped when tracing enhanced-capture jumps up the call stack (one per line); live list and history panel share the same resolver |
 | JAR Business-Frame Prefixes | Empty | Package prefixes of in-house business tool libraries that run as dependency JARs (one per line): once registered, source jumps land on the SQL line inside the tool class instead of the upper caller line; use together with "Source-Capture Frame Skip Prefixes" |
@@ -90,6 +93,7 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 | History Directory / File Name | Empty (default path) / `sql-history-$yyyy-MM-dd$.sql` | History save location and naming template, with date placeholders supported |
 | History File Retention Limit | 30 | When the save directory holds more history files than this, the oldest are cleaned up automatically to keep the disk from growing without bound; 0 = keep everything |
 | Remove Lines Containing | Empty | Filter log lines containing specified keywords |
+| Show full data-source badge context | Off | Off (default) shows only the database type in the target badge (e.g. `[MySQL]`); on shows the full connection fact (`[MySQL · database@host:port]`). Applies to log and history entries immediately; persistence and search are unaffected, and entries without connection facts render unchanged |
 | CRUD Color Markers | Left color bar | Log / history lists colored by SELECT / INSERT / UPDATE / DELETE type (default blue / green / orange / red); three styles (left color bar / full-row tint / off), four customizable colors with one-click restore to defaults; the "Type Filter" popup checkboxes carry color swatch legends |
 
 ::: details Scope of source-interceptor injection and project-type boundaries (When to read: injecting in a multi-module project or hitting an "unrecognized project type" dialog)
@@ -103,6 +107,16 @@ The "Source-Capture Frame Skip Prefixes" and "JAR Business-Frame Prefixes" field
 ### Data Directory
 
 History SQL and execution temp files live under `.idea/sql-visualizer/` in your project (history files in its `sql-history/` subdirectory). Since v2026.9.2 this directory is renamed from `mybatis-plus-sql-visualizer`; old directories are no longer read — history starts fresh in the new location after upgrading.
+
+Below the "Auto-save" group there are three independent cleanup entries:
+
+| Entry | Scope |
+|---|---|
+| Open capture history directory | Only opens the capture history directory in your file manager; **deletes nothing** |
+| Clear preview SQL history… | Clears preview history (including favourites, tags and per-entry parameter snapshots); parameter history and named presets are untouched |
+| Clear parameter history / presets… | Clears parameter history and named presets; stale caches and late write-backs in already-open panels are invalidated too |
+
+The three are independent: clearing preview history does not delete parameter snapshots, and clearing parameter history does not touch history files.
 
 ## UI & Operations
 

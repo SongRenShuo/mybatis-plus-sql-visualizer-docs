@@ -24,6 +24,13 @@ Bindings can be changed in `Settings` > `Keymap` by searching for the plugin act
 | SQL → Java | Select SQL text → context menu; or the sidebar tab in the tool window |
 | SQL Log tool window | Bottom tool window bar; captures MyBatis console logs automatically, with an optional "auto-start listening on project launch" setting |
 | Batch operation parameter panel | Parameter panel inside the preview popup |
+| Copy SQL and Close | Blue primary action at the bottom of the preview panel (copies the current SQL and closes the panel) |
+| Estimate affected rows | Preview panel "More" menu (UPDATE / DELETE only) |
+| Export replay script / Export portable SQL | Preview panel "More" menu |
+| Copy as AI Context | Preview panel "More" menu (there is also a "with identifiers" variant) |
+| One-click diagnostic report | Preview panel "More" → "Share" → copy / export diagnostic report |
+| History: jump to last entry | "↓≡" action in the SQL History second-level toolbar |
+| Join the community | Chat-bubble icon at the far right of the SQL Log toolbar |
 
 ## Tips
 
