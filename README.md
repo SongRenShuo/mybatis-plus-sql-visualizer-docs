@@ -6,6 +6,8 @@ search: false
 
 SQL Visualizer 插件的官网与文档站，基于 [VitePress](https://vitepress.dev/) 构建。
 
+本仓库与插件仓一致，采用双平台同步：**Gitee 是主仓**，[GitHub](https://github.com/SongRenShuo/mybatis-plus-sql-visualizer-docs) 是镜像。部署（Cloudflare Pages）只从主仓触发，镜像仓仅作代码可见性备份。
+
 ## 产品首页
 
 Wrapper 链、XML/注解动态 SQL 实时预览（含 MPJ 联表 JOIN），控制台日志一键还原，SQL 反向转 Java 代码。
