@@ -50,7 +50,7 @@
 
 ## 典型工作流
 
-<GifPlayer src="/demo/mcp-agent.gif" alt="AI Assistant 的 Codex agent 经 ACP 调用插件 MCP 工具并留痕" />
+<GifPlayer src="/demo/mcp-agent.gif" alt="AI Assistant 的 ACP agent 经 IDE 内置 MCP 调用 sqlv_check_sql，右边出分析结论、左边 idea.log 留审计行" />
 以「让 agent 查一条慢 SQL 的病根」为例，agent 会按需串起这些工具：
 
 1. `sqlv_render_sql` 按文件与行号拿到真实可执行 SQL（参数已回填，不是源码里的 `?` 占位）
