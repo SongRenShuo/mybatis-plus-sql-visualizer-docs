@@ -109,6 +109,7 @@ Java-side `session.createNamedQuery("Entity.method")` calls that don't match a `
 
 - `JpaSort.unsafe` function-injection shapes are not converted (safety boundary, annotated)
 - Async returns (`CompletableFuture`) and Repository SPI implementations (e.g. Envers auditing) are out of preview scope
+- Duplicate entity names: when two modules both declare a `User`, resolution prefers the module that hosts the HQL; if several candidates are equally visible it reports "unresolved" instead of silently picking the first one
 
 Related pages: [Wrapper → SQL Preview](/en/features/wrapper-preview), [SQL Log Tool Window](/en/features/sql-log) (Hibernate / JdbcTemplate log capture).
 

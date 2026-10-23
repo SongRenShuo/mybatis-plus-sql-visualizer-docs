@@ -108,6 +108,7 @@ Java 侧 `session.createNamedQuery("实体.方法名")` 在 `@NamedQuery` 注解
 
 - `JpaSort.unsafe` 函数注入形态不做转换（安全边界，标注提示）
 - 异步返回（`CompletableFuture`）与 Repository 实现类 SPI（如 Envers 审计）不在预览范围
+- 同名实体歧义：两个模块里都有 `User` 这类同名实体时，按「HQL 所在模块的可见性」优先解析；同层多个可见候选就报未解析，不会静默挑第一个
 
 相关页面：[Wrapper → SQL 预览](./wrapper-preview)、[SQL 日志工具窗口](./sql-log)（Hibernate / JdbcTemplate 日志捕获）。
 

@@ -54,6 +54,14 @@ Boolean-overloaded conditions like `.eq(true, ...)` can be toggled in the left p
 When an entity field name differs from the real column name (field `orderID`, column `order_id`), the name is rewritten only when it maps to exactly one column — ambiguous matches stay untouched. With no usable data source, the behavior is identical to having the option off.
 :::
 
+#### Parameter presets and parameter history
+
+The parameter area can store named parameter sets ("Manage Presets"), and the values you type are remembered automatically ("default preset"). Both kinds of memory are **scoped per declaring method**:
+
+- The key includes the method signature, so two methods never share values; a preset with the same name is stored separately under each
+- Editing the SQL text does not lose the parameters — it still falls back to that method's most recent save
+- Presets carried over from older versions are migrated into method scope automatically on first hit, with no manual re-saving
+
 ### 11-Dialect Pagination
 
 | Dialect | Syntax |
@@ -115,6 +123,10 @@ With IntelliJ IDEA Ultimate + Database plugin, a temporary `.sql` file is create
 
 <GifPlayer src="/demo/execute-sql.gif" alt="The full Execute SQL flow: preview a car_device_info LEFT JOIN station_info chain, click Execute SQL, the plugin creates the temporary file mpsql-exec.sql and submits it to mpj_demo@localhost, and the Output / Result 1 tab inside the preview dialog returns a real data grid (2 rows, e.g. 充电桩A-01) alongside the native console at the bottom" />
 
+#### Schema annotations in the preview editor
+
+If a column name in the preview SQL does not exist in the data source, the editor underlines it with a **red squiggle** and offers suggested column names on hover — you catch the typo before running instead of after a failure. Annotations apply only to the temporary file the preview generates (including `mpsql-exec.sql`), and they are **deliberately conservative**: nothing is annotated while the cache is cold, or on JOIN / CTE queries, so a wrong hint is never shown.
+
 Want to tweak the SQL and run it again? Click **"Back to Preview"** in the execution view header to return to the editable SQL — no need to close and reopen the dialog.
 
 Of the four buttons at the bottom of the panel, **"Copy SQL and Close"** is the blue primary action: it copies the current SQL and closes the panel in one click. That suits the most common ending — "copy this out and paste it somewhere" — one step fewer than Copy then Cancel.
@@ -146,12 +158,13 @@ With no data source bound, a data-source picker opens and retries automatically 
 
 ### Dialect Mismatch With the Data Source
 
-When the dialect used for preview and the dialect of the data source you want to execute against do not match (for example an Oracle-rendered SQL submitted to MySQL), the panel's result row enters a blocked state and offers two exits on the spot:
+When the dialect used for preview and the dialect of the data source you want to execute against do not match (for example an Oracle-rendered SQL submitted to MySQL), the panel's result row enters a blocked state and offers three exits on the spot:
 
 <GifPlayer src="/demo/dialect-gate.gif" alt="Dialect gate blocked state with its three exits" />
 
 - **Switch Data Source**: pick a data source of the target dialect; once bound, the preview re-renders for the new dialect and retries
 - **Dialect Settings**: jump straight to the plugin's dialect configuration page
+- **Copy error message**: copy the whole blocked-state explanation for pasting into an issue or a chat
 
 Once a data source is bound, if its dialect differs from the currently rendered one the preview re-renders for the target dialect automatically (when a lossless re-render is possible) — no manual refresh needed. The difference between manual and automatic mode: automatic mode requires a re-check before executing, while manual conflicts and unknown writes / EXPLAIN are always blocked.
 
@@ -239,7 +252,7 @@ Put the current SQL on the clipboard as a context block for AI: source and diale
 
 <GifPlayer src="/demo/ai-context-copy.gif" alt="Copy as AI Context: More then Copy as AI Context produces a notification reporting how many sensitive literals were masked; the second demo uses the include-identifiers variant, where real table and column names appear but literals stay masked" />
 
-Two exits: the default one anonymises table and column names too; **"Copy as AI Context (with identifiers)"** keeps structure and identifiers so the AI can follow the semantics, while literals are still masked and quoted content is not copied.
+Two exits: the default one anonymises table and column names too; **"Copy as AI Context (with identifiers)"** keeps structure and identifiers so the AI can follow the semantics, while literals are still masked and quoted content is not copied. Structural words (SELECT / FROM / WHERE / JOIN and so on) are always kept verbatim in either mode, while aggregate functions and keywords (COUNT / SUM / JSON / FIRST / NEXT and so on) stay anonymised.
 
 The boundary matters: **ordinary strings that do not match a rule keep their original text** (e.g. `name = 'tom'` is not treated as sensitive), so the block makes no promise of being entirely secret-free — read it over before pasting into an external AI. It only writes the clipboard and never uploads anything.
 

@@ -101,7 +101,7 @@ Completed capabilities are grouped by module — click a title to expand.
 - [x] N+1 same-template count badge
 - [x] Data-source context badge
 - [x] Clipboard read button in Log → SQL
-- [x] Two-channel capture status bar with a pause entry
+- [x] Two-channel capture status bar (the pause entry is implemented but currently hidden)
 - [x] Display and export masking (list / preview / export / MCP)
 - [x] History search regex and case-sensitivity toggles
 - [x] Jump to the last entry in the history list

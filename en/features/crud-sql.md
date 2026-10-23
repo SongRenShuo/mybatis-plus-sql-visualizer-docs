@@ -26,6 +26,7 @@ The selected statement opens in the existing SQL preview window, ready to edit, 
 
 - INSERT / UPDATE reuse the batch panel's per-column toggles: auto-increment primary keys are unchecked by default, matching MP runtime behavior
 - The `@Version` optimistic-lock column is appended to UPDATE's WHERE automatically, with `version = version + 1` at the end of SET
+- When the entity carries `@TableField(fill = …)`, the parameter panel offers "FieldFill safe simulation": those fill columns get a simulated-value input for INSERT / UPDATE; a value you type goes into the SQL (the normal input grays out), leaving it blank omits the column — your `MetaObjectHandler` is never executed
 - UPDATE / DELETE locate rows by primary key; tables without a primary key degrade the WHERE clause to a `1 = 0` placeholder, flagged as "no primary key recognized" in the candidate list to prevent accidental full-table statements
 - Logic-delete semantics travel with the "DELETE (logic delete)" variant, leaving the physical DELETE untouched
 - On SQL Server, generated INSERTs touching identity columns are wrapped in `SET IDENTITY_INSERT ... ON/OFF` automatically, so the statement replays directly; other dialects need no wrapping and the output is byte-for-byte unchanged (rollback snapshots carry the dialect and identity-column info too)

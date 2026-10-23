@@ -1,6 +1,6 @@
 # Configuration
 
-All settings are located at `Settings > Tools > SQL Visualizer`.
+All settings are located at `Settings > Tools > SQL Visualizer`. The search box at the top-left of the Settings dialog finds these entries directly — every plugin setting is registered with the IDE settings search index. The plugin landing page has its own search box on top of that; both index the same data and return the same hits.
 
 ![SQL Visualizer main settings page (Tools > SQL Visualizer)](/demo/settings.png)
 
@@ -23,6 +23,7 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 | Auto-Fold Field Threshold | 10 | A field list folds only when it has at least this many elements and spans multiple lines; editable only while auto-fold is enabled |
 | Logic Delete Injection | On | `@TableLogic` auto appends `AND deleted = value` |
 | Logic Delete Value | 0 | Value for the logic delete condition |
+| Embedded column naming | Auto | Whether to prefix flattened `@Embeddable` fields with their component path (e.g. `qty_base_qty` rather than `base_qty`); "Auto" recognises the project's `ImplicitNamingStrategy` and falls back to no prefix when it cannot tell |
 | Tenant Injection | Off | Entity queries / updates / deletes auto append `AND tenant_id = ?` (preview simulation, aligned with MP's tenant interceptor semantics) |
 | Tenant Column Name | `tenant_id` | Column name used for tenant injection, adjustable per business (e.g. `org_id` / `shop_id`) |
 | Tenant Column Default | 1 | Literal default appended to UPDATE SET / INSERT tenant columns |
@@ -152,13 +153,13 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 
 ## Project-Level Settings
 
-`Settings > Tools > SQL Visualizer (Current Project)` offers 10 project-level controls: the enhanced-capture switch, database dialect, 3 checkboxes, logic-delete value, table prefix / suffix, table-name strategy, and ignored fields.
+`Settings > Tools > SQL Visualizer (Current Project)` offers 10 overrides below the master switch: database dialect, parameter substitution, SQL formatting, logic-delete injection, logic-delete value, table prefix / suffix, table-name inference strategy, ignored fields, and calibrate columns against the data source (4 of them are checkboxes). Enhanced capture is a global setting and is not part of the project-level overrides.
 
 ![SQL Visualizer project-level settings page (Tools > SQL Visualizer (Current Project)): with the master switch off, every row below grays out and shows the effective global values](/demo/settings-project.png)
 
-- When the "Use project settings" master switch is off, the 9 override rows gray out and show the effective global values — what you see is what runs; a "Reset to follow global" button clears this project's overrides in one click
+- When the "Use project settings" master switch is off, all 10 override rows gray out and show the effective global values — what you see is what runs; a "Reset to follow global" button clears this project's overrides in one click
 - With the dialect on "Auto-infer", the project level takes precedence over the global decision
-- Settings search hits entries on both the global page and the project page
+- Page-local search and the IDE settings search share one source: a setting is findable in both, covering global and project-page entries
 - Import / export covers global settings only; project-level settings are not included
 
 ## Update & Diagnostics

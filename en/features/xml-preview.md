@@ -139,11 +139,15 @@ UPDATE and DELETE get no automatic rollback. The plugin has only the SQL text, n
 
 The dialog says so plainly ("UPDATE cannot be auto-rolled back: original values are unknowable." / "DELETE cannot be auto-rolled back: the deleted data is unknowable."), points to binlog, flashback or backup restore for manual recovery, and offers a snapshot query `SELECT * FROM table [WHERE original WHERE]`:
 
-1. Click "Run snapshot query" to execute it directly — the result lands in the panel's console grid, the row image fetched by your own hands
-2. Copy the whole result grid back into the dialog (TSV, first line is the column names)
-3. Click "Generate rollback from pasted result": a DELETE original becomes an INSERT that backfills every column, an UPDATE original becomes a reverse UPDATE that also puts the written new values into the WHERE clause as an optimistic-lock check — it only rolls back while the database still holds the written state
+1. Click "Run snapshot query" — it goes through the read-only side channel (**it does not touch the shared console and does not replace the SQL you are looking at**), and the result table shows up right in the dialog
+2. The result is filled in automatically and the rollback statement is **generated immediately** — no manual copy-paste: a DELETE original becomes an INSERT that backfills every column, an UPDATE original becomes a reverse UPDATE that also puts the written new values into the WHERE clause as an optimistic-lock check, so it only rolls back while the database still holds the written state
+3. If you want to hand-tune it, switch to the **Text** view, edit, then click "Generate rollback from pasted result" (this is the fallback path, not the normal one)
 
-The snapshot result supports **table / text dual view** switching and column-width adjustment; on Ultimate you can also "Open in CSV Editor", which sends the snapshot into the IDE's native CSV table for viewing and editing (on Community it opens as a text editor). The snapshot query goes through the read-only side channel and never replaces the SQL in the preview editor; with no data source bound a picker opens directly and the query retries once you choose one.
+The snapshot result supports **table / text dual view** switching. In table view you can also sort by clicking a column header, drag column widths, "fit columns" in one click, copy a cell / row / column / everything from the context menu, and take the TSV away with `Ctrl+C`; on Ultimate you can additionally "Open in CSV Editor", which sends the snapshot into the IDE's native CSV table for viewing and editing (on Community it opens as a text editor).
+
+The snapshot query goes through the read-only side channel and never replaces the SQL in the preview editor; with no data source bound a picker opens directly and the query retries once you choose one.
+
+When the snapshot statement's dialect does not match the target data source, the dialog offers the same kind of exits: re-render for the target dialect and retry, or switch to another data source.
 
 <GifPlayer src="/demo/rollback-snapshot-dual.gif" alt="Rollback snapshot query and Open in CSV Editor" />
 

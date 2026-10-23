@@ -26,6 +26,7 @@
 
 - INSERT / UPDATE 复用批量参数面板的列勾选：自增主键默认不勾选，对齐 MP 运行时行为
 - `@Version` 乐观锁列在 UPDATE 中自动追加到 WHERE，SET 尾写为 `version = version + 1`
+- 实体带 `@TableField(fill = …)` 时可在参数面板勾选「FieldFill 安全模拟」：INSERT / UPDATE 里那些填充列给出模拟值输入，填了就以模拟值入 SQL（普通输入框转灰），不填则不下发——不执行你的 `MetaObjectHandler`
 - UPDATE / DELETE 按主键定位；表无主键时 WHERE 降级为 `1 = 0` 占位并在候选中提示未识别到主键，避免误生成全表语句
 - 实体含逻辑删除字段时的 DELETE 语义差异，由「DELETE（逻辑删除）」变体承载，物理 DELETE 原样保留
 - SQL Server 的身份自增列在生成的 INSERT 外自动包 `SET IDENTITY_INSERT 表 ON/OFF`，语句可直接回放；其他方言无需包装、产物逐字节不变（回滚快照同样携带方言与身份列信息）

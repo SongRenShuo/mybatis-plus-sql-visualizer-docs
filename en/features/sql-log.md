@@ -12,7 +12,7 @@ Auto-captures SQL as it runs, restores everything into a unified list of executa
 
 | Method | How |
 |--------|-----|
-| Manual capture | Sidebar "MyBatis SQL Log" tool window → the "Capture" button (first in the panel toolbar) |
+| Manual capture | Sidebar "SQL Visualizer" tool window → the "SQL Log" tab → the "Capture" button (first in the panel toolbar) |
 | Auto-listen | With "Auto-start listening on project launch" enabled in settings, capture starts automatically when you run / debug the project — no button click needed |
 
 First-time onboarding: opening a code file that uses MyBatis-Plus pops a one-time pointer notification (once per machine, can be turned off in settings). The first successful capture in a session also pops a notification linking straight to the log panel.
@@ -66,6 +66,12 @@ Manual log pasting lives in the panel's "Log → SQL" tab — paste MyBatis / Hi
 
 ## Features
 
+### Toolbar
+
+Left to right, the SQL log tab's toolbar carries: capture, manage suppression rules (eye-with-slash), clear, sort by duration, sort by time, SQL type filter (funnel), follow, dedupe, timestamp display, community, help. Every icon is a semantic SVG shipped with the plugin (the same registry as the other three tabs), so it does not depend on the IDE theme's built-in icons.
+
+> The former "pause capture" entry is implemented but currently hidden, so it is not on the toolbar.
+
 ### Auto-Open Tool Window
 
 When the setting "Auto-open log window on SQL found" (on by default) is active, capturing the first SQL auto-opens the log tool window — debounced to once per 60 seconds, without stealing editor focus.
@@ -81,7 +87,7 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 | Capability | Description |
 |-----------|-------------|
 | Zero-output diagnostics | When capture is running but not a single entry shows up, the panel's empty state names the blocker — the enhanced channel's current state (off / waiting for the app process / attached / heartbeat lost and fallen back / fallen back), the console channel's attached count and scanned line count — plus actionable next steps in three tiers ("waiting for the project to run / console has no output yet / output exists but no SQL matched") |
-| Two-channel status bar | While capturing, a line is pinned to the bottom of the SQL log tab showing the console channel (N attached, N lines scanned) and the enhanced channel (off / waiting to mount / attached pid / paused / fallen back) plus the received-event count; the whole line hides when capture is off |
+| Two-channel status bar | While capturing, a line is pinned to the bottom of the SQL log tab showing the console channel (N attached, N lines scanned) and the enhanced channel (off / waiting to mount / attached pid / fallen back; the "paused" state still exists in code, but the pause button is currently hidden so you will not see it in normal use) plus the received-event count; the whole line hides when capture is off |
 | Settings status line | The enhanced-capture status line in settings renders all five states faithfully (attached / connection lost and fallen back / heartbeat lost and fallen back / connection established awaiting first heartbeat / enabled awaiting app process); it shows blank only while enhanced capture is off |
 
 <GifPlayer src="/demo/capture-diagnostics.gif" alt="Capture diagnostics: the SQL log panel's empty state states 'no SQL captured yet' with three tiers of next steps (click Capture and run a console that emits SQL logs / restore manually from the Log to SQL tab / turn on enhanced capture in settings for real parameter values and precise timing); clicking the trailing Open Settings (jump to enhanced capture) link jumps straight to Settings > Tools > SQL Visualizer > SQL Log with the source-location capture group and its enhanced-capture toggle on screen" />
@@ -187,7 +193,7 @@ Each checkbox in the log page's "Type Filter" popup carries a matching color swa
 The log list has tail following on by default: the view sticks to the bottom as new SQL arrives, always showing the latest entries. Manual scrolling with the mouse wheel, scrollbar or keyboard pauses following. Scrolling back to the bottom does not resume it automatically; click the toolbar's "Scroll to Bottom" action to resume following.
 
 ::: details Details (When to read: the list is not at the bottom, or you are looking for the action)
-- The "Scroll to Bottom" action sits at the end of the toolbar's action group: one click jumps to the bottom of the list and resumes following.
+- The "Scroll to Bottom" action sits inside the toolbar action group (sorting, the community entry and help come after it): one click jumps to the bottom of the list and resumes following.
 - Manual scrolling triggers the pause; scroll direction does not automatically resume following. Programmatic appends (new entries arriving) never disturb your reading position while following is paused.
 :::
 
@@ -263,7 +269,7 @@ If the XML doesn't exist (annotation SQL, MP built-in statements) or locating fa
 When keep-alive heartbeat SQL (such as `SELECT 1`) keeps flooding the list, you can suppress it out of the list:
 
 - Right-click an entry → "Suppress this SQL" to suppress in one click; multi-select works (different statements become separate rules, existing ones are skipped automatically). Existing rows vanish from the list immediately, a balloon notification can jump straight to the management dialog, and the management dialog shows live hit counts
-- The toolbar "Manage suppression rules" (funnel icon) and the right-click "Manage suppression rules…" open the same management dialog: a rule list (pattern summary / created at / blocked N times counter) plus a read-only SQL preview with syntax highlighting and line numbers on the right; add / delete / clear take effect instantly, and the dialog is resizable with its size remembered
+- The toolbar "Manage suppression rules" (eye-with-slash icon; the funnel icon is the SQL type filter) and the right-click "Manage suppression rules…" open the same management dialog: a rule list (pattern summary / created at / blocked N times counter) plus a read-only SQL preview with syntax highlighting and line numbers on the right; add / delete / clear take effect instantly, and the dialog is resizable with its size remembered
 - Rules apply globally at application level and are stored independently (not part of settings import/export), capped at 500 rules; entries still in the buffer reappear when a rule is deleted (entries already dropped from the queue cannot be restored)
 
 ::: details Matching semantics (When to read: a rule was added but doesn't hit)
@@ -274,7 +280,7 @@ Matching = exact match after whitespace normalization of the restored SQL (trail
 
 <GifPlayer src="/demo/sql-log-focus.gif" alt="SQL log focus tabs demo" />
 
-The entry context menu offers two focus modes, shown as tabs at the top of the panel — several can be open at once, each can be closed, and they stack correctly with type filter and search:
+The entry context menu offers two focus modes, shown as tabs at the top of the panel — several can be open at once, each can be closed, and they stack correctly with type filter and search. The tab strip **always stays on a single row**: when many are open the platform compresses them and collects the overflow into a "show all tabs" dropdown:
 
 - **Focus caller method**: statically approximates the source position's line range so the list shows only SQL issued from within that method
 - **Focus by request**: right-click a SQL executed inside a web request → "Focus by request" to see only that request's SQL, kept in a flat timeline
@@ -349,7 +355,7 @@ Enable "Auto-save SQL history" in settings (off by default) and captured entries
 
 ## Join the Community
 
-The chat-bubble icon at the far right of the toolbar opens a native dialog showing the author's WeChat contact and community-group note side by side — if you want to ask something directly instead of digging through the docs.
+The chat-bubble icon towards the right of the toolbar opens a native dialog (only help "?" sits to its right) showing the author's WeChat contact and community-group note side by side — if you want to ask something directly instead of digging through the docs.
 
 <GifPlayer src="/demo/log-community.gif" alt="Join the community: click the chat-bubble icon in the SQL log toolbar and a native dialog shows the author's WeChat contact and community-group note side by side; the QR codes load asynchronously when the dialog opens" />
 

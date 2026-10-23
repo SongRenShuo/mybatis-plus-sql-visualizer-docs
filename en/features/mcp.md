@@ -55,7 +55,7 @@ Take "have the agent diagnose a slow SQL" as an example — the agent chains the
 
 1. `sqlv_render_sql` fetches the real executable SQL by file and line (parameters filled in, not the `?` placeholders in source)
 2. `sqlv_explain` gets the plan for that SELECT — if the tail hits full-table scans, filesort and similar patterns, `index hints` are appended
-3. `sqlv_perf_advice` runs the 20-rule advisory; `sqlv_schema_context` pulls the table's column comments and structure as supporting evidence
+3. `sqlv_perf_advice` runs the 21-rule advisory; `sqlv_schema_context` pulls the table's column comments and structure as supporting evidence
 4. After the fix, `sqlv_render_sql` re-renders to verify; before touching a write statement, `sqlv_rollback_plan` prepares a rollback plan
 
 Every step is deterministic output: the SQL is a real rendering-chain product, the plan comes straight from the database, the advice traces back to rules — no "gut feeling" involved.

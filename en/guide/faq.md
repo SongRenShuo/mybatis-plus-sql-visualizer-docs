@@ -149,7 +149,7 @@ By default it goes to the native database console — "structured EXPLAIN render
 
 ## Do I have to retype parameter values every time?
 
-No. The parameter area of the preview panel has **presets**: the **default preset** remembers the values you typed and recalls them the next time you preview the same statement, and **Manage Presets** lets you save several named parameter sets (e.g. "staging sample", "boundary values") and switch between them; the conditions area also offers "deselect all / clear" to wipe the current conditions quickly.
+No. The parameter area of the preview panel has **presets**: the **default preset** remembers the values you typed and recalls them the next time you preview the same declaring method (presets are scoped per method, so two methods never share values; even after you edit the SQL text it still falls back to that method's most recent save), and **Manage Presets** lets you save several named parameter sets (e.g. "staging sample", "boundary values") and switch between them; the conditions area also offers "deselect all / clear" to wipe the current conditions quickly.
 
 ## Why is the affected-row estimate unavailable?
 
