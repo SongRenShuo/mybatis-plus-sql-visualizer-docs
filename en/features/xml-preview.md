@@ -145,9 +145,7 @@ The dialog says so plainly ("UPDATE cannot be auto-rolled back: original values 
 
 The snapshot result supports **table / text dual view** switching and column-width adjustment; on Ultimate you can also "Open in CSV Editor", which sends the snapshot into the IDE's native CSV table for viewing and editing (on Community it opens as a text editor). The snapshot query goes through the read-only side channel and never replaces the SQL in the preview editor; with no data source bound a picker opens directly and the query retries once you choose one.
 
-<!-- TODO(assets pending) remove the comment markers once rollback-snapshot-dual.gif is recorded
-<GifPlayer src="/demo/rollback-snapshot-dual.gif" alt="Rollback snapshot dual view: in the UPDATE rollback dialog click Run snapshot query, switch the result between table and text views, then Open in CSV Editor to send the snapshot into the IDE's native CSV editor" />
--->
+<GifPlayer src="/demo/rollback-snapshot-dual.gif" alt="Rollback snapshot query and Open in CSV Editor" />
 
 Primary-key columns can be filled comma-separated in the input box and apply to UPDATE originals: fill them to locate rows by primary key, leave them empty to mirror the whole old row. Rows or statement volume beyond the limits are truncated with a notice, and "Execute rollback" and "Copy" stay disabled until something has been generated.
 

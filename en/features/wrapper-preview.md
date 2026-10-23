@@ -127,9 +127,7 @@ Read-only actions (affected-row estimate, EXPLAIN, rollback snapshot query) go t
 
 After editing an UPDATE / DELETE, you want to know how many rows it will actually touch — "Estimate Affected Rows" in the panel's **More** menu rewrites the current WHERE predicate into an equivalent read-only `COUNT(*)` probe and runs it through a **read-only side channel** against the bound data source: it never enters the shared console and never replaces the SQL you are looking at.
 
-<!-- TODO(assets pending) remove the comment markers once dml-impact.gif is recorded
-<GifPlayer src="/demo/dml-impact.gif" alt="DML impact estimate: in an UPDATE preview, open More then Estimate Affected Rows; a blue banner at the top reports the estimated row count, and hovering it shows the probe statement and target table" />
--->
+<GifPlayer src="/demo/dml-impact.gif" alt="DML impact estimate: Estimate Affected Rows in the More menu reports the row count in a blue banner" />
 
 The result appears as a standalone banner at the top (blue, bold); hovering it shows the probe statement, target table and row-cap note. With `DELETE ... LIMIT n` on a dialect that supports it, the banner reads "≤n (DELETE LIMIT cap)" and the probe itself wraps a `LIMIT` subquery.
 
@@ -150,9 +148,7 @@ With no data source bound, a data-source picker opens and retries automatically 
 
 When the dialect used for preview and the dialect of the data source you want to execute against do not match (for example an Oracle-rendered SQL submitted to MySQL), the panel's result row enters a blocked state and offers two exits on the spot:
 
-<!-- TODO(assets pending) remove the comment markers once dialect-gate.gif is recorded
-<GifPlayer src="/demo/dialect-gate.gif" alt="Dialect gate blocked state: the result row says the dialect does not match the data source; clicking Switch Data Source picks a source of the target dialect and the preview re-renders and retries automatically; the other exit, Dialect Settings, jumps to dialect configuration" />
--->
+<GifPlayer src="/demo/dialect-gate.gif" alt="Dialect gate blocked state with its three exits" />
 
 - **Switch Data Source**: pick a data source of the target dialect; once bound, the preview re-renders for the new dialect and retries
 - **Dialect Settings**: jump straight to the plugin's dialect configuration page
@@ -184,11 +180,11 @@ Like "Execute SQL", EXPLAIN requires a configured data source (Ultimate's Databa
 
 #### Cross-Run Comparison and Plan History
 
-After you add an index or change a condition, did the plan actually change? "Compare with Previous Execution" in the plan view aligns the two results into a tree diff and marks cost / rows changes; nodes are identified stably by "structural path + occurrence index among same-type siblings", so adding or removing a sibling never shifts later nodes. MySQL / MariaDB table families and PG / KingBase JSON families are comparable; Oracle / SQL Server text plans degrade honestly to "not comparable" rather than forcing a diff.
+After you add an index or change a condition, did the plan actually change? The second time you run Explain, the view shows a "Choose a history baseline to compare (does not re-execute the SQL)" row with a baseline dropdown, defaulting to "Previous execution (current session)"; it aligns the two results into a tree diff and marks cost / rows changes. Nodes are identified stably by "structural path + occurrence index among same-type siblings", so adding or removing a sibling never shifts later nodes. MySQL / MariaDB table families and PG / KingBase JSON families are comparable; Oracle / SQL Server text plans degrade honestly to "not comparable" rather than forcing a diff.
 
-<!-- TODO(assets pending) remove the comment markers once explain-history-compare.gif is recorded
-<GifPlayer src="/demo/explain-history-compare.gif" alt="EXPLAIN cross-run comparison: after a second EXPLAIN of the same statement, click Compare with Previous Execution and the plan tree annotates cost / rows changes per node; then open the history baseline dropdown and pick a cross-session saved plan snapshot to diff against, all without re-executing the SQL" />
--->
+> This only exists in the **structured Explain view**, which requires enabling "Render EXPLAIN structurally inside the preview panel" under SQL Preview in Settings (experimental, off by default). With it off, Explain goes straight to the native database console and there is no baseline dropdown.
+
+<GifPlayer src="/demo/explain-history-compare.gif" alt="Structured Explain view with a baseline dropdown: after a second Explain of the same statement, the header shows the history-baseline row and a Previous execution (current session) selector" />
 
 By default comparison only happens within the current session. To keep plans across IDE restarts, turn on **"Keep raw EXPLAIN plans across sessions"** in the settings SQL Preview group — it is off by default because raw plans are not redacted and predicates may contain business values, credentials or keys. Once enabled:
 

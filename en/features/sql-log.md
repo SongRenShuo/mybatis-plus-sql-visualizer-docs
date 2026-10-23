@@ -106,9 +106,7 @@ The clip below shows SQL log list colors, truncation of long SQL statements, and
 
 Before you screenshot, record, or paste logs to a colleague, passwords and phone numbers in parameters should not travel with them. Turning on **"Display and export masking (mask sensitive literals)"** in the settings SQL Log group (off by default) masks sensitive values as `***` at the **display layer**:
 
-<!-- TODO(assets pending) remove the comment markers once display-mask.gif is recorded
-<GifPlayer src="/demo/display-mask.gif" alt="Display masking: after enabling Display and export masking in settings, password and phone-number-shaped literals in the log list and click preview become ***; exported CSV / TSV / TXT / SQL files are masked the same way" />
--->
+<GifPlayer src="/demo/display-mask.gif" alt="Display masking: after enabling display and export masking, the password literal in the log list becomes ***" />
 
 Four outgoing paths are covered:
 
