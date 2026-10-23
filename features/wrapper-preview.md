@@ -128,9 +128,7 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 
 改完一条 UPDATE / DELETE，想知道它到底会动多少行——预览面板「更多」菜单里的「预估影响行数」把当前 WHERE 谓词改写成等价的只读 `COUNT(*)` 试算语句，经**只读旁路查询**对当前绑定数据源执行：不进共享控制台、不替换你正在看的 SQL。
 
-<!-- TODO(素材待补录) 录好 dml-impact.gif 后把下面这行的注释标记去掉即可启用
-<GifPlayer src="/demo/dml-impact.gif" alt="DML 影响面预演：UPDATE 预览点「更多」→「预估影响行数」→ 顶部蓝色横幅给出「预估影响行数：N」，悬停可看试算语句与目标表，横幅旁可「复制 SQL 并关闭」 />
--->
+<GifPlayer src="/demo/dml-impact.gif" alt="DML 影响面预演" />
 
 结果以顶部独立横幅呈现（蓝色加粗），悬停横幅可看这次试算用的语句、目标表与行数上限说明。`DELETE ... LIMIT n` 且方言支持时，横幅显示「≤n（DELETE LIMIT 上限）」，试算语句本身也包一层 `LIMIT` 子查询。
 
@@ -156,9 +154,7 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 
 绑定数据源后，如果新数据源的方言与当前渲染方言不同，预览会自动按目标方言重渲染（能无损重渲染时），不需要手动刷新。手动切换与自动模式的差别在于：自动模式要求先复核再执行，手动冲突与未知写/EXPLAIN 一律阻断。
 
-<!-- TODO(素材待补录) 录好 dialect-gate.gif 后去掉注释标记即可启用
-<GifPlayer src="/demo/dialect-gate.gif" alt="方言闸门阻断态：结果行提示方言与数据源不匹配，点「切换数据源」换成目标方言的数据源后自动按新方言重渲染并重试；另一出口「方言设置」直达方言配置页" />
--->
+<GifPlayer src="/demo/dialect-gate.gif" alt="方言闸门阻断态与两个出口" />
 
 ### EXPLAIN 真实执行计划
 
