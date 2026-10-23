@@ -65,7 +65,7 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 
 ## SQL Log
 
-![Settings page, Source Location Capture group: enhanced capture switch, redaction, call-stack snapshot frame count (12–64), authorization status line and the two frame filter lists](/demo/settings-enhanced-capture.png)
+![Settings page, Source Location Capture group: enhanced capture switch, enhanced-capture redaction, display & export masking, call-stack snapshot frame count (12–64), attached status line and the two frame filter lists](/demo/settings-enhanced-capture.png)
 
 ![Settings page groups for List Display / CRUD color marking / slow-query threshold: SQL display mode, per-statement color markers with reset, slow-query threshold, list cache and dedup window](/demo/settings-log-list.png)
 
@@ -139,7 +139,7 @@ The three are independent: clearing preview history does not delete parameter sn
 
 ## MCP Tools
 
-![Settings page, MCP subpage: the master switch plus a per-tool enable checkbox for each of the eleven read-only tools](/demo/settings-mcp.png)
+![Settings page, MCP subpage: the master switch, MCP output masking, and a per-tool enable checkbox for each of the eleven read-only tools](/demo/settings-mcp.png)
 
 The plugin exposes 11 read-only tools to AI agents (Claude Code / Cursor / AI Assistant, etc.) through the platform's MCP Server; the "MCP Tools" subpage in settings provides the gating:
 
