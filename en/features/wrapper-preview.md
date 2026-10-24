@@ -191,7 +191,9 @@ Oracle's plan rows land in the session-level `PLAN_TABLE` while the statement it
 
 Like "Execute SQL", EXPLAIN requires a configured data source (Ultimate's Database tool window); without one you'll be asked to configure it first.
 
-#### Cross-Run Comparison and Plan History
+#### Cross-Run Comparison and Plan History (experimental)
+
+> Everything in this section requires the experimental switch below; with the default form, Explain goes through the embedded native console and there is no baseline dropdown or history comparison.
 
 After you add an index or change a condition, did the plan actually change? The second time you run Explain, the view shows a "Choose a history baseline to compare (does not re-execute the SQL)" row with a baseline dropdown, defaulting to "Previous execution (current session)"; it aligns the two results into a tree diff and marks cost / rows changes. Nodes are identified stably by "structural path + occurrence index among same-type siblings", so adding or removing a sibling never shifts later nodes. MySQL / MariaDB table families and PG / KingBase JSON families are comparable; Oracle / SQL Server text plans degrade honestly to "not comparable" rather than forcing a diff.
 
