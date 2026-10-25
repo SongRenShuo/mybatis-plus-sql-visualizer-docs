@@ -24,6 +24,10 @@ export async function onRequest(context: {
   // set() 会覆盖客户端自带的伪造值；限流/审计/告警的按访客粒度全靠它
   const clientIp = request.headers.get('cf-connecting-ip')
   if (clientIp) headers.set('x-client-ip', clientIp)
+  // 透传 CF 边缘国家码（batch C）：Pages 域名走 CF 边缘必带此头，Worker 侧用它落
+  // st_track_events/fb_posts 的 country 列；set() 覆盖伪造值，直连 workers.dev 无此头落 NULL
+  const ipCountry = request.headers.get('cf-ipcountry')
+  if (ipCountry) headers.set('cf-ipcountry', ipCountry)
   // 透传 UA：投票指纹 = 访客 IP + UA，不透传则 Worker 侧所有访客 UA 相同、指纹退化为全站单指纹
   const userAgent = request.headers.get('user-agent')
   if (userAgent) headers.set('user-agent', userAgent)
