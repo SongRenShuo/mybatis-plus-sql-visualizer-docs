@@ -50,7 +50,7 @@ For example, `sqlv_mapper_check` goes beyond static contract checking and can al
 
 ## A Typical Workflow
 
-<GifPlayer src="/demo/mcp-agent.gif" alt="The Codex agent in AI Assistant calling a plugin MCP tool over ACP, with an audit line" />
+<GifPlayer src="/demo/mcp-agent.gif" alt="The ACP agent in AI Assistant calling the plugin MCP tool sqlv_check_sql over the built-in MCP server: an mcp: idea/sqlv_check_sql call card appears, followed by a conclusion drawn from the returned statement type, dangerous flag and findings" />
 Take "have the agent diagnose a slow SQL" as an example — the agent chains these tools as needed:
 
 1. `sqlv_render_sql` fetches the real executable SQL by file and line (parameters filled in, not the `?` placeholders in source)
