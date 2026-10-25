@@ -158,15 +158,19 @@ With no data source bound, a data-source picker opens and retries automatically 
 
 ### Dialect Mismatch With the Data Source
 
-When the dialect used for preview and the dialect of the data source you want to execute against do not match (for example an Oracle-rendered SQL submitted to MySQL), the panel's result row enters a blocked state and offers three exits on the spot:
+When the dialect used for preview and the dialect of the data source you want to execute against do not match (for example an Oracle-rendered SQL submitted to MySQL), the plugin **warns but does not block**: the result row explains the mismatch, and the SQL is still submitted to the data source you picked, leaving the verdict to the database itself.
 
-<GifPlayer src="/demo/dialect-gate.gif" alt="Dialect gate blocked state with its three exits" />
+This is deliberate — the dialect belongs to rendering and inference, and should not hold a veto over execution. Once you have explicitly chosen a data source, the plugin sends the SQL as-is; whether it is valid is answered most accurately by the target database (PostgreSQL replies `ERROR: relation "user" does not exist`, MySQL replies with a syntax error).
 
-- **Switch Data Source**: pick a data source of the target dialect; once bound, the preview re-renders for the new dialect and retries
+The one case still blocked is a write or EXPLAIN where **either side's dialect is unknown** (rendered source undetermined, or the target data source's dialect cannot be resolved). That is not "a conflict was detected" but "no judgement is possible", and blindly firing PostgreSQL syntax at a MySQL database is not a risk worth taking — so it stays fail-closed.
+
+The result row also offers:
+
+- **Switch Data Source**: pick a data source that matches; once bound, the preview re-renders for the new dialect and retries
 - **Dialect Settings**: jump straight to the plugin's dialect configuration page
-- **Copy error message**: copy the whole blocked-state explanation for pasting into an issue or a chat
+- **Copy error message**: copy the whole explanation for pasting into an issue or a chat
 
-Once a data source is bound, if its dialect differs from the currently rendered one the preview re-renders for the target dialect automatically (when a lossless re-render is possible) — no manual refresh needed. The difference between manual and automatic mode: automatic mode requires a re-check before executing, while manual conflicts and unknown writes / EXPLAIN are always blocked.
+<GifPlayer src="/demo/dialect-gate.gif" alt="Mismatched dialect warns but still executes: the preview renders as PostgreSQL (dialect: PostgreSQL, manual), the SQL is delivered to the chosen PostgreSQL data source, and the database answers [42P01] ERROR: relation &quot;user&quot; does not exist — the plugin warns without blocking" />
 
 ### Real EXPLAIN Plan
 
