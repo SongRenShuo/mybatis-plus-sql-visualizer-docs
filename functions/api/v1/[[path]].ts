@@ -28,6 +28,9 @@ export async function onRequest(context: {
   // st_track_events/fb_posts 的 country 列；set() 覆盖伪造值，直连 workers.dev 无此头落 NULL
   const ipCountry = request.headers.get('cf-ipcountry')
   if (ipCountry) headers.set('cf-ipcountry', ipCountry)
+  // 声明本请求来自插件官网（20261025-2045 计划）：浏览器同源 GET 不带 Origin，
+  // Worker 只能靠这层标注判断站点归属；set() 覆盖客户端可能的伪造值。
+  headers.set('x-site-origin', 'plugin')
   // 透传 UA：投票指纹 = 访客 IP + UA，不透传则 Worker 侧所有访客 UA 相同、指纹退化为全站单指纹
   const userAgent = request.headers.get('user-agent')
   if (userAgent) headers.set('user-agent', userAgent)
