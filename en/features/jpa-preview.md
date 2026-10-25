@@ -24,7 +24,7 @@ The preview shortcut `Alt+Shift+Q` works on all of the above (cursor on the targ
 
 Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight to SQL:
 
-<GifPlayer src="/demo/jpa-write-path.gif" alt="Repository CRUD write-path preview: save yields an INSERT (with a left-hand Insert-columns checklist — unticking user.age drops that column from the INSERT list live), and deleteById yields a DELETE annotated with its per-entity EntityManager.remove semantics (not a bulk DELETE)" />
+<GifPlayer src="/demo/jpa-write-path.gif" alt="Repository CRUD write-path preview: save yields an INSERT (with a left-hand Insert-columns checklist listing all 8 columns), and deleteById yields a DELETE annotated with its per-entity EntityManager.remove semantics (not a bulk DELETE)" />
 
 | Method | Rendering |
 |--------|-----------|
@@ -39,7 +39,7 @@ Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight
 
 ## Derived Query Deepening
 
-<GifPlayer src="/demo/jpa-derived-query.gif" alt="Previewing derived methods in UserRepository one by one: findTop10ByOrderByCreateTimeDesc yields ORDER BY create_time DESC LIMIT 10; findByUsernameLike yields LIKE '%…%'; the Page-returning findByDepartmentIdAndStatus… yields a data SQL with a #pageSize/#pageOffset parameter panel (LIMIT ?, ?)" />
+<GifPlayer src="/demo/jpa-derived-query.gif" alt="Previewing derived methods in UserRepository one by one: findTop10ByOrderByCreateTimeDesc yields ORDER BY create_time DESC LIMIT 10; findByUsernameLike yields LIKE ? (the parameter value gets its % signs automatically); the Page-returning findByDepartmentIdAndStatus… yields a data SQL with a #pageSize/#pageOffset parameter panel (LIMIT ?, ?)" />
 
 - All six method-name prefixes: `find` / `read` / `get` / `query` / `search` / `stream...By`
 - `Top N` / `First N` / `Distinct` / multi-field `OrderBy<prop>Asc|Desc`

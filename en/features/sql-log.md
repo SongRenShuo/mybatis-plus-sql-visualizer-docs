@@ -339,13 +339,13 @@ Enable "Auto-save SQL history" in settings (off by default) and captured entries
 - **Jump to last entry**: the "↓≡" action in the second-level toolbar jumps straight to the last entry of the current filtered result — no more scrolling to the bottom of a file with thousands of rows. It loads the remaining entries in one go and then positions the view, rather than scrolling batch by batch
 - **Search toggles**: the two switches to the right of the search box mirror IDE find semantics — `.*` enables regex matching (equivalent to the `regex:` prefix) and `Aa` enables case sensitivity (off by default = ignore case); level-1 file-name filtering follows `Aa` too, while regex does not apply to file names
 - **Parameter recognition & refill**: history entries share the same recognition channel as the live log — double-clicking opens the dialog with parameter fill-in just the same
-- **Export & compare**: right-click the second-level list for "Export SQL" (CSV/TSV/TXT/SQL, SQL by default with a timestamped file name) and "Compare two selected" (line-by-line diff, the dialog title carries the structural fingerprint verdict) —
+- **Export & compare**: right-click the second-level list for "Export SQL" (CSV/TSV/TXT/SQL, SQL by default with a timestamped file name) and "Compare two selected" (line-by-line diff; the title carries the structural-fingerprint verdict — "structurally equivalent, parameters only" when the two match, otherwise the differing line count) —
 
 <GifPlayer src="/demo/history-jump-last.gif" alt="Jump to last entry: the second-level list sits at entry 1; clicking the ↓≡ action in the toolbar loads the remainder in one go and jumps to entry 709, without scrolling batch by batch" />
 
 <GifPlayer src="/demo/history-export.gif" alt="Right-click the history list to export SQL and enter a path in the save dialog; the success notification has been edited out of the clip" />
 
-<GifPlayer src="/demo/history-compare.gif" alt="Select two history SQL entries and compare; a two-pane diff view titles the structural fingerprint verdict" />
+<GifPlayer src="/demo/history-compare.gif" alt="Select two history SQL entries and compare; the two-pane diff view titles the verdict as a differing line count" />
 
 ::: details History storage and version compatibility (When to read: you use a custom save location or mix old and new plugin versions)
 - History files are saved under `.idea/sql-visualizer/sql-history/` in your project by default (the directory was renamed from `mybatis-plus-sql-visualizer` in v2026.9.2 — old directories are no longer read). Save location and file name pattern are configurable in settings.

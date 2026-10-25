@@ -39,7 +39,7 @@ This is the first batch (MVP): common chain queries are covered; rarer method sh
 
 ### Dynamic Condition Toggles
 
-<GifPlayer src="/demo/wrapper-params.gif" alt="Toggle the username condition off in the preview panel and WHERE loses a condition in real time; typing a value replaces the placeholder instantly" />
+<GifPlayer src="/demo/wrapper-params.gif" alt="Ticking the username condition on in the preview panel adds a WHERE condition in real time; typing a value replaces the placeholder instantly" />
 
 Boolean-overloaded conditions like `.eq(true, ...)` can be toggled in the left panel, re-rendering SQL in real time.
 
@@ -105,9 +105,16 @@ When an UPDATE / DELETE lacks an effective filter, the Execute SQL confirmation 
 
 The verdict comes from static analysis of the SQL syntax tree (the same source as the snapshot weak-predicate warning in the rollback view); a parse failure is treated as the highest risk, but it is still this one single confirmation with no extra blocking. Without any of the traits above the message stays unchanged.
 
+The same confirmation dialog also runs a **pre-execution self-check** and lists two further kinds of finding:
+
+- **Dialect capability gaps** — the statement uses a shape the current dialect does not support: `DELETE ... LIMIT n` (the row cap is silently dropped, so the delete may touch far more rows than expected), no native UPSERT form (the preview degrades to a plain INSERT, which fails when the row already exists), or a `SET IDENTITY_INSERT` wrapper (this dialect does not use that wrapper — likely a leftover from another dialect)
+- **Unrecognised columns** — column names that do not match the data source's real columns, each with a "did you mean xxx?" suggestion
+
+Both kinds share the one dialog with the unbounded-write traits and add no extra step; when none of them match, the message is byte-for-byte unchanged.
+
 ### Static Performance Advice
 
-<GifPlayer src="/demo/perf-advice.gif" alt="Previewing a join-chain SQL shows a static performance-advice segment right below the panel meta row: ORDER BY without LIMIT — may return a large result set, consider adding LIMIT (a red prefix marks ERROR/WARN, a blue prefix marks INFO)" />
+<GifPlayer src="/demo/perf-advice.gif" alt="Previewing a single-table LAMBDA_QUERY shows a static performance-advice segment right below the panel meta row: the red ⚠ entry reads LIKE '%xxx' with a leading wildcard — the B-Tree index cannot be used, consider full-text search or suffix matching; hovering the meta row reveals the full text of every suggestion (including ℹ INFO entries such as ORDER BY without LIMIT)" />
 
 As soon as the preview renders SQL, the panel lists static performance advice line by line below the meta row (`ORDER BY` without `LIMIT`, `LIKE` with a leading wildcard, a missing `WHERE`, overly deep subqueries and so on). A red `⚠` prefix marks warnings and a blue `ℹ` prefix marks hints, sitting side by side with the real EXPLAIN plan. The visible text is truncated to a width budget (an ellipsis at the end); **hover to read the full text of every suggestion**.
 
@@ -120,6 +127,8 @@ Entities with `@TableLogic` auto-append `AND deleted = value` (the value is conf
 ### Execute SQL
 
 With IntelliJ IDEA Ultimate + Database plugin, a temporary `.sql` file is created automatically after preview, then executed with `Ctrl+Enter`. The preview dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it, so you can type right away. Execution failures are reported inline in the panel instead of a modal dialog interrupting you.
+
+The panel's status row is explicit about where the current data source came from: an active console binding reads "bound"; when only a memory hit applies it reads "data source (last used)" or "data source (last used in this module)" — in a multi-module project each module remembers its own source and never borrows another module's database; with neither, it says "no data source bound (run one query in the console to bind)".
 
 <GifPlayer src="/demo/execute-sql.gif" alt="The full Execute SQL flow: preview a car_device_info LEFT JOIN station_info chain, click Execute SQL, the plugin creates the temporary file mpsql-exec.sql and submits it to mpj_demo@localhost, and the Output / Result 1 tab inside the preview dialog returns a real data grid (2 rows, e.g. 充电桩A-01) alongside the native console at the bottom" />
 
@@ -176,7 +185,7 @@ The result row also offers:
 
 The "EXPLAIN" button in the preview panel's button row: pick a data source, click, and the plugin wraps the SQL into an EXPLAIN statement for the current dialect and submits it to the native database console — the real execution plan sits side by side with the panel's static performance-rule annotations. EXPLAIN counts as confirmation-free, so there is no DML confirm dialog.
 
-<GifPlayer src="/demo/explain-plan.gif" alt="Real EXPLAIN plan: click EXPLAIN in the preview panel, pick the mpj_demo@localhost data source, and the plugin wraps the SQL into an EXPLAIN statement submitted to the native database console; the Output tab returns the real plan table (id / select_type / table / partitions / type) side by side with the panel's static 'ORDER BY without LIMIT' rule annotation" />
+<GifPlayer src="/demo/explain-plan.gif" alt="Real EXPLAIN plan: click EXPLAIN in the preview panel (the mpj_demo@localhost data source is already bound), and the plugin wraps the SQL into an EXPLAIN statement submitted to the native database console; the Output tab returns the real plan table (id / select_type / table / partitions / type) side by side with the panel's static 'ORDER BY without LIMIT' rule annotation" />
 
 | Dialect | Rendered Form | Verification |
 |---------|---------------|--------------|
@@ -195,11 +204,13 @@ Oracle's plan rows land in the session-level `PLAN_TABLE` while the statement it
 
 Like "Execute SQL", EXPLAIN requires a configured data source (Ultimate's Database tool window); without one you'll be asked to configure it first.
 
+Hovering the preview panel's meta row also reveals the **dialect capability matrix** — for the dialect this SQL was actually rendered with, it lists whether `EXPLAIN` / `DELETE ... LIMIT` / `UPSERT` / `IDENTITY wrapper` are supported, with the reason when they are not. It is the explanation surface behind the pre-execution self-check and each action's availability: to see why an action is unavailable for a statement, look here first.
+
 #### Cross-Run Comparison and Plan History (experimental)
 
 > Everything in this section requires the experimental switch below; with the default form, Explain goes through the embedded native console and there is no baseline dropdown or history comparison.
 
-After you add an index or change a condition, did the plan actually change? The second time you run Explain, the view shows a "Choose a history baseline to compare (does not re-execute the SQL)" row with a baseline dropdown, defaulting to "Previous execution (current session)"; it aligns the two results into a tree diff and marks cost / rows changes. Nodes are identified stably by "structural path + occurrence index among same-type siblings", so adding or removing a sibling never shifts later nodes. MySQL / MariaDB table families and PG / KingBase JSON families are comparable; Oracle / SQL Server text plans degrade honestly to "not comparable" rather than forcing a diff.
+After you add an index or change a condition, did the plan actually change? As soon as this session holds a previous plan for the same SQL, the view shows a "Choose a history baseline to compare (does not re-execute the SQL)" row with a baseline dropdown, defaulting to "Previous execution (current session)"; it aligns the two results into a tree diff and marks cost / rows changes. Nodes are identified stably by "structural path + occurrence index among same-type siblings", so adding or removing a sibling never shifts later nodes. MySQL / MariaDB table families and PG / KingBase JSON families are comparable; Oracle / SQL Server text plans degrade honestly to "not comparable" rather than forcing a diff.
 
 > This only exists in the **structured Explain view**, which requires enabling "Render EXPLAIN structurally inside the preview panel" under SQL Preview in Settings (experimental, off by default). With it off, Explain goes straight to the native database console and there is no baseline dropdown.
 
@@ -254,11 +265,13 @@ With "display and export masking" enabled, statements are masked before export a
 
 #### Copy as AI Context
 
-Put the current SQL on the clipboard as a context block for AI: source and dialect included, sensitive literals recognised and parameterized by the existing rules, and a mask count at the end.
+Put the current SQL on the clipboard as a context block for AI. The block is a **versioned diagnostic projection**: source and dialect included, sensitive literals recognised and parameterized by the existing rules (with a mask count), plus — when this session already acquired an execution plan for this SQL — an **acquired plan summary** matched to the current SQL and actual target, and the real static table/column counts. Anything unavailable or stale is **explicitly marked as missing** rather than invented.
 
-<GifPlayer src="/demo/ai-context-copy.gif" alt="Copy as AI Context: More then Copy as AI Context produces a notification reporting how many sensitive literals were masked; the second demo uses the include-identifiers variant, where real table and column names appear but literals stay masked" />
+<GifPlayer src="/demo/ai-context-copy.gif" alt="Copy as AI Context: More then Copy as AI Context produces the notification “AI context v2 copied locally (N values masked, identifiers hidden, missing items marked; no database or network access)”; the second demo uses the include-identifiers variant" />
 
 Two exits: the default one anonymises table and column names too; **"Copy as AI Context (with identifiers)"** keeps structure and identifiers so the AI can follow the semantics, while literals are still masked and quoted content is not copied. Structural words (SELECT / FROM / WHERE / JOIN and so on) are always kept verbatim in either mode, while aggregate functions and keywords (COUNT / SUM / JSON / FIRST / NEXT and so on) stay anonymised.
+
+Copying **never touches the database, the network or MCP** — the plan summary only reuses what this session already acquired, and never runs an extra EXPLAIN just to fill the block. The summary keeps only whitelisted plan nodes and numbers, without the original plan's conditions or NOTICEs.
 
 The boundary matters: **ordinary strings that do not match a rule keep their original text** (e.g. `name = 'tom'` is not treated as sensitive), so the block makes no promise of being entirely secret-free — read it over before pasting into an external AI. It only writes the clipboard and never uploads anything.
 
@@ -275,6 +288,8 @@ The boundary matters: **ordinary strings that do not match a rule keep their ori
 5. Rollback plan and dialect capabilities
 
 The HTML version is self-contained (inline styles), so you can send it to a colleague or paste it into an issue. When the IDE side cannot obtain real plan data, that section says so honestly instead of inventing content.
+
+The share dialog has a third entry, **"Review diagnostic report and give feedback"**: it turns the same diagnostic information into a **feedback draft** and opens the request-pool submission dialog. The draft hides SQL values, comments, parameter names and identifiers by default and attaches no parameters, paths, raw plans or files; when the quoting form is unsupported the SQL section is omitted outright, never falling back to the raw text. You can delete sections and edit the body, and it is submitted only after the destination (the public request pool) and the 16 KiB budget are stated and you **agree each time** — editing or retrying after a failure requires agreeing again.
 
 ## Example
 

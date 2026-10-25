@@ -39,7 +39,7 @@ mapper XML 的 `<select>` / `<update>` / `<delete>` / `<insert>` 行左侧 gutte
 
 ## OGNL 表达式面板
 
-<GifPlayer src="/demo/xml-ognl.gif" alt="OGNL 表达式面板：条件行带求值结果「真」，勾掉条件后 WHERE 实时收窄，参数框填值即替换" />
+<GifPlayer src="/demo/xml-ognl.gif" alt="OGNL 表达式面板：条件行带求值结果「真 / 假」，勾掉条件后 WHERE 实时收窄" />
 
 动态条件的 OGNL 表达式（如 `name != null and name != ''`）可在左侧面板勾选，对应 SQL 实时变化。
 

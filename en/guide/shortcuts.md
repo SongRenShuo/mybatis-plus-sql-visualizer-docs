@@ -30,7 +30,7 @@ Bindings can be changed in `Settings` > `Keymap` by searching for the plugin act
 | Copy as AI Context | Preview panel "More" menu (there is also a "with identifiers" variant) |
 | One-click diagnostic report | Preview panel "More" → "Share" → copy / export diagnostic report |
 | History: jump to last entry | "↓≡" action in the SQL History second-level toolbar |
-| Join the community | Chat-bubble icon at the far right of the SQL Log toolbar |
+| Join the community | Chat-bubble icon near the right end of the SQL Log toolbar (only the help "?" sits to its right) |
 
 ## Tips
 

@@ -23,7 +23,7 @@
 
 与 MyBatis-Plus 的 `save` 对齐，JPA Repository 的 CRUD 方法同样直接解析出 SQL：
 
-<GifPlayer src="/demo/jpa-write-path.gif" alt="Repository CRUD 写路径预览：save 出 INSERT（左侧「参数列」勾选面板，取消勾选 user.age 后 INSERT 列清单实时少一列），deleteById 出 DELETE 并附「逐实体 EntityManager.remove 语义（非 bulk DELETE）」注释" />
+<GifPlayer src="/demo/jpa-write-path.gif" alt="Repository CRUD 写路径预览：save 出 INSERT（左侧「参数列」勾选面板列出全部 8 个列），deleteById 出 DELETE 并附「逐实体 EntityManager.remove 语义（非 bulk DELETE）」注释" />
 
 | 方法 | 呈现 |
 |------|------|
@@ -38,7 +38,7 @@
 
 ## 派生查询深化
 
-<GifPlayer src="/demo/jpa-derived-query.gif" alt="在 UserRepository 里逐个预览派生方法：findTop10ByOrderByCreateTimeDesc 生成 ORDER BY create_time DESC LIMIT 10；findByUsernameLike 生成 LIKE '%…%'；返回 Page 的 findByDepartmentIdAndStatus… 生成带 #pageSize/#pageOffset 参数面板的数据 SQL（LIMIT ?, ?）" />
+<GifPlayer src="/demo/jpa-derived-query.gif" alt="在 UserRepository 里逐个预览派生方法：findTop10ByOrderByCreateTimeDesc 生成 ORDER BY create_time DESC LIMIT 10；findByUsernameLike 生成 LIKE ?（参数值自动补 %）；返回 Page 的 findByDepartmentIdAndStatus… 生成带 #pageSize/#pageOffset 参数面板的数据 SQL（LIMIT ?, ?）" />
 
 - 六种方法名前缀全部支持：`find` / `read` / `get` / `query` / `search` / `stream...By`
 - `Top N` / `First N` / `Distinct` / `OrderBy<prop>Asc|Desc` 多字段排序

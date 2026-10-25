@@ -39,7 +39,7 @@ When the target can't be resolved the preview continues, with the warning naming
 
 ## OGNL Expression Panel
 
-<GifPlayer src="/demo/xml-ognl.gif" alt="OGNL expression panel: condition lines carry their evaluated result, toggling one off narrows WHERE in real time, and typing a parameter value substitutes it" />
+<GifPlayer src="/demo/xml-ognl.gif" alt="OGNL expression panel: condition lines carry their evaluated result (true / false), and toggling one off narrows WHERE in real time" />
 
 OGNL expressions in dynamic conditions (e.g. `name != null and name != ''`) can be toggled in the left panel, with SQL updating in real time.
 

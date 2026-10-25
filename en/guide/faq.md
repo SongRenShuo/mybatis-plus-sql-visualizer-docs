@@ -157,7 +157,7 @@ The action only works for a single UPDATE / DELETE. These shapes report the reas
 
 ## Why does the AI context block still contain original values?
 
-"Copy as AI Context" only masks literals that **match a rule** (password-like column names, ID-card / mobile-number shapes); ordinary strings keep their original text — `name = 'tom'` for instance is not treated as sensitive. So the block makes no promise of being entirely secret-free: read it over before pasting into an external AI. For a stricter exit, turn on "Display and export masking" or clean it up by hand before copying.
+"Copy as AI Context" only masks literals that **match a rule** (password-like column names, ID-card / mobile-number shapes); ordinary strings keep their original text — `name = 'tom'` for instance is not treated as sensitive. So the block makes no promise of being entirely secret-free: read it over before pasting into an external AI. For a stricter exit, turn on "Display and export masking" or clean it up by hand before copying. (The block is a versioned diagnostic projection: copying never touches the database or the network, and the plan summary only reuses what this session already acquired.)
 
 ## Why isn't EXPLAIN plan history saved by default?
 
