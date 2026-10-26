@@ -41,10 +41,13 @@ Auto-determine quoting by field type:
 
 | Dialect | Conflict Clause |
 |---------|----------------|
-| MySQL / MariaDB | `ON DUPLICATE KEY UPDATE` |
-| PostgreSQL | `ON CONFLICT (key) DO UPDATE SET` |
-| SQL Server | `MERGE INTO` |
-| Oracle | `MERGE INTO` |
+| MySQL / MariaDB / OceanBase (MySQL mode) | `ON DUPLICATE KEY UPDATE` |
+| openGauss | `ON DUPLICATE KEY UPDATE` (not PG's `ON CONFLICT`) |
+| PostgreSQL / KingBase / SQLite | `ON CONFLICT (key) DO UPDATE SET` |
+| H2 | Whole statement: `MERGE INTO t (cols) KEY (key) VALUES (...)` |
+| Oracle / SQL Server / DM (Dameng) | No native concise form; degrades to a plain INSERT |
+
+SQL Server, Oracle and Dameng do support `MERGE INTO`, but that is a complete multi-branch statement and cannot be appended as an INSERT conflict suffix. The plugin therefore emits a plain INSERT that is executable on that dialect rather than an incomplete MERGE.
 
 ## Batch Execution and Confirmation
 

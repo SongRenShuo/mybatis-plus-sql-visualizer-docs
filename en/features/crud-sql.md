@@ -29,7 +29,7 @@ The selected statement opens in the existing SQL preview window, ready to edit, 
 - When the entity carries `@TableField(fill = …)`, the parameter panel offers "FieldFill safe simulation": those fill columns get a simulated-value input for INSERT / UPDATE; a value you type goes into the SQL (the normal input grays out), leaving it blank omits the column — your `MetaObjectHandler` is never executed
 - UPDATE / DELETE locate rows by primary key; tables without a primary key degrade the WHERE clause to a `1 = 0` placeholder, flagged as "no primary key recognized" in the candidate list to prevent accidental full-table statements
 - Logic-delete semantics travel with the "DELETE (logic delete)" variant, leaving the physical DELETE untouched
-- On SQL Server, generated INSERTs touching identity columns are wrapped in `SET IDENTITY_INSERT ... ON/OFF` automatically, so the statement replays directly; other dialects need no wrapping and the output is byte-for-byte unchanged (rollback snapshots carry the dialect and identity-column info too)
+- On SQL Server and DM (Dameng), generated INSERTs touching identity columns are wrapped in `SET IDENTITY_INSERT ... ON/OFF` automatically, so the statement replays directly; other dialects need no wrapping and the output is byte-for-byte unchanged (rollback snapshots carry the dialect and identity-column info too)
 - Parameter input rows follow a per-type contract: placeholder hints by category, a faint end-of-line warning when a number field gets non-numeric or a date field gets an unparseable input (a hint only, never a blocker), and mock values dispatched by category
 
 > Have a suggestion or hit an issue with CRUD SQL generation? [Go to the feedback pool](/en/about/feedback?category=other)

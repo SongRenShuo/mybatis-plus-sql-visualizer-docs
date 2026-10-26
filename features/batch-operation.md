@@ -41,10 +41,13 @@ Wrapper 锚点涉及批量操作时，弹窗自动切换到批量参数面板。
 
 | 方言 | 冲突子句 |
 |------|---------|
-| MySQL / MariaDB | `ON DUPLICATE KEY UPDATE` |
-| PostgreSQL | `ON CONFLICT (key) DO UPDATE SET` |
-| SQL Server | `MERGE INTO` |
-| Oracle | `MERGE INTO` |
+| MySQL / MariaDB / OceanBase（MySQL 模式） | `ON DUPLICATE KEY UPDATE` |
+| openGauss | `ON DUPLICATE KEY UPDATE`（不是 PG 的 `ON CONFLICT`） |
+| PostgreSQL / KingBase（金仓）/ SQLite | `ON CONFLICT (key) DO UPDATE SET` |
+| H2 | 整语句 `MERGE INTO t (cols) KEY (key) VALUES (...)` |
+| Oracle / SQL Server / DM（达梦） | 无原生简洁形态，降级纯 INSERT |
+
+SQL Server、Oracle 与达梦虽然支持 `MERGE INTO`，但那是完整的多分支语句形态，无法作为 INSERT 的冲突后缀追加，因此这里选择输出一条在本方言可执行的纯 INSERT，而不是拼一条形态不完整的 MERGE。
 
 ## 批量执行与确认
 

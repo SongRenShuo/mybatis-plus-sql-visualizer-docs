@@ -66,12 +66,14 @@ The parameter area can store named parameter sets ("Manage Presets"), and the va
 
 | Dialect | Syntax |
 |---------|--------|
-| MySQL / MariaDB / SQLite / H2 | `LIMIT n OFFSET m` |
-| PostgreSQL / openGauss | `LIMIT n OFFSET m` |
-| OceanBase (MySQL mode) | `LIMIT [offset,] n` |
-| Oracle | `ROWNUM` / `FETCH FIRST` |
-| SQL Server | `OFFSET m ROWS FETCH NEXT n ROWS ONLY` |
-| DM (Dameng) / KingBase | `LIMIT n OFFSET m` |
+| MySQL / MariaDB | `LIMIT [offset,] count` |
+| OceanBase (MySQL mode) | `LIMIT [offset,] count` |
+| DM (Dameng) | `LIMIT [offset,] count` |
+| PostgreSQL / openGauss | `LIMIT count OFFSET offset` |
+| KingBase | `LIMIT count OFFSET offset` |
+| SQLite / H2 | `LIMIT count OFFSET offset` |
+| Oracle | `OFFSET n ROWS FETCH NEXT m ROWS ONLY` (or `FETCH FIRST m ROWS ONLY` when there is no offset) |
+| SQL Server | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` |
 
 Upsert conflict clauses for OceanBase and openGauss also render in their real forms (openGauss uses the MySQL-style `ON DUPLICATE KEY UPDATE`, not PG's `ON CONFLICT`).
 

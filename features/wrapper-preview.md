@@ -67,12 +67,14 @@
 
 | 方言 | 分页语法 |
 |------|---------|
-| MySQL / MariaDB / SQLite / H2 | `LIMIT n OFFSET m` |
-| PostgreSQL / openGauss | `LIMIT n OFFSET m` |
-| OceanBase（MySQL 模式） | `LIMIT [offset,] n` |
-| Oracle | `ROWNUM` / `FETCH FIRST` |
-| SQL Server | `OFFSET m ROWS FETCH NEXT n ROWS ONLY` |
-| DM（达梦）/ KingBase（金仓） | `LIMIT n OFFSET m` |
+| MySQL / MariaDB | `LIMIT [offset,] count` |
+| OceanBase（MySQL 模式） | `LIMIT [offset,] count` |
+| DM（达梦） | `LIMIT [offset,] count` |
+| PostgreSQL / openGauss | `LIMIT count OFFSET offset` |
+| KingBase（金仓） | `LIMIT count OFFSET offset` |
+| SQLite / H2 | `LIMIT count OFFSET offset` |
+| Oracle | `OFFSET n ROWS FETCH NEXT m ROWS ONLY`（无 offset 时 `FETCH FIRST m ROWS ONLY`） |
+| SQL Server | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` |
 
 OceanBase 与 openGauss 的 upsert 冲突子句亦按各自真实形态渲染（openGauss 实为 `ON DUPLICATE KEY UPDATE` MySQL 形态，非 PG 的 `ON CONFLICT`）。
 
