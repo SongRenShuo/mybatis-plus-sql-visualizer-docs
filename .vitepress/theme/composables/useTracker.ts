@@ -25,6 +25,36 @@ function report(path: string, referrer: string | null): void {
   }
 }
 
+/**
+ * 下载目标白名单。取值即上报的 q，后端原样写入 ext 列，
+ * 后台按 `event_type='download' AND ext=<值>` 聚合——拼错的字符串会变成脏 ext，故运行时也要挡。
+ */
+const DOWNLOAD_TARGETS = ['marketplace', 'gitee-releases'] as const
+
+export type DownloadTarget = (typeof DOWNLOAD_TARGETS)[number]
+
+/**
+ * 上报一次下载按钮点击（20261026 下载量统计计划批次 C）。
+ * target 只接受 DOWNLOAD_TARGETS 内的值，其余直接丢弃；跳转本身不受影响，
+ * 调用方用 @click 并列挂载即可，不要 preventDefault。
+ * 自带 keepalive：target=_blank 外链点击后当前页可能被关闭/切走，仍要送出去。
+ */
+export function trackDownload(target: DownloadTarget): void {
+  try {
+    if (!DOWNLOAD_TARGETS.includes(target)) return
+    const path = cleanPath(typeof location === 'undefined' ? '' : location.pathname)
+    const referrer = typeof document === 'undefined' ? '' : document.referrer
+    void fetch(`${API_BASE}/track`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p: path, r: referrer || undefined, e: 'download', q: target }),
+      keepalive: true,
+    }).catch(() => {})
+  } catch {
+    /* 静默 */
+  }
+}
+
 /** 归一化路由 path：去 hash/query、去 .html 后缀（本站未开 cleanUrls，VitePress 路由事件带 .html）、去尾斜杠 */
 function cleanPath(route: string): string {
   let path = route.split(/[?#]/)[0]

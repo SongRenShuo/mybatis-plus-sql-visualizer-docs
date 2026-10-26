@@ -1,5 +1,6 @@
 <script setup>
 import { useHomeContent } from '../../composables/useHomeContent'
+import { trackDownload } from '../../composables/useTracker'
 
 const { c, localePath } = useHomeContent()
 </script>
@@ -28,6 +29,7 @@ const { c, localePath } = useHomeContent()
           target="_blank"
           rel="noopener noreferrer"
           class="cta-btn-primary"
+          @click="trackDownload('marketplace')"
         >
           {{ c.cta.primary }}
           <svg class="cta-btn-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14">

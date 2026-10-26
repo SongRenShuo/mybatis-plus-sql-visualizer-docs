@@ -1,6 +1,7 @@
 <script setup>
 import { usePluginVersion } from '../../composables/usePluginVersion'
 import { useHomeContent } from '../../composables/useHomeContent'
+import { trackDownload } from '../../composables/useTracker'
 
 const { version } = usePluginVersion()
 const { c, isEnglish } = useHomeContent()
@@ -26,6 +27,7 @@ const { c, isEnglish } = useHomeContent()
               target="_blank"
               rel="noopener noreferrer"
               class="btn-large btn-download"
+              @click="trackDownload('marketplace')"
             >
               <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
@@ -37,6 +39,7 @@ const { c, isEnglish } = useHomeContent()
               target="_blank"
               rel="noopener noreferrer"
               class="btn-large btn-outline"
+              @click="trackDownload('gitee-releases')"
             >
               <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                 <path d="M12 3v10m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>

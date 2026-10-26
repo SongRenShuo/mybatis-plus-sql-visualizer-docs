@@ -4,6 +4,7 @@ import { useData } from 'vitepress'
 import PagefindSearch from '../PagefindSearch.vue'
 import SectionNav from './SectionNav.vue'
 import { useHomeContent } from '../../composables/useHomeContent'
+import { trackDownload } from '../../composables/useTracker'
 
 const { isDark } = useData()
 const { c } = useHomeContent()
@@ -150,6 +151,7 @@ onUnmounted(() => {
             target="_blank"
             rel="noopener noreferrer"
             class="btn-primary"
+            @click="trackDownload('marketplace')"
           >
             {{ c.nav.download }}
           </a>
