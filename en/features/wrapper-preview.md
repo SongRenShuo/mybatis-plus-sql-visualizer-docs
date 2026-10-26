@@ -39,7 +39,7 @@ This is the first batch (MVP): common chain queries are covered; rarer method sh
 
 ### Dynamic Condition Toggles
 
-<GifPlayer src="/demo/wrapper-params.gif" alt="Ticking the username condition on in the preview panel adds a WHERE condition in real time; typing a value replaces the placeholder instantly" />
+<GifPlayer src="/demo/wrapper-params.gif" alt="Unticking the username condition in the preview panel drops a WHERE clause in real time, ticking it back restores it; typing values (tom / 1, unquoted) replaces the placeholders with 'tom' / 1 instantly — quoting is decided by the plugin from the column type" />
 
 Boolean-overloaded conditions like `.eq(true, ...)` can be toggled in the left panel, re-rendering SQL in real time.
 
@@ -181,7 +181,7 @@ The result row also offers:
 - **Dialect Settings**: jump straight to the plugin's dialect configuration page
 - **Copy error message**: copy the whole explanation for pasting into an issue or a chat
 
-<GifPlayer src="/demo/dialect-gate.gif" alt="Mismatched dialect warns but still executes: the preview renders as PostgreSQL (dialect: PostgreSQL, manual), the SQL is delivered to the chosen PostgreSQL data source, and the database answers [42P01] ERROR: relation &quot;user&quot; does not exist — the plugin warns without blocking" />
+<GifPlayer src="/demo/dialect-gate.gif" alt="Mismatched dialect is blocked: the preview renders as PostgreSQL (dialect: PostgreSQL, manual — note the double-quoted FROM &quot;user&quot;); clicking Execute SQL shows a red \"Blocked execution: the SQL was rendered with the manual dialect PostgreSQL while the selected data source is MySQL\" row with three exits — Switch data source / Dialect settings / Copy error message" />
 
 ### Real EXPLAIN Plan
 

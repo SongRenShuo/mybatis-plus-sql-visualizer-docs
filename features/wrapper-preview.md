@@ -42,7 +42,7 @@
 
 `.eq(true, ...)` 等布尔重载条件可在左侧面板勾选/取消，SQL 实时重渲染。
 
-<GifPlayer src="/demo/wrapper-params.gif" alt="预览面板动态条件勾上 username 后 WHERE 实时多一个条件，参数框填值后 ? 即时替换为实值" />
+<GifPlayer src="/demo/wrapper-params.gif" alt="预览面板动态条件取消勾选 username 后 WHERE 实时少一个条件，勾回还原；参数框填值（tom / 1，不带引号）后 ? 即时替换为 'tom' / 1——引号由插件按字段类型决定" />
 
 ### 参数回填
 
@@ -182,7 +182,7 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 - **方言设置**：直达插件的方言配置页
 - **复制错误信息**：把整段说明复制走，便于贴进 issue 或对话里核对
 
-<GifPlayer src="/demo/dialect-gate.gif" alt="方言不一致时的提示与放行：预览按 PostgreSQL 渲染（方言：PostgreSQL 手动指定），执行时选定 PostgreSQL 数据源后 SQL 直接送达，目标库返回 [42P01] ERROR: relation &quot;user&quot; does not exist —— 插件只提示不阻断" />
+<GifPlayer src="/demo/dialect-gate.gif" alt="方言不一致时插件已阻止执行：预览按 PostgreSQL 渲染（方言：PostgreSQL 手动指定，SQL 呈 FROM &quot;user&quot; 双引号形态），点「执行 SQL」后结果区出现红色「已阻止执行：当前 SQL 由手动方言 PostgreSQL 渲染，所选数据源是 MySQL」说明行，附「切换数据源」「方言设置」「复制错误信息」三个出口" />
 
 ### EXPLAIN 真实执行计划
 

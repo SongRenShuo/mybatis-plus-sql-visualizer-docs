@@ -24,7 +24,7 @@ The preview shortcut `Alt+Shift+Q` works on all of the above (cursor on the targ
 
 Matching MyBatis-Plus `save` support, JPA Repository CRUD methods parse straight to SQL:
 
-<GifPlayer src="/demo/jpa-write-path.gif" alt="Repository CRUD write-path preview: save yields an INSERT (with a left-hand Insert-columns checklist listing all 8 columns), and deleteById yields a DELETE annotated with its per-entity EntityManager.remove semantics (not a bulk DELETE)" />
+<GifPlayer src="/demo/jpa-write-path.gif" alt="Repository CRUD write-path preview: save yields an INSERT (with a left-hand Insert-columns checklist listing all 8 columns; unticking user.age drops that column from the INSERT in real time), and deleteById yields a DELETE annotated with its per-entity EntityManager.remove semantics (not a bulk DELETE)" />
 
 | Method | Rendering |
 |--------|-----------|

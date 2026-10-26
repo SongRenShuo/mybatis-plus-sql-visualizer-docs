@@ -23,7 +23,7 @@
 
 与 MyBatis-Plus 的 `save` 对齐，JPA Repository 的 CRUD 方法同样直接解析出 SQL：
 
-<GifPlayer src="/demo/jpa-write-path.gif" alt="Repository CRUD 写路径预览：save 出 INSERT（左侧「参数列」勾选面板列出全部 8 个列），deleteById 出 DELETE 并附「逐实体 EntityManager.remove 语义（非 bulk DELETE）」注释" />
+<GifPlayer src="/demo/jpa-write-path.gif" alt="Repository CRUD 写路径预览：save 出 INSERT（左侧「参数列」勾选面板列出全部 8 个列，取消勾选 user.age 后 INSERT 列清单实时少一列），deleteById 出 DELETE 并附「逐实体 EntityManager.remove 语义（非 bulk DELETE）」注释" />
 
 | 方法 | 呈现 |
 |------|------|
