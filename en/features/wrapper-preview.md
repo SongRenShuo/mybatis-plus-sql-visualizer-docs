@@ -181,7 +181,7 @@ The result row also offers:
 - **Dialect Settings**: jump straight to the plugin's dialect configuration page
 - **Copy error message**: copy the whole explanation for pasting into an issue or a chat
 
-<GifPlayer src="/demo/dialect-gate.gif" alt="Mismatched dialect is blocked: the preview renders as PostgreSQL (dialect: PostgreSQL, manual — note the double-quoted FROM &quot;user&quot;); clicking Execute SQL shows a red \"Blocked execution: the SQL was rendered with the manual dialect PostgreSQL while the selected data source is MySQL\" row with three exits — Switch data source / Dialect settings / Copy error message" />
+<GifPlayer src="/demo/dialect-gate.gif" alt="Mismatched dialect is blocked: the preview renders as PostgreSQL (dialect: PostgreSQL, manual — note the double-quoted FROM &quot;user&quot;); clicking Execute SQL shows a red Blocked-execution row (the SQL was rendered with the manual dialect PostgreSQL while the selected data source is MySQL) with three exits — Switch data source / Dialect settings / Copy error message" />
 
 ### Real EXPLAIN Plan
 
