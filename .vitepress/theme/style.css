@@ -880,6 +880,11 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
    「脚本跳转」两个路径的避让量同源，不会各改各的。 */
 .cool-home {
   --home-anchor-offset: 124px;
+  /* 首页「更多特性」卡片正文灰阶：比全局 --text-secondary 深一档。
+     gray-500（#6b7280）对白底 4.83:1 刚过 AA 门槛，16px 中文整段排下来观感发飘；
+     gray-600 是 7.56:1。只作用于这一区块的正文，不动全局变量——章节眉题靠
+     字号与字距承担标记作用，不需要这个对比度。 */
+  --feature-text: #4b5563;
 }
 
 .cool-home main section[id] {
@@ -893,6 +898,7 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
   --text-primary: #f9fafb;
   --text-secondary: #9ca3af;
   --border-color: #374151;
+  --feature-text: #d1d5db;
 }
 
 /* ============================================

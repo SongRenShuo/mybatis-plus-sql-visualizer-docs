@@ -203,7 +203,7 @@ export const homeContent = {
       eyebrow: 'More Features',
       badge: '更多特性',
       title: '我们为您考虑周全',
-      description: 'SQL Visualizer 涵盖了 SQL 调试所需的一切功能。',
+      description: '预览、捕获、定位、生成——调试一条 SQL 要用到的四件事，都在这一个插件里。',
     },
 
     welfare: {
@@ -550,7 +550,7 @@ export const homeContent = {
       eyebrow: 'More Features',
       badge: 'More Features',
       title: 'Everything You Need',
-      description: 'SQL Visualizer covers everything SQL debugging takes.',
+      description: 'Preview, capture, trace, generate — the four things SQL debugging takes, in one plugin.',
     },
 
     welfare: {

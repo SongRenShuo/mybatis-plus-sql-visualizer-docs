@@ -58,7 +58,8 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
             </svg>
           </div>
           <h3 class="feature-card-title">{{ card.title }}</h3>
-          <p class="feature-card-description">{{ card.description }}</p>
+          <p class="feature-card-claim">{{ card.claim }}</p>
+          <p class="feature-card-tags">{{ card.tags.join(' · ') }}</p>
         </div>
       </div>
     </div>
@@ -101,7 +102,7 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
 
 .section-description {
   font-size: 1.125rem;
-  color: var(--text-secondary);
+  color: var(--feature-text);
   line-height: 1.75;
 }
 
@@ -194,8 +195,24 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
   color: var(--text-primary);
 }
 
-.feature-card-description {
-  color: var(--text-secondary);
+/* 一句话主张：卡片里唯一的叙述性文字，长度按 20 字（英文 55 字符）控住，
+   九张卡因此都落在两行以内，卡片高度不再参差 */
+.feature-card-claim {
+  color: var(--feature-text);
   line-height: 1.75;
+  margin: 0 0 1rem;
+  /* 留出两行高度，短句卡片与长句卡片底部对齐 */
+  min-height: 3.5em;
+}
+
+/* 能力点：顿号分隔的纯文本行，不用胶囊/底色（用户对「AI 味」的判定里，
+   自创胶囊块是明确的一条）。用文本流而不是 flex 子项——flex 每个标签都
+   自带边界空间，英文长标签因此更容易提前折行。留两行高度对齐卡片底部。 */
+.feature-card-tags {
+  min-height: 3.5em;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  color: var(--feature-text);
 }
 </style>
