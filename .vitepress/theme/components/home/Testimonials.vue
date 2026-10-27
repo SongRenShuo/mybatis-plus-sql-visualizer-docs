@@ -25,18 +25,20 @@ const { c } = useHomeContent()
           class="testimonial-card mp-reveal"
           :style="{ '--mp-reveal-delay': `${i * 80}ms` }"
         >
-          <div class="testimonial-stars">
+          <div class="testimonial-stars" :aria-label="`${t.stars} / 5`">
             <svg
               v-for="s in 5"
               :key="s"
               class="testimonial-star"
+              :class="{ 'testimonial-star--empty': s > t.stars }"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
           </div>
-          <p class="testimonial-quote">"{{ t.quote }}"</p>
+          <p class="testimonial-headline">{{ t.headline }}</p>
+          <p class="testimonial-detail">{{ t.detail }}</p>
           <div class="testimonial-author">
             <div class="testimonial-avatar" :style="{ backgroundColor: t.color }">
               {{ t.initials }}
@@ -58,7 +60,7 @@ const { c } = useHomeContent()
   background: linear-gradient(135deg, #f5f7f7 0%, #f0f5f5 100%);
 }
 
-:global(.dark) .testimonials-section {
+html.dark .testimonials-section {
   background: linear-gradient(135deg, #1e2124 0%, #1a1e1e 100%);
 }
 
@@ -79,7 +81,7 @@ const { c } = useHomeContent()
   margin-bottom: 1.25rem;
 }
 
-:global(.dark) .testimonials-badge {
+html.dark .testimonials-badge {
   background-color: #374151;
   color: #9ca3af;
 }
@@ -93,7 +95,7 @@ const { c } = useHomeContent()
   margin-top: 0;
 }
 
-:global(.dark) .testimonials-title {
+html.dark .testimonials-title {
   color: #f9fafb;
 }
 
@@ -130,7 +132,7 @@ const { c } = useHomeContent()
   gap: 1rem;
 }
 
-:global(.dark) .testimonial-card {
+html.dark .testimonial-card {
   background: #2b2d30;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
 }
@@ -146,16 +148,39 @@ const { c } = useHomeContent()
   color: #facc15;
 }
 
-.testimonial-quote {
+/* 未点亮的星：同一批 SVG，只压掉不透明度，避免多一套路径 */
+.testimonial-star--empty {
+  color: #d1d5db;
+}
+
+html.dark .testimonial-star--empty {
+  color: #4b5563;
+}
+
+/* 结论句：卡片里最先被扫读的一行，字号与字重都比细节高一级 */
+.testimonial-headline {
   color: #0f172a;
-  font-size: 1rem;
-  line-height: 1.65;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.5;
+  margin: 0;
+}
+
+html.dark .testimonial-headline {
+  color: #f9fafb;
+}
+
+/* 支撑细节：比结论低一级，行长与颜色都收一档 */
+.testimonial-detail {
+  color: #6b7280;
+  font-size: 0.9375rem;
+  line-height: 1.7;
   flex: 1;
   margin: 0;
 }
 
-:global(.dark) .testimonial-quote {
-  color: #e5e7eb;
+html.dark .testimonial-detail {
+  color: #9ca3af;
 }
 
 .testimonial-author {
@@ -184,7 +209,7 @@ const { c } = useHomeContent()
   font-size: 0.9375rem;
 }
 
-:global(.dark) .testimonial-name {
+html.dark .testimonial-name {
   color: #f9fafb;
 }
 

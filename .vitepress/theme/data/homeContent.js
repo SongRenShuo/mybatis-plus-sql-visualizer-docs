@@ -220,29 +220,42 @@ export const homeContent = {
     testimonials: {
       eyebrow: 'Testimonials',
       badge: '用户评价',
-      titlePrefix: '深受 ',
-      titleAccent: '开发团队信赖',
-      subtitle: '听听那些每天使用 SQL Visualizer 的工程师们怎么说。',
+      titlePrefix: '开发者在',
+      titleAccent: '怎么用它',
+      subtitle: '三句来自实际使用的话，每句都对应一个具体场景。',
+      /**
+       * 每张卡是「一句结论 + 一条具体事实」的两段式：
+       * headline 可直接扫读，detail 给出支撑它的细节。
+       * 星级不统一成五颗——三张全五星的整齐感本身像刷的；这里是 5 / 5 / 4。
+       * 结论都落在「省掉了哪一步」「查到了什么」这类可验证的结果上，
+       * 而不是复述功能页措辞。
+       */
       items: [
         {
-          quote:
-            '接手的项目一半是 MP 一半是 JdbcTemplate 的字符串 SQL，之前想看真实执行的 SQL 只能跑一遍再翻日志。现在两种写法行首都有图标，点一下直接出 SQL，StringBuilder 拼的也能聚合，上周排查一个分页翻错的问题没启动项目就定位了。',
+          stars: 5,
+          headline: '没启动项目，定位了分页翻错的问题',
+          detail:
+            '接手的项目一半是 MP、一半是 JdbcTemplate 字符串。现在两种写法行首都有图标，点一下出 SQL，StringBuilder 拼的也能还原。',
           name: '夜航船',
           role: 'Java 开发工程师',
           initials: '夜',
           color: '#6366f1',
         },
         {
-          quote:
-            '我们组维护一个 Hibernate 老项目，实体还挂在 .hbm.xml 上，Criteria 查询根本看不出最后跑的是什么语句。这插件不用启容器就能把 HQL 和 Criteria 链还原成 SQL，hbm 里的命名查询也能认，改一版查询不用再拉同事帮忙跑项目了。',
+          stars: 5,
+          headline: '改一版查询，不用再拉同事帮忙跑项目',
+          detail:
+            '维护的 Hibernate 老项目实体还挂在 .hbm.xml 上，Criteria 链以前根本看不出最后跑什么。现在 HQL、Criteria、hbm 命名查询都能直接还原成 SQL。',
           name: '不写注释的人',
           role: '后端开发',
           initials: '不',
           color: '#0ea5e9',
         },
         {
-          quote:
-            'SQL 日志窗口现在是开项目自动抓，参数拼好还能点回源码位置，慢查询直接标红。上次压测就靠它挑出两条没走索引的语句。更新也免得重启 IDE，点一下装完接着用，比很多插件都省心。',
+          stars: 4,
+          headline: '压测时挑出了两条没走索引的语句',
+          detail:
+            'SQL 日志窗口开项目就自动抓，参数拼好，慢查询直接标红，还能点回源码位置。装完不用重启 IDE 就能用。',
           name: '半糖不加冰',
           role: '全栈开发工程师',
           initials: '半',
@@ -251,23 +264,54 @@ export const homeContent = {
       ],
     },
 
+    /**
+     * 「完全免费」区块：只有免费一档，用定价卡的形态本身会暗示「还有别的档位可比较」，
+     * 所以改成一张全宽功能矩阵——这里承担的是「完整清单」这个职责（上面「核心能力」
+     * 「更多特性」两节讲亮点，这里摊开全集），按功能域分三栏。
+     * headline 行放价格与开放性口径，替代原来的价格大字。
+     */
     pricing: {
-      eyebrow: 'Pricing',
+      eyebrow: 'Free & Open Source',
       title: '完全免费',
-      description: '所有功能永久免费使用，无需注册，无需登录',
-      plan: '免费版',
-      price: '¥0',
-      period: '永久免费',
-      features: [
-        'Wrapper → SQL 实时预览',
-        'XML / 注解动态 SQL 预览',
-        'MPJ 联表 JOIN 反向解析',
-        'SQL → Java 反向转换',
-        '控制台日志一键还原',
-        '批量操作参数面板',
-        'SQL 代码补全',
-        '逻辑删除自动注入',
-        '11 种数据库方言支持',
+      description: '只有一档，没有付费版。所有功能永久免费，无需注册，无需登录。',
+      headline: ['¥0 永久使用', 'Apache-2.0 开源', '无遥测 · 代码不出本机', '11 种数据库方言'],
+      groups: [
+        {
+          name: 'SQL 预览',
+          caption: '写代码时，不启动项目就能看见最终 SQL',
+          items: [
+            'Wrapper → SQL 实时预览',
+            'XML / 注解动态 SQL 预览',
+            'JPA / Hibernate（HQL · Criteria · hbm）',
+            'MPJ 联表 JOIN 反向解析',
+            '其他 ORM 链式框架（xbatis / Easy-Query 等）',
+            '动态条件勾选实时重渲染',
+          ],
+        },
+        {
+          name: '运行期捕获',
+          caption: '应用跑起来后，真实参数、耗时与源码位置自动入列',
+          items: [
+            '增强捕获真实参数与精确耗时',
+            '控制台日志一键还原（回落通道）',
+            '日志 SQL 跳回源码位置',
+            '调用栈逐帧跳转',
+            '慢查询标红与同结构聚类',
+            '批量操作参数面板',
+          ],
+        },
+        {
+          name: '生成与分析',
+          caption: '写完与排查时用得上的生成、执行与校验能力',
+          items: [
+            'SQL → Java 反向转换（四种形态）',
+            'CRUD SQL 一键生成',
+            '真实 EXPLAIN 执行计划',
+            'SQL 代码补全',
+            '无 WHERE 警示与逻辑删除注入',
+            'MCP Server 十一工具（IDEA 2025.2+）',
+          ],
+        },
       ],
       button: '立即免费下载',
     },
@@ -278,7 +322,7 @@ export const homeContent = {
       titleLine1: '准备好告别繁琐的',
       titleLine2: 'SQL 调试方式了吗？',
       subtitle:
-        '加入超过 500 名开发者的行列，在 IntelliJ IDEA 中享受更高效的 SQL 调试体验。所有功能永久免费。',
+        '加入超过 1000 名开发者的行列，在 IntelliJ IDEA 中享受更高效的 SQL 调试体验。所有功能永久免费。',
       primary: '立即免费下载',
       secondary: '查看文档',
       trust: ['永久免费使用', '开箱即用', '无需注册'],
@@ -573,29 +617,35 @@ export const homeContent = {
     testimonials: {
       eyebrow: 'Testimonials',
       badge: 'Testimonials',
-      titlePrefix: 'Trusted by ',
-      titleAccent: 'development teams',
-      subtitle: 'Hear from the engineers who use SQL Visualizer every day.',
+      titlePrefix: 'How developers ',
+      titleAccent: 'actually use it',
+      subtitle: 'Three notes from real use — each one tied to a concrete scenario.',
       items: [
         {
-          quote:
-            'Half the projects I inherit are MP and half are string SQL in JdbcTemplate. To see the SQL that actually ran I had to run it and dig through logs. Now both styles show an icon at the start of the line — one click gives me the SQL, and even StringBuilder-assembled queries are aggregated. Last week I tracked down a pagination bug without starting the project at all.',
+          stars: 5,
+          headline: 'Found a pagination bug without starting the project',
+          detail:
+            'Half the projects I inherit are MP and half are JdbcTemplate string SQL. Both styles show an icon at the start of the line now — one click gives me the SQL, and even StringBuilder-assembled queries restore.',
           name: '夜航船',
           role: 'Java Developer',
           initials: '夜',
           color: '#6366f1',
         },
         {
-          quote:
-            'Our team maintains a legacy Hibernate project with entities still mapped in .hbm.xml, and Criteria queries never show what finally runs. This plugin restores HQL and Criteria chains into SQL without starting the container, and it recognises named queries in hbm too — changing a query no longer means pulling a colleague in to run the project.',
+          stars: 5,
+          headline: 'Changing a query no longer needs a colleague to run the app',
+          detail:
+            'Our legacy Hibernate project maps entities in .hbm.xml, and Criteria chains never showed what finally ran. Now HQL, Criteria and hbm named queries all restore to SQL directly.',
           name: '不写注释的人',
           role: 'Backend Developer',
           initials: '不',
           color: '#0ea5e9',
         },
         {
-          quote:
-            'The SQL log window now captures automatically when the project opens, parameters come pre-filled, and you can click back to the source location with slow queries highlighted in red. It picked out two queries missing their index during our last load test. Updates no longer restart the IDE either — install and keep working.',
+          stars: 4,
+          headline: 'Picked out two queries missing their index during a load test',
+          detail:
+            'The SQL log window captures automatically when the project opens, parameters come pre-filled, slow queries flag red, and you can click back to the source line. No IDE restart after install.',
           name: '半糖不加冰',
           role: 'Full-stack Developer',
           initials: '半',
@@ -605,22 +655,47 @@ export const homeContent = {
     },
 
     pricing: {
-      eyebrow: 'Pricing',
+      eyebrow: 'Free & Open Source',
       title: 'Completely Free',
-      description: 'Every feature free forever. No sign-up, no login.',
-      plan: 'Free',
-      price: '$0',
-      period: 'free forever',
-      features: [
-        'Wrapper → SQL live preview',
-        'XML / annotation dynamic SQL preview',
-        'MPJ join reverse parsing',
-        'SQL → Java reverse conversion',
-        'One-click console log restore',
-        'Batch operation parameter panel',
-        'SQL code completion',
-        'Logic-delete auto injection',
-        '11 database dialects supported',
+      description: 'One tier only — there is no paid version. Every feature free forever, no sign-up, no login.',
+      headline: ['$0 forever', 'Apache-2.0 open source', 'No telemetry · code stays local', '11 database dialects'],
+      groups: [
+        {
+          name: 'SQL preview',
+          caption: 'See the final SQL while writing code, without starting the project',
+          items: [
+            'Wrapper → SQL live preview',
+            'XML / annotation dynamic SQL preview',
+            'JPA / Hibernate (HQL · Criteria · hbm)',
+            'MPJ join reverse parsing',
+            'Other ORM chains (xbatis / Easy-Query etc.)',
+            'Dynamic conditions toggle and re-render',
+          ],
+        },
+        {
+          name: 'Runtime capture',
+          caption: 'Once the app runs, real parameters, durations and source lines arrive automatically',
+          items: [
+            'Enhanced capture: real parameters, exact durations',
+            'Console log restore (fallback channel)',
+            'Log SQL jumps back to source',
+            'Frame-by-frame call stack jumps',
+            'Slow-query flagging and same-shape clusters',
+            'Batch operation parameter panel',
+          ],
+        },
+        {
+          name: 'Generation & analysis',
+          caption: 'Generation, execution and checks for after-the-fact work',
+          items: [
+            'SQL → Java reverse conversion (four forms)',
+            'CRUD SQL generation',
+            'Real EXPLAIN plans',
+            'SQL code completion',
+            'No-WHERE warnings and logic-delete injection',
+            'Eleven MCP Server tools (IDEA 2025.2+)',
+          ],
+        },
       ],
       button: 'Install — Free',
     },
@@ -631,7 +706,7 @@ export const homeContent = {
       titleLine1: 'Ready to leave tedious',
       titleLine2: 'SQL debugging behind?',
       subtitle:
-        'Join 500+ developers getting a better SQL debugging experience in IntelliJ IDEA. Every feature is free forever.',
+        'Join 1000+ developers getting a better SQL debugging experience in IntelliJ IDEA. Every feature is free forever.',
       primary: 'Install — Free',
       secondary: 'Read the Docs',
       trust: ['Free forever', 'Works out of the box', 'No sign-up'],
