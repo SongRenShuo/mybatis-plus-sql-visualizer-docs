@@ -48,7 +48,7 @@ export const homeContent = {
         'IntelliJ IDEA 插件：写代码时就看见最终 SQL——Wrapper 链、XML/注解/HQL 动态 SQL（含 MPJ 联表 JOIN）实时预览；跑起来后真实参数与耗时自动捕获，慢查询标红、EXPLAIN 看计划、一键跳回源码；SQL 也能反向转成 Java 代码。不启服务、不翻日志、不手拼参数。',
       install: '在 Marketplace 中安装',
       offline: '下载离线包',
-      highlights: ['更新无需重启 IDEA', '内网环境离线可用', '无遥测 · 代码不出本机'],
+      highlights: ['更新无需重启 IDEA', '内网环境离线可用', '不发使用数据 · 代码不出本机'],
       statLabels: ['最新版本', 'IDEA 支持', '开源协议'],
       codeJavaLabel: 'UserService.java',
       codeSqlLabel: '实时预览 · 生成的 SQL',
@@ -274,7 +274,7 @@ export const homeContent = {
       eyebrow: 'Free & Open Source',
       title: '完全免费',
       description: '只有一档，没有付费版。所有功能永久免费，无需注册，无需登录。',
-      headline: ['¥0 永久使用', 'Apache-2.0 开源', '无遥测 · 代码不出本机', '11 种数据库方言'],
+      headline: ['¥0 永久使用', 'Apache-2.0 开源', '不发使用数据 · 代码不出本机', '11 种数据库方言'],
       groups: [
         {
           name: 'SQL 预览',
@@ -382,7 +382,7 @@ export const homeContent = {
       highlights: [
         'Updates without restarting IDEA',
         'Works offline on intranets',
-        'No telemetry · your code never leaves the machine',
+        'Reports no usage data · your code never leaves the machine',
       ],
       statLabels: ['Latest version', 'IDEA support', 'License'],
       codeJavaLabel: 'UserService.java',
@@ -658,7 +658,7 @@ export const homeContent = {
       eyebrow: 'Free & Open Source',
       title: 'Completely Free',
       description: 'One tier only — there is no paid version. Every feature free forever, no sign-up, no login.',
-      headline: ['$0 forever', 'Apache-2.0 open source', 'No telemetry · code stays local', '11 database dialects'],
+      headline: ['$0 forever', 'Apache-2.0 open source', 'Reports no usage data · code stays local', '11 database dialects'],
       groups: [
         {
           name: 'SQL preview',

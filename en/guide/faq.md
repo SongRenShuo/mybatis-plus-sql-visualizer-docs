@@ -119,7 +119,7 @@ Yes. Generated code is strictly based on MyBatis-Plus public APIs (local jar dec
 
 ## Does it work on an intranet with no internet access?
 
-Yes — core features are entirely offline: previews, parameter fill-in, reverse conversion, log restore, JOIN diagrams, formatting and CRUD generation all run locally, and the plugin has no telemetry or account validation. Only two optional entry points reach the internet — "Check Update" and "Submit Feedback" — and both merely report a failure without blocking anything.
+Yes — core features are entirely offline: previews, parameter fill-in, reverse conversion, log restore, JOIN diagrams, formatting and CRUD generation all run locally, and the plugin reports no usage data and has no account validation. Only two optional entry points reach the internet — "Check Update" and "Submit Feedback" — and both merely report a failure without blocking anything.
 
 Two more things to note for intranet deployment: the JDBC drivers needed by "Execute SQL" must be pre-provisioned (when missing, the IDE platform downloads them online), and a system property can repoint the update source to an intranet address. See [Offline & Intranet](./offline.md).
 

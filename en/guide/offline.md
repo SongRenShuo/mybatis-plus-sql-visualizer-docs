@@ -30,7 +30,7 @@ There are exactly two network endpoints, both optional, both degrading gracefull
 
 Beyond that:
 
-- **No telemetry, no analytics** — usage data is never reported
+- **The plugin reports no usage data and has no analytics**
 - **No account or license validation** — no sign-in needed on first run
 - **Your code and SQL are never uploaded** — only what you review and confirm in the feedback dialog leaves your machine
 - **No embedded network service** — the plugin listens on no port
