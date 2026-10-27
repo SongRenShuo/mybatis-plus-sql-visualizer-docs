@@ -13,7 +13,7 @@
 3. 点击 <kbd>Install</kbd> 安装
 4. 重启 IDE 生效
 
-![Marketplace 里搜索 SQL Visualizer：结果首条即本插件（作者 SongRenShuo、下载量 434），右侧详情页带「安装」按钮与版本号](/demo/install-marketplace.png)
+![Marketplace 里搜索 SQL Visualizer：结果首条即本插件（作者 SongRenShuo），右侧详情页带「安装」按钮与版本号](/demo/install-marketplace.png)
 
 ### 方式二：手动下载插件安装
 
