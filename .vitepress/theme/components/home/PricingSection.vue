@@ -163,12 +163,16 @@ const { c } = useHomeContent()
 
 .pricing-group-head {
   margin-bottom: 1rem;
-  padding-bottom: 0.85rem;
+  padding: 0 0 0.85rem 0.75rem;
   border-bottom: 1px solid var(--border-color);
+  /* 左侧品牌色竖条：标题与下方清单共用同一条左基线，靠色条把标题从
+     六条能力里拎出来。不做居中——清单项长短差很大（最短 6 字、最长要折行），
+     居中会让每行起点乱跳，破坏这条可顺着往下扫的竖线。 */
+  border-left: 3px solid var(--primary-color);
 }
 
 .pricing-group-name {
-  font-size: 1.0625rem;
+  font-size: 1.1875rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0 0 0.4rem;
