@@ -128,6 +128,9 @@
       </div>
     </div>
 
+    <!-- 提交失败提示（替代 alert，弹窗被浏览器拦截时也能看到） -->
+    <p v-if="submitError" class="submit-error">{{ submitError }}</p>
+
     <!-- 成功提示 -->
     <div v-if="success" class="success-msg">
       提交成功！您的反馈编号是 <strong>{{ submittedPostNo }}</strong>
@@ -235,6 +238,7 @@ if (ideContext?.pluginVersion) form.pluginVersion = ideContext.pluginVersion
 
 const submitting = ref(false)
 const success = ref(false)
+const submitError = ref('')
 const submittedPostNo = ref('')
 
 const MAX_ATTACHMENTS = 3
@@ -327,7 +331,8 @@ async function uploadItem(item: UploadItem) {
       item.status = 'success'
     } else {
       item.status = 'error'
-      item.error = t('uploadFailed', l)
+      // 优先展示后端原因（429 上传过频 / 413 超限 / 415 类型不支持），拿不到再兜底文案
+      item.error = data.message || t('uploadFailed', l)
     }
   } catch (err) {
     item.status = 'error'
@@ -405,6 +410,8 @@ async function handleSubmit() {
   if (!isValid.value || submitting.value || hasUploading.value) return
   submitting.value = true
   success.value = false
+  submitError.value = ''
+  const l = props.locale || 'zh'
 
   try {
     const res = await fetch(`${props.apiBase}/feedback/posts`, {
@@ -447,10 +454,10 @@ async function handleSubmit() {
       items.value = []
       uploadError.value = ''
     } else {
-      alert('提交失败: ' + data.message)
+      submitError.value = data.message || (l === 'zh' ? '提交失败，请稍后重试' : 'Submit failed, please retry')
     }
   } catch (err) {
-    alert('提交失败，请稍后重试')
+    submitError.value = l === 'zh' ? '提交失败，请稍后重试' : 'Submit failed, please retry'
     console.error(err)
   } finally {
     submitting.value = false
@@ -757,6 +764,16 @@ async function handleSubmit() {
 .submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.submit-error {
+  margin-top: 1rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, #ef4444 10%, var(--vp-c-bg));
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  font-size: 0.85rem;
 }
 
 .success-msg {
