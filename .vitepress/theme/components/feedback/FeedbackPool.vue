@@ -133,7 +133,10 @@
 
     <!-- 提交成功 toast：弹窗会立刻关闭，编号只能由父级在这之后展示 -->
     <Teleport to="body">
-      <div v-if="toast" class="pool-toast" role="status">{{ toast }}</div>
+      <div v-if="toast" class="pool-toast" role="status">
+        <span>{{ toast.text }}</span>
+        <a v-if="toast.link" :href="toast.link.href" class="pool-toast-link">{{ toast.link.label }}</a>
+      </div>
     </Teleport>
 
     <!-- Stats Bar -->
@@ -304,29 +307,57 @@ function closeForm() {
 }
 
 /** 提交成功后的编号 toast（本池弹窗与深链弹窗两个入口共用同一文案） */
-function notifySubmitted(postNo?: string) {
-  showToast(postNo ? `${t('submitSuccess', props.locale)} ${postNo}` : t('submitSuccess', props.locale))
+interface SubmitOptions {
+  /** 需求池表单勾选了「同时申请 Bug 悬赏」 */
+  bountyIntent?: boolean
+  /** 本次提交标题，用于拼悬赏页的 title 参数 */
+  title?: string
+}
+
+interface ToastState {
+  text: string
+  link?: { href: string; label: string }
+}
+
+const TOAST_DURATION = 6000
+const TOAST_DURATION_BOUNTY = 15000
+
+function notifySubmitted(postNo?: string, opts?: SubmitOptions) {
+  const base = postNo ? `${t('submitSuccess', props.locale)} ${postNo}` : t('submitSuccess', props.locale)
+
+  // 勾选悬赏时 toast 延长到 15s 并追加「继续申请悬赏」链接；不自动跳转，避免打断用户
+  if (opts?.bountyIntent && postNo) {
+    const prefix = props.locale === 'en' ? '/en' : ''
+    const href = `${prefix}/about/bounty?postNo=${encodeURIComponent(postNo)}&title=${encodeURIComponent(opts.title || '')}`
+    showToast(base, {
+      duration: TOAST_DURATION_BOUNTY,
+      link: { href, label: t('bountyContinue', props.locale) },
+    })
+    return
+  }
+
+  showToast(base)
 }
 
 // 提交成功：关弹窗后立刻刷新列表/统计，并通知父级联动刷新动态；
 // 表单内的成功块随弹窗卸载，编号改由底部 toast 展示（否则用户看不到提交结果）
-function onSubmitted(postNo?: string) {
+function onSubmitted(postNo?: string, opts?: SubmitOptions) {
   closeForm()
   loadData()
   emit('submitted')
-  notifySubmitted(postNo)
+  notifySubmitted(postNo, opts)
 }
 
-const toast = ref('')
+const toast = ref<ToastState | null>(null)
 let toastTimer: ReturnType<typeof setTimeout> | null = null
 
-function showToast(msg: string) {
-  toast.value = msg
+function showToast(msg: string, opts?: { duration?: number; link?: ToastState['link'] }) {
+  toast.value = { text: msg, link: opts?.link }
   if (toastTimer) clearTimeout(toastTimer)
   toastTimer = setTimeout(() => {
-    toast.value = ''
+    toast.value = null
     toastTimer = null
-  }, 6000)
+  }, opts?.duration ?? TOAST_DURATION)
 }
 
 function onKeydown(e: KeyboardEvent) {
@@ -574,6 +605,10 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
   transform: translateX(-50%);
   z-index: 1200;
   max-width: min(90vw, 520px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
   padding: 0.75rem 1.25rem;
   border-radius: 10px;
   background: color-mix(in srgb, #10b981 12%, var(--vp-c-bg));
@@ -581,7 +616,15 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
   color: #10b981;
   font-size: 0.875rem;
   font-weight: 500;
+  text-align: center;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.pool-toast-link {
+  color: #059669;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .stats-bar {

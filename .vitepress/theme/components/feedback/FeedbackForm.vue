@@ -23,6 +23,15 @@
       </div>
     </div>
 
+    <!-- Bug 类型可同时申请悬赏：勾选只表达意向，不改变需求池表单的必填规则 -->
+    <div v-if="form.type === 2" class="bounty-intent">
+      <label class="bounty-intent-label">
+        <input v-model="bountyIntent" type="checkbox" />
+        <span>{{ t('bountyIntent', props.locale || 'zh') }}</span>
+      </label>
+      <p class="bounty-intent-hint">{{ t('bountyIntentHint', props.locale || 'zh') }}</p>
+    </div>
+
     <!-- 标题 -->
     <div class="form-group">
       <div class="label-row">
@@ -151,7 +160,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   // postNo：提交成功后的反馈编号，供父级 toast 展示（弹窗会被立刻关掉，表单内提示看不到）
-  (e: 'done', postNo?: string): void
+  // opts.title：本次提交的标题，父级用它拼「继续申请悬赏」链接
+  (e: 'done', postNo?: string, opts?: { bountyIntent?: boolean; title?: string }): void
 }>()
 
 import { t, type MessageKey } from './i18n'
@@ -241,6 +251,8 @@ const submitting = ref(false)
 const success = ref(false)
 const submitError = ref('')
 const submittedPostNo = ref('')
+// Bug 类型下的「同时申请 Bug 悬赏」意向；不参与 canSubmit / invalidTips
+const bountyIntent = ref(false)
 
 const MAX_ATTACHMENTS = 3
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -447,7 +459,20 @@ async function handleSubmit() {
     if (data.code === 0) {
       success.value = true
       submittedPostNo.value = data.data.postNo
-      emit('done', submittedPostNo.value)
+      // 悬赏意向只在 Bug 类型下生效；勾选时把昵称/邮箱一次性交给悬赏页，
+      // 读取后立即删除，避免邮箱进入 URL。
+      const wantsBounty = bountyIntent.value && form.type === 2
+      if (wantsBounty) {
+        try {
+          window.sessionStorage.setItem(
+            'bounty:prefill',
+            JSON.stringify({ name: submitterName, email: submitterEmail }),
+          )
+        } catch {
+          /* 隐私模式下可能不可写，忽略 */
+        }
+      }
+      emit('done', submittedPostNo.value, { bountyIntent: wantsBounty, title })
       // Reset form
       form.title = ''
       form.description = ''
@@ -457,6 +482,7 @@ async function handleSubmit() {
       form.pluginVersion = ''
       form.submitterName = ''
       form.submitterEmail = ''
+      bountyIntent.value = false
       items.value.forEach(revokePreview)
       items.value = []
       uploadError.value = ''
@@ -615,6 +641,38 @@ async function handleSubmit() {
   font-size: 0.75rem;
   color: var(--vp-c-text-3);
   margin: 0 0 1rem;
+}
+
+.bounty-intent {
+  margin: -0.25rem 0 1rem;
+  padding: 0.75rem 0.875rem;
+  border: 1px dashed var(--vp-c-brand-1);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--vp-c-brand-1) 5%, var(--vp-c-bg));
+}
+
+.bounty-intent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  cursor: pointer;
+}
+
+.bounty-intent-label input {
+  margin-top: 0.2rem;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.bounty-intent-hint {
+  margin: 0.375rem 0 0 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--vp-c-text-3);
 }
 
 .ide-badge {
