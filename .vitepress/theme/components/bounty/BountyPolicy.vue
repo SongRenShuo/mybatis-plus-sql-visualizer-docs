@@ -3,6 +3,10 @@
     <h2>{{ t('policy.title', locale) }}</h2>
     <p class="section-sub">{{ t('policy.subtitle', locale) }}</p>
 
+    <p v-if="budgetMessage" class="budget-banner" :class="`is-${policy.budgetStatus}`" role="status">
+      {{ budgetMessage }}
+    </p>
+
     <p v-if="ready && !policy.enabled" class="paused-notice" role="status">{{ t('policy.paused', locale) }}</p>
     <p v-if="loadError" class="load-error">{{ t('policy.loadFailed', locale) }}</p>
 
@@ -50,6 +54,7 @@
 import { computed } from 'vue'
 import { t, type Locale } from './i18n'
 import {
+  budgetNotice,
   formatMoney,
   severityColor,
   severityDesc,
@@ -66,6 +71,11 @@ const props = defineProps<{
   ready?: boolean
   loadError?: boolean
 }>()
+
+// 预算状态提示：normal 为空串；策略未就绪时不显示
+const budgetMessage = computed(() =>
+  props.ready === false ? '' : budgetNotice(props.policy.budgetStatus, props.locale),
+)
 
 const tiers = computed(() =>
   [...props.policy.tiers]
@@ -133,6 +143,26 @@ const validityRows = computed(() => {
   color: #b45309;
   font-size: 0.875rem;
   text-align: center;
+}
+
+/* 预算状态横幅：只承载状态文字，不渲染任何金额 */
+.budget-banner {
+  max-width: 760px;
+  margin: 0 auto 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+  background: color-mix(in srgb, #f59e0b 10%, var(--vp-c-bg));
+  color: #b45309;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.budget-banner.is-reached {
+  border-color: #ef4444;
+  background: color-mix(in srgb, #ef4444 10%, var(--vp-c-bg));
+  color: #b91c1c;
 }
 
 .load-error {

@@ -1,5 +1,15 @@
 <template>
   <div class="bounty-page">
+    <!-- 月度预算状态：只有状态文字，不出现任何预算金额；reached 也不阻断提交 -->
+    <p
+      v-if="budgetMessage"
+      class="budget-banner"
+      :class="`is-${policy.budgetStatus}`"
+      role="status"
+    >
+      {{ budgetMessage }}
+    </p>
+
     <!-- 顶部：标题、说明、按钮、聚合统计 -->
     <section class="bounty-hero">
       <p class="hero-eyebrow">{{ t('hero.badge', locale) }}</p>
@@ -40,6 +50,7 @@
         :locale="locale"
         :policy="policy"
         :policy-ready="policyReady"
+        :budget-status="policy.budgetStatus"
         @submitted="onSubmitted"
       />
     </section>
@@ -59,6 +70,7 @@ import BountyLookup from './BountyLookup.vue'
 import { t, type Locale } from './i18n'
 import {
   DEFAULT_POLICY,
+  budgetNotice,
   normalizePolicy,
   normalizeStats,
   type BountyPolicyData,
@@ -81,6 +93,11 @@ const stats = ref<BountyStatsData | null>(null)
 const policyLoadFailed = ref(false)
 // 策略请求完成前不展示「暂停」，避免首屏先闪一句暂停提示
 const policyReady = ref(false)
+
+// 预算状态文案（normal 为空串）；策略就绪前不显示，避免首屏闪出提示
+const budgetMessage = computed(() =>
+  policyReady.value ? budgetNotice(policy.value.budgetStatus, locale.value) : '',
+)
 
 const flowSteps = computed(() => {
   const hours = policy.value.reviewSlaHours || 72
@@ -155,6 +172,26 @@ function onSubmitted() {
 .bounty-hero {
   padding: 2rem 0 0.5rem;
   text-align: center;
+}
+
+/* 预算状态横幅：只承载状态文字，不渲染任何金额 */
+.budget-banner {
+  max-width: 760px;
+  margin: 0 auto 0;
+  padding: 0.7rem 1rem;
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+  background: color-mix(in srgb, #f59e0b 10%, var(--vp-c-bg));
+  color: #b45309;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.budget-banner.is-reached {
+  border-color: #ef4444;
+  background: color-mix(in srgb, #ef4444 10%, var(--vp-c-bg));
+  color: #b91c1c;
 }
 
 .hero-eyebrow {
