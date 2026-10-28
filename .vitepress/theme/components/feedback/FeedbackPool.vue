@@ -71,7 +71,9 @@
           </div>
           <div class="card-right">
             <div class="card-header">
-              <h3 class="card-title">{{ post.title }}</h3>
+              <h3 class="card-title">
+                <span v-if="post.isPinned" class="card-pin" title="置顶">📌</span>{{ post.title }}
+              </h3>
               <StatusBadge :status="post.status" :locale="locale" />
             </div>
             <div class="card-meta">
@@ -238,6 +240,8 @@ function categoryLabel(category: string): string {
   return label === key ? category : label
 }
 
+// 服务端已按 status/type/sort 过滤与排序（置顶由后端 ORDER BY is_pinned DESC 保证），
+// 这里只做旧接口不认参数时的本地兜底，不再重排——否则会打乱置顶优先序
 const filteredPosts = computed(() => {
   let result = posts.value
 
@@ -247,12 +251,6 @@ const filteredPosts = computed(() => {
   }
   if (filterType.value) {
     result = result.filter(p => p.type === Number(filterType.value))
-  }
-
-  if (sortBy.value === 'newest') {
-    result = [...result].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-  } else {
-    result = [...result].sort((a, b) => b.voteCount - a.voteCount)
   }
 
   return result
@@ -278,8 +276,9 @@ const postsForBoard = computed(() =>
 onMounted(loadData)
 onMounted(() => window.addEventListener('keydown', onKeydown))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
+// 筛选/排序交给服务端：本地过滤只兜底，翻页到 100 条以后的数据也能被筛到
 watch([filterStatus, filterType, sortBy], () => {
-  // Filters reactive, no need to reload
+  loadData()
 })
 
 function closeForm() {
@@ -308,6 +307,11 @@ async function loadData() {
   try {
     const params = new URLSearchParams({ size: '100' })
     if (searchKeyword.value) params.set('keyword', searchKeyword.value)
+    if (filterType.value) params.set('type', filterType.value)
+    // 状态筛选用归并组：服务端按原始 status 逗号列表过滤
+    const group = filterStatus.value === '' ? null : STATUS_GROUPS[Number(filterStatus.value)]
+    if (group) params.set('status', group.statuses.join(','))
+    if (sortBy.value) params.set('sort', sortBy.value)
 
     const [postsRes, statsRes] = await Promise.all([
       fetch(`${props.apiBase}/feedback/posts?${params.toString()}`),
@@ -504,6 +508,10 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.card-pin {
+  margin-right: 0.25rem;
 }
 
 .card-meta {
