@@ -288,9 +288,24 @@ onBeforeUnmount(() => {
 watch([filterStatus, filterType, sortBy], () => {
   loadData()
 })
+// 切到看板：看板没有筛选入口，沿用列表筛选会出现「只剩一列有数据」的错觉。
+// 重置即由上面的筛选 watch 触发唯一一次 loadData，这里不再额外请求；
+// 切回列表时筛选保持默认空值。
+watch(view, (v) => {
+  if (v !== 'board') return
+  if (filterStatus.value !== '' || filterType.value !== '') {
+    filterStatus.value = ''
+    filterType.value = ''
+  }
+})
 
 function closeForm() {
   showForm.value = false
+}
+
+/** 提交成功后的编号 toast（本池弹窗与深链弹窗两个入口共用同一文案） */
+function notifySubmitted(postNo?: string) {
+  showToast(postNo ? `${t('submitSuccess', props.locale)} ${postNo}` : t('submitSuccess', props.locale))
 }
 
 // 提交成功：关弹窗后立刻刷新列表/统计，并通知父级联动刷新动态；
@@ -299,7 +314,7 @@ function onSubmitted(postNo?: string) {
   closeForm()
   loadData()
   emit('submitted')
-  showToast(postNo ? `${t('submitSuccess', props.locale)} ${postNo}` : t('submitSuccess', props.locale))
+  notifySubmitted(postNo)
 }
 
 const toast = ref('')
@@ -360,8 +375,8 @@ async function loadData() {
   }
 }
 
-// 供父组件在深链弹窗提交成功后刷新本池数据
-defineExpose({ reload: loadData })
+// 供父组件在深链弹窗提交成功后刷新本池数据，并复用本池的编号 toast
+defineExpose({ reload: loadData, notifySubmitted })
 
 function selectPost(postNo: string) {
   emit('select-post', postNo)

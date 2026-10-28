@@ -124,9 +124,11 @@ function onPoolSubmitted() {
   activityRef.value?.reload()
 }
 
-// 深链弹窗提交成功：关弹窗后刷新反馈池与动态面板
-function onDeepLinkSubmitted() {
+// 深链弹窗提交成功：关弹窗后由反馈池弹编号 toast（弹窗立刻关闭，表单内提示看不到），
+// 再刷新反馈池与动态面板两侧数据
+function onDeepLinkSubmitted(postNo?: string) {
   closeForm()
+  poolRef.value?.notifySubmitted(postNo)
   poolRef.value?.reload()
   activityRef.value?.reload()
 }
