@@ -406,8 +406,9 @@ async function loadData() {
   }
 }
 
-// 供父组件在深链弹窗提交成功后刷新本池数据，并复用本池的编号 toast
-defineExpose({ reload: loadData, notifySubmitted })
+// 供父组件在深链弹窗提交成功后刷新本池数据、复用编号 toast；
+// applyVoteUpdate 供详情抽屉投票后定向同步卡片票数与统计条
+defineExpose({ reload: loadData, notifySubmitted, applyVoteUpdate: onVoteUpdate })
 
 function selectPost(postNo: string) {
   emit('select-post', postNo)

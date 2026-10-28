@@ -1,13 +1,7 @@
 <template>
   <div class="feedback-page">
-    <FeedbackDetail
-      v-if="selectedPost"
-      :post-no="selectedPost"
-      :api-base="apiBase"
-      :locale="locale"
-      @back="selectedPost = null"
-    />
-    <div v-else class="feedback-page-body">
+    <!-- 两栏常驻：点卡片/动态条目不再整页切换，改为右侧抽屉滑出详情 -->
+    <div class="feedback-page-body">
       <FeedbackPool
         ref="poolRef"
         :api-base="apiBase"
@@ -19,8 +13,20 @@
         ref="activityRef"
         :api-base="apiBase"
         :locale="locale"
+        @select-post="selectedPost = $event"
       />
     </div>
+
+    <!-- 详情右侧抽屉：关闭（×/遮罩/Esc/返回列表）回到列表原位 -->
+    <FeedbackDetailDrawer
+      v-if="selectedPost"
+      :post-no="selectedPost"
+      :api-base="apiBase"
+      :locale="locale"
+      @close="selectedPost = null"
+      @vote="onDrawerVote"
+      @commented="onDrawerCommented"
+    />
 
     <!-- 深链 ?category=xxx 直开提交表单（与反馈池内「提交反馈」弹窗同款交互） -->
     <Teleport to="body">
@@ -55,7 +61,7 @@ import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useData } from 'vitepress'
 import { t, type Locale } from './i18n'
 import FeedbackPool from './FeedbackPool.vue'
-import FeedbackDetail from './FeedbackDetail.vue'
+import FeedbackDetailDrawer from './FeedbackDetailDrawer.vue'
 import FeedbackActivity from './FeedbackActivity.vue'
 import FeedbackForm from './FeedbackForm.vue'
 
@@ -106,13 +112,25 @@ onMounted(() => {
   }
 })
 
-// 打开/返回详情时同步查询串：保持链接可分享，返回列表后刷新不再落回详情
+// 打开/关闭抽屉时同步查询串 + 背景滚动锁：保持链接可分享，关闭后刷新不再落回详情
 watch(selectedPost, (v) => {
   const url = new URL(window.location.href)
   if (v) url.searchParams.set('postNo', v)
   else url.searchParams.delete('postNo')
   window.history.replaceState(null, '', url)
+  // 抽屉打开时锁背景滚动，关闭恢复（selectedPost 只在客户端变化，SSG 不经过这里）
+  document.documentElement.style.overflow = v ? 'hidden' : ''
 })
+
+// 抽屉内投票：定向同步背景列表卡片的票数与统计条（复用池内既有更新逻辑）
+function onDrawerVote(postNo: string, count: number, hasVoted: boolean) {
+  poolRef.value?.applyVoteUpdate(postNo, count, hasVoted)
+}
+
+// 抽屉内评论：刷新背景列表的评论数（评论不进动态流，动态栏无需刷）
+function onDrawerCommented() {
+  poolRef.value?.reload()
+}
 
 // 关闭深链弹窗：清空即卸载表单，下次深链重新挂载取回预填分类
 function closeForm() {
@@ -133,11 +151,16 @@ function onDeepLinkSubmitted(postNo?: string, opts?: { bountyIntent?: boolean; t
   activityRef.value?.reload()
 }
 
-// Esc 关闭弹窗（与反馈池内提交弹窗一致）
+// Esc 分层关闭：深链提交弹窗优先，否则关详情抽屉（两者互斥，这里是兜底）
 function onKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape' && deepLinkCategory.value) closeForm()
+  if (e.key !== 'Escape') return
+  if (deepLinkCategory.value) closeForm()
+  else if (selectedPost.value) selectedPost.value = null
 }
-onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeydown)
+  document.documentElement.style.overflow = ''
+})
 </script>
 
 <style scoped>

@@ -139,8 +139,10 @@ const props = defineProps<{
   locale?: Locale
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'back'): void
+  (e: 'vote', count: number, hasVoted: boolean): void
+  (e: 'commented'): void
 }>()
 
 const locale = props.locale || 'zh'
@@ -263,6 +265,8 @@ function onVoteUpdate(count: number, hasVoted: boolean) {
     post.value.voteCount = count
     post.value.hasVoted = hasVoted
   }
+  // 通知抽屉上层定向同步背景列表（抽屉形态下列表常驻，不再靠重挂载刷新）
+  emit('vote', count, hasVoted)
 }
 
 async function submitComment() {
@@ -299,6 +303,7 @@ async function submitComment() {
     if (data.code === 0) {
       commentContent.value = ''
       commentError.value = ''
+      emit('commented') // 上层刷新背景列表的评论数；自己随后 loadDetail 展示新评论
       loadDetail() // Reload to show new comment
     } else {
       commentError.value = data.message || (locale === 'zh' ? '提交失败' : 'Failed')

@@ -5,7 +5,14 @@
     <div v-if="loading" class="activity-empty">{{ t('loading', locale) }}</div>
     <div v-else-if="!items.length" class="activity-empty">{{ t('activityEmpty', locale) }}</div>
     <ul v-else class="activity-list">
-      <li v-for="item in items" :key="item.id" class="activity-item">
+      <li
+        v-for="item in items"
+        :key="item.id"
+        class="activity-item"
+        tabindex="0"
+        @click="$emit('select-post', item.postNo)"
+        @keydown.enter="$emit('select-post', item.postNo)"
+      >
         <span
           class="activity-icon"
           :class="item.type === 'new' ? 'icon-new' : 'icon-status'"
@@ -41,6 +48,11 @@ import { parseUtcDate } from './dateTime'
 const props = defineProps<{
   apiBase: string
   locale: Locale
+}>()
+
+// 条目点击直达对应需求（后端 activity 接口两类条目都带 postNo）
+defineEmits<{
+  (e: 'select-post', postNo: string): void
 }>()
 
 interface ActivityItem {
@@ -141,6 +153,22 @@ defineExpose({ reload: loadActivity })
   gap: 0.625rem;
   padding: 0.625rem 0;
   border-bottom: 1px solid var(--vp-c-border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.activity-item:hover {
+  background: var(--vp-c-bg-mute);
+}
+
+.activity-item:hover .activity-post-title {
+  color: var(--vp-c-brand-1);
+}
+
+.activity-item:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: -2px;
+  border-radius: 6px;
 }
 
 .activity-item:last-child {
