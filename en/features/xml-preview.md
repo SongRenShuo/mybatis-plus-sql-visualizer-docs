@@ -149,7 +149,7 @@ The snapshot query goes through the read-only side channel and never replaces th
 
 When the snapshot statement's dialect does not match the target data source, the dialog offers the same kind of exits: re-render for the target dialect and retry, or switch to another data source.
 
-<GifPlayer src="/demo/rollback-snapshot-dual.gif" alt="Rollback snapshot query and Open in CSV Editor" />
+<GifPlayer src="/demo/rollback-snapshot-dual.gif" alt="UPDATE rollback dialog: it explains the original values are unknowable and offers a snapshot query; clicking Run snapshot query shows the result grid (1 row × 13 columns) in place and generates the reverse UPDATE rollback statement immediately; then the Text view is opened to show the hand-editable statement" />
 
 Primary-key columns can be filled comma-separated in the input box and apply to UPDATE originals: fill them to locate rows by primary key, leave them empty to mirror the whole old row. Rows or statement volume beyond the limits are truncated with a notice, and "Execute rollback" and "Copy" stay disabled until something has been generated.
 
