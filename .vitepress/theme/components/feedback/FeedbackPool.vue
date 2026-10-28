@@ -131,6 +131,11 @@
       </div>
     </Teleport>
 
+    <!-- 提交成功 toast：弹窗会立刻关闭，编号只能由父级在这之后展示 -->
+    <Teleport to="body">
+      <div v-if="toast" class="pool-toast" role="status">{{ toast }}</div>
+    </Teleport>
+
     <!-- Stats Bar -->
     <div class="stats-bar">
       <span>{{ t('totalPosts', locale, { n: stats.totalPosts }) }}</span>
@@ -275,7 +280,10 @@ const postsForBoard = computed(() =>
 
 onMounted(loadData)
 onMounted(() => window.addEventListener('keydown', onKeydown))
-onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeydown)
+  if (toastTimer) clearTimeout(toastTimer)
+})
 // 筛选/排序交给服务端：本地过滤只兜底，翻页到 100 条以后的数据也能被筛到
 watch([filterStatus, filterType, sortBy], () => {
   loadData()
@@ -285,11 +293,25 @@ function closeForm() {
   showForm.value = false
 }
 
-// 提交成功：关弹窗后立刻刷新列表/统计，并通知父级联动刷新动态
-function onSubmitted() {
+// 提交成功：关弹窗后立刻刷新列表/统计，并通知父级联动刷新动态；
+// 表单内的成功块随弹窗卸载，编号改由底部 toast 展示（否则用户看不到提交结果）
+function onSubmitted(postNo?: string) {
   closeForm()
   loadData()
   emit('submitted')
+  showToast(postNo ? `${t('submitSuccess', props.locale)} ${postNo}` : t('submitSuccess', props.locale))
+}
+
+const toast = ref('')
+let toastTimer: ReturnType<typeof setTimeout> | null = null
+
+function showToast(msg: string) {
+  toast.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => {
+    toast.value = ''
+    toastTimer = null
+  }, 6000)
 }
 
 function onKeydown(e: KeyboardEvent) {
@@ -528,6 +550,23 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
   border-radius: 4px;
   background: var(--vp-c-brand-soft);
   color: var(--vp-c-brand-1);
+}
+
+.pool-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  z-index: 1200;
+  max-width: min(90vw, 520px);
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, #10b981 12%, var(--vp-c-bg));
+  border: 1px solid #10b981;
+  color: #10b981;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .stats-bar {

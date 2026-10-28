@@ -109,7 +109,7 @@
       <button type="button" class="att-picker" @click="fileInput?.click()">
         <span class="att-picker-plus">＋</span>{{ t('addAttachment', props.locale || 'zh') }}
       </button>
-      <p class="att-hint">{{ t('maxAttachment', props.locale || 'zh') }}</p>
+      <p class="att-hint">{{ t('maxAttachmentHint', props.locale || 'zh') }}</p>
       <p v-if="uploadError" class="upload-error">{{ uploadError }}</p>
       <div v-if="items.length" class="attachment-list">
         <div v-for="item in items" :key="item.id" class="attachment-item">
@@ -150,7 +150,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'done'): void
+  // postNo：提交成功后的反馈编号，供父级 toast 展示（弹窗会被立刻关掉，表单内提示看不到）
+  (e: 'done', postNo?: string): void
 }>()
 
 import { t, type MessageKey } from './i18n'
@@ -381,15 +382,15 @@ function successfulAttachments() {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const isValid = computed(() =>
-  form.title.length >= 5 &&
-  form.title.length <= 200 &&
-  form.description.length >= 10 &&
+  form.title.trim().length >= 5 &&
+  form.title.trim().length <= 200 &&
+  form.description.trim().length >= 10 &&
   (!form.submitterEmail.trim() || EMAIL_RE.test(form.submitterEmail.trim()))
 )
 
-// 字数计数器（label 右侧）的达标态
-const titleOk = computed(() => form.title.length >= 5 && form.title.length <= 200)
-const descOk = computed(() => form.description.length >= 10)
+// 字数计数器（label 右侧）的达标态：与提交校验同一口径（trim 后计数）
+const titleOk = computed(() => form.title.trim().length >= 5 && form.title.trim().length <= 200)
+const descOk = computed(() => form.description.trim().length >= 10)
 
 // 供父级（提交弹窗 footer）读取/调用
 const canSubmit = computed(() => isValid.value && !submitting.value && !hasUploading.value)
@@ -412,22 +413,28 @@ async function handleSubmit() {
   success.value = false
   submitError.value = ''
   const l = props.locale || 'zh'
+  // 提交前统一 trim：标题/描述带首尾空白既会影响长度校验也会污染展示；
+  // 昵称只填空格时按匿名处理（否则会落一个空白作者名）
+  const title = form.title.trim()
+  const description = form.description.trim()
+  const submitterName = form.submitterName.trim()
+  const submitterEmail = form.submitterEmail.trim()
 
   try {
     const res = await fetch(`${props.apiBase}/feedback/posts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        title: form.title,
-        description: form.description,
+        title,
+        description,
         type: form.type,
         category: form.category,
         // 环境版本：选填，留空则不传（后端按 NULL 落库）
         ideVersion: form.ideVersion.trim() || undefined,
         pluginVersion: form.pluginVersion.trim() || undefined,
-        submitterName: form.submitterName || undefined,
-        submitterEmail: form.submitterEmail || undefined,
-        isAnonymous: !form.submitterName,
+        submitterName: submitterName || undefined,
+        submitterEmail: submitterEmail || undefined,
+        isAnonymous: !submitterName,
         // T-ErrReport：IDE 兜底链路携带来源（后端 fb_posts 已有该列）。
         // 版本值统一由上方两个表单字段提供——深链进来时已预填进 form，用户可改，
         // 这里不再用 ideContext 覆盖，否则 Web 用户填的值会被恒定为 undefined。
@@ -440,7 +447,7 @@ async function handleSubmit() {
     if (data.code === 0) {
       success.value = true
       submittedPostNo.value = data.data.postNo
-      emit('done')
+      emit('done', submittedPostNo.value)
       // Reset form
       form.title = ''
       form.description = ''

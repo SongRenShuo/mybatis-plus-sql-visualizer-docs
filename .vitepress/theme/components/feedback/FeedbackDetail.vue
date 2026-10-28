@@ -267,8 +267,15 @@ function onVoteUpdate(count: number, hasVoted: boolean) {
 
 async function submitComment() {
   if (commenting.value) return
-  if (!commentContent.value.trim()) return
+  const content = commentContent.value.trim()
+  if (!content) return
   commentError.value = ''
+
+  // 后端要求评论内容至少 2 个字符，前端先拦，避免一次无谓请求
+  if (content.length < 2) {
+    commentError.value = locale === 'zh' ? '评论内容至少 2 个字符' : 'Comment must be at least 2 characters'
+    return
+  }
 
   // 邮箱选填，但填了先做轻校验（后端同规则兜底）；留邮箱后官方回复会推送通知
   const email = commentEmail.value.trim()
@@ -283,7 +290,7 @@ async function submitComment() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        content: commentContent.value,
+        content,
         authorName: commentName.value.trim() || undefined,
         authorEmail: email || undefined,
       }),
@@ -315,7 +322,8 @@ function renderMd(text: string): string {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/## (.+)/g, '<h3>$1</h3>')
+    // 只认行首的 ## （正文里出现的 ## 不算标题）
+    .replace(/^## (.+)$/gm, '<h3>$1</h3>')
     .replace(/\n/g, '<br>')
 }
 
