@@ -67,7 +67,7 @@
  * 面板内容统一成「行」模型（清除行 / 自定义值行 / 选项行），这样键盘 ↑↓ 与 Enter
  * 只需在一维下标上移动——否则清除与自定义这两类特殊行要么漏掉键盘、要么下标算错。
  */
-import { ref, computed, nextTick, onBeforeUnmount } from 'vue'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { t, type Locale } from './i18n'
 
 const props = defineProps<{
@@ -137,12 +137,15 @@ function toggle() {
 }
 
 async function show() {
-  open.value = true
   keyword.value = ''
   activeIndex.value = -1
-  await nextTick()
-  searchInput.value?.focus()
+  // 先算好 fixed 坐标再挂载面板：若等 open=true 后再定位，面板会先以正文流节点
+  // 插入 body 末尾，浏览器的滚动锚定会先动一次视口，表现为「点开下拉页面跳走」。
   positionPanel()
+  open.value = true
+  await nextTick()
+  positionPanel()
+  searchInput.value?.focus({ preventScroll: true })
 }
 
 /** 面板定位：行高 34px + 搜索行 44px + 内边距；超出视口下边则向上展开 */
@@ -169,7 +172,12 @@ function close() {
 function pick(v: string) {
   emit('update:modelValue', v)
   close()
-  trigger.value?.focus()
+  trigger.value?.focus({ preventScroll: true })
+}
+
+/** 面板是 fixed 定位；滚动/缩放后重新贴合触发器，避免面板与控件脱节 */
+function onViewportChange() {
+  if (open.value) positionPanel()
 }
 
 function onTriggerKeydown(e: KeyboardEvent) {
@@ -184,7 +192,7 @@ function onSearchKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape') {
     e.preventDefault()
     close()
-    trigger.value?.focus()
+    trigger.value?.focus({ preventScroll: true })
   } else if (e.key === 'ArrowDown') {
     e.preventDefault()
     if (last >= 0) activeIndex.value = Math.min(activeIndex.value + 1, last)
@@ -201,7 +209,15 @@ function onSearchKeydown(e: KeyboardEvent) {
   }
 }
 
-onBeforeUnmount(close)
+onMounted(() => {
+  window.addEventListener('scroll', onViewportChange, true)
+  window.addEventListener('resize', onViewportChange)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onViewportChange, true)
+  window.removeEventListener('resize', onViewportChange)
+  close()
+})
 </script>
 
 <style scoped>
