@@ -13,10 +13,14 @@ const messages = {
     'hero.badge': 'Bug Bounty',
     'hero.title': 'Bug 悬赏',
     'hero.subtitle': '提交可复现的插件 Bug，审核确认后按等级获得小额悬赏。',
-    'hero.note': '按等级区间与审核结果发放，单笔不超过 ¥18.88。',
+    'hero.note': '按等级区间与审核结果发放，单笔不超过 ¥9.88。',
     'hero.submit': '提交报告',
     'hero.policy': '查看奖励标准',
     'hero.paused': 'Bug 悬赏计划当前暂停接收新报告；已提交的记录仍会正常审核与发放。',
+
+    // 月度预算状态（只给状态文字，不给任何金额）
+    'budget.near_limit': '本月悬赏额度即将达到上限，后续提交的报告可能不再发放金额奖励。',
+    'budget.reached': '本月悬赏额度已达到上限，后续提交的报告将不再发放金额奖励，但仍会正常受理。',
 
     // Stats
     'stats.total': '累计收到',
@@ -211,10 +215,14 @@ const messages = {
     'hero.badge': 'Bug Bounty',
     'hero.title': 'Bug Bounty',
     'hero.subtitle': 'Report a reproducible plugin bug and earn a small bounty once it is verified.',
-    'hero.note': 'Paid by tier range and review result, up to ¥18.88 per report.',
+    'hero.note': 'Paid by tier range and review result, up to ¥9.88 per report.',
     'hero.submit': 'Submit a report',
     'hero.policy': 'View reward tiers',
     'hero.paused': 'The bug bounty program is currently paused for new reports. Submitted reports are still being reviewed and paid.',
+
+    // Monthly budget status (status text only, never amounts)
+    'budget.near_limit': 'This month’s bounty quota is nearly used up; reports submitted later may not receive a monetary reward.',
+    'budget.reached': 'This month’s bounty quota has been reached; reports submitted later will not receive a monetary reward, but they will still be accepted and reviewed.',
 
     // Stats
     'stats.total': 'Reports received',
