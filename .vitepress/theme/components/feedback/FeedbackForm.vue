@@ -113,7 +113,7 @@
       <p v-if="uploadError" class="upload-error">{{ uploadError }}</p>
       <div v-if="items.length" class="attachment-list">
         <div v-for="item in items" :key="item.id" class="attachment-item">
-          <img v-if="isImage(item) && item.key" :src="fileUrl(item)" :alt="item.fileName" class="att-thumb" loading="lazy" />
+          <img v-if="item.previewUrl" :src="item.previewUrl" :alt="item.fileName" class="att-thumb" loading="lazy" />
           <span class="att-name" :title="item.fileName">{{ item.fileName }}</span>
           <span v-if="item.status === 'uploading'" class="att-status upload">{{ t('uploading', props.locale || 'zh') }}</span>
           <span v-else-if="item.status === 'success'" class="att-status ok">{{ formatSize(item.fileSize) }}</span>
@@ -136,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, markRaw, onMounted } from 'vue'
+import { ref, computed, reactive, markRaw, onMounted, onBeforeUnmount } from 'vue'
 
 const props = defineProps<{
   apiBase: string
@@ -250,6 +250,8 @@ interface UploadItem {
   fileSize: number
   status: 'uploading' | 'success' | 'error'
   error: string
+  /** 图片本地预览地址：帖子未提交时 /feedback/files/:key 无关联行会 404，只能用本地 object URL */
+  previewUrl: string
 }
 
 const items = ref<UploadItem[]>([])
@@ -291,7 +293,12 @@ function handleFileSelect(e: Event) {
       fileSize: file.size,
       status: 'uploading',
       error: '',
+      previewUrl: '',
     })
+    // 图片走本地 object URL：帖子尚未落库，后端 /feedback/files/:key 反查不到关联行必 404
+    if (isImage(item) && typeof URL !== 'undefined' && URL.createObjectURL) {
+      item.previewUrl = URL.createObjectURL(file)
+    }
     items.value.push(item)
     uploadItem(item)
   }
@@ -330,8 +337,21 @@ async function uploadItem(item: UploadItem) {
 function removeItem(item: UploadItem) {
   const idx = items.value.indexOf(item)
   if (idx > -1) items.value.splice(idx, 1)
+  revokePreview(item)
   if (!items.value.length) uploadError.value = ''
 }
+
+/** 回收单个附件占用的 object URL（移除、提交成功重置与组件卸载都要调） */
+function revokePreview(item: UploadItem) {
+  if (item.previewUrl) {
+    URL.revokeObjectURL(item.previewUrl)
+    item.previewUrl = ''
+  }
+}
+
+onBeforeUnmount(() => {
+  items.value.forEach(revokePreview)
+})
 
 function formatSize(bytes: number): string {
   if (bytes == null) return ''
@@ -342,10 +362,6 @@ function formatSize(bytes: number): string {
 
 function isImage(item: UploadItem): boolean {
   return item.mimeType.startsWith('image/') || /\.(png|jpe?g|gif|webp)$/i.test(item.fileName)
-}
-
-function fileUrl(item: UploadItem): string {
-  return `${props.apiBase}/feedback/files/${item.key}`
 }
 
 function successfulAttachments() {
@@ -423,6 +439,7 @@ async function handleSubmit() {
       form.pluginVersion = ''
       form.submitterName = ''
       form.submitterEmail = ''
+      items.value.forEach(revokePreview)
       items.value = []
       uploadError.value = ''
     } else {
