@@ -126,24 +126,25 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label>{{ t('form.pluginVersion', locale) }}</label>
+              <label>{{ t('form.pluginVersionLabel', locale) }}</label>
               <VersionSelect
                 v-model="form.pluginVersion"
                 :options="pluginVersionOptions"
                 :locale="locale"
-                :placeholder="t('form.pluginVersion', locale)"
+                :placeholder="t('form.pluginVersionPlaceholder', locale)"
               />
             </div>
             <div class="form-group">
-              <label>{{ t('form.ideVersion', locale) }}</label>
+              <label>{{ t('form.ideVersionLabel', locale) }}</label>
               <VersionSelect
                 v-model="form.ideVersion"
                 :options="ideVersionOptions"
                 :locale="locale"
-                :placeholder="t('form.ideVersion', locale)"
+                :placeholder="t('form.ideVersionPlaceholder', locale)"
               />
             </div>
           </div>
+          <p class="field-hint">{{ t('form.versionHint', locale) }}</p>
 
           <div class="form-row">
             <div class="form-group">
