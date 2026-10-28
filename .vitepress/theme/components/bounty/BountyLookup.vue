@@ -218,12 +218,16 @@ async function lookup() {
 
     if (data && data.code === 0 && data.data) {
       result.value = data.data as LookupResult
+    } else if (res.status === 429) {
+      error.value = t('lookup.rateLimited', props.locale)
+    } else if (res.status === 400 && data && typeof data.message === 'string' && data.message) {
+      error.value = data.message
     } else {
       // 编号不存在与邮箱不匹配统一提示，避免被用来枚举编号
       error.value = t('lookup.notFound', props.locale)
     }
   } catch (err) {
-    error.value = t('lookup.notFound', props.locale)
+    error.value = t('lookup.networkError', props.locale)
     console.error(err)
   } finally {
     loading.value = false

@@ -546,7 +546,8 @@ async function handleSubmit() {
     reporterName: form.reporterName.trim() || undefined,
     reporterEmail: form.reporterEmail.trim(),
     postNo: form.postNo.trim() || undefined,
-    source: 'web',
+    // 从需求池跳转过来时带上 postNo，便于管理端区分来源
+    source: form.postNo.trim() ? 'feedback' : 'web',
     isSensitive: form.isSensitive,
     website: form.website,
     attachments: successfulAttachments(),
