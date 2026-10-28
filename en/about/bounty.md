@@ -41,7 +41,7 @@ Your email is only used for review and payout contact and is never public. Looki
 
 ### Amounts and payout
 
-Rewards are paid by tier range and review result, up to ¥18.88 per report. The final amount is subject to review. After approval, an admin transfers the reward manually and records the payout time.
+Rewards are paid by tier range and review result, up to ¥9.88 per report. The final amount is subject to review. After approval, an admin transfers the reward manually and records the payout time. Once the monthly bounty quota is used up, reports are still accepted and reviewed, but no monetary reward is paid.
 
 ## FAQ
 

@@ -14,6 +14,9 @@ export interface BountyTier {
   desc?: string
 }
 
+/** 月度预算状态：公开接口只给状态文字，不给任何金额。 */
+export type BudgetStatus = 'normal' | 'near_limit' | 'reached'
+
 export interface BountyPolicyData {
   enabled: boolean
   currency: string
@@ -21,6 +24,13 @@ export interface BountyPolicyData {
   maxReward: number
   tiers: BountyTier[]
   validityFactors: Record<string, number>
+  /** 预算状态；缺省按 normal 处理 */
+  budgetStatus: BudgetStatus
+  /**
+   * 月度预算（分）。仅用于与后端默认策略对齐的本地兜底，
+   * 公开接口不返回该字段，页面任何位置都不渲染。
+   */
+  monthlyBudget: number
 }
 
 export interface BountyStatsData {
@@ -40,14 +50,16 @@ export const DEFAULT_POLICY: BountyPolicyData = {
   enabled: false,
   currency: 'CNY',
   reviewSlaHours: 72,
-  maxReward: 1888,
+  maxReward: 988,
   tiers: [
-    { severity: 1, label: '严重', min: 1200, max: 1888, desc: '' },
-    { severity: 2, label: '高', min: 800, max: 1200, desc: '' },
-    { severity: 3, label: '中', min: 400, max: 800, desc: '' },
-    { severity: 4, label: '低', min: 100, max: 300, desc: '' },
+    { severity: 1, label: '严重', min: 688, max: 988, desc: '' },
+    { severity: 2, label: '高', min: 488, max: 688, desc: '' },
+    { severity: 3, label: '中', min: 288, max: 488, desc: '' },
+    { severity: 4, label: '低', min: 88, max: 288, desc: '' },
   ],
   validityFactors: { '1': 1, '2': 0.5, '3': 0, '4': 0 },
+  budgetStatus: 'normal',
+  monthlyBudget: 2000,
 }
 
 export const DEFAULT_STATS: BountyStatsData = {
@@ -180,6 +192,20 @@ function toInt(value: unknown, fallback: number): number {
   return Number.isFinite(n) ? n : fallback
 }
 
+const BUDGET_STATUSES: BudgetStatus[] = ['normal', 'near_limit', 'reached']
+
+/** 预算状态归一化：未知值一律按 normal，页面不因脏数据误报「已达上限」。 */
+export function normalizeBudgetStatus(value: unknown): BudgetStatus {
+  return BUDGET_STATUSES.includes(value as BudgetStatus) ? (value as BudgetStatus) : 'normal'
+}
+
+/** 预算状态提示文案；normal 返回空串，调用方据此决定是否显示横幅。 */
+export function budgetNotice(status: BudgetStatus, locale: Locale): string {
+  if (status === 'near_limit') return t('budget.near_limit', locale)
+  if (status === 'reached') return t('budget.reached', locale)
+  return ''
+}
+
 /** 接口策略归一化：字段缺失或类型异常时回落到默认值，页面不因脏数据白屏。 */
 export function normalizePolicy(raw: unknown): BountyPolicyData {
   const src = (raw || {}) as Record<string, unknown>
@@ -213,6 +239,9 @@ export function normalizePolicy(raw: unknown): BountyPolicyData {
     maxReward: toInt(src.maxReward, DEFAULT_POLICY.maxReward),
     tiers: tiers.length ? tiers : DEFAULT_POLICY.tiers.map((row) => ({ ...row })),
     validityFactors,
+    // 公开接口只返回状态；金额字段不读取，避免把预算数额带进页面
+    budgetStatus: normalizeBudgetStatus(src.budgetStatus),
+    monthlyBudget: DEFAULT_POLICY.monthlyBudget,
   }
 }
 

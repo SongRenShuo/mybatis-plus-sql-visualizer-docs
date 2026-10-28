@@ -279,6 +279,8 @@
 
         <p v-if="submitError" class="submit-error" role="alert">{{ submitError }}</p>
 
+        <p v-if="budgetHint" class="budget-hint" role="status">{{ budgetHint }}</p>
+
         <button type="submit" class="submit-btn" :disabled="!canSubmit">
           {{ submitting ? t('form.submitting', locale) : t('form.submit', locale) }}
         </button>
@@ -294,10 +296,12 @@ import VersionSelect from '../feedback/VersionSelect.vue'
 import { t, type Locale } from './i18n'
 import {
   CATEGORY_SLUGS,
+  budgetNotice,
   categoryOptions,
   severityColor,
   severityLabel,
   type BountyPolicyData,
+  type BudgetStatus,
 } from './bountyStatus'
 import { useAttachmentUpload } from './useAttachmentUpload'
 
@@ -307,6 +311,8 @@ const props = defineProps<{
   policy: BountyPolicyData
   /** 策略请求是否已完成；未完成时提交按钮保持禁用 */
   policyReady?: boolean
+  /** 月度预算状态：只用于提示，不参与提交拦截（reached 仍可正常提交） */
+  budgetStatus?: BudgetStatus
 }>()
 
 const emit = defineEmits<{
@@ -429,6 +435,12 @@ const canSubmit = computed(
     !submitting.value &&
     !hasUploading.value,
 )
+
+// 预算状态只做提示，不进入 canSubmit：reached 时提交按钮仍可用
+const budgetHint = computed(() => {
+  if (props.policyReady === false) return ''
+  return budgetNotice(props.budgetStatus ?? 'normal', props.locale)
+})
 
 const invalidTips = computed(() => {
   const tips: string[] = []
@@ -970,6 +982,18 @@ async function handleSubmit() {
   border: 1px solid #ef4444;
   color: #ef4444;
   font-size: 0.85rem;
+}
+
+/* 预算状态提示：只有状态文字，不含任何金额；不影响提交 */
+.budget-hint {
+  margin: 0 0 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  background: color-mix(in srgb, #f59e0b 8%, var(--vp-c-bg));
+  color: #b45309;
+  font-size: 0.85rem;
+  line-height: 1.6;
 }
 
 .submit-btn {
