@@ -113,8 +113,8 @@
         </div>
         <textarea v-model="commentContent" placeholder="写下您的评论..." rows="3" class="fd-input fd-textarea"></textarea>
         <span v-if="commentError" class="fd-form-error">{{ commentError }}</span>
-        <button class="fd-submit" :disabled="!commentContent.trim()" @click="submitComment">
-          发表评论
+        <button class="fd-submit" :disabled="!commentContent.trim() || commenting" @click="submitComment">
+          {{ commenting ? (locale === 'zh' ? '提交中...' : 'Posting...') : (locale === 'zh' ? '发表评论' : 'Post Comment') }}
         </button>
       </div>
     </div>
@@ -234,6 +234,8 @@ const commentName = ref('')
 const commentEmail = ref('')
 const commentContent = ref('')
 const commentError = ref('')
+// 评论提交中：按钮禁用 + 函数入口守卫，防双击产生两条相同评论
+const commenting = ref(false)
 
 onMounted(loadDetail)
 
@@ -264,6 +266,7 @@ function onVoteUpdate(count: number, hasVoted: boolean) {
 }
 
 async function submitComment() {
+  if (commenting.value) return
   if (!commentContent.value.trim()) return
   commentError.value = ''
 
@@ -274,6 +277,7 @@ async function submitComment() {
     return
   }
 
+  commenting.value = true
   try {
     const res = await fetch(`${props.apiBase}/feedback/posts/${props.postNo}/comments`, {
       method: 'POST',
@@ -295,6 +299,8 @@ async function submitComment() {
   } catch (err) {
     commentError.value = locale === 'zh' ? '提交失败，请稍后重试' : 'Failed, please retry'
     console.error('Comment failed:', err)
+  } finally {
+    commenting.value = false
   }
 }
 

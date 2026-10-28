@@ -256,6 +256,8 @@ interface UploadItem {
 
 const items = ref<UploadItem[]>([])
 const uploadError = ref('')
+// 有附件仍在上传：canSubmit 据此禁用提交，并给出提示
+const hasUploading = computed(() => items.value.some(it => it.status === 'uploading'))
 const fileInput = ref<HTMLInputElement | null>(null)
 let uid = 0
 
@@ -385,7 +387,7 @@ const titleOk = computed(() => form.title.length >= 5 && form.title.length <= 20
 const descOk = computed(() => form.description.length >= 10)
 
 // 供父级（提交弹窗 footer）读取/调用
-const canSubmit = computed(() => isValid.value && !submitting.value)
+const canSubmit = computed(() => isValid.value && !submitting.value && !hasUploading.value)
 const invalidTips = computed(() => {
   const l = props.locale || 'zh'
   const tips: string[] = []
@@ -393,12 +395,14 @@ const invalidTips = computed(() => {
   if (form.title.length > 200) tips.push(t('tipTitleMax', l))
   if (form.description.trim().length < 10) tips.push(t('tipDescMin', l))
   if (form.submitterEmail.trim() && !EMAIL_RE.test(form.submitterEmail.trim())) tips.push(t('tipEmailInvalid', l))
+  // 附件还在上传时禁止提交：否则 successfulAttachments() 只收 success 项，附件被静默丢弃
+  if (hasUploading.value) tips.push(t('tipUploading', l))
   return tips
 })
 defineExpose({ submit: handleSubmit, canSubmit, invalidTips })
 
 async function handleSubmit() {
-  if (!isValid.value || submitting.value) return
+  if (!isValid.value || submitting.value || hasUploading.value) return
   submitting.value = true
   success.value = false
 
