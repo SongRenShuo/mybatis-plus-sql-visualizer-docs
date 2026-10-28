@@ -135,26 +135,6 @@ const validityRows = computed(() => {
   text-align: center;
 }
 
-/* 预算状态横幅：只承载状态文字，不渲染任何金额 */
-.budget-banner {
-  max-width: 760px;
-  margin: 0 auto 1rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid #f59e0b;
-  border-radius: 10px;
-  background: color-mix(in srgb, #f59e0b 10%, var(--vp-c-bg));
-  color: #b45309;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  text-align: center;
-}
-
-.budget-banner.is-reached {
-  border-color: #ef4444;
-  background: color-mix(in srgb, #ef4444 10%, var(--vp-c-bg));
-  color: #b91c1c;
-}
-
 .load-error {
   margin: 0 0 1rem;
   text-align: center;
