@@ -153,6 +153,7 @@ export default defineConfig({
           { text: '功能详解', link: '/features/wrapper-preview' },
           { text: '使用指南', link: '/guide/getting-started' },
           { text: '需求池', link: '/about/feedback' },
+          { text: 'Bug 悬赏', link: '/about/bounty' },
           { text: '关于', link: '/about/' }
         ],
         sidebar: {
@@ -190,6 +191,7 @@ export default defineConfig({
               { text: '更新日志', link: '/about/changelog' },
               { text: '开发路线', link: '/about/roadmap' },
               { text: '需求反馈池', link: '/about/feedback' },
+              { text: 'Bug 悬赏', link: '/about/bounty' },
               { text: '友情推荐', link: '/about/friends' }
             ]
           }
@@ -223,6 +225,7 @@ export default defineConfig({
           { text: 'Features', link: '/en/features/wrapper-preview' },
           { text: 'Guide', link: '/en/guide/getting-started' },
           { text: 'Feedback', link: '/en/about/feedback' },
+          { text: 'Bug Bounty', link: '/en/about/bounty' },
           { text: 'About', link: '/en/about/' }
         ],
         sidebar: {
@@ -260,6 +263,7 @@ export default defineConfig({
               { text: 'Changelog', link: '/en/about/changelog' },
               { text: 'Roadmap', link: '/en/about/roadmap' },
               { text: 'Feedback Pool', link: '/en/about/feedback' },
+              { text: 'Bug Bounty', link: '/en/about/bounty' },
               { text: 'Friend Recommendations', link: '/en/about/friends' }
             ]
           }

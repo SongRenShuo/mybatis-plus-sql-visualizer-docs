@@ -125,10 +125,10 @@ function onPoolSubmitted() {
 }
 
 // 深链弹窗提交成功：关弹窗后由反馈池弹编号 toast（弹窗立刻关闭，表单内提示看不到），
-// 再刷新反馈池与动态面板两侧数据
-function onDeepLinkSubmitted(postNo?: string) {
+// 再刷新反馈池与动态面板两侧数据；勾选悬赏时把意向与标题透传给池内 toast
+function onDeepLinkSubmitted(postNo?: string, opts?: { bountyIntent?: boolean; title?: string }) {
   closeForm()
-  poolRef.value?.notifySubmitted(postNo)
+  poolRef.value?.notifySubmitted(postNo, opts)
   poolRef.value?.reload()
   activityRef.value?.reload()
 }
