@@ -31,7 +31,7 @@ next:
   <div class="qr-card">
     <img src="/group-qr.png" width="180" height="180" alt="User group QR code" class="qr-card__img"/>
     <div class="qr-card__title">User Group</div>
-    <div class="qr-card__desc">Scan to join the SQL Visualizer user group on WeChat. If the code has expired, grab the latest one from the Gitee repository README.</div>
+    <div class="qr-card__desc">Scan to join the SQL Visualizer user group on WeChat. If the code has expired, add the author's WeChat and they will invite you in.</div>
   </div>
 </div>
 
