@@ -72,6 +72,7 @@
 | DM（达梦） | `LIMIT [offset,] count` |
 | PostgreSQL / openGauss | `LIMIT count OFFSET offset` |
 | KingBase（金仓） | `LIMIT count OFFSET offset` |
+| GaussDB / HighGo（瀚高）/ Vastbase（海量） | `LIMIT count OFFSET offset` |
 | SQLite / H2 | `LIMIT count OFFSET offset` |
 | Oracle | `OFFSET n ROWS FETCH NEXT m ROWS ONLY`（无 offset 时 `FETCH FIRST m ROWS ONLY`） |
 | SQL Server | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` |
@@ -200,6 +201,9 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | 引擎级单测 |
 | OceanBase（MySQL 模式） | `EXPLAIN <sql>`（表格行） | 官方文档级验证（真机留账） |
 | openGauss | `EXPLAIN (FORMAT JSON) <sql>` | 真机通过 |
+| GaussDB | `EXPLAIN (FORMAT JSON) <sql>` | 官方文档级验证（真机留账） |
+| HighGo（瀚高） | `EXPLAIN (FORMAT JSON) <sql>` | 社区镜像引擎级实证（V6.0.1，非厂商镜像） |
+| Vastbase（海量） | `EXPLAIN (FORMAT JSON) <sql>` | 官方文档级验证（真机留账） |
 | Oracle | `EXPLAIN PLAN FOR <sql>`（计划写入会话级 `PLAN_TABLE`） | 真机通过（Free 23 / XE 11g） |
 | SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | 官方文法落地，真机未验证 |
 

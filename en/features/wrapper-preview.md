@@ -71,6 +71,7 @@ The parameter area can store named parameter sets ("Manage Presets"), and the va
 | DM (Dameng) | `LIMIT [offset,] count` |
 | PostgreSQL / openGauss | `LIMIT count OFFSET offset` |
 | KingBase | `LIMIT count OFFSET offset` |
+| GaussDB / HighGo / Vastbase | `LIMIT count OFFSET offset` |
 | SQLite / H2 | `LIMIT count OFFSET offset` |
 | Oracle | `OFFSET n ROWS FETCH NEXT m ROWS ONLY` (or `FETCH FIRST m ROWS ONLY` when there is no offset) |
 | SQL Server | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` |
@@ -199,6 +200,9 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | engine-level unit tests |
 | OceanBase (MySQL mode) | `EXPLAIN <sql>` (table rows) | verified against official docs (real-DB check pending) |
 | openGauss | `EXPLAIN (FORMAT JSON) <sql>` | verified on real DB |
+| GaussDB | `EXPLAIN (FORMAT JSON) <sql>` | official docs (live DB pending) |
+| HighGo | `EXPLAIN (FORMAT JSON) <sql>` | community-image engine probe (V6.0.1) |
+| Vastbase | `EXPLAIN (FORMAT JSON) <sql>` | official docs (live DB pending) |
 | Oracle | `EXPLAIN PLAN FOR <sql>` (plan goes to the session-level `PLAN_TABLE`) | verified on real DB (Free 23 / XE 11g) |
 | SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | official grammar; real-DB check pending |
 

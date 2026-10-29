@@ -43,7 +43,8 @@ Auto-determine quoting by field type:
 |---------|----------------|
 | MySQL / MariaDB / OceanBase (MySQL mode) | `ON DUPLICATE KEY UPDATE` |
 | openGauss | `ON DUPLICATE KEY UPDATE` (not PG's `ON CONFLICT`) |
-| PostgreSQL / KingBase / SQLite | `ON CONFLICT (key) DO UPDATE SET` |
+| GaussDB / Vastbase | `ON DUPLICATE KEY UPDATE` (same as openGauss) |
+| PostgreSQL / KingBase / SQLite / HighGo | `ON CONFLICT (key) DO UPDATE SET` |
 | H2 | Whole statement: `MERGE INTO t (cols) KEY (key) VALUES (...)` |
 | Oracle / SQL Server / DM (Dameng) | No native concise form; degrades to a plain INSERT |
 
