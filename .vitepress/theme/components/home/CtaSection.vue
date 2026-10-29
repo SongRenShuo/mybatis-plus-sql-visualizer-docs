@@ -10,7 +10,6 @@ const { c, localePath } = useHomeContent()
     <div class="cta-card mp-reveal">
       <span class="section-eyebrow">{{ c.cta.eyebrow }}</span>
       <div class="cta-badge">
-        <span class="cta-badge-icon">✨</span>
         {{ c.cta.badge }}
       </div>
 
@@ -74,7 +73,6 @@ const { c, localePath } = useHomeContent()
 .cta-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
   padding: 0.375rem 1rem;
   border-radius: 9999px;
   background-color: rgba(94, 234, 212, 0.1);
@@ -83,11 +81,6 @@ const { c, localePath } = useHomeContent()
   font-size: 0.8125rem;
   font-weight: 500;
   margin-bottom: 1.75rem;
-}
-
-.cta-badge-icon {
-  font-size: 0.875rem;
-  line-height: 1;
 }
 
 .cta-title {
