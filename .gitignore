@@ -34,6 +34,8 @@ cf-credentials*.json
 r2-credentials*.json
 wrangler.toml
 .cf-token
+# 本仓 GitHub 推送令牌与凭据助手（同插件仓 .local/github-token.json）
+.local/
 
 # Local dev / temp
 *.local
