@@ -72,15 +72,15 @@
           <div class="card-right">
             <div class="card-header">
               <h3 class="card-title">
-                <span v-if="post.isPinned" class="card-pin" title="置顶">📌</span>{{ post.title }}
+                <span v-if="post.isPinned" class="card-pin" title="置顶"><FbIcon name="pin" :size="13" /></span>{{ post.title }}
               </h3>
               <StatusBadge :status="post.status" :locale="locale" />
             </div>
             <div class="card-meta">
-              <span class="meta-type">{{ post.typeIcon }} {{ typeLabel(post.type) }}</span>
+              <span class="meta-type"><FbIcon :name="post.typeIcon" :size="14" /> {{ typeLabel(post.type) }}</span>
               <span v-if="post.category" class="meta-category">{{ categoryLabel(post.category) }}</span>
               <span class="meta-date">{{ formatDateTime(post.createdAt) }}</span>
-              <span class="meta-comments">💬 {{ post.commentCount }}</span>
+              <span class="meta-comments"><FbIcon name="message" :size="13" /> {{ post.commentCount }}</span>
             </div>
           </div>
         </div>
@@ -123,7 +123,7 @@
             <FeedbackForm ref="formRef" :api-base="apiBase" :locale="locale" embedded @done="onSubmitted" />
           </div>
           <div class="modal-footer">
-            <span v-if="!formRef?.canSubmit" class="modal-hint">⚠ {{ (formRef?.invalidTips || []).join('，') }}</span>
+            <span v-if="!formRef?.canSubmit" class="modal-hint"><FbIcon name="alert" :size="14" /> {{ (formRef?.invalidTips || []).join('，') }}</span>
             <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
             <button class="modal-submit" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">{{ t('submitBtn', locale) }}</button>
           </div>
@@ -151,6 +151,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import StatusBadge from './StatusBadge.vue'
+import FbIcon from './FbIcon.vue'
 import FilterSelect from './FilterSelect.vue'
 import VoteButton from './VoteButton.vue'
 import FeedbackForm from './FeedbackForm.vue'
@@ -210,10 +211,10 @@ const statusOptions = computed(() => [
 
 const typeOptions = computed(() => [
   { value: '', label: props.locale === 'zh' ? '全部' : 'All' },
-  { value: '1', label: `✨ ${t('type.feature', props.locale)}` },
-  { value: '2', label: `🐛 ${t('type.bug', props.locale)}` },
-  { value: '3', label: `⚡ ${t('type.improvement', props.locale)}` },
-  { value: '4', label: `❓ ${t('type.question', props.locale)}` },
+  { value: '1', label: t('type.feature', props.locale) },
+  { value: '2', label: t('type.bug', props.locale) },
+  { value: '3', label: t('type.improvement', props.locale) },
+  { value: '4', label: t('type.question', props.locale) },
 ])
 
 const sortOptions = computed(() => [
@@ -221,7 +222,10 @@ const sortOptions = computed(() => [
   { value: 'newest', label: t('sortNewest', props.locale) },
 ])
 
-const typeIcons: Record<number, string> = { 1: '✨', 2: '🐛', 3: '⚡', 4: '❓' }
+// 类型 -> FbIcon 图标名（原 emoji 载体已换成内联 SVG，看板卡片同样消费该字段）
+const typeIcons: Record<number, string> = {
+  1: 'plus-square', 2: 'bug', 3: 'trending-up', 4: 'help-circle',
+}
 
 const typeKeys: Record<number, MessageKey> = {
   1: 'type.feature', 2: 'type.bug', 3: 'type.improvement', 4: 'type.question',

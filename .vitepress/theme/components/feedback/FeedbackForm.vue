@@ -17,7 +17,7 @@
           :style="{ '--type-color': t.color }"
           @click="form.type = t.value"
         >
-          <span class="type-icon">{{ t.icon }}</span>
+          <span class="type-icon"><FbIcon :name="t.icon" :size="14" /></span>
           <span>{{ t.label }}</span>
         </button>
       </div>
@@ -165,16 +165,17 @@ const emit = defineEmits<{
 }>()
 
 import { t, type MessageKey } from './i18n'
+import FbIcon from './FbIcon.vue'
 import FilterSelect from './FilterSelect.vue'
 import VersionSelect from './VersionSelect.vue'
 
 const types = computed<Array<{ value: number; label: string; icon: string; color: string }>>(() => {
   const l = props.locale || 'zh'
   return [
-    { value: 1, label: t('type.feature', l), icon: '✨', color: '#3b82f6' },
-    { value: 2, label: t('type.bug', l), icon: '🐛', color: '#ef4444' },
-    { value: 3, label: t('type.improvement', l), icon: '⚡', color: '#f59e0b' },
-    { value: 4, label: t('type.question', l), icon: '❓', color: '#8b5cf6' },
+    { value: 1, label: t('type.feature', l), icon: 'plus-square', color: '#3b82f6' },
+    { value: 2, label: t('type.bug', l), icon: 'bug', color: '#ef4444' },
+    { value: 3, label: t('type.improvement', l), icon: 'trending-up', color: '#f59e0b' },
+    { value: 4, label: t('type.question', l), icon: 'help-circle', color: '#8b5cf6' },
   ]
 })
 

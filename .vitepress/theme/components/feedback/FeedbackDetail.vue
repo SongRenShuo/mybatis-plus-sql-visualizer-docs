@@ -9,7 +9,7 @@
       <div class="fd-header-top">
         <span class="fd-post-no">{{ post.postNo }}</span>
         <StatusBadge :status="post.status" :locale="locale" />
-        <span v-if="post.typeLabel" class="fd-type-chip">{{ typeIcon(post.type) }} {{ post.typeLabel }}</span>
+        <span v-if="post.typeLabel" class="fd-type-chip"><FbIcon :name="typeIcon(post.type)" :size="14" /> {{ post.typeLabel }}</span>
       </div>
       <h1 class="fd-title">{{ post.title }}</h1>
       <div class="fd-meta">
@@ -57,7 +57,7 @@
           rel="noopener"
         >
           <img v-if="isImage(att)" :src="fileUrl(att.key)" :alt="att.fileName" class="fd-att-thumb" loading="lazy" />
-          <span v-else class="fd-att-icon">📎</span>
+          <span v-else class="fd-att-icon"><FbIcon name="paperclip" :size="15" /></span>
           <span class="fd-att-name">{{ att.fileName }}</span>
           <span class="fd-att-size">{{ formatSize(att.fileSize) }}</span>
         </a>
@@ -129,6 +129,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import StatusBadge from './StatusBadge.vue'
+import FbIcon from './FbIcon.vue'
 import VoteButton from './VoteButton.vue'
 import { t, type Locale, type MessageKey } from './i18n'
 import { formatDateTime } from './dateTime'
@@ -155,7 +156,10 @@ function statusColor(s: number): string {
   return statusColors[s] || '#6b7280'
 }
 
-const typeIcons: Record<number, string> = { 1: '✨', 2: '🐛', 3: '⚡', 4: '❓' }
+// 类型 -> FbIcon 图标名
+const typeIcons: Record<number, string> = {
+  1: 'plus-square', 2: 'bug', 3: 'trending-up', 4: 'help-circle',
+}
 
 function typeIcon(type: number): string {
   return typeIcons[type] || ''

@@ -5,7 +5,7 @@
     :title="hasVoted ? '取消点赞' : '点赞'"
     @click.stop="handleVote"
   >
-    <span class="vote-icon">👍</span>
+    <span class="vote-icon"><FbIcon name="thumbs-up" :size="16" /></span>
     <span class="vote-count">{{ count }}</span>
     <span v-if="floatText" :key="floatKey" class="vote-float">{{ floatText }}</span>
   </button>
@@ -13,6 +13,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import FbIcon from './FbIcon.vue'
 
 const props = withDefaults(defineProps<{
   postNo: string

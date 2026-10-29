@@ -46,7 +46,7 @@
             @click="pick(row.value)"
           >
             <span class="vs-option-label">{{ row.label }}</span>
-            <span v-if="row.selected" class="vs-check" aria-hidden="true">✓</span>
+            <span v-if="row.selected" class="vs-check" aria-hidden="true"><FbIcon name="check" :size="12" /></span>
           </button>
           <div v-if="!rows.length" class="vs-empty">{{ t('versionEmpty', props.locale || 'zh') }}</div>
         </div>
@@ -69,6 +69,7 @@
  */
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { t, type Locale } from './i18n'
+import FbIcon from './FbIcon.vue'
 
 const props = defineProps<{
   modelValue: string

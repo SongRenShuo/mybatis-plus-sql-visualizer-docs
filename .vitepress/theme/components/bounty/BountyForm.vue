@@ -1,7 +1,7 @@
 <template>
   <div class="bounty-form-card">
     <div v-if="success" class="success-card" role="status">
-      <div class="success-icon" aria-hidden="true">✓</div>
+      <div class="success-icon" aria-hidden="true"><FbIcon name="check" :size="12" /></div>
       <h3>{{ t('form.successTitle', locale) }}</h3>
       <p class="success-no">
         {{ t('form.successNo', locale) }}
@@ -274,7 +274,7 @@
         </div>
 
         <div v-if="invalidTips.length" class="tips" aria-live="polite">
-          <p v-for="tip in invalidTips" :key="tip">⚠ {{ tip }}</p>
+          <p v-for="tip in invalidTips" :key="tip"><FbIcon name="alert" :size="14" /> {{ tip }}</p>
         </div>
 
         <p v-if="submitError" class="submit-error" role="alert">{{ submitError }}</p>
@@ -292,6 +292,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import FilterSelect from '../feedback/FilterSelect.vue'
+import FbIcon from '../feedback/FbIcon.vue'
 import VersionSelect from '../feedback/VersionSelect.vue'
 import { t, type Locale } from './i18n'
 import {
@@ -1027,6 +1028,9 @@ async function handleSubmit() {
 }
 
 .success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 2.5rem;
   height: 2.5rem;
   margin: 0 auto 0.75rem;

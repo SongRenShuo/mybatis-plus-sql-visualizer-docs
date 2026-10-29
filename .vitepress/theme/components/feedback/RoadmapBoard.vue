@@ -23,13 +23,13 @@
               :api-base="apiBase"
               @update="(c, v) => $emit('vote', post.postNo, c, v)"
             />
-            <span v-if="post.isPinned" class="card-pin" title="置顶">📌</span>
+            <span v-if="post.isPinned" class="card-pin" title="置顶"><FbIcon name="pin" :size="13" /></span>
           </div>
           <div class="card-title">{{ post.title }}</div>
           <div class="card-meta">
-            <span class="card-type">{{ post.typeIcon }} {{ post.typeLabel }}</span>
+            <span class="card-type"><FbIcon :name="post.typeIcon" :size="14" /> {{ post.typeLabel }}</span>
             <span v-if="post.category" class="card-category">{{ categoryLabel(post.category) }}</span>
-            <span v-if="post.commentCount > 0" class="card-comments">💬 {{ post.commentCount }}</span>
+            <span v-if="post.commentCount > 0" class="card-comments"><FbIcon name="message" :size="13" /> {{ post.commentCount }}</span>
           </div>
           <!-- 与列表卡片同款时间（MM-DD HH:mm），看板此前完全没有时间 -->
           <div class="card-footer">
@@ -49,6 +49,7 @@
 import type { Locale, MessageKey } from './i18n'
 import { t } from './i18n'
 import VoteButton from './VoteButton.vue'
+import FbIcon from './FbIcon.vue'
 import { formatDateTime } from './dateTime'
 import { STATUS_GROUPS, type StatusGroup } from './status'
 

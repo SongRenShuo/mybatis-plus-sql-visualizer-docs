@@ -46,7 +46,7 @@
             />
           </div>
           <div class="modal-footer">
-            <span v-if="!formRef?.canSubmit" class="modal-hint">⚠ {{ (formRef?.invalidTips || []).join('，') }}</span>
+            <span v-if="!formRef?.canSubmit" class="modal-hint"><FbIcon name="alert" :size="14" /> {{ (formRef?.invalidTips || []).join('，') }}</span>
             <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
             <button class="modal-submit" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">{{ t('submitBtn', locale) }}</button>
           </div>
@@ -61,6 +61,7 @@ import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useData } from 'vitepress'
 import { t, type Locale } from './i18n'
 import FeedbackPool from './FeedbackPool.vue'
+import FbIcon from './FbIcon.vue'
 import FeedbackDetailDrawer from './FeedbackDetailDrawer.vue'
 import FeedbackActivity from './FeedbackActivity.vue'
 import FeedbackForm from './FeedbackForm.vue'

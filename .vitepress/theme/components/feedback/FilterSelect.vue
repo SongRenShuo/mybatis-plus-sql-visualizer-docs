@@ -29,7 +29,7 @@
           @click="pick(o.value)"
         >
           <span class="fs-option-label">{{ o.label }}</span>
-          <span v-if="o.value === props.modelValue" class="fs-check" aria-hidden="true">✓</span>
+          <span v-if="o.value === props.modelValue" class="fs-check" aria-hidden="true"><FbIcon name="check" :size="12" /></span>
         </button>
       </div>
     </Teleport>
@@ -43,6 +43,7 @@
  * 深浅色跟随 VitePress CSS 变量自动切换。
  */
 import { ref, computed, nextTick, onBeforeUnmount } from 'vue'
+import FbIcon from './FbIcon.vue'
 
 const props = defineProps<{
   modelValue: string

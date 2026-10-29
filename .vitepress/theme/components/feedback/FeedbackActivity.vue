@@ -16,7 +16,7 @@
         <span
           class="activity-icon"
           :class="item.type === 'new' ? 'icon-new' : 'icon-status'"
-        >{{ item.type === 'new' ? '✨' : '🔁' }}</span>
+        ><FbIcon :name="item.type === 'new' ? 'plus-circle' : 'refresh'" :size="14" /></span>
         <div class="activity-body">
           <p class="activity-line">
             <span
@@ -43,6 +43,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { t, type Locale, type MessageKey } from './i18n'
+import FbIcon from './FbIcon.vue'
 import { parseUtcDate } from './dateTime'
 
 const props = defineProps<{
