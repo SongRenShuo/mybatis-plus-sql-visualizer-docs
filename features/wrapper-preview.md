@@ -63,20 +63,20 @@
 - 改 SQL 文本不会丢参数——仍按该方法最近一次保存回落
 - 从旧版本升上来的全局预设会在首次命中时自动迁移到方法作用域，不需要手工重存
 
-### 11 种方言分页渲染
+### 12 种方言分页渲染
 
 | 方言 | 分页语法 |
 |------|---------|
 | MySQL / MariaDB | `LIMIT [offset,] count` |
 | OceanBase（MySQL 模式） | `LIMIT [offset,] count` |
 | DM（达梦） | `LIMIT [offset,] count` |
-| PostgreSQL / openGauss | `LIMIT count OFFSET offset` |
+| PostgreSQL / openGauss / GaussDB | `LIMIT count OFFSET offset` |
 | KingBase（金仓） | `LIMIT count OFFSET offset` |
 | SQLite / H2 | `LIMIT count OFFSET offset` |
 | Oracle | `OFFSET n ROWS FETCH NEXT m ROWS ONLY`（无 offset 时 `FETCH FIRST m ROWS ONLY`） |
 | SQL Server | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` |
 
-OceanBase 与 openGauss 的 upsert 冲突子句亦按各自真实形态渲染（openGauss 实为 `ON DUPLICATE KEY UPDATE` MySQL 形态，非 PG 的 `ON CONFLICT`）。
+OceanBase、openGauss 与 GaussDB 的 upsert 冲突子句亦按各自真实形态渲染（openGauss 与 GaussDB 实为 `ON DUPLICATE KEY UPDATE` MySQL 形态，非 PG 的 `ON CONFLICT`）。
 
 <GifPlayer src="/demo/dialect-pagination.gif" alt="方言分页：设置页数据库方言从 MySQL 切到 Oracle 后，同一处重新预览，分页子句由 LIMIT 5, 5 变为 ORDER BY id DESC OFFSET 5 ROWS FETCH NEXT 5 ROWS ONLY，表名引号也从反引号换成双引号" />
 
@@ -200,6 +200,7 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | 引擎级单测 |
 | OceanBase（MySQL 模式） | `EXPLAIN <sql>`（表格行） | 官方文档级验证（真机留账） |
 | openGauss | `EXPLAIN (FORMAT JSON) <sql>` | 真机通过 |
+| GaussDB | `EXPLAIN (FORMAT JSON) <sql>` | 官方文档级验证（无公开镜像，真机留账） |
 | Oracle | `EXPLAIN PLAN FOR <sql>`（计划写入会话级 `PLAN_TABLE`） | 真机通过（Free 23 / XE 11g） |
 | SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | 官方文法落地，真机未验证 |
 

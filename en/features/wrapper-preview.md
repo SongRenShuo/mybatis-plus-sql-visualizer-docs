@@ -62,20 +62,20 @@ The parameter area can store named parameter sets ("Manage Presets"), and the va
 - Editing the SQL text does not lose the parameters — it still falls back to that method's most recent save
 - Presets carried over from older versions are migrated into method scope automatically on first hit, with no manual re-saving
 
-### 11-Dialect Pagination
+### 12-Dialect Pagination
 
 | Dialect | Syntax |
 |---------|--------|
 | MySQL / MariaDB | `LIMIT [offset,] count` |
 | OceanBase (MySQL mode) | `LIMIT [offset,] count` |
 | DM (Dameng) | `LIMIT [offset,] count` |
-| PostgreSQL / openGauss | `LIMIT count OFFSET offset` |
+| PostgreSQL / openGauss / GaussDB | `LIMIT count OFFSET offset` |
 | KingBase | `LIMIT count OFFSET offset` |
 | SQLite / H2 | `LIMIT count OFFSET offset` |
 | Oracle | `OFFSET n ROWS FETCH NEXT m ROWS ONLY` (or `FETCH FIRST m ROWS ONLY` when there is no offset) |
 | SQL Server | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` |
 
-Upsert conflict clauses for OceanBase and openGauss also render in their real forms (openGauss uses the MySQL-style `ON DUPLICATE KEY UPDATE`, not PG's `ON CONFLICT`).
+Upsert conflict clauses for OceanBase, openGauss and GaussDB also render in their real forms (openGauss and GaussDB use the MySQL-style `ON DUPLICATE KEY UPDATE`, not PG's `ON CONFLICT`).
 
 <GifPlayer src="/demo/dialect-pagination.gif" alt="Dialect pagination: after switching the settings-page database dialect from MySQL to Oracle, re-previewing at the same place turns the pagination clause from LIMIT 5, 5 into ORDER BY id DESC OFFSET 5 ROWS FETCH NEXT 5 ROWS ONLY, and the table quoting changes from backticks to double quotes" />
 
@@ -199,6 +199,7 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | engine-level unit tests |
 | OceanBase (MySQL mode) | `EXPLAIN <sql>` (table rows) | verified against official docs (real-DB check pending) |
 | openGauss | `EXPLAIN (FORMAT JSON) <sql>` | verified on real DB |
+| GaussDB | `EXPLAIN (FORMAT JSON) <sql>` | verified against official docs (real-DB check pending) |
 | Oracle | `EXPLAIN PLAN FOR <sql>` (plan goes to the session-level `PLAN_TABLE`) | verified on real DB (Free 23 / XE 11g) |
 | SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | official grammar; real-DB check pending |
 
