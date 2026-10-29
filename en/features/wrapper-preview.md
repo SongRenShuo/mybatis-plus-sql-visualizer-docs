@@ -202,7 +202,7 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 | openGauss | `EXPLAIN (FORMAT JSON) <sql>` | verified on real DB |
 | GaussDB | `EXPLAIN (FORMAT JSON) <sql>` | official docs (live DB pending) |
 | HighGo | `EXPLAIN (FORMAT JSON) <sql>` | community-image engine probe (V6.0.1) |
-| Vastbase | `EXPLAIN (FORMAT JSON) <sql>` | official docs (live DB pending) |
+| Vastbase | `EXPLAIN (FORMAT JSON) <sql>` | community-image engine probe (A-mode) |
 | Oracle | `EXPLAIN PLAN FOR <sql>` (plan goes to the session-level `PLAN_TABLE`) | verified on real DB (Free 23 / XE 11g) |
 | SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | official grammar; real-DB check pending |
 
