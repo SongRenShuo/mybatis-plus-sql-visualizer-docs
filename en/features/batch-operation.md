@@ -42,7 +42,7 @@ Auto-determine quoting by field type:
 | Dialect | Conflict Clause |
 |---------|----------------|
 | MySQL / MariaDB / OceanBase (MySQL mode) | `ON DUPLICATE KEY UPDATE` |
-| openGauss / GaussDB | `ON DUPLICATE KEY UPDATE` (not PG's `ON CONFLICT`) |
+| openGauss | `ON DUPLICATE KEY UPDATE` (not PG's `ON CONFLICT`) |
 | PostgreSQL / KingBase / SQLite | `ON CONFLICT (key) DO UPDATE SET` |
 | H2 | Whole statement: `MERGE INTO t (cols) KEY (key) VALUES (...)` |
 | Oracle / SQL Server / DM (Dameng) | No native concise form; degrades to a plain INSERT |
