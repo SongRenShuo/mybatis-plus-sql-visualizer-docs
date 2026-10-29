@@ -25,6 +25,14 @@ export default defineConfig({
   //（实测 `/features/wrapper-preview.html` → 308 → 无后缀 200）。产物仍是 .html 文件，只是链接不带后缀。
   cleanUrls: true,
 
+  // 文档页显示「最后更新于」（构建期按文件跑 git log 取最后一次提交时间），
+  // 同时让 sitemap 自动带上 <lastmod>；单页可用 frontmatter `lastUpdated: false` 关闭。
+  lastUpdated: true,
+
+  // docs/ 为内部文档（开发计划、开发笔记、发行说明、验收文档、SQL 文件、memory-archive），
+  // 不面向访客：直接从构建源排除，既不出页面，也不进 sitemap 与搜索索引。
+  srcExclude: ['docs/**'],
+
   title: 'SQL Visualizer',
   description:
     'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），真实 EXPLAIN 执行计划，运行期捕获真实参数与耗时（慢查询标红与静态性能建议），日志一键跳回源码，SQL 反向转 Java 代码。',
@@ -110,7 +118,8 @@ export default defineConfig({
   // 开发服务器代理：/api/changelog → JetBrains Marketplace
   vite: {
     // 构建产物生成 llms.txt / llms-full.txt（AI 搜索友好）
-    // docs/ 为内部文档（开发计划、发行说明、开发笔记、需求文档、SQL文件等），不进 llms 索引，页面仍正常构建可访问。
+    // docs/ 已由根级 srcExclude 排除在构建之外（不再出页面），这里保留 ignoreFiles 兜底，
+    // 防止有人临时改动 srcExclude 时内部文档混进 llms 索引。
     // ignoreFiles 为 minimatch 模式，匹配相对 srcDir 的路径；`docs/**` 递归排除 docs/ 下所有层级文件
     plugins: [llmstxt({
       ignoreFiles: ['docs/**']
@@ -209,7 +218,18 @@ export default defineConfig({
           next: '下一篇'
         },
         lastUpdated: {
-          text: '最后更新于'
+          text: '最后更新于',
+          formatOptions: {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Shanghai',
+            forceLocale: true
+          }
         }
       }
     },
@@ -281,7 +301,18 @@ export default defineConfig({
           next: 'Next'
         },
         lastUpdated: {
-          text: 'Last updated'
+          text: 'Last updated',
+          formatOptions: {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Shanghai',
+            forceLocale: true
+          }
         }
       }
     }

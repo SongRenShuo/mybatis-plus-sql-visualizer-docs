@@ -1,9 +1,11 @@
 // pagefind 索引前：给内部页 HTML 注入 data-pagefind-ignore，将其整体排除出搜索索引。
 // 内部页 = docs/ 下开发计划/发行说明/开发笔记 + README.html（仓库说明的构建产物）。
+// 2026-10-29 起 docs/ 已由 config 的 srcExclude 排除，不再产出页面；这里保留处理逻辑作兜底
+//（若哪天恢复构建，仍能自动排除出索引），目录不存在时跳过而不是报错。
 // 实测 pagefind 1.5.2 不读取 .pagefindignore 文件（site 根与 CWD 放置均无效），改用
 // 官方文档推荐的属性方案：pagefind 对带 data-pagefind-ignore 的节点忽略整个子树，
 // 加在 <body> 上即整页无内容、不进索引。VitePress frontmatter 的 search:false 只作用于
-// 内置 local search，与此互不相干。Cloudflare Pages 部署照常提供这些页面，只是不可被搜索。
+// 内置 local search，与此互不相干。
 import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 
@@ -19,7 +21,10 @@ function* walk(dir) {
 
 let count = 0
 const docsDir = join(dist, 'docs')
-const targets = [...walk(docsDir)]
+const targets = []
+try {
+  if (statSync(docsDir).isDirectory()) targets.push(...walk(docsDir))
+} catch {}
 const readme = join(dist, 'README.html')
 try {
   if (statSync(readme).isFile()) targets.push(readme)
