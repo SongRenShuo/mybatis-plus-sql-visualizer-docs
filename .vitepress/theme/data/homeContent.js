@@ -318,7 +318,6 @@ export const homeContent = {
 
     cta: {
       eyebrow: 'Get Started',
-      badge: '立即体验',
       titleLine1: '准备好告别繁琐的',
       titleLine2: 'SQL 调试方式了吗？',
       subtitle:
@@ -702,7 +701,6 @@ export const homeContent = {
 
     cta: {
       eyebrow: 'Get Started',
-      badge: 'Try it now',
       titleLine1: 'Ready to leave tedious',
       titleLine2: 'SQL debugging behind?',
       subtitle:

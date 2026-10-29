@@ -22,10 +22,12 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
       </div>
 
       <div class="features-grid">
-        <div
+        <a
           v-for="(card, index) in cards"
           :key="index"
+          :href="card.link"
           class="feature-card mp-reveal"
+          :aria-label="card.title"
           :style="{ '--mp-reveal-delay': `${(index % 3) * 80}ms` }"
         >
           <div class="feature-icon" :class="card.color">
@@ -60,7 +62,7 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
           <h3 class="feature-card-title">{{ card.title }}</h3>
           <p class="feature-card-claim">{{ card.claim }}</p>
           <p class="feature-card-tags">{{ card.tags.join(' · ') }}</p>
-        </div>
+        </a>
       </div>
     </div>
   </section>
@@ -119,7 +121,12 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
   }
 }
 
+/* 整卡是链接：锚点默认带下划线与蓝色文字，这里复位成卡片原有的文本外观；
+   悬停上浮 + 标题转品牌色，给出「可点」的暗示，不额外加「查看文档」文案 */
 .feature-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
   background-color: var(--bg-primary);
   border-radius: 1rem;
   padding: 10px 29px;
@@ -128,6 +135,16 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
 
 .feature-card:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.feature-card:hover .feature-card-title {
+  color: var(--primary-color);
+}
+
+.feature-card:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
 }
 
 .feature-icon {
@@ -193,6 +210,7 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
   font-weight: bold;
   margin-bottom: 0.75rem;
   color: var(--text-primary);
+  transition: color 0.2s;
 }
 
 /* 一句话主张：卡片里唯一的叙述性文字，长度按 20 字（英文 55 字符）控住，

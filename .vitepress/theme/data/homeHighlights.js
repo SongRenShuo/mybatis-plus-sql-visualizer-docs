@@ -26,7 +26,8 @@
  * 对含 raw 段的语句执行前弹 Yes/No，与 DML 二次确认同款形态；原描述这条没问题。）
  */
 
-// 中文首页 9 张卡片：icon 对应 FeaturesGrid 里的 svg 图标，color 对应配色 class
+// 中文首页 9 张卡片：icon 对应 FeaturesGrid 里的 svg 图标，color 对应配色 class，
+// link 指向功能页里讲这条能力的位置（锚点均已按 dist 实际 id 核对）；整卡可点。
 export const coolCards = [
   {
     icon: 'code',
@@ -34,6 +35,7 @@ export const coolCards = [
     title: '多框架支持',
     claim: '项目里怎么写 SQL，这里都能预览',
     tags: ['MPJ 联表', 'JPA / Hibernate', 'XML / 注解'],
+    link: '/guide/compatibility#框架支持范围',
   },
   {
     icon: 'gauge',
@@ -41,6 +43,7 @@ export const coolCards = [
     title: '极致性能',
     claim: '点开就有结果，不用等项目启动',
     tags: ['静态解析', '大日志不卡', '报错就地提示'],
+    link: '/features/wrapper-preview#触发方式',
   },
   {
     icon: 'bulb',
@@ -48,6 +51,7 @@ export const coolCards = [
     title: '智能识别',
     claim: 'Wrapper 链行首自动出现预览图标',
     tags: ['零配置', '类型自动识别', '随编辑即时更新'],
+    link: '/features/wrapper-preview#支持的-wrapper-类型',
   },
   {
     icon: 'cog',
@@ -55,6 +59,7 @@ export const coolCards = [
     title: '广泛集成',
     claim: '从写代码到跑起来，每个环节都接上',
     tags: ['CRUD 一键生成', '真实 EXPLAIN', 'MCP 十一工具'],
+    link: '/features/crud-sql',
   },
   {
     icon: 'shield',
@@ -62,6 +67,7 @@ export const coolCards = [
     title: '安全防护',
     claim: '把误操作挡在执行之前',
     tags: ['无 WHERE 警示', '逻辑删除注入', '直替执行确认'],
+    link: '/features/wrapper-preview#安全警示',
   },
   {
     icon: 'history',
@@ -69,6 +75,7 @@ export const coolCards = [
     title: '历史记录',
     claim: '每次预览和转换都留档，随时翻回来',
     tags: ['自动保存', 'SQL 高亮 + 耗时', '两级导航'],
+    link: '/features/sql-log#sql-高亮与耗时显示',
   },
   {
     icon: 'timer',
@@ -76,6 +83,7 @@ export const coolCards = [
     title: '慢查询与性能建议',
     claim: '最慢的那几条，一眼就看见',
     tags: ['慢查询标红', 'N+1 同结构聚类', '静态性能建议'],
+    link: '/features/sql-log#慢查询与性能建议',
   },
   {
     icon: 'target',
@@ -83,6 +91,7 @@ export const coolCards = [
     title: '源码级定位',
     claim: '从日志直接跳到发出这条 SQL 的代码行',
     tags: ['真实调用栈', '逐帧跳转', '悬停看全栈'],
+    link: '/features/sql-log#从调用栈跳转',
   },
   {
     icon: 'swap',
@@ -90,6 +99,7 @@ export const coolCards = [
     title: 'SQL → Java 反向转换',
     claim: '粘一段 SQL，生成能直接用的 Wrapper',
     tags: ['四种形态', '增删改查 + JOIN', '默认形态可配'],
+    link: '/features/sql-to-java',
   },
 ]
 
@@ -101,6 +111,7 @@ export const enCoolCards = [
     title: 'Multi-framework support',
     claim: 'Preview every SQL style your project uses',
     tags: ['MPJ joins', 'JPA / Hibernate', 'XML / Annotations'],
+    link: '/en/guide/compatibility#framework-coverage',
   },
   {
     icon: 'gauge',
@@ -108,6 +119,7 @@ export const enCoolCards = [
     title: 'Performance',
     claim: 'Results on click, no project startup',
     tags: ['Static parsing', 'Smooth logs', 'In-panel errors'],
+    link: '/en/features/wrapper-preview#trigger-methods',
   },
   {
     icon: 'bulb',
@@ -115,6 +127,7 @@ export const enCoolCards = [
     title: 'Smart detection',
     claim: 'Preview icons appear on Wrapper chains',
     tags: ['Zero config', 'Types resolved', 'Live updates'],
+    link: '/en/features/wrapper-preview#supported-wrapper-types',
   },
   {
     icon: 'cog',
@@ -122,6 +135,7 @@ export const enCoolCards = [
     title: 'Broad integration',
     claim: 'Wired in from the first line to the running app',
     tags: ['CRUD generation', 'Real EXPLAIN', '11 MCP tools'],
+    link: '/en/features/crud-sql',
   },
   {
     icon: 'shield',
@@ -129,6 +143,7 @@ export const enCoolCards = [
     title: 'Safety',
     claim: 'Mistakes stopped before execution',
     tags: ['No-WHERE warnings', 'Logic delete', '${} confirm'],
+    link: '/en/features/wrapper-preview#safety-warning',
   },
   {
     icon: 'history',
@@ -136,6 +151,7 @@ export const enCoolCards = [
     title: 'History',
     claim: 'Every preview and conversion kept on record',
     tags: ['Auto-saved', 'SQL highlight', 'Two-level nav'],
+    link: '/en/features/sql-log#sql-highlighting-execution-time',
   },
   {
     icon: 'timer',
@@ -143,6 +159,7 @@ export const enCoolCards = [
     title: 'Slow queries & advice',
     claim: 'The slowest statements, right at the top',
     tags: ['Slow flagged', 'N+1 clusters', 'Static advice'],
+    link: '/en/features/sql-log#slow-queries-performance-advice',
   },
   {
     icon: 'target',
@@ -150,6 +167,7 @@ export const enCoolCards = [
     title: 'Source-level navigation',
     claim: 'From a log entry to the line that ran it',
     tags: ['Real call stack', 'Frame jumps', 'Full stack on hover'],
+    link: '/en/features/sql-log#jump-from-the-call-stack',
   },
   {
     icon: 'swap',
@@ -157,5 +175,6 @@ export const enCoolCards = [
     title: 'SQL → Java reverse conversion',
     claim: 'Paste SQL, get wrapper code you can run',
     tags: ['Four forms', 'CRUD + joins', 'Configurable default'],
+    link: '/en/features/sql-to-java',
   },
 ]

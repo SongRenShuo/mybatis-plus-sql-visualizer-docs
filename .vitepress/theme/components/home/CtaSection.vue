@@ -9,9 +9,6 @@ const { c, localePath } = useHomeContent()
   <section id="sec-start" class="cta-section section-dark">
     <div class="cta-card mp-reveal">
       <span class="section-eyebrow">{{ c.cta.eyebrow }}</span>
-      <div class="cta-badge">
-        {{ c.cta.badge }}
-      </div>
 
       <h2 class="cta-title">
         {{ c.cta.titleLine1 }}<br />
@@ -70,17 +67,9 @@ const { c, localePath } = useHomeContent()
   gap: 0;
 }
 
-.cta-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.375rem 1rem;
-  border-radius: 9999px;
-  background-color: rgba(94, 234, 212, 0.1);
-  border: 1px solid rgba(94, 234, 212, 0.25);
-  color: #5eead4;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  margin-bottom: 1.75rem;
+/* 胶囊徽标已移除：眉题与主标题之间需要单独的呼吸位，全局眉题默认只有 0.75rem */
+.cta-card .section-eyebrow {
+  margin-bottom: 1.5rem;
 }
 
 .cta-title {
