@@ -76,6 +76,25 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 - IDEA 2024.3 ~ 2025.1 do not support this feature set (the platform has no built-in MCP Server); all other plugin features are unaffected
 - Environments without the MCP Server plugin see zero impact: the plugin's MCP registration is not loaded at all, and every other feature works as usual
 
+### Version compatibility (read when: you want to know whether the settings-page gating applies on your IDE)
+
+The platform's tool-filter extension point has a different shape on each release line; the plugin probes it and adapts:
+
+| IDEA version (build tested) | Platform filter extension point | MCP server | Settings gating |
+|---|---|---|---|
+| 2024.3 ~ 2025.1 | No built-in MCP Server | Not supported | — |
+| 2025.2 / 2025.3 (253.31033) | None | Works | Not applied |
+| 2026.1.x early (261.17801) | None | Works | Not applied |
+| 2026.1.x intermediate (261.22158) | Present, returns `StateFlow` | Works | Not applied |
+| 2026.1.x (261.24374 / 261.25134) | Present, `getFilters` form | Works | Applied |
+| 2026.2 / 2026.3 (262.10968 / 263.7307) | Present, `applyFilters` form | Works | Applied |
+
+On the versions marked "Not applied", the plugin's tools are listed and callable exactly like any other tool; the only difference is that tools you disable on the settings page are not hidden from the agent's tool list — that platform generation simply has no matching extension point, so this is not a plugin fault.
+
+::: warning IDEA 2026.1.x (261) upgrade notice
+Plugin versions 2026.10.29 and earlier make the **built-in MCP Server unusable for every client** on IDEA 2026.1.x (261.22158 and later): any client connection returns 500, tools registered by other plugins disappear too, and turning off the plugin's own MCP master switch does not help (uninstalling the plugin is the only workaround). Upgrading to a fixed version restores it — no configuration change needed.
+:::
+
 ## Settings and Gating
 
 <GifPlayer src="/demo/mcp.gif" alt="Gating on the plugin's MCP Tools settings page: the banner reports 11 registered AI tools; turning the master switch off greys out all eleven; after switching it back on, disabling sqlv_rollback_plan alone flips the banner to '1 tool disabled — disabled tools do not appear in the AI assistant tool list'; the platform Tools > MCP Server > Exposed Tools entry is visible in the same tree" />
