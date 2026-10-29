@@ -13,6 +13,7 @@ const props = defineProps({
 
 const { lang } = useData()
 const isZh = computed(() => (lang.value || 'zh-CN').toLowerCase().startsWith('zh'))
+const isDev = import.meta.env.DEV
 const buttonText = computed(() => (isZh.value ? '搜索文档' : 'Search documentation'))
 const modalAria = computed(() => (isZh.value ? '站内搜索' : 'Site search'))
 
@@ -33,7 +34,8 @@ function loadPagefindUI() {
     document.head.appendChild(link)
     const script = document.createElement('script')
     script.src = '/pagefind/pagefind-ui.js'
-    script.onload = () => resolve()
+    script.onload = () =>
+      window.PagefindUI ? resolve() : reject(new Error('pagefind-ui 加载失败'))
     script.onerror = () => reject(new Error('pagefind-ui 加载失败'))
     document.head.appendChild(script)
   })
@@ -221,7 +223,10 @@ const modKey = computed(() => {
     <div v-if="open" class="pf-modal-mask" @click.self="closeModal()">
       <div ref="modalEl" class="pf-modal" role="dialog" :aria-label="modalAria">
         <div v-if="uiLoadFailed" class="pf-modal-error">
-          <template v-if="isZh">搜索组件加载失败，请刷新页面后重试。</template>
+          <template v-if="isDev">
+            {{ isZh ? '开发模式下搜索需要构建索引：先运行 npm run build，再刷新页面。' : 'Search in dev needs a built index: run npm run build, then refresh.' }}
+          </template>
+          <template v-else-if="isZh">搜索组件加载失败，请刷新页面后重试。</template>
           <template v-else>Search failed to load. Please refresh the page and try again.</template>
         </div>
         <div ref="container" class="pf-modal-body" @click="onResultClick"></div>

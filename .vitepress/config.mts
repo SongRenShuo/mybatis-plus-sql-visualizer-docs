@@ -1,8 +1,40 @@
 import { defineConfig } from 'vitepress'
 import llmstxt from 'vitepress-plugin-llms'
-import { readFileSync } from 'node:fs'
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { dirname, resolve } from 'node:path'
+import { dirname, extname, resolve, sep } from 'node:path'
+
+// dev server 只服务源码目录，构建产物里的 pagefind 索引（npm run build 生成）不在其列，
+// 站内搜索弹窗会落到「加载失败」。这里把 .vitepress/dist/pagefind 只读挂到 /pagefind；
+// 索引还没构建时放行，由前端提示先跑一次 build。仅作用于 dev（apply: 'serve'）。
+function pagefindDevAssets() {
+  const dir = resolve(dirname(fileURLToPath(import.meta.url)), 'dist/pagefind')
+  const prefix = dir + sep
+  const types: Record<string, string> = {
+    '.js': 'text/javascript; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.json': 'application/json; charset=utf-8',
+    '.wasm': 'application/wasm',
+    '.pagefind': 'application/wasm',
+    '.pf_meta': 'application/octet-stream'
+  }
+  return {
+    name: 'pagefind-dev-assets',
+    apply: 'serve' as const,
+    configureServer(server: any) {
+      server.middlewares.use('/pagefind', (req: any, res: any, next: any) => {
+        if (req.method !== 'GET' && req.method !== 'HEAD') return next()
+        const rel = decodeURIComponent((req.url || '/').split('?')[0])
+        const file = resolve(dir, '.' + rel)
+        if (file !== dir && !file.startsWith(prefix)) return next()
+        if (!existsSync(file) || !statSync(file).isFile()) return next()
+        res.setHeader('Content-Type', types[extname(file)] || 'application/octet-stream')
+        if (req.method === 'HEAD') return res.end()
+        createReadStream(file).pipe(res)
+      })
+    }
+  }
+}
 
 // 插件版本单一来源：构建前由 scripts/sync-plugin-version.mjs 写入
 // （同级插件仓 gradle.properties → Marketplace API → 保留现值），
@@ -121,7 +153,7 @@ export default defineConfig({
     // docs/ 已由根级 srcExclude 排除在构建之外（不再出页面），这里保留 ignoreFiles 兜底，
     // 防止有人临时改动 srcExclude 时内部文档混进 llms 索引。
     // ignoreFiles 为 minimatch 模式，匹配相对 srcDir 的路径；`docs/**` 递归排除 docs/ 下所有层级文件
-    plugins: [llmstxt({
+    plugins: [pagefindDevAssets(), llmstxt({
       ignoreFiles: ['docs/**']
     })],
     server: {
