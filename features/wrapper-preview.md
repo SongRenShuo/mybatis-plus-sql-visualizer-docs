@@ -27,12 +27,12 @@
 
 | 写法 | 示例 |
 |------|------|
-| JdbcTemplate 字符串 SQL | `jdbcTemplate.queryForList("select * from user where id = ?", 1L)`，命名参数 `:name` 按名回填，`StringBuilder` 拼接自动聚合 |
+| [JdbcTemplate](https://docs.spring.io/spring-framework/reference/data-access/jdbc/core.html) 字符串 SQL | `jdbcTemplate.queryForList("select * from user where id = ?", 1L)`，命名参数 `:name` 按名回填，`StringBuilder` 拼接自动聚合 |
 | 自研 DAO 字符串 SQL | `beanCruder.selectList(User.class, "select ...")` 等字符串实参调用行出图标；方法定义名行（方法体内有此类调用）同样出图标 |
-| xbatis（原 mybatis-mp） | `QueryChain.of(userDao, UserEntity.class).eq(UserEntity::getStatus, 1).toList()` |
-| Easy-Query（proxy 风格） | `easyEntityQuery.queryable(Topic.class).where(o -> o.id().eq("123")).toList()` |
-| MyBatis Dynamic SQL | `SelectDSL.select(...).from(userTable).where(id, isEqualTo(1)).build().render(...)` |
-| Querydsl | `queryFactory.selectFrom(QUser.user).where(QUser.user.status.eq(1)).fetch()` |
+| [xbatis](https://xbatis.cn/)（原 mybatis-mp） | `QueryChain.of(userDao, UserEntity.class).eq(UserEntity::getStatus, 1).toList()` |
+| [Easy-Query](https://www.easy-query.com/)（proxy 风格） | `easyEntityQuery.queryable(Topic.class).where(o -> o.id().eq("123")).toList()` |
+| [MyBatis Dynamic SQL](https://mybatis.org/mybatis-dynamic-sql/) | `SelectDSL.select(...).from(userTable).where(id, isEqualTo(1)).build().render(...)` |
+| [Querydsl](https://github.com/querydsl/querydsl) | `queryFactory.selectFrom(QUser.user).where(QUser.user.status.eq(1)).fetch()` |
 
 以上均为第一阶段支持（MVP）：常见链式查询已覆盖，个别冷门方法形态以插件实际识别为准。
 

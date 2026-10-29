@@ -2,7 +2,7 @@
 
 ## IDE 版本
 
-- 支持 IntelliJ IDEA **2024.3 及以上**（构建号 243+），不设上限，持续适配最新版
+- 支持 [IntelliJ IDEA](https://www.jetbrains.com/idea/) **2024.3 及以上**（构建号 243+），不设上限，持续适配最新版
 - 同时兼容 IntelliJ 平台的其他 IDE（PyCharm、WebStorm、GoLand 等 2024.3+），MyBatis / JPA 相关能力依赖 Java 语境，建议在 IDEA Ultimate / Community 中使用
 - Ultimate 版专属能力：预览弹窗内 `Ctrl+Enter` 直接执行 SQL（依赖内置 Database 插件）
 
@@ -15,12 +15,24 @@
 
 | 框架 | 支持内容 |
 |------|---------|
-| MyBatis-Plus | Lambda / 字符串版 Wrapper、service 链、逻辑删除、乐观锁 |
-| MyBatis-Plus-Join | `MPJLambdaWrapper` / `MPJQueryWrapper` 联表 |
-| MyBatis | XML 动态 SQL、注解 SQL（含 `<script>` 与 Provider）、JdbcTemplate 字符串 SQL |
-| Spring Data JPA | 派生方法、Repository CRUD 写路径（save / findById / delete 家族）、`@Query`（JPQL / 原生 SQL）、`@NamedQuery`、CriteriaBuilder、Specification、QueryByExample、Pageable / Sort 分页排序 |
-| Hibernate | HQL、`.hbm.xml` 映射与 `<query>` / `<sql-query>` 命名查询 |
-| 其他 ORM（MVP） | xbatis（原 mybatis-mp）链式 API、Easy-Query（proxy 风格）、MyBatis Dynamic SQL（SelectDSL）、Querydsl（JPAQueryFactory）、Spring Data JDBC / R2DBC（`@Query` / `@Modifying`） |
+| [MyBatis-Plus](https://baomidou.com/) | Lambda / 字符串版 Wrapper、service 链、逻辑删除、乐观锁 |
+| [MyBatis-Plus-Join](https://mybatis-plus-join.github.io/) | `MPJLambdaWrapper` / `MPJQueryWrapper` 联表 |
+| [MyBatis](https://mybatis.org/mybatis-3/) | XML 动态 SQL、注解 SQL（含 `<script>` 与 Provider） |
+| [Spring JdbcTemplate](https://docs.spring.io/spring-framework/reference/data-access/jdbc/core.html) | 字符串 SQL、`NamedParameterJdbcTemplate` 命名参数 |
+| [Spring Data JPA](https://spring.io/projects/spring-data-jpa) | 派生方法、Repository CRUD 写路径（save / findById / delete 家族）、`@Query`（JPQL / 原生 SQL）、`@NamedQuery`、CriteriaBuilder、Specification、QueryByExample、Pageable / Sort 分页排序 |
+| [Hibernate](https://hibernate.org/orm/) | HQL、`.hbm.xml` 映射与 `<query>` / `<sql-query>` 命名查询 |
+
+### 其他 ORM（MVP）
+
+第一阶段支持：常见链式与注解写法已覆盖，冷门形态以插件实际识别为准。
+
+| 框架 | 支持内容 |
+|------|---------|
+| [xbatis](https://xbatis.cn/)（原 mybatis-mp） | 链式 API |
+| [Easy-Query](https://www.easy-query.com/) | proxy 风格 |
+| [MyBatis Dynamic SQL](https://mybatis.org/mybatis-dynamic-sql/) | `SelectDSL` |
+| [Querydsl](https://github.com/querydsl/querydsl) | `JPAQueryFactory` |
+| [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc) / [R2DBC](https://spring.io/projects/spring-data-r2dbc) | `@Query` / `@Modifying` |
 
 ## 安装渠道
 

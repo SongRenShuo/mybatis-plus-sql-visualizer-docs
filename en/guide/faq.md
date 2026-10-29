@@ -39,7 +39,7 @@ No. A data source is a prerequisite for **execution-class** features: running SQ
 
 ## Does it support MyBatis-Plus-Join (MPJ) JOIN queries?
 
-Yes. `MPJLambdaWrapper` and `MPJQueryWrapper` JOIN preview, as well as MPJ-form SQL → Java reverse conversion, are all implemented. When selecting the MPJ form for reverse conversion, the project needs the `mybatis-plus-join` dependency (1.5.6+).
+Yes. `MPJLambdaWrapper` and `MPJQueryWrapper` JOIN preview, as well as MPJ-form SQL → Java reverse conversion, are all implemented. When selecting the MPJ form for reverse conversion, the project needs the [`mybatis-plus-join`](https://mybatis-plus-join.github.io/) dependency (1.5.6+).
 
 ## Why doesn't `findAllById` get a preview?
 
@@ -141,7 +141,7 @@ Data permissions are appended dynamically by the interceptor at runtime, so a st
 
 ## Can handwritten string SQL inside JdbcTemplate be previewed?
 
-Yes. "Enable JdbcTemplate string-SQL preview" on the settings page's "SQL Preview" tab is on by default: string SQL arguments of `queryForList` / `update` and friends get a preview icon and can be triggered with `Alt+Shift+Q`; `NamedParameterJdbcTemplate` `:name` parameters are filled in.
+Yes. "Enable [JdbcTemplate](https://docs.spring.io/spring-framework/reference/data-access/jdbc/core.html) string-SQL preview" on the settings page's "SQL Preview" tab is on by default: string SQL arguments of `queryForList` / `update` and friends get a preview icon and can be triggered with `Alt+Shift+Q`; `NamedParameterJdbcTemplate` `:name` parameters are filled in.
 
 ## Why isn't the execution plan rendered as a table inside the panel?
 

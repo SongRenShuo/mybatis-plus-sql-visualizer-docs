@@ -26,12 +26,12 @@ Also triggered by inline gutter icons, with the same preview experience:
 
 | Style | Example |
 |-------|---------|
-| JdbcTemplate string SQL | `jdbcTemplate.queryForList("select * from user where id = ?", 1L)` — named params `:name` filled by name, `StringBuilder` chains aggregated |
+| [JdbcTemplate](https://docs.spring.io/spring-framework/reference/data-access/jdbc/core.html) string SQL | `jdbcTemplate.queryForList("select * from user where id = ?", 1L)` — named params `:name` filled by name, `StringBuilder` chains aggregated |
 | Custom DAO string SQL | gutter icon on call lines with string arguments like `beanCruder.selectList(User.class, "select ...")`; method-name lines whose body contains such calls show one too |
-| xbatis (formerly mybatis-mp) | `QueryChain.of(userDao, UserEntity.class).eq(UserEntity::getStatus, 1).toList()` |
-| Easy-Query (proxy style) | `easyEntityQuery.queryable(Topic.class).where(o -> o.id().eq("123")).toList()` |
-| MyBatis Dynamic SQL | `SelectDSL.select(...).from(userTable).where(id, isEqualTo(1)).build().render(...)` |
-| Querydsl | `queryFactory.selectFrom(QUser.user).where(QUser.user.status.eq(1)).fetch()` |
+| [xbatis](https://xbatis.cn/) (formerly mybatis-mp) | `QueryChain.of(userDao, UserEntity.class).eq(UserEntity::getStatus, 1).toList()` |
+| [Easy-Query](https://www.easy-query.com/) (proxy style) | `easyEntityQuery.queryable(Topic.class).where(o -> o.id().eq("123")).toList()` |
+| [MyBatis Dynamic SQL](https://mybatis.org/mybatis-dynamic-sql/) | `SelectDSL.select(...).from(userTable).where(id, isEqualTo(1)).build().render(...)` |
+| [Querydsl](https://github.com/querydsl/querydsl) | `queryFactory.selectFrom(QUser.user).where(QUser.user.status.eq(1)).fetch()` |
 
 This is the first batch (MVP): common chain queries are covered; rarer method shapes follow what the plugin actually recognizes.
 

@@ -1,6 +1,6 @@
 # MCP Server: SQL Tools for AI Agents
 
-The plugin registers eleven tools with IDEA's built-in MCP Server, letting external agents such as Claude Code, Cursor, JetBrains AI Assistant, Codex, ZCode and DeepSeek Harness call the plugin's SQL capabilities directly: render executable SQL, inspect table structures, fetch execution plans. You keep writing code in the IDE as usual while the agent works alongside — neither side interrupts the other.
+The plugin registers eleven tools with IDEA's built-in MCP Server, letting external agents such as [Claude Code](https://code.claude.com/docs/en/overview), [Cursor](https://cursor.com/), [JetBrains AI Assistant](https://www.jetbrains.com/ai-ides/), [Codex](https://github.com/openai/codex), [ZCode](https://zcode.z.ai/cn) and [DeepSeek Harness](https://www.deepseek.com/harness/) call the plugin's SQL capabilities directly: render executable SQL, inspect table structures, fetch execution plans. You keep writing code in the IDE as usual while the agent works alongside — neither side interrupts the other.
 
 ![SQL Visualizer MCP Server: external agents connect over MCP to the IDE built-in MCP Server and call the eleven read-only tools the plugin registers — grouped by agent workflow into Get SQL (5), Inspect the database (2) and Pre-execution checks (4)](/demo/mcp-overview.svg)
 

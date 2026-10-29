@@ -1,7 +1,7 @@
 # JPA / Hibernate SQL 预览
 <GifPlayer src="/demo/jpa-preview.gif" alt="JPA / Hibernate SQL 预览演示" />
 
-面向 Spring Data JPA 与 Hibernate 项目的静态 SQL 预览——Repository 方法、JPQL / HQL、Criteria 查询链、`.hbm.xml` 映射，不启动 Spring 容器、不连数据库，光标所在行左侧 gutter 图标点击即出 SQL。
+面向 [Spring Data JPA](https://spring.io/projects/spring-data-jpa) 与 [Hibernate](https://hibernate.org/orm/) 项目的静态 SQL 预览——Repository 方法、JPQL / HQL、Criteria 查询链、`.hbm.xml` 映射，不启动 Spring 容器、不连数据库，光标所在行左侧 gutter 图标点击即出 SQL。
 
 ## 触发面
 

@@ -39,7 +39,7 @@ mapper XML 内语句的语法高亮（关键字 / 字符串 / 注释着色、`#{
 
 ## 支持 MyBatis-Plus-Join（MPJ）联表查询吗？
 
-支持。`MPJLambdaWrapper` 与 `MPJQueryWrapper` 联表预览、以及 MPJ 形态的 SQL→Java 反向转换均已实现。反向转换选择 MPJ 形态时，项目需引入 `mybatis-plus-join` 依赖（1.5.6+）。
+支持。`MPJLambdaWrapper` 与 `MPJQueryWrapper` 联表预览、以及 MPJ 形态的 SQL→Java 反向转换均已实现。反向转换选择 MPJ 形态时，项目需引入 [`mybatis-plus-join`](https://mybatis-plus-join.github.io/) 依赖（1.5.6+）。
 
 ## 为什么 JPA 的 findAllById 没有预览？
 
@@ -141,7 +141,7 @@ v2026.9.18 起，数据库方言默认改为「智能推断（跟随数据源）
 
 ## JdbcTemplate 里手写的字符串 SQL 能预览吗？
 
-可以。设置页「SQL 预览」的「启用 JdbcTemplate SQL 字符串预览」默认开启：`queryForList` / `update` 等方法的字符串 SQL 实参会有预览图标，也能用 `Alt+Shift+Q` 触发；`NamedParameterJdbcTemplate` 的 `:name` 命名参数可以回填。
+可以。设置页「SQL 预览」的「启用 [JdbcTemplate](https://docs.spring.io/spring-framework/reference/data-access/jdbc/core.html) SQL 字符串预览」默认开启：`queryForList` / `update` 等方法的字符串 SQL 实参会有预览图标，也能用 `Alt+Shift+Q` 触发；`NamedParameterJdbcTemplate` 的 `:name` 命名参数可以回填。
 
 ## 执行计划为什么没在面板里渲染成表格？
 

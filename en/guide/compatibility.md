@@ -2,7 +2,7 @@
 
 ## IDE versions
 
-- IntelliJ IDEA **2024.3 or later** (build 243+), no upper bound — always adapted to the latest release
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/) **2024.3 or later** (build 243+), no upper bound — always adapted to the latest release
 - Other IntelliJ Platform IDEs (PyCharm, WebStorm, GoLand, etc. 2024.3+) install fine, but MyBatis / JPA capabilities need a Java context — IDEA Ultimate or Community is recommended
 - Ultimate-only capability: executing SQL straight from the preview popup with `Ctrl+Enter` (requires the bundled Database plugin)
 
@@ -15,12 +15,24 @@
 
 | Framework | Supported |
 |------|---------|
-| MyBatis-Plus | Lambda / string Wrappers, service chains, logical delete, optimistic locking |
-| MyBatis-Plus-Join | `MPJLambdaWrapper` / `MPJQueryWrapper` joins |
-| MyBatis | XML dynamic SQL, annotation SQL (including `<script>` and Provider), JdbcTemplate string SQL |
-| Spring Data JPA | Derived queries, Repository CRUD write paths (save / findById / delete family), `@Query` (JPQL / native SQL), `@NamedQuery`, CriteriaBuilder, Specification, QueryByExample, Pageable / Sort |
-| Hibernate | HQL, `.hbm.xml` mappings and `<query>` / `<sql-query>` named queries |
-| Other ORM (MVP) | xbatis (formerly mybatis-mp) chain APIs, Easy-Query (proxy style), MyBatis Dynamic SQL (SelectDSL), Querydsl (JPAQueryFactory), Spring Data JDBC / R2DBC (`@Query` / `@Modifying`) |
+| [MyBatis-Plus](https://baomidou.com/) | Lambda / string Wrappers, service chains, logical delete, optimistic locking |
+| [MyBatis-Plus-Join](https://mybatis-plus-join.github.io/) | `MPJLambdaWrapper` / `MPJQueryWrapper` joins |
+| [MyBatis](https://mybatis.org/mybatis-3/) | XML dynamic SQL, annotation SQL (including `<script>` and Provider) |
+| [Spring JdbcTemplate](https://docs.spring.io/spring-framework/reference/data-access/jdbc/core.html) | String SQL, `NamedParameterJdbcTemplate` named parameters |
+| [Spring Data JPA](https://spring.io/projects/spring-data-jpa) | Derived queries, Repository CRUD write paths (save / findById / delete family), `@Query` (JPQL / native SQL), `@NamedQuery`, CriteriaBuilder, Specification, QueryByExample, Pageable / Sort |
+| [Hibernate](https://hibernate.org/orm/) | HQL, `.hbm.xml` mappings and `<query>` / `<sql-query>` named queries |
+
+### Other ORM (MVP)
+
+First-stage support: common chain and annotation styles are covered; rarer shapes follow what the plugin actually recognizes.
+
+| Framework | Supported |
+|------|---------|
+| [xbatis](https://xbatis.cn/) (formerly mybatis-mp) | chain APIs |
+| [Easy-Query](https://www.easy-query.com/) | proxy style |
+| [MyBatis Dynamic SQL](https://mybatis.org/mybatis-dynamic-sql/) | `SelectDSL` |
+| [Querydsl](https://github.com/querydsl/querydsl) | `JPAQueryFactory` |
+| [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc) / [R2DBC](https://spring.io/projects/spring-data-r2dbc) | `@Query` / `@Modifying` |
 
 ## Installation channels
 
