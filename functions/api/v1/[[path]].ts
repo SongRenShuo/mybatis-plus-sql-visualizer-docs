@@ -7,6 +7,7 @@ const UPSTREAM = 'https://sql-visualizer-admin.3064597532.workers.dev/api/v1'
 export async function onRequest(context: {
   request: Request
   params: { path?: string[] }
+  env?: { X_CLIENT_IP_TRUST?: string }
 }): Promise<Response> {
   const { request, params } = context
   const segments = params.path || []
@@ -24,6 +25,13 @@ export async function onRequest(context: {
   // set() 会覆盖客户端自带的伪造值；限流/审计/告警的按访客粒度全靠它
   const clientIp = request.headers.get('cf-connecting-ip')
   if (clientIp) headers.set('x-client-ip', clientIp)
+  // 代理身份证明（20261031 x-client-ip 信任链收紧）：Worker 侧只有收到与自身
+  // X_CLIENT_IP_TRUST secret 相等的 x-proxy-trust 头才采信 x-client-ip，
+  // 防 workers.dev 直连者伪造假 IP 绕过限流/封禁/指纹。Pages 与 Worker 配了
+  // 同名 secret 就自动带上；secret 未配置（本地 dev/未升密前）不设头，
+  // Worker 侧回落 cf-connecting-ip（共享出口 IP，与旧行为的兜底一致）
+  const trust = context.env?.X_CLIENT_IP_TRUST
+  if (trust) headers.set('x-proxy-trust', trust)
   // 透传 CF 边缘国家码（batch C）：Pages 域名走 CF 边缘必带此头，Worker 侧用它落
   // st_track_events/fb_posts 的 country 列；set() 覆盖伪造值，直连 workers.dev 无此头落 NULL
   const ipCountry = request.headers.get('cf-ipcountry')
