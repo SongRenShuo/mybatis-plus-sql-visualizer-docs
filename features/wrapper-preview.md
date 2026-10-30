@@ -200,7 +200,7 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 | MySQL / MariaDB | `EXPLAIN <sql>`（原生表格行） | 真机通过 |
 | PostgreSQL | `EXPLAIN (FORMAT JSON, VERBOSE) <sql>` | 真机通过 |
 | KingBase（金仓） | `EXPLAIN (FORMAT JSON) <sql>` | 真机通过 |
-| DM（达梦） | `EXPLAIN <sql>` | 真机通过 |
+| DM（达梦） | `EXPLAIN FOR <sql>`（原生计划表，19 列） | 真机通过（DM8 8.1.3.12，裸 JDBC 通道 2026-10-31） |
 | H2 | `EXPLAIN PLAN FOR <sql>` | 引擎级单测 |
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | 引擎级单测 |
 | OceanBase（MySQL 模式） | `EXPLAIN <sql>`（表格行） | 官方文档级验证（真机留账） |
@@ -213,6 +213,8 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 
 Oracle 的计划行落在会话级 `PLAN_TABLE` 里、语句本身返回 0 行，面板会给出指引：在同一连接的数据库端另执行 `SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY)` 查看。SQL Server 的计划 XML 是语句执行后的附加结果集，在原生控制台的多结果页签里可见。
 
+达梦要注意一点：`EXPLAIN FOR` 才是拿计划的写法，**光写 `EXPLAIN` 在 DM8 上不返回任何结果集**（实测：查询列数为 0，也没有第二个结果集），看起来就像「计划正文为空」。所以本表给的是 `EXPLAIN FOR`。它返回的是一张 19 列的结构化计划表（`PLAN_ID` / `LEVEL_ID` / `OPERATION` / `TAB_NAME` / `IDX_NAME` / `SCAN_TYPE` / `ROW_NUMS` / `BYTES` / `COST` / `CPU_COST` / `IO_COST` / `FILTER` / `JOIN_COND` / `ADVICE_INFO` 等），因此达梦与 MySQL 表格族一样能进结构化计划视图、能跨次对比、也能落历史。
+
 「执行计划」与「执行 SQL」一样依赖已配置的数据源（Ultimate 的 Database 工具窗），未配置时会提示先配置。
 
 预览面板顶部元信息行悬停还能看到**方言能力矩阵**——按这条 SQL 的实际渲染方言，列出 `EXPLAIN` / `DELETE ... LIMIT` / `UPSERT` / `IDENTITY 包装` 四项各自是「支持」还是不支持及原因。它是执行前自检与各动作可用性的解释面：某个动作为什么在这条语句上不可用，先看这里。
@@ -221,7 +223,7 @@ Oracle 的计划行落在会话级 `PLAN_TABLE` 里、语句本身返回 0 行�
 
 > 本节描述的能力只在开启实验开关后存在；默认形态下执行计划走内嵌原生控制台，没有基线下拉与历史对比。
 
-同一条 SQL 改完索引、加了条件之后，计划到底变没变——只要本会话里已经存过这条 SQL 的历史计划，视图顶部就会出现「选择历史基线对比（不重新执行 SQL）」与一个基线下拉，默认选中「上次执行（当前会话）」，把两次结果做树对齐 diff，标注 cost / rows 的变化；节点的稳定标识是「结构路径 + 同型节点出现序」，兄弟节点增删不会让后面的节点串位。MySQL / MariaDB 的表格族与 PG / KingBase 的 JSON 族可比；Oracle / SQL Server 的文本计划诚实降级为不可比，不硬做 diff。
+同一条 SQL 改完索引、加了条件之后，计划到底变没变——只要本会话里已经存过这条 SQL 的历史计划，视图顶部就会出现「选择历史基线对比（不重新执行 SQL）」与一个基线下拉，默认选中「上次执行（当前会话）」，把两次结果做树对齐 diff，标注 cost / rows 的变化；节点的稳定标识是「结构路径 + 同型节点出现序」，兄弟节点增删不会让后面的节点串位。MySQL / MariaDB / 达梦 的表格族与 PG / KingBase 的 JSON 族可比；Oracle / SQL Server 的文本计划诚实降级为不可比，不硬做 diff。
 
 > 这条能力只在**结构化执行计划视图**里存在，且需要先在设置页「SQL 预览」组开启「预览面板内结构化渲染 EXPLAIN」（实验特性，默认关闭）；默认关闭时执行计划直接走原生数据库控制台，没有基线下拉。
 
@@ -230,6 +232,7 @@ Oracle 的计划行落在会话级 `PLAN_TABLE` 里、语句本身返回 0 行�
 默认只在当前会话内比较。要把计划留到下次开 IDE 还能比，需要在设置页「SQL 预览」组单独打开**「跨会话保留原始 EXPLAIN 计划」**——它默认关闭，因为原始计划未经脱敏，谓词里可能带业务值、凭据或密钥。开启后：
 
 - 计划按「项目 + 数据源稳定 UUID + 方言 + 格式 + SQL 指纹」隔离，不会串到别的库或别的语句上
+- 表格族（MySQL / MariaDB / 达梦）与 JSON 族（PG / KingBase / openGauss / 瀚高 / 海量 / GaussDB）按结构化快照保存；文本族（Oracle / SQLite / H2 等）按计划原文保存——**这意味着那些以前不落盘的文本计划，开启这个开关后也会写进本地历史**，同样未脱敏
 - 每条历史条目最多保留 5 份快照，单份序列化后上限 256 KiB（超限只跳过保存，当前显示的结果不受影响）
 - 选历史基线做对比**只读**，不会重新执行 SQL
 - 清除预览 SQL 历史会一并删掉已保留的计划；关闭这个开关只停止新增保存，不删已有计划

@@ -20,7 +20,7 @@
 
 | 工具 | 输入 | 产出 |
 |------|------|------|
-| `sqlv_render_sql` | `filePath` + `line`（项目相对路径或项目内绝对路径，配行号），或直接贴 `xmlSnippet`（mapper XML 片段） | 真实可执行 SQL——参数已回填，渲染降级处附说明 |
+| `sqlv_render_sql` | `filePath` + `line`（项目相对路径或项目内绝对路径，配行号），或直接贴 `xmlSnippet`（mapper XML 片段）；配了外部模板渲染时另可传 `paramsJson` | 真实可执行 SQL——参数已回填，渲染降级处附说明 |
 | `sqlv_render_logs` | `logText` 整段控制台日志原文（可选自定义 `sqlPrefix` / `paramPrefix` 等前缀） | MyBatis / Hibernate / JdbcTemplate 日志还原成的可执行 SQL |
 | `sqlv_crud_sql` | `filePath` 或 `className`（MyBatis-Plus 实体类） | INSERT / UPDATE / SELECT / DELETE 四件套 |
 | `sqlv_reverse_sql` | `sql` 一条 SQL | 反向生成的 MyBatis-Plus Java 代码 |
@@ -31,7 +31,7 @@
 | 工具 | 输入 | 产出 |
 |------|------|------|
 | `sqlv_schema_context` | `tables` 表名清单（可选 `dataSource`、`maxTables`，默认最多 8 张、上限 20） | 数据源真实的表列结构、类型与注释，紧凑上下文 |
-| `sqlv_explain` | `selectSql` 单条 SELECT（可选 `dataSource`；`dialect` 可省略，按数据源 URL 自动识别） | 按方言派发的 EXPLAIN 执行计划文本，附驱动 notices 与 index hints 建议 |
+| `sqlv_explain` | `selectSql` 单条 SELECT（可选 `dataSource`；`dialect` 可省略，按数据源 URL 自动识别） | 按方言派发的 EXPLAIN 执行计划文本，附驱动 notices 与 index hints 建议；达梦走 `EXPLAIN FOR`，返回 19 列计划表 |
 
 ### 执行前把关
 
@@ -69,6 +69,28 @@
 | `sqlv_schema_context` / `sqlv_explain` | 配置了多个数据源时显式指名 `dataSource`——目标数据源未在 Database 工具窗连接并内省时，同名表可能改从其他数据源解析；`sqlv_schema_context` 的成功输出首行会披露实际命中的数据源（`source: …`），未指名 `dataSource` 时标注 `auto-resolved` 并附 pin 提示，照提示重试即可锁定意图库 |
 | `sqlv_render_logs` / `sqlv_rollback_plan` / `sqlv_mapper_check` | 语句头会带上语句名（取自日志前导 `-- Name:` 注释），多语句输出一目了然 |
 | `sqlv_perf_advice` | 单条文案超长会被截断，避免无上限输出 |
+| `sqlv_explain` 的数据源 | 只接受关系型库。数据源 URL 属于非 SQL 家族（`jdbc:redis://`、`jdbc:mongodb://` 一类）时直接返回 `NOT_A_SQL_DATASOURCE`，不会退化成一个方言再盲投——把 EXPLAIN 发给 Redis 只会拿到一个误导排查方向的驱动异常 |
+| `sqlv_explain` 的达梦 | 计划语句是 `EXPLAIN FOR <sql>`：DM8 上裸 `EXPLAIN` 不返回结果集（实测），`EXPLAIN FOR` 才给出 19 列结构化计划表。想自己复现计划时别手拼 `EXPLAIN` 前缀 |
+| `sqlv_render_sql` 与自研模板 | 项目里的 SQL 不在 MyBatis 生态里（根节点 `<sqls>`、语句 `<sql id="…">`、`:命名参数` 一类自研模板）时，可在设置页「外部 SQL 模板」里配一条渲染命令，把模板路径、语句 id 与 `paramsJson` 交给它算出 SQL；不配则这类位置照旧返回 `SOURCE_NOT_FOUND` |
+
+## 错误码
+
+调用失败一律以 `[错误码] 说明` 的结构化文本返回（不抛平台异常、不在 IDE 里弹框），agent 拿到就能自行决定重试还是换路：
+
+| 错误码 | 含义 |
+|--------|------|
+| `MCP_READ_ONLY` | 语句本身是写操作——需要连库执行的入口只接受 SELECT，这是第一道结构判定 |
+| `SQL_BLOCKED` | 语句形态违规：多条语句、锁读（`FOR UPDATE` / `FOR SHARE`）、`SELECT … INTO`、解析失败（判不了就拒绝，不放行） |
+| `INVALID_ARGUMENT` | 入参缺失或形态非法（路径给得不全、`line` 越界、方言名不认识等） |
+| `DATASOURCE_NOT_FOUND` | 数据源别名不匹配，或项目里还没有数据源；错误文本会列出可用的数据源名 |
+| `NOT_A_SQL_DATASOURCE` | 目标数据源不是关系型 SQL 库（Redis / MongoDB 一类 URL 子协议）；错误文本只带子协议，不回显账号口令 |
+| `DATASOURCE_UNREACHABLE` | 建连或执行失败（不可达、鉴权失败等） |
+| `SCHEMA_NOT_AVAILABLE` | 表在所有数据源都取不到元数据（数据源未连接或内省未完成） |
+| `DIALECT_UNSUPPORTED` | 当前方言没有对应的 EXPLAIN 渲染 |
+| `SOURCE_NOT_FOUND` | 给定位置找不到可识别的 SQL 源：不是语句行、路径在项目外、文件不存在，或该位置是插件尚未支持的模板格式 |
+| `EXTERNAL_RENDER_FAILED` | 外部模板渲染失败——命令模板非法、启动失败、超时、非零退出或输出为空；只有启用「外部 SQL 模板」后才会出现 |
+| `TOOL_DISABLED` | 该工具在设置页被禁用；外部会话即使记住工具名直接调用也会拿到这个码，不执行任何工具逻辑 |
+| `PROJECT_NOT_READY` | 项目索引未完成或正在关闭，稍后重试 |
 
 ## 使用前提
 

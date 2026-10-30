@@ -199,7 +199,7 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 | MySQL / MariaDB | `EXPLAIN <sql>` (native table rows) | verified on real DB |
 | PostgreSQL | `EXPLAIN (FORMAT JSON, VERBOSE) <sql>` | verified on real DB |
 | KingBase | `EXPLAIN (FORMAT JSON) <sql>` | verified on real DB |
-| DM (Dameng) | `EXPLAIN <sql>` | verified on real DB |
+| DM (Dameng) | `EXPLAIN FOR <sql>` (native 19-column plan table) | verified on real DB (DM8 8.1.3.12, raw JDBC, 2026-10-31) |
 | H2 | `EXPLAIN PLAN FOR <sql>` | engine-level unit tests |
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | engine-level unit tests |
 | OceanBase (MySQL mode) | `EXPLAIN <sql>` (table rows) | verified against official docs (real-DB check pending) |
@@ -212,6 +212,8 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 
 Oracle's plan rows land in the session-level `PLAN_TABLE` while the statement itself returns 0 rows, so the panel points you to run `SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY)` on the database side over the same connection. SQL Server returns the plan XML as an additional result set after the statement, visible in the native console's extra result tabs.
 
+One thing to know about Dameng: `EXPLAIN FOR` is the form that returns a plan — a bare `EXPLAIN` returns **no result set at all** on DM8 (zero columns, and no second result set either), which looks exactly like "the plan body is empty". Hence this table uses `EXPLAIN FOR`. What comes back is a 19-column structured plan table (`PLAN_ID` / `LEVEL_ID` / `OPERATION` / `TAB_NAME` / `IDX_NAME` / `SCAN_TYPE` / `ROW_NUMS` / `BYTES` / `COST` / `CPU_COST` / `IO_COST` / `FILTER` / `JOIN_COND` / `ADVICE_INFO` and more), so DM behaves like the MySQL table family: it can feed the structured plan view, be compared across runs, and be kept in history.
+
 Like "Execute SQL", EXPLAIN requires a configured data source (Ultimate's Database tool window); without one you'll be asked to configure it first.
 
 Hovering the preview panel's meta row also reveals the **dialect capability matrix** — for the dialect this SQL was actually rendered with, it lists whether `EXPLAIN` / `DELETE ... LIMIT` / `UPSERT` / `IDENTITY wrapper` are supported, with the reason when they are not. It is the explanation surface behind the pre-execution self-check and each action's availability: to see why an action is unavailable for a statement, look here first.
@@ -220,7 +222,7 @@ Hovering the preview panel's meta row also reveals the **dialect capability matr
 
 > Everything in this section requires the experimental switch below; with the default form, Explain goes through the embedded native console and there is no baseline dropdown or history comparison.
 
-After you add an index or change a condition, did the plan actually change? As soon as this session holds a previous plan for the same SQL, the view shows a "Choose a history baseline to compare (does not re-execute the SQL)" row with a baseline dropdown, defaulting to "Previous execution (current session)"; it aligns the two results into a tree diff and marks cost / rows changes. Nodes are identified stably by "structural path + occurrence index among same-type siblings", so adding or removing a sibling never shifts later nodes. MySQL / MariaDB table families and PG / KingBase JSON families are comparable; Oracle / SQL Server text plans degrade honestly to "not comparable" rather than forcing a diff.
+After you add an index or change a condition, did the plan actually change? As soon as this session holds a previous plan for the same SQL, the view shows a "Choose a history baseline to compare (does not re-execute the SQL)" row with a baseline dropdown, defaulting to "Previous execution (current session)"; it aligns the two results into a tree diff and marks cost / rows changes. Nodes are identified stably by "structural path + occurrence index among same-type siblings", so adding or removing a sibling never shifts later nodes. MySQL / MariaDB / Dameng table families and PG / KingBase JSON families are comparable; Oracle / SQL Server text plans degrade honestly to "not comparable" rather than forcing a diff.
 
 > This only exists in the **structured Explain view**, which requires enabling "Render EXPLAIN structurally inside the preview panel" under SQL Preview in Settings (experimental, off by default). With it off, Explain goes straight to the native database console and there is no baseline dropdown.
 
@@ -229,6 +231,7 @@ After you add an index or change a condition, did the plan actually change? As s
 By default comparison only happens within the current session. To keep plans across IDE restarts, turn on **"Keep raw EXPLAIN plans across sessions"** in the settings SQL Preview group — it is off by default because raw plans are not redacted and predicates may contain business values, credentials or keys. Once enabled:
 
 - Plans are isolated by "project + stable data-source UUID + dialect + format + SQL fingerprint", so they never bleed into another database or another statement
+- Table families (MySQL / MariaDB / Dameng) and JSON families (PG / KingBase / openGauss / HighGo / Vastbase / GaussDB) are stored as structured snapshots; text families (Oracle / SQLite / H2 and others) are stored as the raw plan text — **which means those text plans, previously never persisted, now also land in local history** once this switch is on, equally unredacted
 - Each history entry keeps at most 5 snapshots, 256 KiB each after serialization (over-limit saves are skipped; the currently displayed result is unaffected)
 - Picking a history baseline is **read-only** and never re-executes the SQL
 - Clearing preview SQL history also deletes retained plans; turning the switch off only stops new saves and deletes nothing
