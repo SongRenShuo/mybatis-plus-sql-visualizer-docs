@@ -28,6 +28,20 @@ export async function onRequest(context: {
   // st_track_events/fb_posts 的 country 列；set() 覆盖伪造值，直连 workers.dev 无此头落 NULL
   const ipCountry = request.headers.get('cf-ipcountry')
   if (ipCountry) headers.set('cf-ipcountry', ipCountry)
+  // 透传 CF 边缘地理数据（写时采集三层，2026-10-30）：Pages Functions 运行在 Workers runtime，
+  // request.cf 自带访客的城市/区域/ASN——coderutil 只认中国 IPv4，国外 IP 与 IPv6 归属地靠
+  // 这层数据。序列化为单头 JSON（字段缺失就省略该键，值全 ASCII 安全）；整个 cf 不存在
+  // （本地 dev/部分环境）就不设头，Worker 侧落 NULL 与 country 缺失同语义
+  const cf = (request as Request & { cf?: Record<string, unknown> }).cf
+  if (cf) {
+    const geo: Record<string, string> = {}
+    if (typeof cf.country === 'string') geo.country = cf.country
+    if (typeof cf.city === 'string') geo.city = cf.city
+    if (typeof cf.region === 'string') geo.region = cf.region
+    if (typeof cf.asn === 'number') geo.asn = String(cf.asn)
+    if (typeof cf.asOrganization === 'string') geo.asOrg = cf.asOrganization
+    if (Object.keys(geo).length > 0) headers.set('x-client-geo', JSON.stringify(geo))
+  }
   // 声明本请求来自插件官网（20261025-2045 计划）：浏览器同源 GET 不带 Origin，
   // Worker 只能靠这层标注判断站点归属；set() 覆盖客户端可能的伪造值。
   headers.set('x-site-origin', 'plugin')
