@@ -34,7 +34,7 @@
   <text x="365" y="546" font-family="monospace" font-size="18" fill="#e2e8f0">id = 1001 AND station_id IS NOT NULL</text>
   <!-- 标签 -->
   <rect x="260" y="600" width="120" height="28" rx="14" fill="rgba(37,99,235,0.2)" stroke="rgba(37,99,235,0.4)"/>
-  <text x="320" y="620" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#60a5fa">11 种方言</text>
+  <text x="320" y="620" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#60a5fa">14 种方言</text>
   <rect x="395" y="600" width="130" height="28" rx="14" fill="rgba(16,185,129,0.2)" stroke="rgba(16,185,129,0.4)"/>
   <text x="460" y="620" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#34d399">610+ 测试</text>
   <rect x="540" y="600" width="120" height="28" rx="14" fill="rgba(124,58,237,0.2)" stroke="rgba(124,58,237,0.4)"/>

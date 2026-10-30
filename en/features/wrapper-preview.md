@@ -62,7 +62,9 @@ The parameter area can store named parameter sets ("Manage Presets"), and the va
 - Editing the SQL text does not lose the parameters — it still falls back to that method's most recent save; **presets are permanently bound to the method too**: a preset remembers the method it was saved under, so renaming parameters or restructuring the statement still resolves by method, with no loss from text-fingerprint drift
 - Presets carried over from older versions are migrated into method scope automatically on first hit, with no manual re-saving
 
-### 11-Dialect Pagination
+### 14-Dialect Pagination
+
+The dialect count goes from 11 to 14: GaussDB is split out of the merged openGauss form into its own dialect — the settings dropdown, log badges and MCP dialect names now all show GaussDB instead of openGauss; two new dialects join the list, HighGo (`jdbc:highgo:`) and Vastbase (`jdbc:vastbase:` / `jdbc:dws:iam:`); and KingBase's PostgreSQL-protocol driver (`postgresql-for-kingbase`) is no longer mistaken for PostgreSQL. Also, previews under GaussDB / DM / HighGo / Vastbase used to always degrade to simplified mode (banner shown, table/column completion unavailable) because the parser registrations the platform requires were missing — fixed.
 
 | Dialect | Syntax |
 |---------|--------|
@@ -75,6 +77,8 @@ The parameter area can store named parameter sets ("Manage Presets"), and the va
 | SQLite / H2 | `LIMIT count OFFSET offset` |
 | Oracle | `OFFSET n ROWS FETCH NEXT m ROWS ONLY` (or `FETCH FIRST m ROWS ONLY` when there is no offset) |
 | SQL Server | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` |
+
+One thing to know about SQL Server: the `OFFSET … FETCH NEXT` clause must follow an `ORDER BY`. When the statement has none, the preview appends an `ORDER BY (SELECT NULL)` placeholder (the community-standard way to say "no particular order") — without it the rendered SQL fails on a real server with `Incorrect syntax near '0'.`; no placeholder is added when an ORDER BY is already present.
 
 Upsert conflict clauses for OceanBase and openGauss also render in their real forms (openGauss uses the MySQL-style `ON DUPLICATE KEY UPDATE`, not PG's `ON CONFLICT`).
 
@@ -202,13 +206,13 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 | DM (Dameng) | `EXPLAIN FOR <sql>` (native 19-column plan table) | verified on real DB (DM8 8.1.3.12, raw JDBC, 2026-10-31) |
 | H2 | `EXPLAIN PLAN FOR <sql>` | engine-level unit tests |
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | engine-level unit tests |
-| OceanBase (MySQL mode) | `EXPLAIN <sql>` (table rows) | verified against official docs (real-DB check pending) |
+| OceanBase (MySQL mode) | `EXPLAIN <sql>` (text plan tree, not table rows) | community-image engine probe (OB CE 4.3.5) |
 | openGauss | `EXPLAIN (FORMAT JSON) <sql>` | verified on real DB |
 | GaussDB | `EXPLAIN (FORMAT JSON) <sql>` | official docs (live DB pending) |
 | HighGo | `EXPLAIN (FORMAT JSON) <sql>` | community-image engine probe (V6.0.1) |
 | Vastbase | `EXPLAIN (FORMAT JSON) <sql>` | community-image engine probe (A-mode) |
 | Oracle | `EXPLAIN PLAN FOR <sql>` (plan goes to the session-level `PLAN_TABLE`) | verified on real DB (Free 23 / XE 11g) |
-| SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | official grammar; real-DB check pending |
+| SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | verified on real DB (official SQL Server 2022 image) |
 
 Oracle's plan rows land in the session-level `PLAN_TABLE` while the statement itself returns 0 rows, so the panel points you to run `SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY)` on the database side over the same connection. SQL Server returns the plan XML as an additional result set after the statement, visible in the native console's extra result tabs.
 
@@ -222,7 +226,7 @@ Hovering the preview panel's meta row also reveals the **dialect capability matr
 
 > Everything in this section requires the experimental switch below; with the default form, Explain goes through the embedded native console and there is no baseline dropdown or history comparison.
 
-After you add an index or change a condition, did the plan actually change? As soon as this session holds a previous plan for the same SQL, the view shows a "Choose a history baseline to compare (does not re-execute the SQL)" row with a baseline dropdown, defaulting to "Previous execution (current session)"; it aligns the two results into a tree diff and marks cost / rows changes. Nodes are identified stably by "structural path + occurrence index among same-type siblings", so adding or removing a sibling never shifts later nodes. MySQL / MariaDB / Dameng table families and PG / KingBase JSON families are comparable; Oracle / SQL Server text plans degrade honestly to "not comparable" rather than forcing a diff.
+After you add an index or change a condition, did the plan actually change? As soon as this session holds a previous plan for the same SQL, the view shows a "Choose a history baseline to compare (does not re-execute the SQL)" row with a baseline dropdown, defaulting to "Previous execution (current session)"; it aligns the two results into a tree diff and marks cost / rows changes. Nodes are identified stably by "structural path + occurrence index among same-type siblings", so adding or removing a sibling never shifts later nodes. MySQL / MariaDB / Dameng table families and PG / KingBase / openGauss JSON families are comparable; Oracle / SQL Server text plans degrade honestly to "not comparable" rather than forcing a diff.
 
 > This only exists in the **structured Explain view**, which requires enabling "Render EXPLAIN structurally inside the preview panel" under SQL Preview in Settings (experimental, off by default). With it off, Explain goes straight to the native database console and there is no baseline dropdown.
 

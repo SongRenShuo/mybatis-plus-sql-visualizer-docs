@@ -63,7 +63,9 @@
 - 改 SQL 文本不会丢参数——仍按该方法最近一次保存回落；**预设同样永久绑定方法**：保存时记住所属方法，之后改写 SQL 文本（换参数名、调整结构）仍按方法命中，不因文本指纹变化丢预设
 - 从旧版本升上来的全局预设会在首次命中时自动迁移到方法作用域，不需要手工重存
 
-### 11 种方言分页渲染
+### 14 种方言分页渲染
+
+方言总数 11 → 14：GaussDB 从 openGauss 的并入形态拆为独立方言——设置页下拉、日志库角标与 MCP 方言名都如实显示 GaussDB，不再一律写 openGauss；新增瀚高 HighGo（`jdbc:highgo:`）与海量 Vastbase（`jdbc:vastbase:` / `jdbc:dws:iam:`）两方言；金仓的 PG 协议版驱动（`postgresql-for-kingbase`）也不再被误认成 PostgreSQL。另外，GaussDB / 达梦 / 瀚高 / 海量四种方言下预览此前恒降级为简化模式（顶部横幅提示、表 / 列补全不可用），缺平台所需的语法解析器注册所致，已修复。
 
 | 方言 | 分页语法 |
 |------|---------|
@@ -76,6 +78,8 @@
 | SQLite / H2 | `LIMIT count OFFSET offset` |
 | Oracle | `OFFSET n ROWS FETCH NEXT m ROWS ONLY`（无 offset 时 `FETCH FIRST m ROWS ONLY`） |
 | SQL Server | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` |
+
+SQL Server 要注意一点：`OFFSET … FETCH NEXT` 子句必须跟在 `ORDER BY` 之后，语句没有排序时预览会自动补 `ORDER BY (SELECT NULL)` 占位（T-SQL 社区标准写法，表示「不指定顺序」）——否则产物在真机直接报 `Incorrect syntax near '0'.`；已有排序时不补。
 
 OceanBase 与 openGauss 的 upsert 冲突子句亦按各自真实形态渲染（openGauss 实为 `ON DUPLICATE KEY UPDATE` MySQL 形态，非 PG 的 `ON CONFLICT`）。
 
@@ -203,13 +207,13 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 | DM（达梦） | `EXPLAIN FOR <sql>`（原生计划表，19 列） | 真机通过（DM8 8.1.3.12，裸 JDBC 通道 2026-10-31） |
 | H2 | `EXPLAIN PLAN FOR <sql>` | 引擎级单测 |
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | 引擎级单测 |
-| OceanBase（MySQL 模式） | `EXPLAIN <sql>`（表格行） | 官方文档级验证（真机留账） |
+| OceanBase（MySQL 模式） | `EXPLAIN <sql>`（文本计划树，非表格行） | 社区镜像引擎级实证（OB CE 4.3.5） |
 | openGauss | `EXPLAIN (FORMAT JSON) <sql>` | 真机通过 |
 | GaussDB | `EXPLAIN (FORMAT JSON) <sql>` | 官方文档级验证（真机留账） |
 | HighGo（瀚高） | `EXPLAIN (FORMAT JSON) <sql>` | 社区镜像引擎级实证（V6.0.1，非厂商镜像） |
 | Vastbase（海量） | `EXPLAIN (FORMAT JSON) <sql>` | 社区镜像引擎级实证（A 模式） |
 | Oracle | `EXPLAIN PLAN FOR <sql>`（计划写入会话级 `PLAN_TABLE`） | 真机通过（Free 23 / XE 11g） |
-| SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | 官方文法落地，真机未验证 |
+| SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | 真机通过（官方镜像 SQL Server 2022） |
 
 Oracle 的计划行落在会话级 `PLAN_TABLE` 里、语句本身返回 0 行，面板会给出指引：在同一连接的数据库端另执行 `SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY)` 查看。SQL Server 的计划 XML 是语句执行后的附加结果集，在原生控制台的多结果页签里可见。
 
@@ -223,7 +227,7 @@ Oracle 的计划行落在会话级 `PLAN_TABLE` 里、语句本身返回 0 行�
 
 > 本节描述的能力只在开启实验开关后存在；默认形态下执行计划走内嵌原生控制台，没有基线下拉与历史对比。
 
-同一条 SQL 改完索引、加了条件之后，计划到底变没变——只要本会话里已经存过这条 SQL 的历史计划，视图顶部就会出现「选择历史基线对比（不重新执行 SQL）」与一个基线下拉，默认选中「上次执行（当前会话）」，把两次结果做树对齐 diff，标注 cost / rows 的变化；节点的稳定标识是「结构路径 + 同型节点出现序」，兄弟节点增删不会让后面的节点串位。MySQL / MariaDB / 达梦 的表格族与 PG / KingBase 的 JSON 族可比；Oracle / SQL Server 的文本计划诚实降级为不可比，不硬做 diff。
+同一条 SQL 改完索引、加了条件之后，计划到底变没变——只要本会话里已经存过这条 SQL 的历史计划，视图顶部就会出现「选择历史基线对比（不重新执行 SQL）」与一个基线下拉，默认选中「上次执行（当前会话）」，把两次结果做树对齐 diff，标注 cost / rows 的变化；节点的稳定标识是「结构路径 + 同型节点出现序」，兄弟节点增删不会让后面的节点串位。MySQL / MariaDB / 达梦 的表格族与 PG / KingBase / openGauss 的 JSON 族可比；Oracle / SQL Server 的文本计划诚实降级为不可比，不硬做 diff。
 
 > 这条能力只在**结构化执行计划视图**里存在，且需要先在设置页「SQL 预览」组开启「预览面板内结构化渲染 EXPLAIN」（实验特性，默认关闭）；默认关闭时执行计划直接走原生数据库控制台，没有基线下拉。
 

@@ -125,7 +125,7 @@ Two more things to note for intranet deployment: the JDBC drivers needed by "Exe
 
 ## Which database dialects are supported for pagination syntax?
 
-11 dialects: MySQL, PostgreSQL, Oracle, SQL Server, H2, SQLite, MariaDB, DM (Dameng), KingBase, OceanBase, openGauss. Pagination clauses and upsert conflict clauses render per dialect differences.
+14 dialects: MySQL, PostgreSQL, Oracle, SQL Server, H2, SQLite, MariaDB, DM (Dameng), KingBase, OceanBase, openGauss, GaussDB, HighGo, Vastbase. Pagination clauses and upsert conflict clauses render per dialect differences.
 
 ## Shortcut conflicts?
 

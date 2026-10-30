@@ -82,7 +82,7 @@ export const homeContent = {
           points: [
             { title: 'Lambda 链静态解析', description: '无需运行项目即可预览完整 SQL' },
             { title: '动态条件勾选', description: 'if / choose / where 等标签按需渲染' },
-            { title: '11 种方言分页', description: 'MySQL / PG / Oracle 等全方言分页语法' },
+            { title: '14 种方言分页', description: 'MySQL / PG / Oracle 等全方言分页语法' },
           ],
         },
         {
@@ -101,7 +101,7 @@ export const homeContent = {
             },
             {
               title: '目标库角标',
-              description: '条目标注 [MySQL]、[DM（达梦）] 等，11 种方言与 HSQL / GBASE 全识别',
+              description: '条目标注 [MySQL]、[DM（达梦）] 等，14 种方言与 HSQL / GBASE 全识别',
             },
           ],
         },
@@ -191,9 +191,9 @@ export const homeContent = {
       titleLine1: '强大的 SQL 预览能力',
       titleLine2: '多方言、多场景全覆盖',
       description:
-        '支持 11 种数据库方言分页渲染，参数自动替换为实际值，LIKE 自动拼百分号，动态条件面板勾选实时预览。',
+        '支持 14 种数据库方言分页渲染，参数自动替换为实际值，LIKE 自动拼百分号，动态条件面板勾选实时预览。',
       points: [
-        { title: '多方言支持', description: 'MySQL / PostgreSQL / Oracle / SQLServer 等 11 种方言分页语法' },
+        { title: '多方言支持', description: 'MySQL / PostgreSQL / Oracle / SQLServer 等 14 种方言分页语法' },
         { title: '参数自动替换', description: '? 占位符替换为实际值，按字段类型自动加引号' },
       ],
       link: '查看预览能力',
@@ -274,7 +274,7 @@ export const homeContent = {
       eyebrow: 'Free & Open Source',
       title: '完全免费',
       description: '只有一档，没有付费版。所有功能永久免费，无需注册，无需登录。',
-      headline: ['¥0 永久使用', 'Apache-2.0 开源', '不发使用数据 · 代码不出本机', '11 种数据库方言'],
+      headline: ['¥0 永久使用', 'Apache-2.0 开源', '不发使用数据 · 代码不出本机', '14 种数据库方言'],
       groups: [
         {
           name: 'SQL 预览',
@@ -423,7 +423,7 @@ export const homeContent = {
               description: 'if / choose / where tags rendered on demand',
             },
             {
-              title: '11 pagination dialects',
+              title: '14 pagination dialects',
               description: 'Pagination syntax for MySQL / PG / Oracle and the rest',
             },
           ],
@@ -447,7 +447,7 @@ export const homeContent = {
             {
               title: 'Target database badges',
               description:
-                'Entries tagged [MySQL], [DM] and so on, across 11 dialects plus HSQL / GBASE',
+                'Entries tagged [MySQL], [DM] and so on, across 14 dialects plus HSQL / GBASE',
             },
           ],
         },
@@ -575,7 +575,7 @@ export const homeContent = {
       titleLine1: 'Powerful SQL preview',
       titleLine2: 'across dialects and scenarios',
       description:
-        'Pagination rendered for 11 database dialects, parameters replaced with actual values, LIKE gets its percent signs automatically, and dynamic conditions toggle live in the panel.',
+        'Pagination rendered for 14 database dialects, parameters replaced with actual values, LIKE gets its percent signs automatically, and dynamic conditions toggle live in the panel.',
       points: [
         {
           title: 'Multi-dialect support',
@@ -657,7 +657,7 @@ export const homeContent = {
       eyebrow: 'Free & Open Source',
       title: 'Completely Free',
       description: 'One tier only — there is no paid version. Every feature free forever, no sign-up, no login.',
-      headline: ['$0 forever', 'Apache-2.0 open source', 'Reports no usage data · code stays local', '11 database dialects'],
+      headline: ['$0 forever', 'Apache-2.0 open source', 'Reports no usage data · code stays local', '14 database dialects'],
       groups: [
         {
           name: 'SQL preview',

@@ -14,7 +14,7 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| Database Dialect | Auto-infer | Pagination / upsert clauses render per dialect; defaults to "Auto-infer", can be pinned manually, and leaving it empty at project level follows the global setting. See [Wrapper → SQL Preview · Dialect pagination](/en/features/wrapper-preview#_11-dialect-pagination) |
+| Database Dialect | Auto-infer | Pagination / upsert clauses render per dialect; defaults to "Auto-infer", can be pinned manually, and leaving it empty at project level follows the global setting. See [Wrapper → SQL Preview · Dialect pagination](/en/features/wrapper-preview#_14-dialect-pagination) |
 | Replace `?` Placeholders | On | Off = variables also render as `?` |
 | Formatted Output | On | Multi-line indent (Off = single line) |
 | Vertical Layout Column Tags | On | In vertical layout, each INSERT value line end shows a pairing `-- column` annotation (the vertical-layout button tooltip likewise notes that this can be turned off here) |
@@ -28,7 +28,7 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 | Tenant Column Name | `tenant_id` | Column name used for tenant injection, adjustable per business (e.g. `org_id` / `shop_id`) |
 | Tenant Column Default | 1 | Literal default appended to UPDATE SET / INSERT tenant columns |
 | Append Tenant Column on INSERT | On | Sub-switch: the INSERT column list gets the tenant column appended (aligned with MP `TenantLineInnerInterceptor` INSERT semantics); INSERT only — requires Tenant Injection to be on, UPDATE / DELETE unaffected |
-| Simulate Pagination Interceptor (COUNT preview) | On | For mapper methods / XML / annotation statements taking a `Page` / `IPage` argument, the preview **appends the pagination clause** and **emits a COUNT wrapper alongside** (`SELECT COUNT(*) FROM (...) TOTAL`), matching MyBatis-Plus `PaginationInnerInterceptor` runtime behaviour (skipped when `searchCount=false`). See [Wrapper → SQL Preview · pagination simulation](/en/features/wrapper-preview#_11-dialect-pagination) |
+| Simulate Pagination Interceptor (COUNT preview) | On | For mapper methods / XML / annotation statements taking a `Page` / `IPage` argument, the preview **appends the pagination clause** and **emits a COUNT wrapper alongside** (`SELECT COUNT(*) FROM (...) TOTAL`), matching MyBatis-Plus `PaginationInnerInterceptor` runtime behaviour (skipped when `searchCount=false`). See [Wrapper → SQL Preview · pagination simulation](/en/features/wrapper-preview#_14-dialect-pagination) |
 | Append paginated COUNT preview | On | Sub-switch of the simulation: when off, only `LIMIT` is appended and no COUNT statement is produced; has no effect while the master switch is off (parent wins) |
 | Enable JdbcTemplate string-SQL preview | On | Shows a preview icon for string SQL arguments of `queryForList` / `update` and friends, triggerable with `Alt+Shift+Q`; named parameters (`NamedParameterJdbcTemplate` `:name` placeholders) are filled in |
 | Show DataPermissionInterceptor runtime-difference hint | Off | When on, the warning area of SELECT / UPDATE / DELETE previews notes that the interceptor appends conditions dynamically at runtime |
