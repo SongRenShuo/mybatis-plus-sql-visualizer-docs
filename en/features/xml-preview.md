@@ -16,6 +16,16 @@ Settings → "Interface & actions" has a master switch, "Detect SQL embedded in 
 When the carrier tag itself or an ancestor carries `type="hql"` / `"jpql"`, the HQL conversion pipeline handles it (alias-scoped property-to-column mapping applies as usual); if the entity can't be resolved or conversion fails it falls back to showing the original text. The right-click and `Alt+Shift+Q` entries plus the multi-statement picker behave the same as for mapper XML.
 :::
 
+## Mapper Two-Way Navigation
+
+Mapper XML `select` / `insert` / `update` / `delete` tag lines and Mapper interface method lines each get a navigation gutter icon, clicking either jumps to its counterpart: from the XML statement line to the interface method, and from the interface method to the XML statement.
+
+Targets are resolved by `namespace` + tag `id`; when resolution fails no icon is shown — the plugin never guesses a same-named method as a fallback. The icons obey the gutter master switch and the "mapper XML statements" group switch in settings.
+
+::: details Coexisting with peer navigation plugins (When to read: you have MyBatisCodeHelperPro or similar installed)
+When a peer MyBatis navigation plugin (currently: MyBatisCodeHelperPro) is enabled, it draws its own jump arrow on the same line — two icons stacked on one line help nobody, so this plugin **yields** its two navigation icons by default. The behavior is controlled by the setting "Yield Mapper navigation icons when a peer MyBatis navigation plugin is present" (on by default, in the same block as the gutter group switches): turn it off to keep this plugin's icons even when the peer is present. Other gutters (SQL preview, annotation SQL, JPA / HQL, JDBC, Wrapper chains, etc.) are unaffected by the yielding.
+:::
+
 ## Supported Dynamic Tags
 
 | Tag | Description |
@@ -36,6 +46,19 @@ Fully-qualified `refid="other.namespace.fragmentId"` includes expand across file
 Dynamic tags inside the fragment (`<if>` / `<foreach>` etc.) render as usual, `${}` dynamic refids are supported, and property substitution plus cycle detection apply the same.
 
 When the target can't be resolved the preview continues, with the warning naming the concrete reason: no mapper file for the namespace / no such fragment under that namespace / the same fragment id declared in multiple files (ambiguous — the difference is reported as-is). Bare ids still resolve within the current file only, matching MyBatis runtime behavior.
+
+## Mapper XML Editing Support
+
+Beyond previewing, the plugin injects a set of capabilities into the mapper XML **editor itself**:
+
+- **Syntax coloring**: statement text is colored per SQL syntax — keywords / table names / columns / operators in distinct colors, `#{}` and `${}` placeholders colored differently with a background tint, fine-grained OGNL coloring inside `${}` and attribute values, and coloring for `test` / `value` attribute expressions; colors are customizable in the plugin's color settings page
+- **Typing and completion**: typing `#` / `$` auto-closes `{}`; `#{}` placeholders complete structural attributes (`jdbcType` / `javaType` / `typeHandler` etc.), tag attribute values (`id` / `refid` / `resultMap` / `resultType` / `parameterType` etc.) complete across the board, resultMap `column` attributes complete with column names, and `mybatis-config.xml` configuration options complete as well
+- **Reference navigation**: `<include refid>`, resultMap references and the like can jump between definition and usages
+- **Dynamic tag folding**: `<if>` / `<where>` and other dynamic tags fold along the statement structure
+
+::: details Coexisting with other SQL plugins (When to read: another SQL coloring plugin is installed and mapper XML coloring looks off)
+Coloring yields per **injection region** — only the regions the other plugin actually colors are given up, everything else keeps this plugin's coloring. No more "detected a peer, give up the whole file" behavior.
+:::
 
 ## OGNL Expression Panel
 

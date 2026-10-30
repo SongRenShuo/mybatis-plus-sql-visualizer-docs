@@ -89,6 +89,7 @@ Camel-case embedded paths in derived method names (`findByUpdateInfoCreatedTimeA
 - Nested dot paths resolve **segment by segment** (`address.zipcode.zip` → the overridden column `cust_zip`), so intermediate segments (`Zipcode`) take part in the match instead of degrading into an underscore-joined pseudo column
 - When `prefix` and `@AttributeOverride` meet, **the override name is the final column name** — `prefix` is only prepended to columns with no override declaration, so doubles like `biz_biz_street` cannot occur
 - Mixed-annotation entities with MyBatis-Plus and jakarta embed annotations coexisting (`@TableName` + `@Embedded`) flatten into owner-table columns in Wrapper preview, batch templates and CRUD generation as well — value-object pseudo columns are gone there too
+- When the entity lives in a dependency JAR / lib module that has no naming configuration of its own, the embedded-column naming probe cascades from "the entity's module" to "the querying host module", so column names no longer lose their embedded prefix
 :::
 
 ## Inheritance-Chain Entity Column Resolution

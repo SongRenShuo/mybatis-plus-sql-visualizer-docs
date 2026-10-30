@@ -105,7 +105,7 @@ To keep old records, manually copy the `.sql` files under the old directory's `s
 
 ## Why did my SQL dialect change after upgrading?
 
-Since v2026.9.18 the database dialect defaults to "Auto-infer (follow the data source)": the plugin infers the dialect first from the enhanced-capture connection's JDBC URL, then from the IDE data source configuration, falling back to MySQL when neither matches. Configurations that never set a dialect manually enter inference mode automatically after upgrading (the old default was MySQL).
+Since v2026.9.18 the database dialect defaults to "Auto-infer (follow the data source)": the plugin only takes SQL data sources as candidates when inferring (non-SQL sources such as Redis don't count), with configuration evidence scoped per module and the active profile taking priority; the fallback no longer hard-codes MySQL — with no data source available it takes the consensus of the JDBC URL in configuration and SQL dialect features, then falls back to project / global settings. Configurations that never set a dialect manually enter inference mode automatically after upgrading (the old default was MySQL).
 
 To pin a dialect, pick one manually in settings — pagination / upsert rendering then follows the selected dialect. You can switch back to "Auto-infer" anytime.
 

@@ -73,6 +73,7 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 ## Requirements
 
 - IDEA 2025.2+: the MCP Server is built into the platform, nothing extra to install
+- IDEA 2026.1.x: as of v2026.10.29 the plugin registers its filter through that version line's tool-filter contract, and the MCP Server works as expected (older plugin versions made the platform's MCP service unavailable overall on that line — upgrading the plugin fixes it)
 - IDEA 2024.3 ~ 2025.1 do not support this feature set (the platform has no built-in MCP Server); all other plugin features are unaffected
 - Environments without the MCP Server plugin see zero impact: the plugin's MCP registration is not loaded at all, and every other feature works as usual
 
@@ -86,6 +87,8 @@ Settings → the "MCP Tools" page provides a gating area:
 - "Enable all" / "Disable all" shortcuts
 
 Every change takes effect immediately: the next tool-list refresh or tool call follows the new configuration — no IDE restart needed.
+
+Disabling is not just "disappearing from the list": the shared execution entry re-checks the switches before every call — an external session that remembers a tool's name and calls it directly gets a `TOOL_DISABLED` error, and no tool logic runs.
 
 ::: details Relationship with the platform MCP switch (When to read: the agent still sees other tools after you turn off the plugin's switch, or you want to shut down the MCP service entirely)
 These switches only control whether the plugin's eleven tools are visible to the agent. They are independent of the "Enable MCP Server" toggle under Tools → MCP Server — the latter is the master switch for the platform's built-in MCP service (127.0.0.1:64342), which also serves tools from other plugins and the platform itself. Turning off the plugin's switch leaves that service running: through the platform's tool-filter extension (`mcpToolFilterProvider`), the plugin removes the `sqlv_*` tools from the agent's tool list — effective at the next listing refresh or new session, visible to connected clients once they refresh.

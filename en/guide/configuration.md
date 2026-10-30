@@ -40,7 +40,7 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 | Empty-Parameter Fill Strategy | Placeholder `?` | How a parameter input row with signature info is filled when left empty — Placeholder `?` (default) / NULL literal / empty string, three options. See [XML / HQL Dynamic SQL Preview · Parameter Panel](/en/features/xml-preview#parameter-panel) |
 
 ::: details Full rules of dialect auto-inference (When to read: you need to pin a dialect or debug a dialect mismatch)
-Inference priority: the enhanced-capture connection's JDBC URL wins first, the IDE data source configuration next, MySQL as the fallback when neither matches; "Auto-infer" is the first entry of the dialect dropdown, with a status line below showing the current inference result and its basis. Upgrade semantics: users who never touched the dialect setting enter inference mode automatically (the old default was MySQL), and manual values are preserved as-is. Reserved words of all 11 dialects are calibrated against official docs / engine tests, and H2 upsert renders as the native `MERGE INTO ... KEY` form.
+Inference only considers SQL data sources — non-SQL sources such as Redis are never taken as candidates dragging the consensus down. Configuration evidence is scoped per source module (multi-module projects each pointing at their own database no longer degrade into "no consensus"), test-resource directories are excluded from scanning (a main PostgreSQL plus a test H2 no longer cancel each other out), and the active profile wins (`spring.profiles.active` / `include`, with `${ENV:default}` resolving to its default); only when a module yields no conclusion does it fall back to project level. Double-click previews of log and history entries carry the dialect of that execution instead of always rendering as MySQL. The fallback no longer hard-codes MySQL: with no IDE data source available it takes the unique consensus of "JDBC URL in configuration → driver coordinates → SQL dialect features", then falls back one more step to project / global settings, with the status line showing the current inference result and its source. "Auto-infer" is the first entry of the dialect dropdown. Upgrade semantics: users who never touched the dialect setting enter inference mode automatically (the old default was MySQL), and manual values are preserved as-is. Reserved words of every dialect are calibrated against official docs / engine tests, and H2 upsert renders as the native `MERGE INTO ... KEY` form.
 :::
 
 ::: details Basis for choosing a fill strategy (When to read: execution errors or a suspected unfilled parameter)
@@ -95,7 +95,7 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 | History File Retention Limit | 30 | When the save directory holds more history files than this, the oldest are cleaned up automatically to keep the disk from growing without bound; 0 = keep everything |
 | Remove Lines Containing | Empty | Filter log lines containing specified keywords |
 | Show full data-source badge context | Off | Off (default) shows only the database type in the target badge (e.g. `[MySQL]`); on shows the full connection fact (`[MySQL · database@host:port]`). Applies to log and history entries immediately; persistence and search are unaffected, and entries without connection facts render unchanged |
-| CRUD Color Markers | Left color bar | Log / history lists colored by SELECT / INSERT / UPDATE / DELETE type (default blue / green / orange / red); three styles (left color bar / full-row tint / off), four customizable colors with one-click restore to defaults; the "Type Filter" popup checkboxes carry color swatch legends |
+| CRUD Color Markers | Left color bar | Log / history lists colored by statement type (default blue / green / orange / red); three styles (left color bar / full-row tint / off), four customizable colors with one-click restore to defaults; the "Type Filter" popup checkboxes carry color swatch legends. The two DDL tiers (CREATE/ALTER/RENAME and DROP/TRUNCATE) reuse the insert / delete colors with a dashed bar to tell them apart, and can be filtered separately |
 
 ::: details Scope of source-interceptor injection and project-type boundaries (When to read: injecting in a multi-module project or hitting an "unrecognized project type" dialog)
 "Auto-Inject Source-Capture Interceptor": multi-module projects first show a dialog to pick the injection scope (all selected by default); when the project type can't be recognized (not a Spring Boot + MyBatis-Plus project), the dialog instead guides you to enable enhanced capture in one click (the enhanced channel does not depend on project type).
@@ -138,6 +138,8 @@ The three are independent: clearing preview history does not delete parameter sn
 
 ![Injected colouring in OrderMapper.xml: select tags and SQL keywords coloured, ${orderBy} placeholder highlighted separately](/demo/xml-syntax-highlight.gif)
 
+**Mapper two-way navigation icons and peer yielding**: the gutter icons that jump between mapper XML statement lines and Mapper interface method lines (see [XML Preview · Mapper Two-Way Navigation](/en/features/xml-preview#mapper-two-way-navigation)) obey the master switch and the "mapper XML statements" group switch above. There is also a dedicated setting, "**Yield Mapper navigation icons when a peer MyBatis navigation plugin is present**" (on by default, in the same block as the gutter group switches): when a peer MyBatis navigation plugin (currently MyBatisCodeHelperPro) is detected as enabled, these two icons hide so they don't stack with the peer's own arrow on one line; turn it off to keep this plugin's icons even when the peer is present.
+
 ## MCP Tools
 
 ![Settings page, MCP subpage: the master switch, MCP output masking, and a per-tool enable checkbox for each of the eleven read-only tools](/demo/settings-mcp.png)
@@ -148,7 +150,7 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 
 - Master switch: enable/disable the plugin's MCP functionality as a whole
 - Per-tool enable/disable for all eleven tools, plus "Enable All / Disable All" quick buttons
-- Changes take effect immediately — no IDE restart needed
+- Changes take effect immediately — no IDE restart needed; disabled tools are not just removed from the list — the execution entry re-checks the switches before every call, so an external session calling a disabled tool by name gets a `TOOL_DISABLED` error
 - These switches gate the plugin's own tools only; the IDE-wide "Enable MCP Server" toggle under Tools → MCP Server is the platform master switch (other plugins and platform tools share the same service), and the two are independent — with the plugin's switch off, the platform service keeps running, while the plugin removes the `sqlv_*` tools from the agent's tool list dynamically through the platform's tool-filter extension, no restart needed
 
 ## Project-Level Settings
@@ -168,7 +170,7 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 |---------|---------|-------------|
 | Auto-Check on Startup | Off | When enabled, silent check of the Gitee early-access channel on IDE launch with a notification when a new version is found; when off, stable updates come from JetBrains Marketplace |
 | Ignore This Version | - | Notification action to skip startup reminders for the current version (persisted across restarts); manual checks in settings are unaffected |
-| Check Update / Download & Install | - | Manual check, one-click download & install; the new version hot-swaps into the running IDE and takes effect immediately (no restart), with automatic fallback to the restart script when dynamic install isn't supported or any step fails — never left in an intermediate state |
+| Check Update / Download & Install | - | Manual check, one-click download & install; the new version hot-swaps into the running IDE and takes effect immediately (no restart), with automatic fallback to the restart script when dynamic install isn't supported or any step fails — never left in an intermediate state; a failed check distinguishes "network unreachable / update channel 404 / already up to date", with Marketplace and Gitee Releases fallback links in the 404 case |
 | Plugin Cache | - | Show cache size and entry count (entity lookup / resolution / Wrapper preview, all scopes), one-click clear |
 | Report a Problem / Feedback Pool | - | Manual feedback entry, opening a report dialog straight to the [feedback pool](/en/about/feedback); type / category / description required; IDE and plugin versions are attached automatically |
 | Internal Build Number | - | Unique per build, one-click copy for bug reports |

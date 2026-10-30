@@ -59,7 +59,7 @@ When an entity field name differs from the real column name (field `orderID`, co
 The parameter area can store named parameter sets ("Manage Presets"), and the values you type are remembered automatically ("default preset"). Both kinds of memory are **scoped per declaring method**:
 
 - The key includes the method signature, so two methods never share values; a preset with the same name is stored separately under each
-- Editing the SQL text does not lose the parameters — it still falls back to that method's most recent save
+- Editing the SQL text does not lose the parameters — it still falls back to that method's most recent save; **presets are permanently bound to the method too**: a preset remembers the method it was saved under, so renaming parameters or restructuring the statement still resolves by method, with no loss from text-fingerprint drift
 - Presets carried over from older versions are migrated into method scope automatically on first hit, with no manual re-saving
 
 ### 11-Dialect Pagination
@@ -133,6 +133,8 @@ With IntelliJ IDEA Ultimate + Database plugin, a temporary `.sql` file is create
 
 The panel's status row is explicit about where the current data source came from: an active console binding reads "bound"; when only a memory hit applies it reads "data source (last used)" or "data source (last used in this module)" — in a multi-module project each module remembers its own source and never borrows another module's database; with neither, it says "no data source bound (run one query in the console to bind)".
 
+The console used for execution is reused by **binding identity**: whichever database the preview header is bound to is the console the statement runs on — the old "preview says bound to A, execution lands on B's existing console" mismatch is gone; after you explicitly switch sources, the data-source picker restores the full data source list.
+
 <GifPlayer src="/demo/execute-sql.gif" alt="The full Execute SQL flow: preview a car_device_info LEFT JOIN station_info chain, click Execute SQL, the plugin creates the temporary file mpsql-exec.sql and submits it to mpj_demo@localhost, and the Output / Result 1 tab inside the preview dialog returns a real data grid (2 rows, e.g. 充电桩A-01) alongside the native console at the bottom" />
 
 #### Schema annotations in the preview editor
@@ -174,6 +176,8 @@ When the dialect used for preview and the dialect of the data source you want to
 
 This is deliberate — the dialect belongs to rendering and inference, and should not hold a veto over execution. Once you have explicitly chosen a data source, the plugin sends the SQL as-is; whether it is valid is answered most accurately by the target database (PostgreSQL replies `ERROR: relation "user" does not exist`, MySQL replies with a syntax error).
 
+The judgement is transparent too: the SQL's dialect source, confidence and candidate data-source identifiers can all be inspected on demand in the panel.
+
 The one case still blocked is a write or EXPLAIN where **either side's dialect is unknown** (rendered source undetermined, or the target data source's dialect cannot be resolved). That is not "a conflict was detected" but "no judgement is possible", and blindly firing PostgreSQL syntax at a MySQL database is not a risk worth taking — so it stays fail-closed.
 
 The result row also offers:
@@ -182,7 +186,7 @@ The result row also offers:
 - **Dialect Settings**: jump straight to the plugin's dialect configuration page
 - **Copy error message**: copy the whole explanation for pasting into an issue or a chat
 
-<GifPlayer src="/demo/dialect-gate.gif" alt="Mismatched dialect is blocked: the preview renders as PostgreSQL (dialect: PostgreSQL, manual — note the double-quoted FROM &quot;user&quot;); clicking Execute SQL shows a red Blocked-execution row (the SQL was rendered with the manual dialect PostgreSQL while the selected data source is MySQL) with three exits — Switch data source / Dialect settings / Copy error message" />
+<GifPlayer src="/demo/dialect-gate.gif" alt="Dialect mismatch warns but does not block: the preview renders as PostgreSQL (dialect: PostgreSQL, manual — note the double-quoted FROM &quot;user&quot;); clicking Execute SQL with a MySQL data source selected shows an info row reading Dialect mismatch: the SQL was rendered with the manual dialect PostgreSQL while the selected data source is MySQL — execution continues and the SQL is submitted as-is, with three exits — Switch data source / Dialect settings / Copy error message" />
 
 ### Real EXPLAIN Plan
 

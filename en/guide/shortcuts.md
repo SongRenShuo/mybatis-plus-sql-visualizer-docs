@@ -19,6 +19,7 @@ Bindings can be changed in `Settings` > `Keymap` by searching for the plugin act
 | SQL preview | Caret on a Wrapper chain / mapper statement → right-click `Convert to SQL`; or the gutter icon (left-click previews, right-click offers "Recent Executions") |
 | Annotation SQL preview | Gutter icon on `@Select` / `@Update` lines |
 | JPA / Hibernate preview | Gutter icon on derived methods / CRUD calls / `@Query` / `@NamedQuery` / Criteria chains / `.hbm.xml` named queries |
+| Mapper two-way navigation | Navigation gutter icons on mapper XML statement lines and Mapper interface method lines — click either to jump to its counterpart (yields by default when a peer navigation plugin is present) |
 | EXPLAIN plan | "EXPLAIN" button in the preview panel button row |
 | SQL quick templates (EXPLAIN / COUNT / 10-row sample) | Select a table name in a mapper XML or the preview editor → the "SQL quick templates" context menu; no default shortcut — bind your own in the plugin's "Shortcuts" settings section or in Keymap |
 | SQL → Java | Select SQL text → context menu; or the sidebar tab in the tool window |

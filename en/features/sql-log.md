@@ -46,6 +46,7 @@ Database badges show only the database type by default; enabling "Show full data
 - **Capture from the very start**: with the master switch on, `-javaagent` is written into the arguments before the Java run configuration launches, and the agent weaves in during the target JVM's premain phase — startup-phase SQL (framework init, data-source probes, Flyway / Liquibase migrations) goes straight into the enhanced channel instead of landing before the mount completes. Nothing is injected while the switch is off; any injection failure only falls back to the existing attach path and the console bridge, leaving the run configuration untouched.
 - **Honest capability boundary notice**: when injection fails and a dynamic attach (attach) succeeds instead, a notice says so plainly — "connections created before the attach are outside the capture scope; re-run the project for full coverage" (at most once per run).
 - **Injection scope**: `-javaagent` only goes into real application run tasks; JVMs forked by Gradle / Maven test and IDE tasks (`test`, `runIde`, etc.) are never injected.
+- **Zero-replacement capture**: the agent never replaces JDBC objects on the host side — connections are kept as-is by default (only their URL is registered), and SQL plus bound parameters are captured via statement-level bytecode weaving, so host-side casts of the connection (such as to `DmdbConnection`) are unaffected. To restore the old connection-wrapping form, opt in explicitly with `-Dsqlvis.agent.wrapConnection=true` (off by default — "never keep the application from starting" wins over coverage). Known boundary: drivers whose statement implementation classes are not on the weaving roster (GBASE 8s, some SQLite / HSQLDB forms) produce no events by default.
 - **Turning it off**: collection stops and console capture takes over so the list never runs dry; the setting can be re-enabled at any time, with no cooldown.
 - **About the warning**: premain startup injection is the JVM's expected loading path and no longer produces the dynamic-attach warning; only when injection fails and falls back to dynamic attach (attach) may the application console on JDK 21+ show one agent warning (JEP 451) — expected behavior, a warning only, no impact on your app.
 - **Collection follows the listening state**: stopping listening also stops in-app collection — no more capture-and-discard waste; re-enabling listening resumes it, and after the agent mounts on project startup the listening state is reconciled automatically, so a project started with listening off no longer collects for nothing.
@@ -105,6 +106,8 @@ The clip below shows SQL log list colors, truncation of long SQL statements, and
 
 ::: details Sorting and enhanced-channel details (When to read: sort results or duration data look wrong)
 - Hover the sorting and grouping icons on the left for their descriptions; entries missing duration or line number always sink to the bottom (in both directions, so empty values never float to the top); time sorting follows the list's time column (with "Log time" selected, entries are ordered by log time — the time you see matches the sort key).
+- The meta row is laid out in a fixed order (source last), and the source shows the full file name (brackets and the `.java` suffix kept, nothing stripped or cut); when too wide it truncates in order instead of dropping fragments. Time display strictly follows the configured format — no more silently dropping the date because the column is narrow.
+- For entries carrying a call stack, the meta-row stack digest is framed to the first project frame before the usual truncation — a digest that starts entirely inside framework frames no longer shows a wall of framework class names.
 - Enhanced-capture entries carry structured durations (millisecond-accurate), affected-row counts and execution error messages directly — no log parsing involved.
 :::
 
@@ -186,6 +189,8 @@ Marker style is a three-way choice, configured under the "SQL Log" group's "CRUD
 
 Each checkbox in the log page's "Type Filter" popup carries a matching color swatch legend, syncing instantly with color changes (the legend hides when marking is off).
 
+DDL statements take part in type marking and filtering too: `CREATE` / `ALTER` / `RENAME` form one tier reusing the insert color (green), `DROP` / `TRUNCATE` another tier reusing the delete color (red), and both tiers can be checked separately in the "Type Filter" popup (previously DDL had no type at all, so filters like "inserts only" behaved ambiguously). Visually the bar shape tells them apart — DDL draws a dashed bar, DML a solid one, with no new settings.
+
 ### Scroll to Bottom & Tail Following
 
 <GifPlayer src="/demo/sql-log-tail-follow.gif" alt="As SQL entries stream in, the viewport follows the bottom; dragging the scrollbar upward pauses following, and the toolbar Scroll to Bottom action jumps back and resumes it" />
@@ -195,6 +200,7 @@ The log list has tail following on by default: the view sticks to the bottom as 
 ::: details Details (When to read: the list is not at the bottom, or you are looking for the action)
 - The "Scroll to Bottom" action sits inside the toolbar action group (sorting, the community entry and help come after it): one click jumps to the bottom of the list and resumes following.
 - Manual scrolling triggers the pause; scroll direction does not automatically resume following. Programmatic appends (new entries arriving) never disturb your reading position while following is paused.
+- While following is paused the list keeps receiving new SQL: when the buffer is full and drops old rows, the viewport is compensated by the removed row's height, so what you are reading stays put.
 :::
 
 ### Jump to Source
@@ -217,7 +223,8 @@ An enhanced-capture entry carries more than a single execution point — it carr
 
 - Frames are listed as structured rows — method name, fully-qualified class name and `:line`, with the class name middle-ellipsized when too wide so the line number always stays visible; the top frame is selected by default and the plugin's own capture frames are dimmed gray
 - **Clicking any frame jumps to that frame's source line** (resolved by class name across the whole project, library classes landing in the decompiled view, just like the debugger). When a frame cannot be resolved the popup stays open — no false "jumped" impression
-- Infrastructure frames at the tail (Tomcat / thread-pool tails and the like) are skipped when resolving, so the popup anchors on the deepest business frame and you see the Controller → Service path at a glance
+- Infrastructure frames at the tail (Tomcat / thread-pool tails and the like) are skipped when resolving, so the popup anchors on the deepest business frame and you see the Controller → Service path at a glance; the fold list also covers the JDBC driver family and MyBatis internals
+- **Non-web threads** producing SQL are covered too — for scheduler threads (`@Scheduled` and the like) the bottom anchor pierces Spring scheduling and similar framework prefixes, so business frames are no longer squeezed out of the frame window; the popup title carries the thread name (`scheduling-1`, `pool-2-thread-1`), making it obvious which thread issued the SQL
 - "Copy full call stack" at the bottom copies the raw snapshot verbatim, ready to paste into an issue or a chat
 
 How many frames are kept is configurable — "Call-stack snapshot frames" in settings (default 24, range 12–64): sampled at both ends, the top keeps JDBC / engine-side frames and the bottom always keeps 8 business-side frames, joined by an omission marker in the middle. Changes take effect via a hot push on save — no application restart.
@@ -297,7 +304,7 @@ The "List display" dropdown under the "SQL Log" group in settings controls how S
 <GifPlayer src="/demo/sql-list-display.gif" alt="In settings under List Display → SQL display mode, switch from the default Keyword wrap to Single line, then confirm and return to the SQL log list to see single-line summaries" />
 
 - **Single line**: one fixed row per entry, long SQL truncated
-- **Keyword wrap** (default): SQL wraps at keywords, height growing with content
+- **Keyword wrap** (default): SQL wraps at keywords, height growing with content; wrapping works on the fully restored SQL (extra-long statements truncate at a whitespace boundary within budget) — no more single-line display because the summary was too short to find a wrap point
 - **Formatted**: full pretty-print, long statements split clause by clause
 
 The SQL log page and the History page share the same setting, which survives IDE restarts. In any mode, Ctrl+C on a selected entry copies the plain SQL, not the rendered text.

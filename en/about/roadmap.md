@@ -13,7 +13,7 @@ Planned features and progress.
 
 Completed capabilities are grouped by module — click a title to expand.
 
-::: details Preview & Diagnostics (41)
+::: details Preview & Diagnostics (45)
 - [x] Wrapper → SQL static parsing (Lambda / String / MPJ / Kotlin)
 - [x] XML / annotation dynamic SQL preview (OGNL panel)
 - [x] HQL / JPQL / JPA Criteria preview (entity-alias expansion)
@@ -55,6 +55,10 @@ Completed capabilities are grouped by module — click a title to expand.
 - [x] Rollback snapshot table / text dual view and open-in-CSV-editor
 - [x] Replay script export (executable .sql with parameters filled in)
 - [x] Copy as AI Context (including a with-identifiers variant)
+- [x] Two-way navigation between Mapper interface methods and XML statements (yielding to peer navigation plugins)
+- [x] Mapper XML editing support (completion / reference navigation / dynamic-tag folding / color settings page)
+- [x] Execution console reused by binding data-source identity
+- [x] Dialect inference scoped per module with active-profile priority
 :::
 
 ::: details Conversion & Completion (8)
@@ -68,7 +72,7 @@ Completed capabilities are grouped by module — click a title to expand.
 - [x] Portable export of CRUD / rollback SQL
 :::
 
-::: details Log & History (37)
+::: details Log & History (39)
 - [x] SQL log tool window (multi-framework capture, Log → SQL restore)
 - [x] Duration display & slow-query detection
 - [x] Precise jump to source (interceptor-marked call sites)
@@ -106,6 +110,8 @@ Completed capabilities are grouped by module — click a title to expand.
 - [x] History search regex and case-sensitivity toggles
 - [x] Jump to the last entry in the history list
 - [x] Join-the-community entry point
+- [x] DDL statement-type coloring and filtering
+- [x] Scheduler-thread call stacks (thread name in the popup title)
 :::
 
 ::: details Platform & Ecosystem (10)
@@ -121,9 +127,9 @@ Completed capabilities are grouped by module — click a title to expand.
 - [x] Settings & onboarding discoverability polish
 :::
 
-> Everything above has shipped with v2026.9.8 ~ v2026.10.23; see the [changelog](./changelog) for version details.
+> Everything above has shipped with v2026.9.8 ~ v2026.10.30; see the [changelog](./changelog) for version details.
 >
-> Per-version highlights: **v2026.9.23** the ten MCP Server tools, premain capture at startup, method-level / request-level focus tabs, one-click rollback SQL, dialect auto-inference, cross-namespace include resolution; **v2026.10.6** embedded value objects (@Embedded) support, SQL log suppression, SQL embedded in generic XML, alias-free HQL mapping, the OceanBase / openGauss dialects, empty parameters defaulting to a `?` placeholder, JAR business-frame registration and jump-landing fixes; **v2026.10.7** SQL log scroll-to-bottom with tail following, JPA setParameter auto-prefill (literals / enum constants) with fill-by-name, loading performance under concurrent log storms; **v2026.10.9** the SQL-log call-stack popup with click-a-frame-to-jump, the always-present SQL History tab, Recent Executions as a dialog, SQL → Java coverage expansion and a free-form return type; **v2026.10.13** capture-channel attribution and per-bucket merging, mapper XML syntax highlighting plus highlighter/completion/navigation gap closure, the dialect quote-mismatch static warning, the independent pagination COUNT switch, history regex / case-sensitivity toggles, data-source badges defaulting to database type only; **v2026.10.16** entity reverse-look-up in dependency libraries (background scan plus explicit trigger), native-feel rewrite of the SQL log and history lists, business-frame-first call stacks, the join-the-community entry; **v2026.10.23** parameter presets and parameter history isolated per declaring method, the read-only preview side channel with Copy SQL and Close, DML impact estimate, one-click diagnostic report, pre-execution schema check and dialect capability self-check, cross-session EXPLAIN plan history with cross-run comparison, replay-script export, Copy as AI Context, display and export masking, FieldFill safe simulation, in-place dialect-gate exits, rollback snapshot dual view with CSV editor, enhanced capture on by default.
+> Per-version highlights: **v2026.9.23** the ten MCP Server tools, premain capture at startup, method-level / request-level focus tabs, one-click rollback SQL, dialect auto-inference, cross-namespace include resolution; **v2026.10.6** embedded value objects (@Embedded) support, SQL log suppression, SQL embedded in generic XML, alias-free HQL mapping, the OceanBase / openGauss dialects, empty parameters defaulting to a `?` placeholder, JAR business-frame registration and jump-landing fixes; **v2026.10.7** SQL log scroll-to-bottom with tail following, JPA setParameter auto-prefill (literals / enum constants) with fill-by-name, loading performance under concurrent log storms; **v2026.10.9** the SQL-log call-stack popup with click-a-frame-to-jump, the always-present SQL History tab, Recent Executions as a dialog, SQL → Java coverage expansion and a free-form return type; **v2026.10.13** capture-channel attribution and per-bucket merging, mapper XML syntax highlighting plus highlighter/completion/navigation gap closure, the dialect quote-mismatch static warning, the independent pagination COUNT switch, history regex / case-sensitivity toggles, data-source badges defaulting to database type only; **v2026.10.16** entity reverse-look-up in dependency libraries (background scan plus explicit trigger), native-feel rewrite of the SQL log and history lists, business-frame-first call stacks, the join-the-community entry; **v2026.10.23** parameter presets and parameter history isolated per declaring method, the read-only preview side channel with Copy SQL and Close, DML impact estimate, one-click diagnostic report, pre-execution schema check and dialect capability self-check, cross-session EXPLAIN plan history with cross-run comparison, replay-script export, Copy as AI Context, display and export masking, FieldFill safe simulation, in-place dialect-gate exits, rollback snapshot dual view with CSV editor, enhanced capture on by default; **v2026.10.26** host-module cascade for embedded-column naming of JAR / lib entities; **v2026.10.28** two-way navigation between Mapper interface methods and XML statements, DDL statement-type coloring and filtering, dialect mismatch warns without blocking execution, zero-replacement JDBC capture; **v2026.10.29** dialect inference scoped per module with active-profile priority, the IDEA 2026.1.x MCP compatibility fix, scheduler-thread call stacks; **v2026.10.30** yielding the two-way navigation icons to peer navigation plugins.
 >
 > An earlier batch (preview parameter presets, mapper XML syntax highlighting, full-dialect EXPLAIN with structured rendering, IPage pagination simulation, ShardingSphere log capture, history diff and export, full-width parenthesis tolerance, the preview data-source binding indicator, preview parameter memory, three-state update-failure diagnosis, history parameter snapshots restored to the preview, the dialect capability matrix, the independent pagination COUNT switch, history / log SQL script export, `--` line comments in the preview editor, the dedup fix for the first events after enhanced-capture takeover, the generated-frame fallback for source locations, and the mapper XML completion dispatch fix) has also shipped with the versions above.
 

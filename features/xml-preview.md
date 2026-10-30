@@ -16,6 +16,16 @@ mapper XML 的 `<select>` / `<update>` / `<delete>` / `<insert>` 行左侧 gutte
 载体标签自身或祖先带 `type="hql"` / `"jpql"` 时走 HQL 转换管道（别名作用域属性列名映射照常生效），实体不可解析或转换失败时回退原文直显；右键与 `Alt+Shift+Q` 入口、多语句选择栏行为与 mapper XML 一致。
 :::
 
+## Mapper 双向跳转
+
+mapper XML 的 `select` / `insert` / `update` / `delete` 标签行与 Mapper 接口方法行各出一枚跳转图标，点击互相跳转：XML 语句行跳到对应的接口方法，接口方法行跳到 XML 语句。
+
+跳转目标按 `namespace` + 标签 `id` 解析，解析不到就不显示图标，也不会猜一个同名方法凑数。图标受设置页 gutter 总开关与「mapper XML 语句」分组开关控制。
+
+::: details 与同类导航插件共存（何时看：装了 MyBatisCodeHelperPro 等同类插件时）
+同类 MyBatis 导航插件（当前登记 MyBatisCodeHelperPro）启用时，对方会在同一行画自己的跳转箭头，两枚图标叠在一行没有意义——插件默认**让出**这两个跳转图标。行为由设置项「与同类 MyBatis 导航插件共存时让出 Mapper 跳转图标」控制（默认开，在 gutter 分组开关同一区块）：关闭后即使对方在位也保留本插件图标。其余 gutter（SQL 预览、注解 SQL、JPA / HQL、JDBC、Wrapper 链等）不受让位影响。
+:::
+
 ## 支持的动态标签
 
 | 标签 | 说明 |
@@ -36,6 +46,19 @@ mapper XML 的 `<select>` / `<update>` / `<delete>` / `<insert>` 行左侧 gutte
 片段内的 `<if>` / `<foreach>` 等动态标签照常渲染，`${}` 动态 refid 也支持，property 静态替换与环检测同样生效。
 
 找不到目标时预览不中断，警示给出具体原因：namespace 无 mapper 文件 / 该 namespace 下无此片段 / 多个文件重复声明同名片段（歧义，差异如实标注）。裸 id 仍只在本文件内查找，与 MyBatis 运行时一致。
+
+## mapper XML 编辑辅助
+
+除预览外，插件还给 mapper XML 的**编辑器本身**注入了一套能力：
+
+- **语法着色**：语句文本按 SQL 语法着色——关键字 / 表名 / 列名 / 运算符分色，`#{}` 与 `${}` 参数占位分色并加底色，`${}` 内与属性值内的 OGNL 表达式细着色，`test` / `value` 属性表达式同样着色；颜色可在插件的颜色设置页自定义
+- **输入与补全**：输入 `#` / `$` 自动补出 `{}`；`#{}` 占位符补 `jdbcType` / `javaType` / `typeHandler` 等结构属性，标签属性值（`id` / `refid` / `resultMap` / `resultType` / `parameterType` 等）全覆盖补全，resultMap 的 `column` 属性补列名；`mybatis-config.xml` 的配置项同样可补全
+- **引用导航**：`<include refid>`、resultMap 引用等可在定义与用法之间跳转
+- **动态标签折叠**：`<if>` / `<where>` 等动态标签按语句结构折叠展开
+
+::: details 与其他 SQL 插件共存（何时看：装了别的 SQL 着色插件、mapper XML 着色不符合预期时）
+着色让位按**注入区间**判定——只把对方真正在着色的区间让出去，其余区间照常着色，不再是「检测到对方就整个文件让位」的一刀切。
+:::
 
 ## OGNL 表达式面板
 

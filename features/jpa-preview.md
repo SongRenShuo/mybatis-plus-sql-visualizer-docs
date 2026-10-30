@@ -88,6 +88,7 @@
 - 嵌套点路径按**逐段累积**解析（`address.zipcode.zip` → 覆写列 `cust_zip`），中间段（`Zipcode`）参与匹配，不再退化成下划线拼接的伪列
 - `prefix` 与 `@AttributeOverride` 同时出现时，**覆写名即最终列名**——`prefix` 只拼在没有覆写声明的列上，不会出现 `biz_biz_street` 这类双拼
 - MyBatis-Plus 与 jakarta 嵌入注解共存的混合注解实体（`@TableName` + `@Embedded`）在 Wrapper 预览、批量模板与 CRUD 生成里同样展平为宿主表列，不再出现值对象伪列
+- 实体打包在依赖 JAR / lib 模块、该模块又没有自己的命名配置时，嵌入列命名探测按「实体所在模块 → 查询宿主模块」级联判定，列名不再丢嵌入前缀
 :::
 
 ## 继承链实体列解析
