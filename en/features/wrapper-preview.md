@@ -62,6 +62,8 @@ The parameter area can store named parameter sets ("Manage Presets"), and the va
 - Editing the SQL text does not lose the parameters — it still falls back to that method's most recent save; **presets are permanently bound to the method too**: a preset remembers the method it was saved under, so renaming parameters or restructuring the statement still resolves by method, with no loss from text-fingerprint drift
 - Presets carried over from older versions are migrated into method scope automatically on first hit, with no manual re-saving
 
+<GifPlayer src="/demo/preset-method-binding.gif" alt="Parameter presets are permanently bound to their method: in the preview of WrapperExtServiceImpl.listByNotAndNested, switching the preset dropdown to tom-query fills the username parameter with tom and updates the SQL to username LIKE '%tom%' in real time; after hand-editing the SQL text (deleted = 0 to 1), switching the preset again still fills the parameters — the binding lives on the declaring method and survives text rewrites" />
+
 ### 11-Dialect Pagination
 
 | Dialect | Syntax |

@@ -63,6 +63,8 @@
 - 改 SQL 文本不会丢参数——仍按该方法最近一次保存回落；**预设同样永久绑定方法**：保存时记住所属方法，之后改写 SQL 文本（换参数名、调整结构）仍按方法命中，不因文本指纹变化丢预设
 - 从旧版本升上来的全局预设会在首次命中时自动迁移到方法作用域，不需要手工重存
 
+<GifPlayer src="/demo/preset-method-binding.gif" alt="参数预设永久绑定方法：在 WrapperExtServiceImpl 的 listByNotAndNested 预览里，从预设下拉切到 tom-query，username 参数自动回填 tom、SQL 实时变 username LIKE '%tom%'；手工改写 SQL 文本（deleted = 0 改 1）后再次切换预设，参数照常回填——绑定在声明方法上，不因文本改写丢失" />
+
 ### 11 种方言分页渲染
 
 | 方言 | 分页语法 |
