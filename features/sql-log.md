@@ -227,6 +227,8 @@ DDL 语句同样纳入类型标记与筛选：`CREATE` / `ALTER` / `RENAME` 一�
 - **点击任意一帧即跳到该帧的源码行**（全工程按类名解析，库类落到反编译视图，与调试器习惯一致）；解析不到时弹层保持不关，不制造「已跳转」的假象
 - 列表尾部的基础设施帧（Tomcat / 线程池尾巴等）在解析时被跳过，弹层默认锚定最深的业务帧，一眼看到 Controller → Service 的调用路径；折叠名单覆盖 JDBC 驱动族与 MyBatis 内部包
 - **定时任务等非 Web 线程**产出的 SQL 同样能看到项目帧——`@Scheduled` 一类调度线程的栈底锚点会穿透 Spring scheduling 等框架前缀，业务帧不再被挤出帧数窗口；弹层标题带上线程名（`scheduling-1`、`pool-2-thread-1`），一眼分清 SQL 来自哪条线程
+
+<GifPlayer src="/demo/stack-scheduler-thread.gif" alt="定时任务线程的调用栈：双击 SQL 日志里 SchedulerDemoTask 产出的条目打开预览，元信息行「调用栈:」处悬停后弹层标题显示「调用栈 · scheduling-1」，帧列表依次是内部调用 16 帧 / invoke SqlSessionInterceptor:425 / selectOne SqlSessionTemplate:160 / pollUser SchedulerDemoTask:40，点 pollUser 帧跳到该源码第 40 行" />
 - 底部「复制调用栈全文」把原始快照整段复制走，便于贴进 issue 或对话
 
 保留多少帧可在设置页调——「调用栈快照帧数」（默认 24，范围 12~64）：两端采样，栈顶保留 JDBC / 引擎侧帧，栈底固定保留 8 帧业务侧，中间以省略标记连接；改动保存后热下发生效，无需重启应用。
