@@ -1,5 +1,7 @@
 <template>
   <div class="feedback-page">
+    <!-- 周报订阅入口：后端带双重确认，这里只收集邮箱并透传后端文案 -->
+    <SubscribeCard :api-base="apiBase" :locale="locale" />
     <!-- 两栏常驻：点卡片/动态条目不再整页切换，改为右侧抽屉滑出详情 -->
     <div class="feedback-page-body">
       <FeedbackPool
@@ -65,6 +67,7 @@ import FbIcon from './FbIcon.vue'
 import FeedbackDetailDrawer from './FeedbackDetailDrawer.vue'
 import FeedbackActivity from './FeedbackActivity.vue'
 import FeedbackForm from './FeedbackForm.vue'
+import SubscribeCard from './SubscribeCard.vue'
 
 const props = defineProps<{
   apiBase: string
