@@ -58,6 +58,8 @@ Beyond previewing, the plugin injects a set of capabilities into the mapper XML 
 - **Reference navigation**: `<include refid>`, resultMap references and the like can jump between definition and usages
 - **Dynamic tag folding**: `<if>` / `<where>` and other dynamic tags fold along the statement structure
 
+<GifPlayer src="/demo/xml-editing-support.gif" alt="Mapper XML editing support: typing # at the end of a line inside &lt;where&gt;&lt;if&gt; in UserMapper.xml auto-closes {} with the caret between # and }; continuing with a parameter name and a comma and invoking completion lists candidates annotated with their Chinese comments; Esc dismisses and undo restores" />
+
 ::: details Coexisting with other SQL plugins (When to read: another SQL coloring plugin is installed and mapper XML coloring looks off)
 Coloring yields per **injection region** — only the regions the other plugin actually colors are given up, everything else keeps this plugin's coloring. No more "detected a peer, give up the whole file" behavior.
 :::

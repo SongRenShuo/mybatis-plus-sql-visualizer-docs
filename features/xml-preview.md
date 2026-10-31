@@ -58,6 +58,8 @@ mapper XML 的 `select` / `insert` / `update` / `delete` 标签行与 Mapper 接
 - **引用导航**：`<include refid>`、resultMap 引用等可在定义与用法之间跳转
 - **动态标签折叠**：`<if>` / `<where>` 等动态标签按语句结构折叠展开
 
+<GifPlayer src="/demo/xml-editing-support.gif" alt="mapper XML 编辑辅助：在 UserMapper.xml 的 &lt;where&gt;&lt;if&gt; 体内行尾敲 #，自动补出 {}（光标落在 # 与 } 之间）；续敲参数名与逗号后唤起补全，列表给出带中文注释的候选；Esc 收起、撤销还原" />
+
 ::: details 与其他 SQL 插件共存（何时看：装了别的 SQL 着色插件、mapper XML 着色不符合预期时）
 着色让位按**注入区间**判定——只把对方真正在着色的区间让出去，其余区间照常着色，不再是「检测到对方就整个文件让位」的一刀切。
 :::
