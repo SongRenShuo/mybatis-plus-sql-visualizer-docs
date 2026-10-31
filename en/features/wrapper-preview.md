@@ -180,13 +180,9 @@ The judgement is transparent too: the SQL's dialect source, confidence and candi
 
 The one case still blocked is a write or EXPLAIN where **either side's dialect is unknown** (rendered source undetermined, or the target data source's dialect cannot be resolved). That is not "a conflict was detected" but "no judgement is possible", and blindly firing PostgreSQL syntax at a MySQL database is not a risk worth taking — so it stays fail-closed.
 
-The result row also offers:
+When it lets execution through, the result row is a single grey info line — no buttons, no block. Only in the rarer "automatic re-render failed" case does it escalate to an error row with **Switch Data Source** and **Dialect Settings**; a genuine execution error shows the database's own error row with **Locate failing statement** and **Copy error message**.
 
-- **Switch Data Source**: pick a data source that matches; once bound, the preview re-renders for the new dialect and retries
-- **Dialect Settings**: jump straight to the plugin's dialect configuration page
-- **Copy error message**: copy the whole explanation for pasting into an issue or a chat
-
-<GifPlayer src="/demo/dialect-gate.gif" alt="Dialect mismatch warns but does not block: the preview renders as PostgreSQL (dialect: PostgreSQL, manual — note the double-quoted FROM &quot;user&quot;); clicking Execute SQL with a MySQL data source selected shows an info row reading Dialect mismatch: the SQL was rendered with the manual dialect PostgreSQL while the selected data source is MySQL — execution continues and the SQL is submitted as-is, with three exits — Switch data source / Dialect settings / Copy error message" />
+<GifPlayer src="/demo/dialect-gate.gif" alt="Dialect mismatch warns but does not block: the preview renders as PostgreSQL (dialect: PostgreSQL, manual — note the double-quoted FROM &quot;user&quot;); clicking Execute SQL opens a data-source picker listing the available MySQL sources, and after picking mp_demo@localhost an info row appears reading Dialect mismatch: this SQL was rendered for the manual dialect PostgreSQL while the selected data source is MySQL — execution is not blocked and the SQL is submitted to the data source you picked" />
 
 ### Real EXPLAIN Plan
 

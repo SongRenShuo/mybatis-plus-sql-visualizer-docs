@@ -22,6 +22,8 @@ Mapper XML `select` / `insert` / `update` / `delete` tag lines and Mapper interf
 
 Targets are resolved by `namespace` + tag `id`; when resolution fails no icon is shown — the plugin never guesses a same-named method as a fallback. The icons obey the gutter master switch and the "mapper XML statements" group switch in settings.
 
+<GifPlayer src="/demo/mapper-nav-jump.gif" alt="Mapper two-way navigation: in UserMapper.xml, clicking the navigation icon on the selectUserListByXml statement line jumps to the matching selectUserListByXml method in the UserMapper interface; clicking the icon on that interface method line jumps back to the XML statement" />
+
 ::: details Coexisting with peer navigation plugins (When to read: you have MyBatisCodeHelperPro or similar installed)
 When a peer MyBatis navigation plugin (currently: MyBatisCodeHelperPro) is enabled, it draws its own jump arrow on the same line — two icons stacked on one line help nobody, so this plugin **yields** its two navigation icons by default. The behavior is controlled by the setting "Yield Mapper navigation icons when a peer MyBatis navigation plugin is present" (on by default, in the same block as the gutter group switches): turn it off to keep this plugin's icons even when the peer is present. Other gutters (SQL preview, annotation SQL, JPA / HQL, JDBC, Wrapper chains, etc.) are unaffected by the yielding.
 :::

@@ -181,13 +181,9 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 
 唯一仍然拦的情况是**有一边方言未知**（渲染来源不明或目标数据源方言取不到）的写操作与 EXPLAIN：那不是「判断出冲突」，而是「无从判断」，把 PG 语法盲投到 MySQL 库上的风险不可控，此时保持 fail-closed。
 
-结果行同时提供：
+放行时结果行只给一条灰色信息提示，不带按钮、不阻断执行。只有「自动重渲染失败」这类少数情况，提示才升级为错误行并附「切换数据源」「方言设置」两个就地入口；真实执行报错时则是数据库自己的错误行，带「定位到出错语句」「复制错误信息」。
 
-- **切换数据源**：换一条方言匹配的源，绑定后按新方言自动重渲染并重试
-- **方言设置**：直达插件的方言配置页
-- **复制错误信息**：把整段说明复制走，便于贴进 issue 或对话里核对
-
-<GifPlayer src="/demo/dialect-gate.gif" alt="方言不一致时只提示不拦执行：预览按 PostgreSQL 渲染（方言：PostgreSQL 手动指定，SQL 呈 FROM &quot;user&quot; 双引号形态），点「执行 SQL」选定 MySQL 数据源后，结果区给出「方言不一致：当前 SQL 由手动方言 PostgreSQL 渲染，所选数据源是 MySQL」的信息提示，执行继续、SQL 照常提交，附「切换数据源」「方言设置」「复制错误信息」三个出口" />
+<GifPlayer src="/demo/dialect-gate.gif" alt="方言不一致时只提示不拦执行：预览按 PostgreSQL 渲染（方言：PostgreSQL 手动指定，SQL 呈 FROM &quot;user&quot; 双引号形态），点「执行 SQL」弹出数据源选择器（列出可用的 MySQL 源），选 mp_demo@localhost 后结果区出现「方言不一致：当前 SQL 由手动方言 PostgreSQL 渲染，所选数据源是 MySQL」的信息提示——不再阻断，SQL 照常提交到所选数据源" />
 
 ### EXPLAIN 真实执行计划
 

@@ -22,6 +22,8 @@ mapper XML 的 `select` / `insert` / `update` / `delete` 标签行与 Mapper 接
 
 跳转目标按 `namespace` + 标签 `id` 解析，解析不到就不显示图标，也不会猜一个同名方法凑数。图标受设置页 gutter 总开关与「mapper XML 语句」分组开关控制。
 
+<GifPlayer src="/demo/mapper-nav-jump.gif" alt="Mapper 双向跳转：UserMapper.xml 里点 selectUserListByXml 语句行的跳转图标，编辑器落到 UserMapper 接口中同名的 selectUserListByXml 方法行；再点该接口方法行的跳转图标，跳回 XML 语句" />
+
 ::: details 与同类导航插件共存（何时看：装了 MyBatisCodeHelperPro 等同类插件时）
 同类 MyBatis 导航插件（当前登记 MyBatisCodeHelperPro）启用时，对方会在同一行画自己的跳转箭头，两枚图标叠在一行没有意义——插件默认**让出**这两个跳转图标。行为由设置项「与同类 MyBatis 导航插件共存时让出 Mapper 跳转图标」控制（默认开，在 gutter 分组开关同一区块）：关闭后即使对方在位也保留本插件图标。其余 gutter（SQL 预览、注解 SQL、JPA / HQL、JDBC、Wrapper 链等）不受让位影响。
 :::
