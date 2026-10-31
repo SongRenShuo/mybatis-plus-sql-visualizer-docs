@@ -22,6 +22,8 @@ Mapper XML `select` / `insert` / `update` / `delete` tag lines and Mapper interf
 
 Targets are resolved by `namespace` + tag `id`; when resolution fails no icon is shown — the plugin never guesses a same-named method as a fallback. The icons obey the gutter master switch and the "mapper XML statements" group switch in settings.
 
+<GifPlayer src="/demo/mapper-nav-jump.gif" alt="Mapper two-way navigation: in UserMapper.xml, clicking the navigation icon on the selectUserListByXml statement line jumps to the matching selectUserListByXml method in the UserMapper interface; clicking the icon on that interface method line jumps back to the XML statement" />
+
 ::: details Coexisting with peer navigation plugins (When to read: you have MyBatisCodeHelperPro or similar installed)
 When a peer MyBatis navigation plugin (currently: MyBatisCodeHelperPro) is enabled, it draws its own jump arrow on the same line — two icons stacked on one line help nobody, so this plugin **yields** its two navigation icons by default. The behavior is controlled by the setting "Yield Mapper navigation icons when a peer MyBatis navigation plugin is present" (on by default, in the same block as the gutter group switches): turn it off to keep this plugin's icons even when the peer is present. Other gutters (SQL preview, annotation SQL, JPA / HQL, JDBC, Wrapper chains, etc.) are unaffected by the yielding.
 :::
@@ -55,6 +57,8 @@ Beyond previewing, the plugin injects a set of capabilities into the mapper XML 
 - **Typing and completion**: typing `#` / `$` auto-closes `{}`; `#{}` placeholders complete structural attributes (`jdbcType` / `javaType` / `typeHandler` etc.), tag attribute values (`id` / `refid` / `resultMap` / `resultType` / `parameterType` etc.) complete across the board, resultMap `column` attributes complete with column names, and `mybatis-config.xml` configuration options complete as well
 - **Reference navigation**: `<include refid>`, resultMap references and the like can jump between definition and usages
 - **Dynamic tag folding**: `<if>` / `<where>` and other dynamic tags fold along the statement structure
+
+<GifPlayer src="/demo/xml-editing-support.gif" alt="Mapper XML editing support: typing # at the end of a line inside &lt;where&gt;&lt;if&gt; in UserMapper.xml auto-closes {} with the caret between # and }; continuing with a parameter name and a comma and invoking completion lists candidates annotated with their Chinese comments; Esc dismisses and undo restores" />
 
 ::: details Coexisting with other SQL plugins (When to read: another SQL coloring plugin is installed and mapper XML coloring looks off)
 Coloring yields per **injection region** — only the regions the other plugin actually colors are given up, everything else keeps this plugin's coloring. No more "detected a peer, give up the whole file" behavior.

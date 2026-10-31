@@ -63,6 +63,8 @@
 - 改 SQL 文本不会丢参数——仍按该方法最近一次保存回落；**预设同样永久绑定方法**：保存时记住所属方法，之后改写 SQL 文本（换参数名、调整结构）仍按方法命中，不因文本指纹变化丢预设
 - 从旧版本升上来的全局预设会在首次命中时自动迁移到方法作用域，不需要手工重存
 
+<GifPlayer src="/demo/preset-method-binding.gif" alt="参数预设永久绑定方法：在 WrapperExtServiceImpl 的 listByNotAndNested 预览里，从预设下拉切到 tom-query，username 参数自动回填 tom、SQL 实时变 username LIKE '%tom%'；手工改写 SQL 文本（deleted = 0 改 1）后再次切换预设，参数照常回填——绑定在声明方法上，不因文本改写丢失" />
+
 ### 14 种方言分页渲染
 
 方言总数 11 → 14：GaussDB 从 openGauss 的并入形态拆为独立方言——设置页下拉、日志库角标与 MCP 方言名都如实显示 GaussDB，不再一律写 openGauss；新增瀚高 HighGo（`jdbc:highgo:`）与海量 Vastbase（`jdbc:vastbase:` / `jdbc:dws:iam:`）两方言；金仓的 PG 协议版驱动（`postgresql-for-kingbase`）也不再被误认成 PostgreSQL。另外，GaussDB / 达梦 / 瀚高 / 海量四种方言下预览此前恒降级为简化模式（顶部横幅提示、表 / 列补全不可用），缺平台所需的语法解析器注册所致，已修复。
@@ -185,13 +187,9 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 
 唯一仍然拦的情况是**有一边方言未知**（渲染来源不明或目标数据源方言取不到）的写操作与 EXPLAIN：那不是「判断出冲突」，而是「无从判断」，把 PG 语法盲投到 MySQL 库上的风险不可控，此时保持 fail-closed。
 
-结果行同时提供：
+放行时结果行只给一条灰色信息提示，不带按钮、不阻断执行。只有「自动重渲染失败」这类少数情况，提示才升级为错误行并附「切换数据源」「方言设置」两个就地入口；真实执行报错时则是数据库自己的错误行，带「定位到出错语句」「复制错误信息」。
 
-- **切换数据源**：换一条方言匹配的源，绑定后按新方言自动重渲染并重试
-- **方言设置**：直达插件的方言配置页
-- **复制错误信息**：把整段说明复制走，便于贴进 issue 或对话里核对
-
-<GifPlayer src="/demo/dialect-gate.gif" alt="方言不一致时只提示不拦执行：预览按 PostgreSQL 渲染（方言：PostgreSQL 手动指定，SQL 呈 FROM &quot;user&quot; 双引号形态），点「执行 SQL」选定 MySQL 数据源后，结果区给出「方言不一致：当前 SQL 由手动方言 PostgreSQL 渲染，所选数据源是 MySQL」的信息提示，执行继续、SQL 照常提交，附「切换数据源」「方言设置」「复制错误信息」三个出口" />
+<GifPlayer src="/demo/dialect-gate.gif" alt="方言不一致时只提示不拦执行：预览按 PostgreSQL 渲染（方言：PostgreSQL 手动指定，SQL 呈 FROM &quot;user&quot; 双引号形态），点「执行 SQL」弹出数据源选择器（列出可用的 MySQL 源），选 mp_demo@localhost 后结果区出现「方言不一致：当前 SQL 由手动方言 PostgreSQL 渲染，所选数据源是 MySQL」的信息提示——不再阻断，SQL 照常提交到所选数据源" />
 
 ### EXPLAIN 真实执行计划
 

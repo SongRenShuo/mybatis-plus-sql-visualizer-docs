@@ -62,6 +62,8 @@ The parameter area can store named parameter sets ("Manage Presets"), and the va
 - Editing the SQL text does not lose the parameters — it still falls back to that method's most recent save; **presets are permanently bound to the method too**: a preset remembers the method it was saved under, so renaming parameters or restructuring the statement still resolves by method, with no loss from text-fingerprint drift
 - Presets carried over from older versions are migrated into method scope automatically on first hit, with no manual re-saving
 
+<GifPlayer src="/demo/preset-method-binding.gif" alt="Parameter presets are permanently bound to their method: in the preview of WrapperExtServiceImpl.listByNotAndNested, switching the preset dropdown to tom-query fills the username parameter with tom and updates the SQL to username LIKE '%tom%' in real time; after hand-editing the SQL text (deleted = 0 to 1), switching the preset again still fills the parameters — the binding lives on the declaring method and survives text rewrites" />
+
 ### 14-Dialect Pagination
 
 The dialect count goes from 11 to 14: GaussDB is split out of the merged openGauss form into its own dialect — the settings dropdown, log badges and MCP dialect names now all show GaussDB instead of openGauss; two new dialects join the list, HighGo (`jdbc:highgo:`) and Vastbase (`jdbc:vastbase:` / `jdbc:dws:iam:`); and KingBase's PostgreSQL-protocol driver (`postgresql-for-kingbase`) is no longer mistaken for PostgreSQL. Also, previews under GaussDB / DM / HighGo / Vastbase used to always degrade to simplified mode (banner shown, table/column completion unavailable) because the parser registrations the platform requires were missing — fixed.
@@ -184,13 +186,9 @@ The judgement is transparent too: the SQL's dialect source, confidence and candi
 
 The one case still blocked is a write or EXPLAIN where **either side's dialect is unknown** (rendered source undetermined, or the target data source's dialect cannot be resolved). That is not "a conflict was detected" but "no judgement is possible", and blindly firing PostgreSQL syntax at a MySQL database is not a risk worth taking — so it stays fail-closed.
 
-The result row also offers:
+When it lets execution through, the result row is a single grey info line — no buttons, no block. Only in the rarer "automatic re-render failed" case does it escalate to an error row with **Switch Data Source** and **Dialect Settings**; a genuine execution error shows the database's own error row with **Locate failing statement** and **Copy error message**.
 
-- **Switch Data Source**: pick a data source that matches; once bound, the preview re-renders for the new dialect and retries
-- **Dialect Settings**: jump straight to the plugin's dialect configuration page
-- **Copy error message**: copy the whole explanation for pasting into an issue or a chat
-
-<GifPlayer src="/demo/dialect-gate.gif" alt="Dialect mismatch warns but does not block: the preview renders as PostgreSQL (dialect: PostgreSQL, manual — note the double-quoted FROM &quot;user&quot;); clicking Execute SQL with a MySQL data source selected shows an info row reading Dialect mismatch: the SQL was rendered with the manual dialect PostgreSQL while the selected data source is MySQL — execution continues and the SQL is submitted as-is, with three exits — Switch data source / Dialect settings / Copy error message" />
+<GifPlayer src="/demo/dialect-gate.gif" alt="Dialect mismatch warns but does not block: the preview renders as PostgreSQL (dialect: PostgreSQL, manual — note the double-quoted FROM &quot;user&quot;); clicking Execute SQL opens a data-source picker listing the available MySQL sources, and after picking mp_demo@localhost an info row appears reading Dialect mismatch: this SQL was rendered for the manual dialect PostgreSQL while the selected data source is MySQL — execution is not blocked and the SQL is submitted to the data source you picked" />
 
 ### Real EXPLAIN Plan
 

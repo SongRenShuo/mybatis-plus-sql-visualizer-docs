@@ -195,6 +195,8 @@ Each checkbox in the log page's "Type Filter" popup carries a matching color swa
 
 DDL statements take part in type marking and filtering too: `CREATE` / `ALTER` / `RENAME` form one tier reusing the insert color (green), `DROP` / `TRUNCATE` another tier reusing the delete color (red), and both tiers can be checked separately in the "Type Filter" popup (previously DDL had no type at all, so filters like "inserts only" behaved ambiguously). Visually the bar shape tells them apart — DDL draws a dashed bar, DML a solid one, with no new settings.
 
+<GifPlayer src="/demo/ddl-type-color.gif" alt="DDL type marking in the SQL log: a CREATE TABLE and a DROP TABLE entry each carry a dashed bar while the SELECT between them has a solid one; opening the type filter via All shows six tiers (query / insert / update / delete / create table / drop table), and after Deselect All plus checking only the two DDL tiers the button reads 'create table, drop table' and the list keeps just the two DDL entries" />
+
 ### Scroll to Bottom & Tail Following
 
 <GifPlayer src="/demo/sql-log-tail-follow.gif" alt="As SQL entries stream in, the viewport follows the bottom; dragging the scrollbar upward pauses following, and the toolbar Scroll to Bottom action jumps back and resumes it" />
@@ -229,6 +231,8 @@ An enhanced-capture entry carries more than a single execution point — it carr
 - **Clicking any frame jumps to that frame's source line** (resolved by class name across the whole project, library classes landing in the decompiled view, just like the debugger). When a frame cannot be resolved the popup stays open — no false "jumped" impression
 - Infrastructure frames at the tail (Tomcat / thread-pool tails and the like) are skipped when resolving, so the popup anchors on the deepest business frame and you see the Controller → Service path at a glance; the fold list also covers the JDBC driver family and MyBatis internals
 - **Non-web threads** producing SQL are covered too — for scheduler threads (`@Scheduled` and the like) the bottom anchor pierces Spring scheduling and similar framework prefixes, so business frames are no longer squeezed out of the frame window; the popup title carries the thread name (`scheduling-1`, `pool-2-thread-1`), making it obvious which thread issued the SQL
+
+<GifPlayer src="/demo/stack-scheduler-thread.gif" alt="Call stack of a scheduler thread: double-clicking a SchedulerDemoTask entry in the SQL log opens the preview, hovering the meta row's Call stack opens a popup titled 'Call stack · scheduling-1' whose frames read internal frames 16 / invoke SqlSessionInterceptor:425 / selectOne SqlSessionTemplate:160 / pollUser SchedulerDemoTask:40, and clicking the pollUser frame jumps to line 40 of that source" />
 - "Copy full call stack" at the bottom copies the raw snapshot verbatim, ready to paste into an issue or a chat
 
 How many frames are kept is configurable — "Call-stack snapshot frames" in settings (default 24, range 12–64): sampled at both ends, the top keeps JDBC / engine-side frames and the bottom always keeps 8 business-side frames, joined by an omission marker in the middle. Changes take effect via a hot push on save — no application restart.
