@@ -191,6 +191,8 @@ Each checkbox in the log page's "Type Filter" popup carries a matching color swa
 
 DDL statements take part in type marking and filtering too: `CREATE` / `ALTER` / `RENAME` form one tier reusing the insert color (green), `DROP` / `TRUNCATE` another tier reusing the delete color (red), and both tiers can be checked separately in the "Type Filter" popup (previously DDL had no type at all, so filters like "inserts only" behaved ambiguously). Visually the bar shape tells them apart — DDL draws a dashed bar, DML a solid one, with no new settings.
 
+<GifPlayer src="/demo/ddl-type-color.gif" alt="DDL type marking in the SQL log: a CREATE TABLE and a DROP TABLE entry each carry a dashed bar while the SELECT between them has a solid one; opening the type filter via All shows six tiers (query / insert / update / delete / create table / drop table), and after Deselect All plus checking only the two DDL tiers the button reads 'create table, drop table' and the list keeps just the two DDL entries" />
+
 ### Scroll to Bottom & Tail Following
 
 <GifPlayer src="/demo/sql-log-tail-follow.gif" alt="As SQL entries stream in, the viewport follows the bottom; dragging the scrollbar upward pauses following, and the toolbar Scroll to Bottom action jumps back and resumes it" />

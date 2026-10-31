@@ -191,6 +191,8 @@ SQL 日志页签的工具栏从左到右依次是：捕捉、管理屏蔽规则�
 
 DDL 语句同样纳入类型标记与筛选：`CREATE` / `ALTER` / `RENAME` 一档复用增色（绿），`DROP` / `TRUNCATE` 一档复用删色（红），两档在「类型过滤」弹窗里可分别勾选（此前 DDL 无类型，勾「只看插入」等筛选时表现含糊）；视觉上靠色条形态区分——DDL 画虚线、DML 实心，不新增设置项。
 
+<GifPlayer src="/demo/ddl-type-color.gif" alt="SQL 日志 DDL 类型标记：列表里 CREATE TABLE 与 DROP TABLE 两条各带虚线色条，夹在中间的 SELECT 是实心色条；点「全部」打开类型过滤弹窗（查询/插入/更新/删除/建表/删表六档），先「全不选」再只勾「建表」「删表」，按钮文案变为「建表, 删表」，列表只剩两条 DDL" />
+
 ### 滚动到底部与尾部跟随
 
 <GifPlayer src="/demo/sql-log-tail-follow.gif" alt="SQL 持续入列时视口自动贴底；向上拖动滚动条暂停跟随，点工具栏「滚动到底部」跳回底部并恢复跟随" />
