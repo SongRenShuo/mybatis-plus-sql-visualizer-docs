@@ -1,0 +1,23 @@
+{
+  "_comment": "构建期自动更新，手工改动会被覆盖（C 车道脚本从 JetBrains Marketplace API 重写本文件）。当前为 B 车道手工 stub，数据取自 https://plugins.jetbrains.com/api/plugins/33633/updates（2026-11-01）。summaryEn 为 summaryZh 的同义英文，非 Marketplace 原文。",
+  "updates": [
+    {
+      "version": "2026.10.30",
+      "date": "2026-10-29",
+      "summaryZh": "装了 MyBatisCodeHelperPro 等同类插件时，Mapper 双向跳转图标不再和对方的跳转箭头叠在同一行",
+      "summaryEn": "Mapper two-way jump icons no longer overlap with arrows from similar plugins such as MyBatisCodeHelperPro"
+    },
+    {
+      "version": "2026.10.29",
+      "date": "2026-10-29",
+      "summaryZh": "修复 IDEA 2026.1.x 启用 MCP Server 后内置服务对所有客户端不可用、必须卸载插件才恢复的问题",
+      "summaryEn": "Fixed IDEA 2026.1.x: after enabling the MCP Server the built-in service was unavailable to all clients until the plugin was uninstalled"
+    },
+    {
+      "version": "2026.10.28",
+      "date": "2026-10-28",
+      "summaryZh": "Mapper 接口方法与 XML 语句之间新增双向跳转，点行号旁的图标即可互跳",
+      "summaryEn": "New two-way navigation between mapper interface methods and XML statements via the gutter icon"
+    }
+  ]
+}

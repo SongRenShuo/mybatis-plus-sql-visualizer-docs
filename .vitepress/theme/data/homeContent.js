@@ -333,6 +333,17 @@ export const homeContent = {
       button: '立即免费下载',
     },
 
+    /**
+     * 「最近更新」轻区块（PricingSection 与 CtaSection 之间）：只放标题与链接文案。
+     * 条目（版本 / 日期 / 中英一句话摘要）不在本文件——组件直接 import
+     * .vitepress/data/latest-updates.json，该文件构建期由脚本重写。
+     */
+    recentUpdates: {
+      title: '最近更新',
+      viewAll: '查看全部',
+      viewAllHref: '/about/changelog',
+    },
+
     cta: {
       eyebrow: 'Get Started',
       titleLine1: '准备好告别繁琐的',
@@ -731,6 +742,16 @@ export const homeContent = {
         },
       ],
       button: 'Install — Free',
+    },
+
+    /**
+     * 「最近更新」轻区块：与 zh.recentUpdates 同构；viewAllHref 按 testimonials
+     * 的站内链接约定直接带 /en 前缀。
+     */
+    recentUpdates: {
+      title: 'Recent updates',
+      viewAll: 'View all',
+      viewAllHref: '/en/about/changelog',
     },
 
     cta: {
