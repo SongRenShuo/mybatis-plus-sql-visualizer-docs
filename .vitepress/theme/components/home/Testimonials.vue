@@ -2,52 +2,40 @@
 import { useHomeContent } from '../../composables/useHomeContent'
 
 const { c } = useHomeContent()
+
+const isExternal = (link) => typeof link === 'string' && link.startsWith('http')
 </script>
 
 <template>
-  <section id="sec-testimonials" class="testimonials-section">
+  <section id="sec-testimonials" class="facts-section">
     <div class="container">
-      <div class="testimonials-header mp-reveal">
+      <div class="facts-header mp-reveal">
         <span class="section-eyebrow">{{ c.testimonials.eyebrow }}</span>
-        <span class="testimonials-badge">{{ c.testimonials.badge }}</span>
-        <h2 class="testimonials-title">
-          {{ c.testimonials.titlePrefix }}<span class="testimonials-title-accent">{{ c.testimonials.titleAccent }}</span>
+        <span class="facts-badge">{{ c.testimonials.badge }}</span>
+        <h2 class="facts-title">
+          {{ c.testimonials.titlePrefix }}<span class="facts-title-accent">{{ c.testimonials.titleAccent }}</span>
         </h2>
-        <p class="testimonials-subtitle">
+        <p class="facts-subtitle">
           {{ c.testimonials.subtitle }}
         </p>
       </div>
 
-      <div class="testimonials-grid">
+      <div class="facts-grid">
         <div
           v-for="(t, i) in c.testimonials.items"
           :key="i"
-          class="testimonial-card mp-reveal"
+          class="fact-card mp-reveal"
           :style="{ '--mp-reveal-delay': `${i * 80}ms` }"
         >
-          <div class="testimonial-stars" :aria-label="`${t.stars} / 5`">
-            <svg
-              v-for="s in 5"
-              :key="s"
-              class="testimonial-star"
-              :class="{ 'testimonial-star--empty': s > t.stars }"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-          </div>
-          <p class="testimonial-headline">{{ t.headline }}</p>
-          <p class="testimonial-detail">{{ t.detail }}</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar" :style="{ backgroundColor: t.color }">
-              {{ t.initials }}
-            </div>
-            <div>
-              <div class="testimonial-name">{{ t.name }}</div>
-              <div class="testimonial-role">{{ t.role }}</div>
-            </div>
-          </div>
+          <p class="fact-value">{{ t.value }}</p>
+          <p class="fact-label">{{ t.label }}</p>
+          <p class="fact-detail">{{ t.detail }}</p>
+          <a
+            class="fact-link"
+            :href="t.link"
+            :target="isExternal(t.link) ? '_blank' : undefined"
+            :rel="isExternal(t.link) ? 'noopener' : undefined"
+          >{{ t.linkText }} →</a>
         </div>
       </div>
     </div>
@@ -55,22 +43,22 @@ const { c } = useHomeContent()
 </template>
 
 <style scoped>
-.testimonials-section {
+.facts-section {
   padding: 6rem 1.5rem;
   background: linear-gradient(135deg, #f5f7f7 0%, #f0f5f5 100%);
 }
 
-html.dark .testimonials-section {
+html.dark .facts-section {
   background: linear-gradient(135deg, #1e2124 0%, #1a1e1e 100%);
 }
 
-.testimonials-header {
+.facts-header {
   text-align: center;
   max-width: 48rem;
   margin: 0 auto 4rem;
 }
 
-.testimonials-badge {
+.facts-badge {
   display: inline-block;
   padding: 0.35rem 0.9rem;
   border-radius: 9999px;
@@ -81,12 +69,12 @@ html.dark .testimonials-section {
   margin-bottom: 1.25rem;
 }
 
-html.dark .testimonials-badge {
+html.dark .facts-badge {
   background-color: #374151;
   color: #9ca3af;
 }
 
-.testimonials-title {
+.facts-title {
   font-size: clamp(2.5rem, 5vw, 3.25rem);
   font-weight: 700;
   color: #0f172a;
@@ -95,21 +83,21 @@ html.dark .testimonials-badge {
   margin-top: 0;
 }
 
-html.dark .testimonials-title {
+html.dark .facts-title {
   color: #f9fafb;
 }
 
-.testimonials-title-accent {
+.facts-title-accent {
   color: var(--primary-color);
 }
 
-.testimonials-subtitle {
+.facts-subtitle {
   color: #6b7280;
   font-size: 1.0625rem;
   line-height: 1.65;
 }
 
-.testimonials-grid {
+.facts-grid {
   display: grid;
   gap: 1.75rem;
   max-width: 72rem;
@@ -117,104 +105,70 @@ html.dark .testimonials-title {
 }
 
 @media (min-width: 768px) {
-  .testimonials-grid {
+  .facts-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.testimonial-card {
+.fact-card {
   background: #ffffff;
   border-radius: 1rem;
   padding: 2rem;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
-html.dark .testimonial-card {
+html.dark .fact-card {
   background: #2b2d30;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
 }
 
-.testimonial-stars {
-  display: flex;
-  gap: 0.2rem;
-}
-
-.testimonial-star {
-  width: 1.125rem;
-  height: 1.125rem;
-  color: #facc15;
-}
-
-/* 未点亮的星：同一批 SVG，只压掉不透明度，避免多一套路径 */
-.testimonial-star--empty {
-  color: #d1d5db;
-}
-
-html.dark .testimonial-star--empty {
-  color: #4b5563;
-}
-
-/* 结论句：卡片里最先被扫读的一行，字号与字重都比细节高一级 */
-.testimonial-headline {
-  color: #0f172a;
-  font-size: 1.0625rem;
+/* 大号数字：卡片里最先被扫读的一行，品牌色把注意力钉在这里 */
+.fact-value {
+  color: var(--primary-color);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1.25;
   margin: 0;
 }
 
-html.dark .testimonial-headline {
-  color: #f9fafb;
-}
-
-/* 支撑细节：比结论低一级，行长与颜色都收一档 */
-.testimonial-detail {
+/* 出处标签：说明这行数字从哪来、截至何时 */
+.fact-label {
   color: #6b7280;
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  flex: 1;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
   margin: 0;
 }
 
-html.dark .testimonial-detail {
+html.dark .fact-label {
   color: #9ca3af;
 }
 
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: auto;
-}
-
-.testimonial-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 0.875rem;
-  flex-shrink: 0;
-}
-
-.testimonial-name {
-  font-weight: 600;
-  color: #0f172a;
-  font-size: 0.9375rem;
-}
-
-html.dark .testimonial-name {
-  color: #f9fafb;
-}
-
-.testimonial-role {
+/* 支撑说明：低一级，行长与颜色都收一档 */
+.fact-detail {
   color: #6b7280;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+html.dark .fact-detail {
+  color: #9ca3af;
+}
+
+/* 出处链接行：压底对齐，保证三张卡底边整齐 */
+.fact-link {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fact-link:hover {
+  text-decoration: underline;
 }
 </style>
