@@ -310,8 +310,7 @@ export const homeContent = {
       eyebrow: 'Get Started',
       titleLine1: '准备好告别繁琐的',
       titleLine2: 'SQL 调试方式了吗？',
-      subtitle:
-        '加入超过 1000 名开发者的行列，在 IntelliJ IDEA 中享受更高效的 SQL 调试体验。所有功能永久免费。',
+      subtitle: '74 天 18 个版本，Apache-2.0 完全免费，支持 14 种数据库方言。',
       primary: '立即免费下载',
       secondary: '查看文档',
       trust: ['永久免费使用', '开箱即用', '无需注册'],
@@ -684,8 +683,7 @@ export const homeContent = {
       eyebrow: 'Get Started',
       titleLine1: 'Ready to leave tedious',
       titleLine2: 'SQL debugging behind?',
-      subtitle:
-        'Join 1000+ developers getting a better SQL debugging experience in IntelliJ IDEA. Every feature is free forever.',
+      subtitle: '18 releases in 74 days, free under Apache-2.0, 14 SQL dialects.',
       primary: 'Install — Free',
       secondary: 'Read the Docs',
       trust: ['Free forever', 'Works out of the box', 'No sign-up'],
