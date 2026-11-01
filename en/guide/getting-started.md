@@ -11,7 +11,7 @@ Get up and running with SQL Visualizer in 3 minutes.
 1. Open <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd>
 2. Search for `SQL Visualizer`
 3. Click <kbd>Install</kbd>
-4. Restart IDE
+4. If the plugin entry does not appear right after install, restart IDEA once; later version updates usually hot-swap without a restart (the offline update channel supports hot-swap as well)
 
 ![Searching "SQL Visualizer" in the Marketplace: the first result is this plugin (author SongRenShuo), and the detail pane on the right carries the Install button and the version number](/demo/install-marketplace.png)
 
@@ -20,7 +20,7 @@ Get up and running with SQL Visualizer in 3 minutes.
 1. Download the plugin from [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) or [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases)
 2. In IDE, open <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>⚙</kbd> > <kbd>Install Plugin from Disk...</kbd>
 3. Select the downloaded plugin package (no extraction needed)
-4. Restart IDE
+4. If the plugin entry does not appear right after install, restart IDEA once; later version updates usually hot-swap without a restart (the offline update channel supports hot-swap as well)
 
 </Steps>
 

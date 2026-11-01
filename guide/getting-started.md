@@ -11,7 +11,7 @@
 1. 打开 <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd>
 2. 搜索 `SQL Visualizer`
 3. 点击 <kbd>Install</kbd> 安装
-4. 重启 IDE 生效
+4. 首次安装后若未看到插件入口，重启一次 IDEA；后续版本更新通常免重启热生效（离线更新通道亦支持热替换）
 
 ![Marketplace 里搜索 SQL Visualizer：结果首条即本插件（作者 SongRenShuo），右侧详情页带「安装」按钮与版本号](/demo/install-marketplace.png)
 
@@ -20,7 +20,7 @@
 1. 在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) 或 [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases) 下载插件包
 2. 进入 IDE，打开 <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>⚙</kbd> > <kbd>Install Plugin from Disk...</kbd>
 3. 选择下载的插件包（无需解压）
-4. 重启 IDE 生效
+4. 首次安装后若未看到插件入口，重启一次 IDEA；后续版本更新通常免重启热生效（离线更新通道亦支持热替换）
 
 </Steps>
 
