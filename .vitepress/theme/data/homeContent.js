@@ -635,7 +635,7 @@ export const homeContent = {
       points: [
         {
           title: 'Multi-dialect support',
-          description: 'Pagination syntax for MySQL / PostgreSQL / Oracle / SQLServer and 7 more',
+          description: 'Pagination syntax for 14 dialects including MySQL / PostgreSQL / Oracle / SQLServer',
         },
         {
           title: 'Automatic parameter replacement',
