@@ -7,6 +7,10 @@ description: "JPA / Hibernate 生成的 SQL 预览（show_sql 只有问号时的
 
 面向 [Spring Data JPA](https://spring.io/projects/spring-data-jpa) 与 [Hibernate](https://hibernate.org/orm/) 项目的静态 SQL 预览——Repository 方法、JPQL / HQL、Criteria 查询链、`.hbm.xml` 映射，不启动 Spring 容器、不连数据库，光标所在行左侧 gutter 图标点击即出 SQL。
 
+## 和 hibernate.show_sql 的区别
+
+`hibernate.show_sql=true` 只往控制台打印带 `?` 的语句，真实参数分散在 TRACE 级别的绑定日志里——想凑出一条可执行 SQL，还得配 p6spy 或自定义格式化器再手动拼。本插件静态还原完整 SQL：Repository 方法、JPQL / HQL、Criteria 直接生成语句，参数直接回填进占位符。
+
 ## 触发面
 
 | 入口 | 位置 |
