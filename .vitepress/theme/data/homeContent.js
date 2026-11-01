@@ -262,7 +262,7 @@ export const homeContent = {
       items: [
         {
           value: '687 次安装',
-          label: 'JetBrains Marketplace · 截至 2026-11-01',
+          label: 'JetBrains Marketplace 公开数据',
           detail: '数字直接取自 Marketplace 公开页——没有试用墙，也没有解锁门槛。',
           link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
           linkText: '查看 Marketplace',
@@ -682,7 +682,7 @@ export const homeContent = {
       items: [
         {
           value: '687 installs',
-          label: 'JetBrains Marketplace · as of 2026-11-01',
+          label: 'Public JetBrains Marketplace data',
           detail: 'Taken straight from the public Marketplace page — no paywall, no gated unlock.',
           link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
           linkText: 'View on Marketplace',

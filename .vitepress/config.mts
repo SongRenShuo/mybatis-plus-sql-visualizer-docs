@@ -258,6 +258,7 @@ export default defineConfig({
           level: [2, 3],
           label: '页面导航'
         },
+        returnToTopLabel: '回到顶部',
         docFooter: {
           prev: '上一篇',
           next: '下一篇'

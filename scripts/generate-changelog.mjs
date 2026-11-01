@@ -21,17 +21,19 @@ import { fileURLToPath } from 'node:url'
 const here = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(here, '..')
 const API_URL = 'https://plugins.jetbrains.com/api/plugins/33633/updates'
+const PLUGIN_API_URL = 'https://plugins.jetbrains.com/api/plugins/33633'
 const PLUGIN_PAGE = 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer'
 const PROXY = 'http://127.0.0.1:7890'
 const CHANGELOG_OUT = resolve(repoRoot, '.vitepress/data/changelog.json')
 const LATEST_OUT = resolve(repoRoot, '.vitepress/data/latest-updates.json')
+const FACTS_OUT = resolve(repoRoot, '.vitepress/data/facts.json')
 const LATEST_COUNT = 3
 const SUMMARY_MAX = 80
 
 // ---------- 拉取 ----------
 
-async function fetchDirect() {
-  const res = await fetch(API_URL, {
+async function fetchDirect(url = API_URL) {
+  const res = await fetch(url, {
     headers: { 'User-Agent': 'sql-visualizer-docs-build' },
     signal: AbortSignal.timeout(15000),
   })
@@ -39,23 +41,23 @@ async function fetchDirect() {
   return res.json()
 }
 
-function fetchViaCurlProxy() {
+function fetchViaCurlProxy(url = API_URL) {
   const r = spawnSync(
     'curl',
-    ['-sf', '--max-time', '30', '-x', PROXY, API_URL],
+    ['-sf', '--max-time', '30', '-x', PROXY, url],
     { encoding: 'buffer', maxBuffer: 8 * 1024 * 1024 },
   )
   if (r.status !== 0) throw new Error(`curl exit ${r.status}`)
   return JSON.parse(Buffer.from(r.stdout).toString('utf8'))
 }
 
-async function fetchUpdates() {
+async function fetchUpdates(url = API_URL) {
   try {
-    return await fetchDirect()
+    return await fetchDirect(url)
   } catch (e) {
     console.warn(`[changelog] 直连 Marketplace 失败（${e?.message ?? e}），降级走本地代理`)
   }
-  return fetchViaCurlProxy()
+  return fetchViaCurlProxy(url)
 }
 
 // ---------- 版本条目整理 ----------
@@ -205,6 +207,25 @@ function writeIfChanged(file, content, label) {
   return true
 }
 
+// ---------- 事实卡读数（facts.json：构建期兜底，前台经 /api/plugin-info 实时刷新） ----------
+
+function buildFacts(updates, downloads) {
+  const dates = updates
+    .map((u) => Date.parse(toDate(u.cdate)))
+    .filter((n) => !Number.isNaN(n))
+  const firstDate = dates.length ? new Date(Math.min(...dates)).toISOString().slice(0, 10) : null
+  const days = firstDate
+    ? Math.max(1, Math.round((Date.now() - Date.parse(firstDate)) / 86400000))
+    : null
+  return {
+    downloads: Number.isFinite(downloads) ? downloads : null,
+    versions: updates.length,
+    firstDate,
+    days,
+    syncedAt: new Date().toISOString().slice(0, 10),
+  }
+}
+
 // ---------- 主流程 ----------
 
 async function main() {
@@ -255,11 +276,27 @@ async function main() {
   }
   const changed2 = writeIfChanged(LATEST_OUT, buildLatestJson(entries, existingLatest), 'latest-updates.json')
 
+  // 事实卡兜底：下载量来自插件详情 API；拉取失败回落既有 facts.json 的值（首次为 null）
+  let downloads = null
+  try {
+    const detail = await fetchUpdates(PLUGIN_API_URL)
+    const n = Number(detail?.downloads)
+    downloads = Number.isFinite(n) ? n : null
+  } catch (e) {
+    console.warn(`[changelog] 插件详情拉取失败（${e?.message ?? e}），downloads 沿用既有 facts.json`)
+    try {
+      downloads = JSON.parse(readFileSync(FACTS_OUT, 'utf8'))?.downloads ?? null
+    } catch {
+      /* 首次生成 */
+    }
+  }
+  const changed3 = writeIfChanged(FACTS_OUT, `${JSON.stringify(buildFacts(updates, downloads), null, 2)}\n`, 'facts.json')
+
   console.log(
     `[changelog] 共 ${entries.length} 版，最新 ${entries
       .slice(0, LATEST_COUNT)
       .map((e) => e.version)
-      .join(' / ')}（${changed1 || changed2 ? '有更新' : '全部无变化'}）`,
+      .join(' / ')}；事实卡 downloads=${downloads}（${changed1 || changed2 || changed3 ? '有更新' : '全部无变化'}）`,
   )
 }
 

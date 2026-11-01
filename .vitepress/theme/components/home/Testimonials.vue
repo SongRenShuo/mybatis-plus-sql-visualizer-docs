@@ -1,9 +1,37 @@
 <script setup>
+import { computed } from 'vue'
 import { useHomeContent } from '../../composables/useHomeContent'
+import { useFacts } from '../../composables/useFacts'
 
-const { c } = useHomeContent()
+const { c, isEnglish } = useHomeContent()
+const facts = useFacts()
 
 const isExternal = (link) => typeof link === 'string' && link.startsWith('http')
+
+/**
+ * 卡 1/卡 2 的数字走兜底+实时（useFacts），其余字段原样透传；
+ * SSR 阶段渲染构建期 facts.json 的兜底值，客户端拉到 Marketplace 实时读数后原位刷新。
+ * 注意 c 是 computed ref，脚本态必须 c.value（模板里才自动解包）。
+ */
+const cards = computed(() =>
+  c.value.testimonials.items.map((t, i) => {
+    const zh = !isEnglish.value
+    if (i === 0 && facts.downloads.value != null) {
+      const value = zh ? `${facts.downloads.value} 次安装` : `${facts.downloads.value} installs`
+      const label = facts.asOf.value
+        ? `${t.label} · ${zh ? '截至' : 'as of'} ${facts.asOf.value}`
+        : t.label
+      return { ...t, value, label }
+    }
+    if (i === 1 && facts.versions.value != null && facts.days.value != null) {
+      const value = zh
+        ? `${facts.versions.value} 个版本 / ${facts.days.value} 天`
+        : `${facts.versions.value} releases in ${facts.days.value} days`
+      return { ...t, value }
+    }
+    return t
+  }),
+)
 </script>
 
 <template>
@@ -22,7 +50,7 @@ const isExternal = (link) => typeof link === 'string' && link.startsWith('http')
 
       <div class="facts-grid">
         <div
-          v-for="(t, i) in c.testimonials.items"
+          v-for="(t, i) in cards"
           :key="i"
           class="fact-card mp-reveal"
           :style="{ '--mp-reveal-delay': `${i * 80}ms` }"

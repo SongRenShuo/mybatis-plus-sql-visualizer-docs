@@ -78,6 +78,7 @@ export default {
   },
   setup() {
     let scrollHandler: (() => void) | null = null
+    let outlineHandler: (() => void) | null = null
 
     onMounted(() => {
       const nav = document.querySelector('.VPNav')
@@ -97,9 +98,38 @@ export default {
       scrollHandler()
     })
 
+    // 手机端「页面导航」折叠态显示当前小节名（方案 A 加分项）：窄屏下侧栏大纲容器
+    // display:none，其 active 锚点不更新（实测 activeCount=0），故直接读正文标题自行
+    // 计算当前小节——取吸顶线以上最后一个带 id 的 h2/h3；顶部或无命中时还原默认标题。
+    onMounted(() => {
+      outlineHandler = () => {
+        const btn = document.querySelector<HTMLSpanElement>(
+          '.VPLocalNavOutlineDropdown button .menu-text',
+        )
+        if (!btn) return
+        if (!btn.dataset.default) btn.dataset.default = btn.textContent?.trim() ?? ''
+        if (window.scrollY <= 120) {
+          btn.textContent = btn.dataset.default
+          return
+        }
+        let current: string | null = null
+        document.querySelectorAll<HTMLElement>('.vp-doc h2[id], .vp-doc h3[id]').forEach((h) => {
+          if (h.getBoundingClientRect().top <= 141) {
+            current = (h.textContent ?? '').replace(/\u200b/g, '').trim() || current
+          }
+        })
+        btn.textContent = current ?? btn.dataset.default
+      }
+      window.addEventListener('scroll', outlineHandler, { passive: true })
+      outlineHandler()
+    })
+
     onUnmounted(() => {
       if (scrollHandler) {
         window.removeEventListener('scroll', scrollHandler)
+      }
+      if (outlineHandler) {
+        window.removeEventListener('scroll', outlineHandler)
       }
     })
   }

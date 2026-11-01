@@ -1049,3 +1049,31 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
 .roadmap-board::-webkit-scrollbar-thumb:hover {
   background: var(--vp-c-text-3);
 }
+
+/* —— 手机端「页面导航」下拉强化（T-SiteOpt1101 方案 A）——
+   折叠态胶囊化提升可点感；≥640px 长列表双列排布；面板限高内部滚动为组件自带。
+   折叠态显示当前小节名的逻辑在 theme/index.ts setup()（读侧栏大纲的 active 锚点写回按钮）。 */
+@media (max-width: 959px) {
+  .VPLocalNavOutlineDropdown button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 12px;
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 999px;
+    background: var(--vp-c-bg-soft);
+  }
+
+  .VPLocalNavOutlineDropdown button.open {
+    border-color: var(--vp-c-brand-1);
+    color: var(--vp-c-brand-1);
+  }
+}
+
+@media (min-width: 640px) and (max-width: 959px) {
+  /* sql-log 这类 25+ 小节的长列表在横屏手机/窄窗口下双列，扫读距离减半 */
+  .VPLocalNavOutlineDropdown .items .outline {
+    columns: 2;
+    column-gap: 24px;
+  }
+}
