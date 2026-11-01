@@ -1,5 +1,5 @@
 {
-  "_comment": "构建期自动更新，手工改动会被覆盖（C 车道脚本从 JetBrains Marketplace API 重写本文件）。当前为 B 车道手工 stub，数据取自 https://plugins.jetbrains.com/api/plugins/33633/updates（2026-11-01）。summaryEn 为 summaryZh 的同义英文，非 Marketplace 原文。",
+  "_comment": "构建期由 scripts/generate-changelog.mjs 从 JetBrains Marketplace API 自动重写，手工改动会被覆盖。summaryZh 取对应版本 notes 首条纯文本（≤80 字）；summaryEn 沿用此前的手工翻译，新版本在翻译前与 summaryZh 同文。数据来源 https://plugins.jetbrains.com/api/plugins/33633/updates",
   "updates": [
     {
       "version": "2026.10.30",
