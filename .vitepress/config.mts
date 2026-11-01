@@ -48,6 +48,10 @@ const pluginVersion: string = (() => {
   }
 })()
 
+// 站点主描述（og:description 与站点 description 同文，避免两处手写漂移）
+const siteDescription =
+  'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），真实 EXPLAIN 执行计划，运行期捕获真实参数与耗时（慢查询标红与静态性能建议），日志一键跳回源码，SQL 反向转 Java 代码。'
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   // 忽略死链接（开发计划中的 localhost 链接）
@@ -66,8 +70,7 @@ export default defineConfig({
   srcExclude: ['docs/**'],
 
   title: 'SQL Visualizer',
-  description:
-    'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），真实 EXPLAIN 执行计划，运行期捕获真实参数与耗时（慢查询标红与静态性能建议），日志一键跳回源码，SQL 反向转 Java 代码。',
+  description: siteDescription,
 
   // 默认语言
   lang: 'zh-CN',
@@ -82,6 +85,9 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'SQL Visualizer' }],
+    ['meta', { property: 'og:title', content: 'SQL Visualizer' }],
+    ['meta', { property: 'og:description', content: siteDescription }],
+    ['meta', { property: 'og:url', content: 'https://sql-visualizer.jvtools.cn/' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
     ['meta', { property: 'og:locale:alternate', content: 'en_US' }],
     ['meta', { property: 'og:image', content: 'https://sql-visualizer.jvtools.cn/og-image.png' }],
@@ -89,6 +95,8 @@ export default defineConfig({
     ['meta', { property: 'og:image:height', content: '630' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:image', content: 'https://sql-visualizer.jvtools.cn/og-image.png' }],
+    // RSS 自动发现（feed.xml 由 CF Pages Functions 输出）
+    ['link', { rel: 'alternate', type: 'application/rss+xml', title: 'SQL Visualizer Updates', href: 'https://sql-visualizer.jvtools.cn/feed.xml' }],
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
@@ -275,7 +283,7 @@ export default defineConfig({
       lang: 'en-US',
       title: 'SQL Visualizer',
       description:
-        'IntelliJ IDEA Plugin: SQL debugging tool for MyBatis-Plus / MPJ — Wrapper chain, XML/annotation dynamic SQL live preview (incl. MPJ JOIN), console log restore, SQL to Java reverse conversion',
+        'IntelliJ IDEA plugin: SQL debugging companion for MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate — live SQL preview of Wrapper chains and XML/annotation/HQL dynamic SQL (incl. MPJ joins), real EXPLAIN execution plans, runtime capture of real parameters and durations with slow-query highlighting, log-to-source navigation, SQL-to-Java reverse conversion, and MCP Server tools.',
       themeConfig: {
         nav: [
           { text: 'Install', link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer' },
