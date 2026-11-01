@@ -79,6 +79,8 @@ Start with the diagnostics the panel's empty state gives you — it shows the en
 5. Check whether lines were hit by the "Remove Lines Containing" filter rule
 6. Confirm the log goes to the run console (not a separate log file)
 
+For the root cause of "logs only show `?` placeholders" and how the options compare, see [Turning the ? marks in MyBatis logs into real parameters](./mybatis-log-params.md); if you would rather not add the p6spy proxy driver to your project, see [Seeing complete SQL with real parameters without p6spy](./without-p6spy.md).
+
 ## The gutter right-click "Recent Executions" item is empty?
 
 "Recent Executions" looks up executions near that spot from logs captured this session — it requires log capture to be on and to have captured executions at that spot before.
