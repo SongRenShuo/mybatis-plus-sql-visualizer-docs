@@ -73,3 +73,5 @@ description: "14 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、
 | `20261031-1512` 发行说明 | 插件仓 `docs/发行说明/20261031-1512-十四方言转正与动态标签补全修复-发行说明.md`：十四方言转正版，含 GaussDB Kernel 503 与采集 attach 未闭环的口径 |
 | `DialectH2VerificationTest` | 插件仓 `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectH2VerificationTest.kt`：H2 2.3.232 嵌入式引擎执行 TC 套件与保留字扫描 |
 | `DialectSqliteVerificationTest` | 插件仓 `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectSqliteVerificationTest.kt`：SQLite 3.50.3 嵌入式引擎执行 TC 套件与保留字扫描 |
+
+> 对方言支持有建议或遇到问题？[直达需求反馈池](/about/feedback?category=other)

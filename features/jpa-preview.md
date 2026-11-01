@@ -117,4 +117,4 @@ Java 侧 `session.createNamedQuery("实体.方法名")` 在 `@NamedQuery` 注解
 
 相关页面：[Wrapper → SQL 预览](./wrapper-preview)、[SQL 日志工具窗口](./sql-log)（Hibernate / JdbcTemplate 日志捕获）。
 
-> 对这个功能有建议或遇到问题？[直达需求反馈池](/about/feedback)
+> 对这个功能有建议或遇到问题？[直达需求反馈池](/about/feedback?category=jpa)

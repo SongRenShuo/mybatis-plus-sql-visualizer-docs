@@ -118,4 +118,4 @@ Java-side `session.createNamedQuery("Entity.method")` calls that don't match a `
 
 Related pages: [Wrapper → SQL Preview](/en/features/wrapper-preview), [SQL Log Tool Window](/en/features/sql-log) (Hibernate / JdbcTemplate log capture).
 
-> Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback)
+> Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=jpa)

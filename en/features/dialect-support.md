@@ -73,3 +73,5 @@ Capture depths:
 | `20261031-1512` release notes | Plugin repository `docs/发行说明/20261031-1512-十四方言转正与动态标签补全修复-发行说明.md`: official 14-dialect release, including the GaussDB Kernel 503 and capture attach caveats |
 | `DialectH2VerificationTest` | Plugin repository `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectH2VerificationTest.kt`: TC suite and reserved-word sweep on the embedded H2 2.3.232 engine |
 | `DialectSqliteVerificationTest` | Plugin repository `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectSqliteVerificationTest.kt`: TC suite and reserved-word sweep on the embedded SQLite 3.50.3 engine |
+
+> Have a suggestion or hit an issue with dialect support? [Go to the feedback pool](/en/about/feedback?category=other)
