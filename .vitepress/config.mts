@@ -190,6 +190,7 @@ export default defineConfig({
         'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器',
       themeConfig: {
         nav: [
+          { text: '安装', link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer' },
           { text: '首页', link: '/' },
           { text: '功能详解', link: '/features/wrapper-preview' },
           { text: '使用指南', link: '/guide/getting-started' },
@@ -274,6 +275,7 @@ export default defineConfig({
         'IntelliJ IDEA Plugin: SQL debugging tool for MyBatis-Plus / MPJ — Wrapper chain, XML/annotation dynamic SQL live preview (incl. MPJ JOIN), console log restore, SQL to Java reverse conversion',
       themeConfig: {
         nav: [
+          { text: 'Install', link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer' },
           { text: 'Home', link: '/en/' },
           { text: 'Features', link: '/en/features/wrapper-preview' },
           { text: 'Guide', link: '/en/guide/getting-started' },
