@@ -1,4 +1,5 @@
 ---
+title: "Database Dialect Support Matrix"
 description: "14-dialect matrix: MySQL, PostgreSQL, Oracle, SQL Server, DM, KingBase, GaussDB, OceanBase, openGauss and more — per-dialect pagination rendering and EXPLAIN."
 ---
 
@@ -6,9 +7,41 @@ description: "14-dialect matrix: MySQL, PostgreSQL, Oracle, SQL Server, DM, King
 
 The plugin ships with 14 SQL dialects, used for rendering SQL from Wrappers, XML / annotation dynamic SQL, JPA / Hibernate and other sources (pagination, identifier quoting, UPSERT, batch inserts), as well as dialect detection for execution plans and enhanced capture.
 
-This page lists each dialect's verification level, verified capabilities and evidence. Levels only reflect verifications that were actually executed; nothing is inferred.
+**Will my database work?** Mainstream databases are covered — MySQL, MariaDB, PostgreSQL, Oracle, SQL Server, SQLite, H2, DM (Dameng), KingBase, OceanBase, openGauss, GaussDB, HighGo and Vastbase, 14 dialects in total. The plugin renders SQL for your current dialect out of the box, no configuration needed; the full set has graduated from beta (since v2026.10.31 — see the [changelog](/en/about/changelog) for the per-version history).
 
-## Level definitions
+## Dialect quick reference
+
+One row per dialect with the four things you look up most often. "First supported version" is not tracked per dialect on this page — the [changelog](/en/about/changelog) is the source of record. The "EXPLAIN" column shows the statement shape used for that dialect's execution plan and how far it was verified; the "Plan presentation" column is how the plan appears in the preview panel — a table-row plan (structured, comparable), a JSON plan (structured, comparable) or a text plan (shown verbatim).
+
+| Dialect | First supported version | Pagination rendering | EXPLAIN | Plan presentation |
+|---------|-------------------------|----------------------|---------|-------------------|
+| MySQL | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN <sql>`, verified on a real engine | Table-row plan |
+| MariaDB | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN <sql>`, verified on a real engine | Table-row plan |
+| PostgreSQL | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON, VERBOSE) <sql>`, verified on a real engine | JSON plan |
+| Oracle | [See changelog](/en/about/changelog) | `OFFSET n ROWS FETCH NEXT m ROWS ONLY` (`FETCH FIRST m ROWS ONLY` without an offset) | `EXPLAIN PLAN FOR <sql>`, verified on a real engine | Text plan |
+| SQL Server | [See changelog](/en/about/changelog) | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` | `SET STATISTICS XML`, verified on the official image | Text plan |
+| SQLite | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN QUERY PLAN <sql>`, engine-level unit test | Text plan |
+| H2 | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN PLAN FOR <sql>`, engine-level unit test | Text plan |
+| DM (Dameng) | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN FOR <sql>` (19-column plan table), verified on a real engine | Table-row plan |
+| KingBase | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`, verified on a real engine | JSON plan |
+| OceanBase | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` (MySQL mode) | `EXPLAIN <sql>`, verified on a community image | Text plan |
+| openGauss | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`, verified on a real engine | JSON plan |
+| GaussDB | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`, documentation-only | JSON plan |
+| HighGo | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`, verified on a community image | JSON plan |
+| Vastbase | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`, verified on a community image | JSON plan |
+
+## Usage notes
+
+- SQL Server requires `OFFSET … FETCH` to follow `ORDER BY`: for pagination without sorting the plugin adds an `ORDER BY (SELECT NULL)` placeholder — without it the statement fails with a syntax error on a real engine
+- OceanBase's execution plan comes back as an OceanBase-specific ASCII plan tree (a single `Query Plan` column), presented as text
+- The GaussDB execution plan is documentation-only verified for now (real-engine readings still owed); HighGo / Vastbase were verified on community third-party images and OceanBase on a community-edition image
+- Enhanced capture (the SQL log's enhanced channel) has no attach end-to-end readings yet for KingBase, HighGo or Vastbase; SQL rendering and preview are unaffected
+
+::: details Evidence and verification records (for maintainers)
+
+This section keeps the internal verification scopes and evidence ids — commit short hashes, internal task codes and plugin-repository paths. Maintainers only; regular readers can skip it.
+
+**Level definitions**
 
 | Level | Meaning |
 |-------|---------|
@@ -18,7 +51,7 @@ This page lists each dialect's verification level, verified capabilities and evi
 
 The word count in the "Rendering" column is the dialect's full reserved-word sweep — every word is used as an identifier to create a column, then exercised with SELECT / INSERT / UPDATE. The "EXPLAIN" column is the verification level of that dialect's execution-plan template; per-dialect evidence is in the `ExplainSupport.kt` row of the evidence index (each entry carries its own evidence note). The "Capture" column is the verification depth of enhanced capture (bytecode agent); the three depths are explained below the table.
 
-## Support matrix
+**Support matrix (verification levels and evidence)**
 
 | Dialect | Display name | Verification level | Rendering | EXPLAIN | Capture | Evidence |
 |---------|--------------|--------------------|-----------|---------|---------|----------|
@@ -43,7 +76,7 @@ Capture depths:
 - **Weaving + smoke test**: real driver bytes passed weaving and JVM link-time verification, and a premain / attach smoke test ran on a real JVM (`matched` / `woven` counts, no host cast exception); IDE event round-trip is not verified.
 - **Byte weaving**: real driver bytes passed weaving and JVM link-time verification; no attach smoke test was run.
 
-## Known limitations
+**Known limitations (level scope)**
 
 - Level scope: "Real-engine" means the rendering suite was executed on a standalone database instance (including instances deployed from official vendor images); "Community-image" is used only for community-edition or community third-party images (not a vendor commercial instance). H2 and SQLite are embedded engines — verification runs in-process but still counts as execution on a real engine.
 - Every one of the 14 dialects has a real-engine or image-instance rendering reading, but "all dialects verified on vendor official instances" does not hold: HighGo and Vastbase are community third-party images (HighGo is V6.0.1, not the V9 line); OceanBase was verified on a community-edition (OB CE) image; the GaussDB and openGauss readings both come from GaussDB Kernel 503.1.0 (a 2023 kernel with the legacy A/B/C/PG naming, not the new naming and keyword tables of openGauss 5.x / 6.x), and the official openGauss 5.0.0 instance could not create fixture tables because the public schema lacks CREATE privilege; commercial GaussDB requires Huawei authorization or a cloud instance and is not verified.
@@ -52,7 +85,7 @@ Capture depths:
 - OceanBase `EXPLAIN` returns an OceanBase-specific ASCII plan tree (a single `Query Plan` column), which is handled as text (`58b8b5f3`, verified on a community image).
 - The dialect list is defined by `DialectRegistry.dialects` in the plugin repository — 14 entries; the settings dropdown order matches this table.
 
-## Evidence index
+**Evidence index**
 
 | Reference | Content |
 |-----------|---------|
@@ -73,5 +106,7 @@ Capture depths:
 | `20261031-1512` release notes | Plugin repository `docs/发行说明/20261031-1512-十四方言转正与动态标签补全修复-发行说明.md`: official 14-dialect release, including the GaussDB Kernel 503 and capture attach caveats |
 | `DialectH2VerificationTest` | Plugin repository `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectH2VerificationTest.kt`: TC suite and reserved-word sweep on the embedded H2 2.3.232 engine |
 | `DialectSqliteVerificationTest` | Plugin repository `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectSqliteVerificationTest.kt`: TC suite and reserved-word sweep on the embedded SQLite 3.50.3 engine |
+
+:::
 
 > Have a suggestion or hit an issue with dialect support? [Go to the feedback pool](/en/about/feedback?category=other)

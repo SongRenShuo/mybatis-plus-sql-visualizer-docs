@@ -1,4 +1,5 @@
 ---
+title: "数据库方言支持矩阵"
 description: "14 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、SQL Server、达梦、金仓、openGauss、GaussDB、OceanBase、瀚高、海量等，分页渲染与 EXPLAIN 执行计划按方言输出。"
 ---
 
@@ -6,9 +7,41 @@ description: "14 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、
 
 插件内置 14 种数据库方言，用于 Wrapper、XML / 注解动态 SQL、JPA / Hibernate 等来源的 SQL 渲染（分页、标识符引用、UPSERT、批量插入等），以及执行计划与增强捕获的方言识别。
 
-本页列出每种方言的验证等级、已验证能力与依据。等级只按实际执行过的验证标注，不做推定。
+**我的数据库能用吗？** 主流数据库基本都在支持面内——MySQL、MariaDB、PostgreSQL、Oracle、SQL Server、SQLite、H2、达梦、人大金仓、OceanBase、openGauss、GaussDB、瀚高、海量共 14 种。装上插件即按当前方言渲染 SQL，无需任何配置；整组方言已转正发行（自 v2026.10.31 起，逐版本变化见[更新日志](/about/changelog)）。
 
-## 等级定义
+## 方言速览
+
+每行一种方言，列出日常使用最常查的四件事。「起始支持版本」本页没有逐方言记录，以[更新日志](/about/changelog)为准；「EXPLAIN」列是该方言执行计划的语句形态与验证程度；「预览形态」列指执行计划在预览面板的呈现族——表格行计划（可结构化对比）、JSON 计划（可结构化对比）或文本计划（按原文呈现）。
+
+| 方言 | 起始支持版本 | 分页渲染 | EXPLAIN | 预览形态 |
+|------|--------------|----------|---------|----------|
+| MySQL | [见更新日志](/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN <sql>`，真机实证 | 表格行计划 |
+| MariaDB | [见更新日志](/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN <sql>`，真机实证 | 表格行计划 |
+| PostgreSQL | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON, VERBOSE) <sql>`，真机实证 | JSON 计划 |
+| Oracle | [见更新日志](/about/changelog) | `OFFSET n ROWS FETCH NEXT m ROWS ONLY`（无 offset 时 `FETCH FIRST m ROWS ONLY`） | `EXPLAIN PLAN FOR <sql>`，真机实证 | 文本计划 |
+| SQL Server | [见更新日志](/about/changelog) | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` | `SET STATISTICS XML`，官方镜像实证 | 文本计划 |
+| SQLite | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN QUERY PLAN <sql>`，引擎级单测 | 文本计划 |
+| H2 | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN PLAN FOR <sql>`，引擎级单测 | 文本计划 |
+| DM（达梦） | [见更新日志](/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN FOR <sql>`（19 列计划表），真机实证 | 表格行计划 |
+| KingBase（人大金仓） | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`，真机实证 | JSON 计划 |
+| OceanBase | [见更新日志](/about/changelog) | `LIMIT [offset,] count`（MySQL 模式） | `EXPLAIN <sql>`，社区镜像实证 | 文本计划 |
+| openGauss | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`，真机实证 | JSON 计划 |
+| GaussDB | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`，文档级验证 | JSON 计划 |
+| HighGo（瀚高） | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`，社区镜像实证 | JSON 计划 |
+| Vastbase（海量） | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`，社区镜像实证 | JSON 计划 |
+
+## 使用注意
+
+- SQL Server 的 `OFFSET … FETCH` 必须跟在 `ORDER BY` 之后：语句没有排序时，分页渲染会自动补 `ORDER BY (SELECT NULL)` 占位，否则产物在真机直接报语法错
+- OceanBase 的执行计划返回 OB 自有的 ASCII 计划树（单列 `Query Plan`），按文本档呈现
+- GaussDB 的执行计划目前是官方文档级验证（真机读数留账）；瀚高 / 海量的验证实例为社区第三方镜像，OceanBase 为社区版镜像
+- 增强捕获（SQL 日志的增强通道）在金仓 / 瀚高 / 海量三族尚无 attach 端到端读数，SQL 渲染与预览不受影响
+
+::: details 依据与验证记录（面向维护者）
+
+本节保留内部验证口径与证据编号——commit 短哈希、内部任务代号与插件仓内部路径，仅供维护者核对，普通用户无需阅读。
+
+**等级定义**
 
 | 等级 | 含义 |
 |------|------|
@@ -18,7 +51,7 @@ description: "14 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、
 
 表格中「渲染」列的词数，是该方言保留字集合的全量扫描词数——每个词都作为标识符建列，并执行 SELECT / INSERT / UPDATE。「EXPLAIN」列是该方言执行计划模板的验证档位，逐方言依据见依据索引中的 `ExplainSupport.kt` 行（每个表项自带 evidence 文案）。「采集」列是增强捕获（字节码 agent）的验证深度，三档含义见表格下方。
 
-## 支持矩阵
+**支持矩阵（验证等级与依据）**
 
 | 方言 | 显示名 | 验证等级 | 渲染 | EXPLAIN | 采集 | 依据 |
 |------|--------|----------|------|---------|------|------|
@@ -43,7 +76,7 @@ description: "14 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、
 - **织入 + 冒烟**：真实驱动字节织入通过 JVM 链接期校验，并在真实 JVM 上做过 premain / attach 冒烟（`matched` / `woven` 计数、宿主无强转异常）；IDE 事件回流未验证。
 - **字节织入**：真实驱动字节织入通过 JVM 链接期校验，未做 attach 冒烟。
 
-## 已知边界
+**已知边界（等级口径）**
 
 - 等级口径：「真机引擎级」指在独立数据库实例（含厂商官方镜像部署的实例）上执行渲染套件；「社区镜像级」只用于社区版或社区第三方镜像（非厂商商业版实例）。H2 / SQLite 为嵌入式引擎，验证在本进程内执行，同样按「在真实引擎上执行」计入真机引擎级。
 - 14 种方言的渲染套件都有真机或镜像实例读数，但「全部方言都在厂商官方实例上验证」不成立：瀚高、海量为社区第三方镜像（瀚高为 V6.0.1，非 V9 线）；OceanBase 的验证实例为社区版 OB CE 镜像；GaussDB 与 openGauss 的读数都取自 GaussDB Kernel 503.1.0（2023 年内核，兼容命名 A/B/C/PG，不等于 openGauss 5.x / 6.x 的新命名与关键字表），官方 openGauss 5.0.0 实例因 public schema 无 CREATE 权限未能建夹具表；GaussDB 商用版需华为授权或云实例，未验证。
@@ -52,7 +85,7 @@ description: "14 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、
 - OceanBase 的 `EXPLAIN` 返回 OB 自有的 ASCII 计划树（单列 `Query Plan`），按文本档接收（`58b8b5f3`，社区镜像实证）。
 - 方言清单以插件仓 `DialectRegistry.dialects` 为准，共 14 种；设置页下拉顺序与本表一致。
 
-## 依据索引
+**依据索引**
 
 | 标识 | 内容 |
 |------|------|
@@ -73,5 +106,7 @@ description: "14 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、
 | `20261031-1512` 发行说明 | 插件仓 `docs/发行说明/20261031-1512-十四方言转正与动态标签补全修复-发行说明.md`：十四方言转正版，含 GaussDB Kernel 503 与采集 attach 未闭环的口径 |
 | `DialectH2VerificationTest` | 插件仓 `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectH2VerificationTest.kt`：H2 2.3.232 嵌入式引擎执行 TC 套件与保留字扫描 |
 | `DialectSqliteVerificationTest` | 插件仓 `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectSqliteVerificationTest.kt`：SQLite 3.50.3 嵌入式引擎执行 TC 套件与保留字扫描 |
+
+:::
 
 > 对方言支持有建议或遇到问题？[直达需求反馈池](/about/feedback?category=other)
