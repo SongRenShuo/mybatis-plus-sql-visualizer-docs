@@ -41,9 +41,9 @@ mapper XML 内语句的语法高亮（关键字 / 字符串 / 注释着色、`#{
 
 支持。`MPJLambdaWrapper` 与 `MPJQueryWrapper` 联表预览、以及 MPJ 形态的 SQL→Java 反向转换均已实现。反向转换选择 MPJ 形态时，项目需引入 [`mybatis-plus-join`](https://mybatis-plus-join.github.io/) 依赖（1.5.6+）。
 
-## 为什么 JPA 的 findAllById 没有预览？
+## JPA 的 findAllById 有预览吗？
 
-JPA 派生查询的第一批尚未包含 `findAllById` 这类 IN 展开形态，暂无法生成预览，后续版本补齐，已列入[开发路线](../about/roadmap.md)。
+有。`findAllById` 会展开为主键 `IN (?, ?, ...)` 集合查询，与其他派生查询一样直接生成预览，详见[JPA / Hibernate SQL 预览](../features/jpa-preview.md)的派生查询支持列表。
 
 ## 预览 SQL 与实际运行 SQL 有差异吗？
 

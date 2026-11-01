@@ -41,9 +41,9 @@ No. A data source is a prerequisite for **execution-class** features: running SQ
 
 Yes. `MPJLambdaWrapper` and `MPJQueryWrapper` JOIN preview, as well as MPJ-form SQL → Java reverse conversion, are all implemented. When selecting the MPJ form for reverse conversion, the project needs the [`mybatis-plus-join`](https://mybatis-plus-join.github.io/) dependency (1.5.6+).
 
-## Why doesn't `findAllById` get a preview?
+## Does `findAllById` get a preview?
 
-The first batch of JPA derived queries doesn't include `findAllById`-style IN expansion yet, so no preview can be generated for now. It will be filled in a later version — already listed on the [roadmap](../about/roadmap.md).
+Yes. `findAllById` expands into a primary-key `IN (?, ?, ...)` collection query and generates a preview like any other derived query — see the derived-query support table in [JPA / Hibernate SQL Preview](/en/features/jpa-preview).
 
 ## Is there a difference between preview SQL and actual runtime SQL?
 
