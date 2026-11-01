@@ -1,3 +1,7 @@
+---
+description: "Mapper 接口 @Select / @Update / @Delete / @Insert 注解 SQL 预览——注解行点 gutter 图标即出 SQL，含 <script> 动态 SQL 与 Provider 注解。"
+---
+
 # 注解 SQL 预览
 <GifPlayer src="/demo/annotation-preview.gif" alt="注解 SQL 预览演示" />
 

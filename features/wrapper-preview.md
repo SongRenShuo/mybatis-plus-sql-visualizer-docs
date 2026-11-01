@@ -1,3 +1,7 @@
+---
+description: "查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL——不启动项目、不连数据库，静态解析 Wrapper 链即时预览，参数回填、14 种方言分页渲染。"
+---
+
 # Wrapper → SQL 预览
 
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper → SQL 预览演示" />

@@ -1,3 +1,7 @@
+---
+description: "14-dialect matrix: MySQL, PostgreSQL, Oracle, SQL Server, DM, KingBase, GaussDB, OceanBase, openGauss and more — per-dialect pagination rendering and EXPLAIN."
+---
+
 # Database Dialect Support Matrix
 
 The plugin ships with 14 SQL dialects, used for rendering SQL from Wrappers, XML / annotation dynamic SQL, JPA / Hibernate and other sources (pagination, identifier quoting, UPSERT, batch inserts), as well as dialect detection for execution plans and enhanced capture.

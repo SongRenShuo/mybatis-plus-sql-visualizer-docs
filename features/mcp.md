@@ -1,3 +1,7 @@
+---
+description: "MCP Server 把 SQL 能力交给 AI Agent——11 个只读 sqlv_* 工具：渲染可执行 SQL、还原日志、查表结构、EXPLAIN 执行计划、回滚预案与性能建议。"
+---
+
 # MCP Server：给 AI Agent 的 SQL 工具
 
 插件向 IDEA 内置 MCP Server 注册了十一个工具，让 [Claude Code](https://code.claude.com/docs/en/overview)、[Cursor](https://cursor.com/)、[JetBrains AI Assistant](https://www.jetbrains.com/ai-ides/)、[Codex](https://github.com/openai/codex)、[ZCode](https://zcode.z.ai/cn)、[DeepSeek Harness](https://www.deepseek.com/harness/) 这类外部 agent 能直接调用插件的 SQL 能力：渲染可执行 SQL、查表结构、拿执行计划。你在 IDE 里照常写代码，agent 在旁边干活，两边互不打扰。

@@ -1,3 +1,7 @@
+---
+description: "Generate INSERT and CRUD SQL from an entity class or table — right-click to get SELECT / INSERT / UPDATE / DELETE, aligned with MP runtime behavior."
+---
+
 # CRUD SQL Generation
 
 <GifPlayer src="/demo/crud-sql.gif" alt="CRUD SQL Generation Demo" />

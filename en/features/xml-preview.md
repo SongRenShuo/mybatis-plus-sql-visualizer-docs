@@ -1,3 +1,7 @@
+---
+description: "MyBatis XML dynamic SQL preview (foreach / if / choose result) — mapper XML rendered to executable SQL per MyBatis semantics; HQL and JPQL supported too."
+---
+
 # XML / HQL Dynamic SQL Preview
 
 <GifPlayer src="/demo/xml-preview.gif" alt="XML Dynamic SQL Preview Demo" />

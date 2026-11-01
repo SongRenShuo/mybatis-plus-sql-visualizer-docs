@@ -1,3 +1,7 @@
+---
+description: "See the SQL your MyBatis-Plus Wrapper / LambdaQueryWrapper generates — static preview without launching the app or a database, 14-dialect pagination."
+---
+
 # Wrapper → SQL Preview
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper → SQL Preview Demo" />
 

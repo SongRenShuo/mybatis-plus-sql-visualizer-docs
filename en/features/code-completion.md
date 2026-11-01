@@ -1,3 +1,7 @@
+---
+description: "SQL completion in mapper XML and Java SQL annotations — Ctrl+Space for tables, columns, #{} parameters, dynamic tags; real DB columns with a data source."
+---
+
 # SQL Code Completion
 <GifPlayer src="/demo/code-completion.gif" alt="SQL Code Completion Demo" />
 

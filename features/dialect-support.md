@@ -1,3 +1,7 @@
+---
+description: "14 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、SQL Server、达梦、金仓、openGauss、GaussDB、OceanBase、瀚高、海量等，分页渲染与 EXPLAIN 执行计划按方言输出。"
+---
+
 # 数据库方言支持矩阵
 
 插件内置 14 种数据库方言，用于 Wrapper、XML / 注解动态 SQL、JPA / Hibernate 等来源的 SQL 渲染（分页、标识符引用、UPSERT、批量插入等），以及执行计划与增强捕获的方言识别。

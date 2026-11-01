@@ -1,3 +1,7 @@
+---
+description: "根据实体类或表生成 INSERT 语句与完整 CRUD SQL——右键一键生成 SELECT / INSERT / UPDATE / DELETE 并进预览，自增主键、逻辑删除、乐观锁列对齐 MyBatis-Plus 运行时行为。"
+---
+
 # CRUD SQL 生成
 
 <GifPlayer src="/demo/crud-sql.gif" alt="CRUD SQL 生成演示" />

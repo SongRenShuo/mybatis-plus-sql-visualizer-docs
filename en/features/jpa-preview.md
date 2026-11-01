@@ -1,3 +1,7 @@
+---
+description: "Preview the SQL JPA / Hibernate generates — the alternative when show_sql only prints question marks. Repository methods, JPQL / HQL, Criteria, .hbm.xml."
+---
+
 # JPA / Hibernate SQL Preview
 
 <GifPlayer src="/demo/jpa-preview.gif" alt="JPA / Hibernate SQL Preview Demo" />
