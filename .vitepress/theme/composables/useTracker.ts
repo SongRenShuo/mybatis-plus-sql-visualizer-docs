@@ -55,7 +55,7 @@ export function trackDownload(target: DownloadTarget): void {
   }
 }
 
-/** 归一化路由 path：去 hash/query、去 .html 后缀（本站未开 cleanUrls，VitePress 路由事件带 .html）、去尾斜杠 */
+/** 归一化路由 path：去 hash/query、去 .html 后缀兜底（本站已开 cleanUrls，正常路由不带 .html）、去尾斜杠 */
 function cleanPath(route: string): string {
   let path = route.split(/[?#]/)[0]
   if (path.endsWith('.html')) path = path.slice(0, -5)
