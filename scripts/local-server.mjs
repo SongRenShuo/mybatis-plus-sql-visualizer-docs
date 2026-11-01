@@ -36,7 +36,7 @@ const server = createServer(async (req, res) => {
         'https://plugins.jetbrains.com/api/plugins/33633/updates',
         {
           headers: {
-            'User-Agent': 'MyBatis-Plus-SQL-Visualizer-Docs/1.0',
+            'User-Agent': 'SQL-Visualizer-Docs/1.0',
             'Accept': 'application/json',
           },
         }
