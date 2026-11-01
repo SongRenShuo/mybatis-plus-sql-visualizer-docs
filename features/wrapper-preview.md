@@ -207,7 +207,6 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 | MySQL / MariaDB | `EXPLAIN <sql>`（原生表格行） | 真机通过 |
 | PostgreSQL | `EXPLAIN (FORMAT JSON, VERBOSE) <sql>` | 真机通过 |
 | KingBase（金仓） | `EXPLAIN (FORMAT JSON) <sql>` | 真机通过 |
-| DM（达梦） | `EXPLAIN FOR <sql>`（原生计划表，19 列） | 真机通过（DM8 8.1.3.12，裸 JDBC 通道 2026-10-31） |
 | H2 | `EXPLAIN PLAN FOR <sql>` | 引擎级单测 |
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | 引擎级单测 |
 | OceanBase（MySQL 模式） | `EXPLAIN <sql>`（文本计划树，非表格行） | 社区镜像引擎级实证（OB CE 4.3.5） |
@@ -219,8 +218,6 @@ IntelliJ IDEA Ultimate + Database 插件环境下，预览后自动创建临时 
 | SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | 真机通过（官方镜像 SQL Server 2022） |
 
 Oracle 的计划行落在会话级 `PLAN_TABLE` 里、语句本身返回 0 行，面板会给出指引：在同一连接的数据库端另执行 `SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY)` 查看。SQL Server 的计划 XML 是语句执行后的附加结果集，在原生控制台的多结果页签里可见。
-
-达梦要注意一点：`EXPLAIN FOR` 才是拿计划的写法，**光写 `EXPLAIN` 在 DM8 上不返回任何结果集**（实测：查询列数为 0，也没有第二个结果集），看起来就像「计划正文为空」。所以本表给的是 `EXPLAIN FOR`。它返回的是一张 19 列的结构化计划表（`PLAN_ID` / `LEVEL_ID` / `OPERATION` / `TAB_NAME` / `IDX_NAME` / `SCAN_TYPE` / `ROW_NUMS` / `BYTES` / `COST` / `CPU_COST` / `IO_COST` / `FILTER` / `JOIN_COND` / `ADVICE_INFO` 等），因此达梦与 MySQL 表格族一样能进结构化计划视图、能跨次对比、也能落历史。
 
 「执行计划」与「执行 SQL」一样依赖已配置的数据源（Ultimate 的 Database 工具窗），未配置时会提示先配置。
 

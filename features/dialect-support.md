@@ -22,7 +22,7 @@ description: "14 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、
 | SQL Server | [见更新日志](/about/changelog) | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` | `SET STATISTICS XML`，官方镜像实证 | 文本计划 |
 | SQLite | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN QUERY PLAN <sql>`，引擎级单测 | 文本计划 |
 | H2 | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN PLAN FOR <sql>`，引擎级单测 | 文本计划 |
-| DM（达梦） | [见更新日志](/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN FOR <sql>`（19 列计划表），真机实证 | 表格行计划 |
+| DM（达梦） | [见更新日志](/about/changelog) | `LIMIT [offset,] count` | — | 表格行计划 |
 | KingBase（人大金仓） | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`，真机实证 | JSON 计划 |
 | OceanBase | [见更新日志](/about/changelog) | `LIMIT [offset,] count`（MySQL 模式） | `EXPLAIN <sql>`，社区镜像实证 | 文本计划 |
 | openGauss | [见更新日志](/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`，真机实证 | JSON 计划 |

@@ -206,7 +206,6 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 | MySQL / MariaDB | `EXPLAIN <sql>` (native table rows) | verified on real DB |
 | PostgreSQL | `EXPLAIN (FORMAT JSON, VERBOSE) <sql>` | verified on real DB |
 | KingBase | `EXPLAIN (FORMAT JSON) <sql>` | verified on real DB |
-| DM (Dameng) | `EXPLAIN FOR <sql>` (native 19-column plan table) | verified on real DB (DM8 8.1.3.12, raw JDBC, 2026-10-31) |
 | H2 | `EXPLAIN PLAN FOR <sql>` | engine-level unit tests |
 | SQLite | `EXPLAIN QUERY PLAN <sql>` | engine-level unit tests |
 | OceanBase (MySQL mode) | `EXPLAIN <sql>` (text plan tree, not table rows) | community-image engine probe (OB CE 4.3.5) |
@@ -218,8 +217,6 @@ The "EXPLAIN" button in the preview panel's button row: pick a data source, clic
 | SQL Server | `SET STATISTICS XML ON; <sql>; SET STATISTICS XML OFF` | verified on real DB (official SQL Server 2022 image) |
 
 Oracle's plan rows land in the session-level `PLAN_TABLE` while the statement itself returns 0 rows, so the panel points you to run `SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY)` on the database side over the same connection. SQL Server returns the plan XML as an additional result set after the statement, visible in the native console's extra result tabs.
-
-One thing to know about Dameng: `EXPLAIN FOR` is the form that returns a plan — a bare `EXPLAIN` returns **no result set at all** on DM8 (zero columns, and no second result set either), which looks exactly like "the plan body is empty". Hence this table uses `EXPLAIN FOR`. What comes back is a 19-column structured plan table (`PLAN_ID` / `LEVEL_ID` / `OPERATION` / `TAB_NAME` / `IDX_NAME` / `SCAN_TYPE` / `ROW_NUMS` / `BYTES` / `COST` / `CPU_COST` / `IO_COST` / `FILTER` / `JOIN_COND` / `ADVICE_INFO` and more), so DM behaves like the MySQL table family: it can feed the structured plan view, be compared across runs, and be kept in history.
 
 Like "Execute SQL", EXPLAIN requires a configured data source (Ultimate's Database tool window); without one you'll be asked to configure it first.
 

@@ -59,7 +59,7 @@
 :::
 
 ::: details 转换与补全（8 项）
-- [x] SQL → Java 反向转换（四种 Wrapper 形态，多表 JOIN）
+- [x] SQL → Java 反向转换（五种默认形态，多表 JOIN）
 - [x] SQL → Java 能力扩展与方言宽容（分组 / 聚合 / 联合 / 返回类型自由输入）
 - [x] SQL 代码补全（表列名 / 注释 / 参数名）
 - [x] Wrapper 方法链智能补全

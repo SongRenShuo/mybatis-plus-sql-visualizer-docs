@@ -22,7 +22,7 @@ One row per dialect with the four things you look up most often. "First supporte
 | SQL Server | [See changelog](/en/about/changelog) | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` | `SET STATISTICS XML`, verified on the official image | Text plan |
 | SQLite | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN QUERY PLAN <sql>`, engine-level unit test | Text plan |
 | H2 | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN PLAN FOR <sql>`, engine-level unit test | Text plan |
-| DM (Dameng) | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN FOR <sql>` (19-column plan table), verified on a real engine | Table-row plan |
+| DM (Dameng) | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` | — | Table-row plan |
 | KingBase | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`, verified on a real engine | JSON plan |
 | OceanBase | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` (MySQL mode) | `EXPLAIN <sql>`, verified on a community image | Text plan |
 | openGauss | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON) <sql>`, verified on a real engine | JSON plan |
