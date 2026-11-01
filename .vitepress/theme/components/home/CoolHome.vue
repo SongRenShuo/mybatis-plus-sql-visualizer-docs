@@ -1,6 +1,7 @@
 <script setup>
 import NavHeader from './NavHeader.vue'
 import HeroSection from './HeroSection.vue'
+import HeroSteps from './HeroSteps.vue'
 import SocialProof from './SocialProof.vue'
 import FeatureAlternate from './FeatureAlternate.vue'
 import DocsShowcase from './DocsShowcase.vue'
@@ -25,6 +26,7 @@ useReveal()
     <NavHeader />
     <main>
       <HeroSection />
+      <HeroSteps />
       <SocialProof />
       <FeatureAlternate />
       <DocsShowcase />

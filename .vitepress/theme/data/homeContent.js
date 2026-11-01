@@ -54,6 +54,33 @@ export const homeContent = {
       codeSqlLabel: '实时预览 · 生成的 SQL',
     },
 
+    /**
+     * 「安装即见效」三步区块（Hero 之后、技术栈跑马灯之前）：快速上手路径。
+     * items 与英文侧按下标一一对应；items[0].link 为 Marketplace 安装页外链。
+     * 配图固定引用 public/demo/wrapper-preview.gif（组件内直引）。
+     */
+    steps: {
+      eyebrow: 'Quick Start',
+      title: '安装即见效',
+      description: '三步：安装插件，打开项目，光标停好即见最终 SQL。',
+      items: [
+        {
+          title: '安装插件',
+          description: '从 JetBrains Marketplace 安装 SQL Visualizer。',
+          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+        },
+        {
+          title: '打开项目',
+          description: '光标停在任何 Wrapper 链或 Mapper 方法上。',
+        },
+        {
+          title: '立即看到最终 SQL',
+          description: '无需启动项目，预览面板直接给出最终 SQL。',
+        },
+      ],
+      imageAlt: '演示动图：Wrapper 链实时预览出最终 SQL',
+    },
+
     socialProof: {
       caption: '支持多种 SQL 调试场景',
       items: [
@@ -320,6 +347,7 @@ export const homeContent = {
       label: '页内章节导航',
       items: [
         { id: 'sec-tech', label: '技术栈' },
+        { id: 'sec-steps', label: '快速上手' },
         { id: 'sec-capability', label: '核心能力' },
         { id: 'sec-preview', label: '预览能力' },
         { id: 'sec-features', label: '更多特性' },
@@ -375,6 +403,32 @@ export const homeContent = {
       statLabels: ['Latest version', 'IDEA support', 'License'],
       codeJavaLabel: 'UserService.java',
       codeSqlLabel: 'Live preview · generated SQL',
+    },
+
+    /**
+     * 「安装即见效」三步区块：与 zh.steps 按下标一一对应，缺键会退回中文。
+     */
+    steps: {
+      eyebrow: 'Quick Start',
+      title: 'Works right after install',
+      description:
+        'Three steps: install the plugin, open your project, rest the caret — the final SQL appears.',
+      items: [
+        {
+          title: 'Install the plugin',
+          description: 'Install SQL Visualizer from JetBrains Marketplace.',
+          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+        },
+        {
+          title: 'Open your project',
+          description: 'Rest the caret on any Wrapper chain or mapper method.',
+        },
+        {
+          title: 'See the final SQL instantly',
+          description: 'No project launch — the preview panel shows the final SQL directly.',
+        },
+      ],
+      imageAlt: 'Demo animation: a Wrapper chain previewed live as the final SQL',
     },
 
     socialProof: {
@@ -693,6 +747,7 @@ export const homeContent = {
       label: 'On-page section navigation',
       items: [
         { id: 'sec-tech', label: 'Stack' },
+        { id: 'sec-steps', label: 'Quick start' },
         { id: 'sec-capability', label: 'Capabilities' },
         { id: 'sec-preview', label: 'Preview' },
         { id: 'sec-features', label: 'More Features' },
