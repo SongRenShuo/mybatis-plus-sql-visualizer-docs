@@ -2,6 +2,15 @@
 
 3 分钟上手 SQL Visualizer。
 
+## 我想做什么
+
+按目标直达，每条最多三步见效：
+
+1. **预览 Wrapper 链** — 装好插件（见下文「安装插件」），光标落在 Wrapper 链的变量声明行，点左侧 gutter 图标或按 <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>，弹窗即出 SQL。本页下方就是完整走法，深入用法见 [Wrapper → SQL 预览](../features/wrapper-preview.md)
+2. **预览 XML 动态 SQL** — 打开 mapper XML，点 `<select>` 等 SQL 标签行左侧的 gutter 图标。详见 [XML / HQL 动态 SQL 预览](../features/xml-preview.md)
+3. **预览 JPA / HQL** — 打开 Repository 方法、`@Query` 注解或 HQL 字符串所在行，点 gutter 图标。详见 [JPA / Hibernate SQL 预览](../features/jpa-preview.md)
+4. **看运行期 SQL 日志** — 项目启动后打开「SQL 日志」工具窗口，运行中的 SQL 带着真实参数入列。详见 [SQL 日志工具窗口](../features/sql-log.md)
+
 ## 安装插件
 
 <Steps :title="''">

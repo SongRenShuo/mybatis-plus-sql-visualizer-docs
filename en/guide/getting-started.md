@@ -2,6 +2,15 @@
 
 Get up and running with SQL Visualizer in 3 minutes.
 
+## What do you want to do?
+
+Jump straight to your goal — each path pays off in at most three steps:
+
+1. **Preview a Wrapper chain** — install the plugin (see "Installation" below), put the caret on the Wrapper chain's variable declaration line, click the gutter icon or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>, and the popup shows the SQL. The full walkthrough is right below on this page; for advanced usage see [Wrapper → SQL Preview](../features/wrapper-preview.md)
+2. **Preview XML dynamic SQL** — open a mapper XML and click the gutter icon next to a `<select>` (or other SQL statement) tag line. See [XML / HQL Dynamic SQL Preview](../features/xml-preview.md)
+3. **Preview JPA / HQL** — open the line holding a Repository method, a `@Query` annotation or an HQL string and click the gutter icon. See [JPA / Hibernate SQL Preview](../features/jpa-preview.md)
+4. **Watch runtime SQL logs** — with your project running, open the SQL Log tool window and captured SQL arrives with real parameters. See [SQL Log Tool Window](../features/sql-log.md)
+
 ## Installation
 
 <Steps :title="''">
