@@ -118,7 +118,7 @@ export default defineConfig({
         'Call-stack popup with click-a-frame-to-jump',
         'JPA / Hibernate derived query and CRUD preview',
         'MPJ join query live preview',
-        '11-dialect pagination rendering'
+        '14-dialect pagination rendering'
       ],
       'offers': {
         '@type': 'Offer',

@@ -10,7 +10,6 @@ import Steps from './components/Steps.vue'
 import CodeCompare from './components/CodeCompare.vue'
 import FeatureCards from './components/FeatureCards.vue'
 import CodeTabs from './components/CodeTabs.vue'
-import BadgeBar from './components/BadgeBar.vue'
 import DocFooterBar from './components/DocFooterBar.vue'
 import SiteNotice from './components/SiteNotice.vue'
 import NavBarGitee from './components/NavBarGitee.vue'
@@ -34,7 +33,6 @@ export default {
   Layout: () => {
     return h(DefaultTheme.Layout, null, {
       'doc-footer-before': () => h(DocFooterBar),
-      'home-hero-info-after': () => h(BadgeBar),
       'layout-bottom': () => [h(SiteNotice), h(BackToTop)],
       'nav-bar-content-after': () => [h(NavBarGitee), h(PagefindSearch)],
       'nav-screen-content-after': () => h(PagefindSearch, { compact: true }),

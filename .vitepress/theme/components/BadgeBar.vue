@@ -26,9 +26,9 @@
         alt="Downloads"
       />
     </a>
-    <!-- 方言支持（静态；11 种 = 9 + OceanBase/openGauss，T-DialectXcFamily） -->
+    <!-- 方言支持（静态；14 种口径与 dialect-support 矩阵页一致） -->
     <img
-      src="https://img.shields.io/badge/dialects-11-3b82f6?style=flat"
+      src="https://img.shields.io/badge/dialects-14-3b82f6?style=flat"
       alt="Dialects"
     />
     <!-- 协议 -->
