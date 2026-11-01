@@ -206,10 +206,10 @@ export default defineConfig({
               { text: 'XML / HQL 动态 SQL 预览', link: '/features/xml-preview' },
               { text: 'JPA / Hibernate SQL 预览', link: '/features/jpa-preview' },
               { text: '注解 SQL 预览', link: '/features/annotation-preview' },
-              { text: 'SQL → Java 反向转换', link: '/features/sql-to-java' },
-              { text: 'SQL 日志工具窗口', link: '/features/sql-log' },
+              { text: 'SQL 转 QueryWrapper（Wrapper 反向生成 Java）', link: '/features/sql-to-java' },
+              { text: 'MyBatis 日志转完整 SQL（问号自动替换参数）', link: '/features/sql-log' },
               { text: '批量操作参数面板', link: '/features/batch-operation' },
-              { text: 'CRUD SQL 生成', link: '/features/crud-sql' },
+              { text: '根据实体类 / 表生成 INSERT 语句', link: '/features/crud-sql' },
               { text: '数据库方言支持矩阵', link: '/features/dialect-support' },
               { text: 'SQL 代码补全', link: '/features/code-completion' },
               { text: 'MCP Server 工具', link: '/features/mcp' }
@@ -224,7 +224,9 @@ export default defineConfig({
               { text: '版本兼容', link: '/guide/compatibility' },
               { text: '内网与离线环境', link: '/guide/offline' },
               { text: '为什么选择 SQL Visualizer', link: '/guide/comparison' },
-              { text: '常见问题 FAQ', link: '/guide/faq' }
+              { text: '常见问题 FAQ', link: '/guide/faq' },
+              { text: 'MyBatis 日志里的问号怎么变成真实参数', link: '/guide/mybatis-log-params' },
+              { text: '不用 p6spy，怎么看到带真实参数的完整 SQL', link: '/guide/without-p6spy' }
             ]
           },
           '/about/': {
@@ -235,7 +237,8 @@ export default defineConfig({
               { text: '开发路线', link: '/about/roadmap' },
               { text: '需求反馈池', link: '/about/feedback' },
               { text: 'Bug 悬赏', link: '/about/bounty' },
-              { text: '友情推荐', link: '/about/friends' }
+              { text: '友情推荐', link: '/about/friends' },
+              { text: '隐私说明', link: '/about/privacy' }
             ]
           }
         },
@@ -291,10 +294,10 @@ export default defineConfig({
               { text: 'XML / HQL Dynamic SQL Preview', link: '/en/features/xml-preview' },
               { text: 'JPA / Hibernate SQL Preview', link: '/en/features/jpa-preview' },
               { text: 'Annotation SQL Preview', link: '/en/features/annotation-preview' },
-              { text: 'SQL → Java Reverse Conversion', link: '/en/features/sql-to-java' },
-              { text: 'SQL Log Tool Window', link: '/en/features/sql-log' },
+              { text: 'SQL to QueryWrapper (Reverse-Generate Wrapper Java Code)', link: '/en/features/sql-to-java' },
+              { text: 'MyBatis Log to Real SQL (Auto Parameter Substitution)', link: '/en/features/sql-log' },
               { text: 'Batch Operation Panel', link: '/en/features/batch-operation' },
-              { text: 'CRUD SQL Generation', link: '/en/features/crud-sql' },
+              { text: 'Generate INSERT Statements from Entity Classes / Tables', link: '/en/features/crud-sql' },
               { text: 'Dialect Support Matrix', link: '/en/features/dialect-support' },
               { text: 'SQL Code Completion', link: '/en/features/code-completion' },
               { text: 'MCP Server Tools', link: '/en/features/mcp' }
@@ -309,7 +312,9 @@ export default defineConfig({
               { text: 'Compatibility', link: '/en/guide/compatibility' },
               { text: 'Offline & Intranet', link: '/en/guide/offline' },
               { text: 'Why SQL Visualizer', link: '/en/guide/comparison' },
-              { text: 'FAQ', link: '/en/guide/faq' }
+              { text: 'FAQ', link: '/en/guide/faq' },
+              { text: 'Turning the ? marks in MyBatis logs into real parameters', link: '/en/guide/mybatis-log-params' },
+              { text: 'Seeing complete SQL with real parameters without p6spy', link: '/en/guide/without-p6spy' }
             ]
           },
           '/en/about/': {
@@ -320,7 +325,8 @@ export default defineConfig({
               { text: 'Roadmap', link: '/en/about/roadmap' },
               { text: 'Feedback Pool', link: '/en/about/feedback' },
               { text: 'Bug Bounty', link: '/en/about/bounty' },
-              { text: 'Friend Recommendations', link: '/en/about/friends' }
+              { text: 'Friend Recommendations', link: '/en/about/friends' },
+              { text: 'Privacy', link: '/en/about/privacy' }
             ]
           }
         },
