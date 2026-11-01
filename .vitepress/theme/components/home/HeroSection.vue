@@ -35,11 +35,11 @@ const { c, isEnglish } = useHomeContent()
               <span>{{ c.hero.install }}</span>
             </a>
             <a
-              href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases"
+              :href="c.hero.offlineHref"
               target="_blank"
               rel="noopener noreferrer"
               class="btn-large btn-outline"
-              @click="trackDownload('gitee-releases')"
+              @click="trackDownload(c.hero.offlineTrack)"
             >
               <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                 <path d="M12 3v10m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>

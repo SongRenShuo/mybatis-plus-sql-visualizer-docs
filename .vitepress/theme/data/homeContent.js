@@ -48,6 +48,8 @@ export const homeContent = {
         'IntelliJ IDEA 插件：写代码时就看见最终 SQL——Wrapper 链、XML/注解/HQL 动态 SQL（含 MPJ 联表 JOIN）实时预览；跑起来后真实参数与耗时自动捕获，慢查询标红、EXPLAIN 看计划、一键跳回源码；SQL 也能反向转成 Java 代码。不启服务、不翻日志、不手拼参数。',
       install: '在 Marketplace 中安装',
       offline: '下载离线包',
+      offlineHref: 'https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases',
+      offlineTrack: 'gitee-releases',
       highlights: ['更新无需重启 IDEA', '内网环境离线可用', '不发使用数据 · 代码不出本机'],
       statLabels: ['最新版本', 'IDEA 支持', '开源协议'],
       installPath: 'Settings → Plugins → Marketplace 搜索 SQL Visualizer',
@@ -407,6 +409,8 @@ export const homeContent = {
         'IntelliJ IDEA plugin: see the exact SQL while you write it — Wrapper chains, XML/annotation/HQL dynamic SQL (incl. MPJ joins) previewed live. Once it runs, real parameters and durations are captured automatically with slow-query highlighting, EXPLAIN plans and one-click jumps back to the source line; SQL also converts back into Java code. No server to start, no logs to dig through, no parameters to hand-assemble.',
       install: 'Install from Marketplace',
       offline: 'Download offline package',
+      offlineHref: 'https://github.com/SongRenShuo/mybatis-plus-sql-visualizer/releases',
+      offlineTrack: 'github-releases',
       highlights: [
         'Updates without restarting IDEA',
         'Works offline on intranets',

@@ -67,7 +67,7 @@ export default defineConfig({
 
   // docs/ 为内部文档（开发计划、开发笔记、发行说明、验收文档、SQL 文件、memory-archive），
   // 不面向访客：直接从构建源排除，既不出页面，也不进 sitemap 与搜索索引。
-  srcExclude: ['docs/**'],
+  srcExclude: ['docs/**', 'README.md'],
 
   title: 'SQL Visualizer',
   description: siteDescription,

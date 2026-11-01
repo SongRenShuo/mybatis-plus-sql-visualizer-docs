@@ -1,8 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useData } from 'vitepress'
 import { useHomeContent } from '../../composables/useHomeContent'
 
 const { c, localePath } = useHomeContent()
+const { lang } = useData()
+const mediaAlt = lang.value.startsWith('zh') ? 'Wrapper → SQL 预览演示' : 'Wrapper → SQL preview demo'
 
 /** T9c：poster 常驻底层，GIF 就绪后淡入覆盖；失败摘除 GIF 叠层，poster 永久兜底 */
 const gifReady = ref(false)
@@ -74,14 +77,14 @@ onMounted(() => {
         <div class="docs-showcase-video-wrap mp-reveal">
           <img
             src="/demo/wrapper-preview.png"
-            alt="Wrapper → SQL 预览演示"
+            :alt="mediaAlt"
             class="docs-showcase-video"
           />
           <img
             v-if="!gifError"
             ref="gifImg"
             src="/demo/wrapper-preview.gif"
-            alt="Wrapper → SQL 预览演示"
+            :alt="mediaAlt"
             loading="lazy"
             class="docs-showcase-video docs-showcase-video--gif"
             :class="{ 'docs-showcase-video--gif-ready': gifReady }"

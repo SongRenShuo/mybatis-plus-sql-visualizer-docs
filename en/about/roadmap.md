@@ -1,8 +1,4 @@
 ---
-prev:
-  text: Changelog
-  link: /en/about/changelog
-next: false
 ---
 
 # Roadmap
@@ -63,7 +59,7 @@ Completed capabilities are grouped by module — click a title to expand.
 :::
 
 ::: details Conversion & Completion (8)
-- [x] SQL → Java reverse conversion (five forms, multi-table JOIN)
+- [x] SQL → Java reverse conversion (four Wrapper forms, multi-table JOIN)
 - [x] SQL → Java coverage & dialect tolerance (grouping / aggregation / union / free-form return type)
 - [x] SQL code completion (table columns / comments / parameter names)
 - [x] Wrapper method-chain smart completion

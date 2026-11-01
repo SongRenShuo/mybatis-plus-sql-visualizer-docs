@@ -29,7 +29,7 @@ function report(path: string, referrer: string | null): void {
  * 下载目标白名单。取值即上报的 q，后端原样写入 ext 列，
  * 后台按 `event_type='download' AND ext=<值>` 聚合——拼错的字符串会变成脏 ext，故运行时也要挡。
  */
-const DOWNLOAD_TARGETS = ['marketplace', 'gitee-releases'] as const
+const DOWNLOAD_TARGETS = ['marketplace', 'gitee-releases', 'github-releases', 'pricing'] as const
 
 export type DownloadTarget = (typeof DOWNLOAD_TARGETS)[number]
 
