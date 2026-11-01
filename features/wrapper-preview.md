@@ -1,4 +1,5 @@
 ---
+title: "Wrapper → SQL 预览"
 description: "查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL——不启动项目、不连数据库，静态解析 Wrapper 链即时预览，参数回填、14 种方言分页渲染。"
 ---
 
@@ -6,7 +7,7 @@ description: "查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL—�
 
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper → SQL 预览演示" />
 
-把 Java 源码中的 MyBatis-Plus / MPJ 调用**静态解析为可预览 SQL**——无需启动项目、无需连接数据库。
+查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL——把 Java 源码中的调用**静态解析为可预览 SQL**，无需启动项目、无需连接数据库。
 
 ## 触发方式
 

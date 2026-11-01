@@ -1,11 +1,12 @@
 ---
+title: "Wrapper → SQL Preview"
 description: "See the SQL your MyBatis-Plus Wrapper / LambdaQueryWrapper generates — static preview without launching the app or a database, 14-dialect pagination."
 ---
 
 # Wrapper → SQL Preview
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper → SQL Preview Demo" />
 
-Statically parse MyBatis-Plus / MPJ calls in Java source code into previewable SQL — no need to launch the project or connect to a database.
+See the SQL your MyBatis-Plus Wrapper / LambdaQueryWrapper generates — calls in Java source are **statically parsed into previewable SQL**, no need to launch the project or connect to a database.
 
 ## Trigger Methods
 
