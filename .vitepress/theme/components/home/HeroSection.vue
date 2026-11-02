@@ -171,10 +171,22 @@ const { c, isEnglish } = useHomeContent()
   min-width: 0;
 }
 
+/* 三级信息的间距节奏（T5）：原先统一 1.5rem，三级挤成等权。
+   现在按「一级 → 二级 → 三级」把间距拉开成递增——CTA 与标签同属行动区，
+   留 1.75rem；标签到统计数据跨层，留 2.5rem。
+   标题与简介之间保持原值的 1.5rem：那两级不属于本任务的三级信息。 */
 .hero-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.hero-content > .btn-group {
+  margin-top: 0.25rem;
+}
+
+.hero-content > .hero-stats {
+  margin-top: 1rem;
 }
 
 .hero-title {
@@ -206,6 +218,9 @@ const { c, isEnglish } = useHomeContent()
   margin: 0;
 }
 
+/* 一级（T5）：CTA 组是三级的最高层，尺寸上先拉开——
+   字重/内边距比原值各提一档，让它与下方标签、数据明显不同级。
+   宽度仍由文字决定（不撑满），换行时两个按钮各自成行。 */
 .btn-group {
   display: flex;
   flex-wrap: wrap;
@@ -213,14 +228,14 @@ const { c, isEnglish } = useHomeContent()
 }
 
 .btn-large {
-  padding: 0.75rem 1.5rem;
+  padding: 0.875rem 1.75rem;
   border-radius: 9999px;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.3s;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   text-decoration: none;
   border: none;
   cursor: pointer;
@@ -232,6 +247,10 @@ const { c, isEnglish } = useHomeContent()
   flex-shrink: 0;
 }
 
+/* 主按钮：实心 + 品牌色。原 hover 只加了一层与亮色底几乎不可辨的阴影
+   （0 20px 25px -5px rgba(0,0,0,0.1)），观感上「没反馈」。
+   改为「底色加深 + 投影」双通道：深色由 color-mix 从 --primary-color 推出，
+   暗色模式下同样成立（不依赖只在亮色定义的 --primary-dark）。 */
 .btn-download {
   color: white;
   background-color: var(--primary-color);
@@ -239,24 +258,36 @@ const { c, isEnglish } = useHomeContent()
 
 .btn-download:hover {
   color: #ffffff;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  background-color: color-mix(in srgb, var(--primary-color) 88%, #000000);
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.28);
 }
 
+/* 次按钮：保持描边（原实现已是 transparent + 2px 边框，不是填充，
+   无需按「改成描边」处理）。层级靠三处压低——边框降到 1px、
+   字色从 --primary-color 降到 --text-primary、hover 只给浅底，
+   使其在视觉上明确从属于主按钮。 */
 .btn-outline {
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   background-color: transparent;
 }
 
 .btn-outline:hover {
   background-color: var(--bg-secondary);
   color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
+/* 二级（T5）：亮点标签。原先是「描边 + --bg-secondary + 继承字重」，
+   与站内其它卡片共用同一组底色/边框值，观感上不成一级。
+   现在改为「品牌色浅底 + 品牌色描边 + 提字重」：
+   底色用 color-mix 从 --primary-color 派生，亮暗两模式自动跟随，
+   不写死色值（暗色下 --bg-secondary 与 --border-color 的对比度本就低，
+   浅底 route 比换 --bg-secondary 更可靠）。 */
 .hero-highlights {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.625rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -266,12 +297,13 @@ const { c, isEnglish } = useHomeContent()
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.375rem 0.875rem;
+  padding: 0.4375rem 0.9375rem;
   border-radius: 9999px;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-secondary);
-  color: var(--text-secondary);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
+  background-color: color-mix(in srgb, var(--primary-color) 8%, var(--bg-primary));
+  color: var(--text-primary);
   font-size: 0.8125rem;
+  font-weight: 500;
   line-height: 1.4;
 }
 
@@ -280,10 +312,17 @@ const { c, isEnglish } = useHomeContent()
   flex-shrink: 0;
 }
 
+/* 三级（T5）：统计数据。原先 gap 1.5rem 无分隔，数值 1.5rem / 标签 0.75rem
+   只有 2:1，三级里最弱。现在：
+   - 数值提到 1.75rem 并加 tabular-nums（版本号/协议名长度不同，
+     等宽数字让三项基线对齐，不会因换行宽度不同而参差）
+   - 标签降到 0.6875rem 并加字距、改 --text-muted，与数值拉开到约 2.6:1
+   - 之间加发丝竖线分隔（实现见下方 .hero-stat + .hero-stat::before） */
 .hero-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  column-gap: 1.5rem;
+  row-gap: 1.25rem;
   padding-top: 0.5rem;
 }
 
@@ -294,15 +333,30 @@ const { c, isEnglish } = useHomeContent()
 
 .hero-stat-value {
   color: var(--primary-color);
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   line-height: 1.2;
+  font-variant-numeric: tabular-nums;
 }
 
 .hero-stat-label {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-top: 0.375rem;
+}
+
+/* 发丝竖线：只加在第 2、3 项左侧，颜色取 --border-color（亮暗两模式都有）。
+   用 ::before 而非 border-left：border 会增加 content-box 宽度，
+   三项总宽随之变化、在窄屏更容易触发换行；::before 作为 flex 子项参与排布，
+   但宽度只有 1px，且与 column-gap 相加后正好补足 1.5rem 的原间距。 */
+.hero-stat + .hero-stat::before {
+  content: '';
+  align-self: stretch;
+  width: 1px;
+  margin-right: 1.5rem;
+  background-color: var(--border-color);
 }
 
 /* Hero visual */
@@ -508,6 +562,20 @@ const { c, isEnglish } = useHomeContent()
 
   .hero-code__label {
     font-size: 0.6875rem;
+  }
+
+  /* 三级分层在窄屏的收法（T5）：
+     - 统计数值从 1.75rem 回到 1.5rem。1.75rem 是为桌面端与上方 CTA 拉开层级
+       才提的；窄屏三项会换行成三行，字号再大就成了三行巨型数字，反而压过 CTA。
+     - 发丝竖线关掉：flex-wrap 下 CSS 无法判断某项是否行首，换行后
+       .hero-stat + .hero-stat 会落在行首，线就成了一条悬在左边缘的竖道。
+       整体停用，靠 column-gap 保持间隔。 */
+  .hero-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .hero-stat + .hero-stat::before {
+    content: none;
   }
 }
 </style>
