@@ -61,7 +61,7 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
           </div>
           <h3 class="feature-card-title">{{ card.title }}</h3>
           <p class="feature-card-claim">{{ card.claim }}</p>
-          <p class="feature-card-tags">{{ card.tags.join(' · ') }}</p>
+          <p class="feature-card-tags hud-label">{{ card.tags.join(' · ') }}</p>
         </a>
       </div>
     </div>
@@ -229,8 +229,6 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
 .feature-card-tags {
   min-height: 3.5em;
   margin: 0;
-  font-size: 0.8125rem;
   line-height: 1.75;
-  color: var(--feature-text);
 }
 </style>

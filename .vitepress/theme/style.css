@@ -58,6 +58,9 @@
   --text-secondary: #6b7280;
   --text-muted: #9ca3af;
   --border-color: #e5e7eb;
+  /* 发丝网格的分隔线色。与 --border-color 同值，单独命名是为了让「网格线」
+     这个用途可独立调档（网格线要比描边更淡），后续要调只改这里 */
+  --line-color: #e5e7eb;
 }
 
 /* 暗色模式 */
@@ -107,6 +110,7 @@
   --text-secondary: #9ca3af;
   --text-muted: #6b7280;
   --border-color: #374151;
+  --line-color: #374151;
 }
 
 /* ============================================
@@ -920,6 +924,22 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
   text-transform: uppercase;
   color: var(--text-secondary);
   margin: 0 0 0.75rem;
+}
+
+/* meta 行统一：各组件里散落的「标签/编号/日期/身份」类次要信息，统一到一套
+   HUD 参数。与 .section-eyebrow 的分工：后者是章节信号（大字号、0.2em 宽字距、
+   独立成行），本班是卡片/列表内的补充说明（小字号、等宽、0.12em 窄字距）。
+   改造前同类信息散在 4 种正字距（0.2/0.12/0.08/0.01em）与 2 种 px 字距里，
+   且字号从 0.8125rem 到 0.9375rem 不等，同一屏内肉眼可辨差异。
+   等宽字体是为了让「Java 开发工程师」这类中英混排行的字宽节奏一致；
+   uppercase 只对拉丁字符生效，中文不受影响，不会把中文身份行改写。 */
+.hud-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-family: var(--vp-font-family-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 /* ============================================

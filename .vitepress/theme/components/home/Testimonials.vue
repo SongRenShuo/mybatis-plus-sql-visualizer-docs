@@ -45,7 +45,7 @@ const { c } = useHomeContent()
             </div>
             <div>
               <div class="testimonial-name">{{ t.name }}</div>
-              <div class="testimonial-role">{{ t.role }}</div>
+              <div class="testimonial-role hud-label">{{ t.role }}</div>
             </div>
           </div>
         </div>
@@ -214,7 +214,11 @@ html.dark .testimonial-name {
 }
 
 .testimonial-role {
+  /* 颜色在暗色下由 html.dark 覆盖，见下方同选择器 */
   color: #6b7280;
-  font-size: 0.8125rem;
+}
+
+html.dark .testimonial-role {
+  color: #9ca3af;
 }
 </style>
