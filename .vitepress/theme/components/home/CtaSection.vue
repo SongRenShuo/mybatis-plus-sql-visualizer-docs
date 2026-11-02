@@ -74,9 +74,10 @@ const { c, localePath } = useHomeContent()
 
 .cta-title {
   font-size: clamp(2.25rem, 5vw, 3.5rem);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-primary);
-  line-height: 1.1;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
   margin-top: 0;
 }

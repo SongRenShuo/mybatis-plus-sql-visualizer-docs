@@ -15,7 +15,9 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
       <div class="more-features-header mp-reveal">
         <span class="section-eyebrow">{{ c.features.eyebrow }}</span>
         <div class="more-features-badge">{{ c.features.badge }}</div>
-        <h2 class="section-title">{{ c.features.title }}</h2>
+        <h2 class="section-title">
+          {{ c.features.titlePrefix }}<span class="features-title-accent">{{ c.features.titleAccent }}</span>
+        </h2>
         <p class="section-description">
           {{ c.features.description }}
         </p>
@@ -92,7 +94,9 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
 
 .section-title {
   font-size: 2.25rem;
-  font-weight: bold;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
 }
 
@@ -100,6 +104,10 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
   .section-title {
     font-size: 3rem;
   }
+}
+
+.features-title-accent {
+  color: var(--primary-color);
 }
 
 .section-description {

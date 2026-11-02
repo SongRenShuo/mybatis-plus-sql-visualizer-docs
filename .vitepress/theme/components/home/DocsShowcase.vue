@@ -29,7 +29,7 @@ onMounted(() => {
 
           <h2 class="docs-showcase-title">
             {{ c.preview.titleLine1 }}<br />
-            {{ c.preview.titleLine2 }}
+            {{ c.preview.titleLine2Prefix }}<span class="docs-showcase-title-accent">{{ c.preview.titleLine2Accent }}</span>
           </h2>
 
           <p class="docs-showcase-description">
@@ -134,8 +134,9 @@ onMounted(() => {
 
 .docs-showcase-title {
   font-size: 2rem;
-  font-weight: 800;
-  line-height: 1.2;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
   margin: 0;
 }
@@ -144,6 +145,10 @@ onMounted(() => {
   .docs-showcase-title {
     font-size: 2.75rem;
   }
+}
+
+.docs-showcase-title-accent {
+  color: var(--primary-color);
 }
 
 .docs-showcase-description {

@@ -47,7 +47,9 @@ onMounted(() => {
     <div class="container">
       <div class="section-header mp-reveal">
         <span class="section-eyebrow">{{ c.capability.eyebrow }}</span>
-        <h2 class="section-title">{{ c.capability.title }}</h2>
+        <h2 class="section-title">
+          {{ c.capability.titlePrefix }}<span class="capability-title-accent">{{ c.capability.titleAccent }}</span>
+        </h2>
         <p class="section-description">
           {{ c.capability.description }}
         </p>
@@ -121,7 +123,9 @@ onMounted(() => {
 
 .section-title {
   font-size: 2.25rem;
-  font-weight: bold;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
 }
 
@@ -129,6 +133,10 @@ onMounted(() => {
   .section-title {
     font-size: 3rem;
   }
+}
+
+.capability-title-accent {
+  color: var(--primary-color);
 }
 
 .section-description {

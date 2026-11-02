@@ -179,8 +179,9 @@ const { c, isEnglish } = useHomeContent()
 
 .hero-title {
   font-size: 2.25rem;
-  font-weight: bold;
-  line-height: 1.2;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
