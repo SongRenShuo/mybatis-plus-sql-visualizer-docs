@@ -108,11 +108,14 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
   line-height: 1.75;
 }
 
+/* 发丝网格：gap 只留 1px，容器底色透上来就是分隔线，卡片自身背景把线盖住。
+   比给每张卡画 border 省一半代码，也不会有相邻卡 border 叠加成 2px 的问题。 */
 .features-grid {
   display: grid;
-  gap: 2rem;
+  gap: 1px;
   max-width: 72rem;
   margin: 0 auto;
+  background-color: var(--line-color);
 }
 
 @media (min-width: 768px) {
@@ -122,19 +125,26 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
 }
 
 /* 整卡是链接：锚点默认带下划线与蓝色文字，这里复位成卡片原有的文本外观；
-   悬停上浮 + 标题转品牌色，给出「可点」的暗示，不额外加「查看文档」文案 */
+   悬停上浮 + 标题转品牌色，给出「可点」的暗示，不额外加「查看文档」文案。
+   圆角归零：1px 网格里相邻卡的圆角会在四角露出容器底色，形成四个小缺口；
+   悬停时的圆角保留，让上浮的卡有独立的形体。
+   position: relative 是 z-index 生效的前提——悬停上浮会压住相邻卡的 1px 边线，
+   抬到上一层后阴影与边线都完整。 */
 .feature-card {
+  position: relative;
   display: block;
   text-decoration: none;
   color: inherit;
   background-color: var(--bg-primary);
-  border-radius: 1rem;
-  padding: 10px 29px;
+  padding: 2rem 1.75rem;
   transition: all 0.4s;
 }
 
 .feature-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  border-radius: 0.75rem;
+  /* 暗色下黑色阴影几乎不可见，描一圈 --line-color 把上浮的卡从底色里拎出来 */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--line-color);
   transform: translateY(-2px);
 }
 
@@ -142,9 +152,11 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
   color: var(--primary-color);
 }
 
+/* 保留 outline 作为键盘焦点标识：1px 网格下改用 2px 内描边。
+   原来 3px 外扩会压到相邻卡的边线，而网格没有容纳外扩的空间。 */
 .feature-card:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 3px;
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--primary-color);
 }
 
 .feature-icon {
