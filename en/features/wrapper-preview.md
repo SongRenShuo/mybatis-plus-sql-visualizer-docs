@@ -93,6 +93,8 @@ Upsert conflict clauses for OceanBase and openGauss also render in their real fo
 
 Statements taking a `Page` / `IPage` argument simulate pagination the way MyBatis-Plus' `PaginationInnerInterceptor` behaves at runtime: the preview **appends the pagination clause** to the original statement and **also emits a COUNT wrapper** as a second statement (`SELECT COUNT(*) FROM (original SQL) TOTAL`, annotated with its origin); statements with `searchCount=false` or a handwritten LIMIT produce only one of the two. The COUNT product sits at the bottom of the panel, so you have to scroll to see it. The settings page's "SQL Preview" tab can switch the whole simulation off, or drop just the COUNT half via "append paginated COUNT preview".
 
+COUNT only follows real pagination consumption — calls such as `service.page(Page, wrapper)` / `selectPage`, or a mapper method taking an `IPage` parameter. A LIMIT glued on with `wrapper.last("limit 20")` doesn't count as pagination: the preview still renders that LIMIT (its parameter shows as a `?` placeholder awaiting a value), but no COUNT wrapper is appended — appending a string to the condition builder can't trigger MyBatis-Plus' COUNT query.
+
 <GifPlayer src="/demo/pagination-sim.gif" alt="Pagination interceptor simulation: for an XML statement taking an IPage argument, the preview appends LIMIT to the original SQL and emits an annotated COUNT wrapper alongside it — SELECT COUNT(*) FROM (…) TOTAL" />
 
 ### JOIN Diagram

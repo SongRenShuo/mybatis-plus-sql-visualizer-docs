@@ -1,5 +1,11 @@
 [
   {
+    "version": "2026.11.2",
+    "date": "2026-11-02",
+    "notesHtml": "<ul>\n    <li>修复 IDEA 2026.2 上预览窗「执行 SQL」提示没有匹配的已配置数据源、点了也执行不了的问题，现在平台侧出错会如实报出原因，不再一律归到方言不匹配</li>\n    <li>修复 selectList 等非分页查询带 last(\"limit N\") 时预览凭空多出一条分页 COUNT 的问题</li>\n    <li>修复预览面板已打开控制台时，勾选参数或返回预览会弹 Access is allowed from write thread only 异常、预览 SQL 也写不进执行文件的问题</li>\n    <li>好用的话，欢迎到 Marketplace 页评分留言</li>\n</ul>",
+    "summaryZh": "修复 IDEA 2026.2 上预览窗「执行 SQL」提示没有匹配的已配置数据源、点了也执行不了的问题，现在平台侧出错会如实报出原因，不再一律归到方言不匹配"
+  },
+  {
     "version": "2026.10.30",
     "date": "2026-10-29",
     "notesHtml": "<ul>\n    <li>装了 MyBatisCodeHelperPro 等同类插件时，Mapper 双向跳转图标不再和对方的跳转箭头叠在同一行</li>\n    <li>新增开关「与同类 MyBatis 导航插件共存时让出 Mapper 跳转图标」，默认开，关掉即恢复本插件图标</li>\n    <li>只让出跳转图标，SQL 预览等其余左侧图标不受影响</li>\n    <li>修复方言冲突时预览悬停证据丢失候选数据源的问题，此前只显示无精确绑定</li>\n    <li>好用的话，欢迎到 Marketplace 页评分留言</li>\n</ul>",
