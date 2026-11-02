@@ -69,9 +69,14 @@ const { c } = useHomeContent()
   margin: 0 auto 3rem;
 }
 
+/* 与其余 6 个区块的 .section-title 对齐（ArtCraft 改造 T4）：
+   bold → 600，补 -0.02em 字距与 1.15 行高。本组件是 master 新增，
+   未纳入当初的统一，导致同一屏出现两种标题粗细。 */
 .section-title {
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   margin-bottom: 1.25rem;
 }
 

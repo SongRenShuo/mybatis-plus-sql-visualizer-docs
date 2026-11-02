@@ -105,11 +105,14 @@ html.dark .facts-badge {
   color: #9ca3af;
 }
 
+/* 与其余标题对齐（ArtCraft 改造 T4）：700 → 600，补 -0.02em 字距。
+   本区块是 master 新增（「用户评价」改为「数据事实」），未纳入当初的统一。 */
 .facts-title {
   font-size: clamp(2.5rem, 5vw, 3.25rem);
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
   line-height: 1.15;
+  letter-spacing: -0.02em;
   margin-bottom: 1rem;
   margin-top: 0;
 }

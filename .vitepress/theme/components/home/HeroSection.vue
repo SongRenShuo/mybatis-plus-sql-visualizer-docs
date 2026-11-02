@@ -297,15 +297,20 @@ const { c, isEnglish } = useHomeContent()
   padding: 0;
 }
 
+/* 三个信任标签（更新无需重启 / 内网离线可用 / 不发使用数据）。
+   保持改造前的中性观感：浅灰描边、浅灰底、次级文字色，只有左侧对勾是品牌色。
+   这里刻意不用品牌色浅底——首屏已有蓝色主按钮、蓝色标题强调词与蓝色统计数字，
+   标签再上蓝会把整片蓝推过饱和，反而看不出重点（用户 2026-11-02 反馈）。
+   仅把字重从 400 提到 500：13px 中文在次级灰下略细，提一档更易读。 */
 .hero-highlight {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
   padding: 0.4375rem 0.9375rem;
   border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
-  background-color: color-mix(in srgb, var(--primary-color) 8%, var(--bg-primary));
-  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
   font-size: 0.8125rem;
   font-weight: 500;
   line-height: 1.4;
