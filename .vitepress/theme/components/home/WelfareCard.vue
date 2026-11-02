@@ -250,11 +250,10 @@ function handleMouseLeave() {
   }
 }
 
+/* 与 Testimonials / CtaSection 的标题强调词统一为纯色：渐变文字在两套主题下
+   都要额外处理背景裁剪，且与另外两处不一致 */
 .welfare-title-accent {
-  background: linear-gradient(135deg, var(--primary-color) 0%, #22d3ee 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--primary-color);
 }
 
 .welfare-desc {

@@ -70,6 +70,8 @@ export const homeContent = {
 
     capability: {
       eyebrow: 'Core Capabilities',
+      titlePrefix: '大幅提升您的',
+      titleAccent: 'SQL 调试效率',
       title: '大幅提升您的 SQL 调试效率',
       description:
         '更简单的工具，更清晰的逻辑。旨在优化每一个研发细节，让您在更短的时间内成就更多',
@@ -189,6 +191,8 @@ export const homeContent = {
       eyebrow: 'Live Preview',
       badge: 'SQL 预览',
       titleLine1: '强大的 SQL 预览能力',
+      titleLine2Prefix: '多方言、多场景',
+      titleLine2Accent: '全覆盖',
       titleLine2: '多方言、多场景全覆盖',
       description:
         '支持 14 种数据库方言分页渲染，参数自动替换为实际值，LIKE 自动拼百分号，动态条件面板勾选实时预览。',
@@ -202,6 +206,8 @@ export const homeContent = {
     features: {
       eyebrow: 'More Features',
       badge: '更多特性',
+      titlePrefix: '我们为您考虑',
+      titleAccent: '周全',
       title: '我们为您考虑周全',
       description: '预览、捕获、定位、生成——调试一条 SQL 要用到的四件事，都在这一个插件里。',
     },
@@ -272,6 +278,8 @@ export const homeContent = {
      */
     pricing: {
       eyebrow: 'Free & Open Source',
+      titlePrefix: '完全',
+      titleAccent: '免费',
       title: '完全免费',
       description: '只有一档，没有付费版。所有功能永久免费，无需注册，无需登录。',
       headline: ['¥0 永久使用', 'Apache-2.0 开源', '不发使用数据 · 代码不出本机', '14 种数据库方言'],
@@ -404,6 +412,8 @@ export const homeContent = {
 
     capability: {
       eyebrow: 'Core Capabilities',
+      titlePrefix: 'Debug SQL far ',
+      titleAccent: 'faster',
       title: 'Debug SQL far faster',
       description:
         'Simpler tooling, clearer logic. Every detail of the workflow is tuned so you get more done in less time.',
@@ -573,6 +583,8 @@ export const homeContent = {
       eyebrow: 'Live Preview',
       badge: 'SQL Preview',
       titleLine1: 'Powerful SQL preview',
+      titleLine2Prefix: 'across dialects and ',
+      titleLine2Accent: 'scenarios',
       titleLine2: 'across dialects and scenarios',
       description:
         'Pagination rendered for 14 database dialects, parameters replaced with actual values, LIKE gets its percent signs automatically, and dynamic conditions toggle live in the panel.',
@@ -592,6 +604,8 @@ export const homeContent = {
     features: {
       eyebrow: 'More Features',
       badge: 'More Features',
+      titlePrefix: 'Everything You ',
+      titleAccent: 'Need',
       title: 'Everything You Need',
       description: 'Preview, capture, trace, generate — the four things SQL debugging takes, in one plugin.',
     },
@@ -655,6 +669,8 @@ export const homeContent = {
 
     pricing: {
       eyebrow: 'Free & Open Source',
+      titlePrefix: 'Completely ',
+      titleAccent: 'Free',
       title: 'Completely Free',
       description: 'One tier only — there is no paid version. Every feature free forever, no sign-up, no login.',
       headline: ['$0 forever', 'Apache-2.0 open source', 'Reports no usage data · code stays local', '14 database dialects'],

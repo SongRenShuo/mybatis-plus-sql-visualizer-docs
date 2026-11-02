@@ -9,7 +9,9 @@ const { c } = useHomeContent()
     <div class="container">
       <div class="pricing-header mp-reveal">
         <span class="section-eyebrow">{{ c.pricing.eyebrow }}</span>
-        <h2 class="section-title">{{ c.pricing.title }}</h2>
+        <h2 class="section-title">
+          {{ c.pricing.titlePrefix }}<span class="pricing-title-accent">{{ c.pricing.titleAccent }}</span>
+        </h2>
         <p class="section-description">
           {{ c.pricing.description }}
         </p>
@@ -80,6 +82,10 @@ const { c } = useHomeContent()
   .section-title {
     font-size: 3rem;
   }
+}
+
+.pricing-title-accent {
+  color: var(--primary-color);
 }
 
 .section-description {
