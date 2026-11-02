@@ -56,7 +56,10 @@ const cards = computed(() =>
           :style="{ '--mp-reveal-delay': `${i * 80}ms` }"
         >
           <p class="fact-value">{{ t.value }}</p>
-          <p class="fact-label">{{ t.label }}</p>
+          <!-- 出处标签是数字的补充说明，与其余 meta 行同属 .hud-label 层级。
+               合并 master 后本区块由「用户评价」改为「数据事实」，该行是
+               T2 统一时漏掉的落点（旧结构里的 .testimonial-role 已不存在）。 -->
+          <p class="fact-label hud-label">{{ t.label }}</p>
           <p class="fact-detail">{{ t.detail }}</p>
           <a
             class="fact-link"
