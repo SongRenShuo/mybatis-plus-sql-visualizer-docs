@@ -60,15 +60,15 @@ const { c, isEnglish } = useHomeContent()
           <div class="hero-stats">
             <div class="hero-stat">
               <span class="hero-stat-value">{{ version }}</span>
-              <span class="hero-stat-label">{{ c.hero.statLabels[0] }}</span>
+              <span class="hero-stat-label hud-label">{{ c.hero.statLabels[0] }}</span>
             </div>
             <div class="hero-stat">
               <span class="hero-stat-value">2024.3+</span>
-              <span class="hero-stat-label">{{ c.hero.statLabels[1] }}</span>
+              <span class="hero-stat-label hud-label">{{ c.hero.statLabels[1] }}</span>
             </div>
             <div class="hero-stat">
               <span class="hero-stat-value">Apache-2.0</span>
-              <span class="hero-stat-label">{{ c.hero.statLabels[2] }}</span>
+              <span class="hero-stat-label hud-label">{{ c.hero.statLabels[2] }}</span>
             </div>
           </div>
         </div>
@@ -84,7 +84,7 @@ const { c, isEnglish } = useHomeContent()
             <div class="hero-code__pane">
               <div class="hero-code__bar">
                 <span class="hero-code__dot"></span>
-                <span class="hero-code__label">{{ c.hero.codeJavaLabel }}</span>
+                <span class="hero-code__label hud-label">{{ c.hero.codeJavaLabel }}</span>
                 <span class="hero-code__chip">Java</span>
               </div>
               <div class="hero-code__body">
@@ -112,7 +112,7 @@ const { c, isEnglish } = useHomeContent()
             <div class="hero-code__pane">
               <div class="hero-code__bar">
                 <span class="hero-code__dot hero-code__dot--sql"></span>
-                <span class="hero-code__label">{{ c.hero.codeSqlLabel }}</span>
+                <span class="hero-code__label hud-label">{{ c.hero.codeSqlLabel }}</span>
                 <span class="hero-code__chip hero-code__chip--sql">SQL</span>
               </div>
               <div class="hero-code__body hero-code__body--result">

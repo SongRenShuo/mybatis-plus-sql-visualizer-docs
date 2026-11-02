@@ -255,4 +255,24 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
      实测 0.08em 是不换行的最大档，标签的「标签感」仍靠字距 + 等宽 + 字重承担。 */
   letter-spacing: 0.08em;
 }
+
+/* 标签行在窄列里要换回比例字体：等宽字体每个字符同宽，标签普遍比卡片可用
+   宽度长，一换行就破版。实测（卡宽 306px）等宽 2 行、比例 1 行，与改造前基线一致。
+
+   分两档处理：
+   - 英文（任何视口）：英文标签比中文长一倍以上，始终需要比例字体。
+   - 中文（仅窄屏）：中文每字本就等宽，等宽字体不额外增加宽度，桌面三列放得下，
+     保持等宽可让「中英混排时字宽节奏一致」的设计意图成立；但窄屏单列时
+     卡片变窄，等宽 + 0.08em 字距会撑破（实测 9 张卡 5 张换行），故收窄屏才换。 */
+html[lang^='en'] .feature-card-tags {
+  font-family: var(--vp-font-family-base, ui-sans-serif, system-ui, sans-serif);
+  letter-spacing: normal;
+}
+
+@media (max-width: 767px) {
+  html[lang^='zh'] .feature-card-tags {
+    font-family: var(--vp-font-family-base, ui-sans-serif, system-ui, sans-serif);
+    letter-spacing: normal;
+  }
+}
 </style>

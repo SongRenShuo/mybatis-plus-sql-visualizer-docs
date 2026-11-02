@@ -945,6 +945,32 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
   font-family: var(--vp-font-family-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
+/* 英文侧标题强调词：衬线斜体（目标页 ArtCraft 的同款手法）。
+   中文没有斜体字形（浏览器只能合成倾斜，观感差），所以中文侧保持无衬线纯色，
+   只有英文侧走这条。
+
+   为什么用 html[lang] 而不是在 CoolHome 根节点挂 .en 类：
+   VitePress 会把 locale 写到 <html lang>（zh-CN / en-US），纯 CSS 即可命中，
+   不需要 JS 参与，也没有 hydration 失配风险。若在 .cool-home 上挂类并写
+   `.cool-home.en { font-family: ... }`，衬线会级联给整页所有后代，
+   包括暗色代码块（虽然代码块自身写了 font-family 能挡住，但导航、按钮、
+   卡片正文都会被改写）。这里把选择器限定在 8 个 accent 类上，零泄漏。
+
+   实测：Georgia 在本机可用（与 Times/Arial/serif 的字宽互不相同）；
+   应用后各标题高度变化 ≤1px，不引发换行。 */
+html[lang^='en'] .capability-title-accent,
+html[lang^='en'] .features-title-accent,
+html[lang^='en'] .pricing-title-accent,
+html[lang^='en'] .docs-showcase-title-accent,
+html[lang^='en'] .testimonials-title-accent,
+html[lang^='en'] .cta-title-accent,
+html[lang^='en'] .welfare-title-accent,
+html[lang^='en'] .hero-title-highlight {
+  font-family: Georgia, 'Times New Roman', 'Songti SC', serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
 /* ============================================
    滚动揭示（T6）
    ============================================
