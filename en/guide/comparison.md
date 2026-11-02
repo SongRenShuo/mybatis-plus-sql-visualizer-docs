@@ -46,6 +46,21 @@ For the same problem — seeing what SQL MyBatis actually produces — there are
 
 The two are not mutually exclusive. The SQL Log tool window of SQL Visualizer uses enhanced capture by default — collecting at the JDBC layer inside your application's own JVM, with no logging needed in your app, real parameter values and durations, and the call stack and source location included. Console capture is kept as the no-code-change fallback. Jump-to-source and jump-from-call-stack both live in this same pipeline.
 
+## Positioning against common MyBatis plugins
+
+Beyond the MyBatis Log Plugin family, a few other MyBatis plugins are common in the community. They are not racing in the same lane as this project — more complements than competitors. The positioning below is assembled from public sources; for specifics, each plugin's Marketplace page is authoritative:
+
+| Plugin | Positioning | Free? | SQL preview | Log restore | CRUD generation | MCP |
+|--------|-------------|:---:|:---:|:---:|:---:|:---:|
+| SQL Visualizer | Static preview while coding + runtime log restore + SQL → Java | Free (Apache-2.0) | Core | Yes | Yes | Yes |
+| MyBatisX | Mapper navigation and code generation | Free | — | — | Yes | — |
+| MyBatisCodeHelperPro | The broadest MyBatis dev assistance, free + paid license | Free + paid | — | — | Yes | — |
+| MyBatis Log Free | Console log restore | Free | — | Yes | — | — |
+
+`—` means it is not that plugin's focus; descriptions here are deliberately broad — exact version behavior belongs to each vendor's official page.
+
+Combining them as needed does not conflict: for example, use MyBatisX or MyBatisCodeHelperPro for navigation and code generation, and SQL Visualizer for SQL preview and runtime log restore. When a similar navigation plugin is detected, this plugin also yields the Mapper navigation gutter icons on its own, keeping the gutter tidy.
+
 ## Where it shines
 
 - Large projects with slow startup, when you just want to confirm a condition-building line

@@ -41,9 +41,9 @@ No. A data source is a prerequisite for **execution-class** features: running SQ
 
 Yes. `MPJLambdaWrapper` and `MPJQueryWrapper` JOIN preview, as well as MPJ-form SQL → Java reverse conversion, are all implemented. When selecting the MPJ form for reverse conversion, the project needs the [`mybatis-plus-join`](https://mybatis-plus-join.github.io/) dependency (1.5.6+).
 
-## Why doesn't `findAllById` get a preview?
+## Does `findAllById` get a preview?
 
-The first batch of JPA derived queries doesn't include `findAllById`-style IN expansion yet, so no preview can be generated for now. It will be filled in a later version — already listed on the [roadmap](../about/roadmap.md).
+Yes. `findAllById` expands into a primary-key `IN (?, ?, ...)` collection query and generates a preview like any other derived query — see the derived-query support table in [JPA / Hibernate SQL Preview](/en/features/jpa-preview).
 
 ## Is there a difference between preview SQL and actual runtime SQL?
 
@@ -78,6 +78,8 @@ Start with the diagnostics the panel's empty state gives you — it shows the en
 4. Parameter lines may be blocked by the log level — usually TRACE is required
 5. Check whether lines were hit by the "Remove Lines Containing" filter rule
 6. Confirm the log goes to the run console (not a separate log file)
+
+For the root cause of "logs only show `?` placeholders" and how the options compare, see [Turning the ? marks in MyBatis logs into real parameters](./mybatis-log-params.md); if you would rather not add the p6spy proxy driver to your project, see [Seeing complete SQL with real parameters without p6spy](./without-p6spy.md).
 
 ## The gutter right-click "Recent Executions" item is empty?
 

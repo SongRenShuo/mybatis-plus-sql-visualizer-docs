@@ -1,10 +1,4 @@
 ---
-prev:
-  text: Changelog
-  link: /en/about/changelog
-next:
-  text: Roadmap
-  link: /en/about/roadmap
 ---
 
 # Friend Recommendations

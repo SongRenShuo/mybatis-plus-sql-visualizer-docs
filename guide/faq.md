@@ -41,9 +41,9 @@ mapper XML 内语句的语法高亮（关键字 / 字符串 / 注释着色、`#{
 
 支持。`MPJLambdaWrapper` 与 `MPJQueryWrapper` 联表预览、以及 MPJ 形态的 SQL→Java 反向转换均已实现。反向转换选择 MPJ 形态时，项目需引入 [`mybatis-plus-join`](https://mybatis-plus-join.github.io/) 依赖（1.5.6+）。
 
-## 为什么 JPA 的 findAllById 没有预览？
+## JPA 的 findAllById 有预览吗？
 
-JPA 派生查询的第一批尚未包含 `findAllById` 这类 IN 展开形态，暂无法生成预览，后续版本补齐，已列入[开发路线](../about/roadmap.md)。
+有。`findAllById` 会展开为主键 `IN (?, ?, ...)` 集合查询，与其他派生查询一样直接生成预览，详见[JPA / Hibernate SQL 预览](../features/jpa-preview.md)的派生查询支持列表。
 
 ## 预览 SQL 与实际运行 SQL 有差异吗？
 
@@ -78,6 +78,8 @@ JPA 派生查询的第一批尚未包含 `findAllById` 这类 IN 展开形态，
 4. 参数行可能被日志级别挡掉，通常要开到 TRACE
 5. 检查是否被「移除包含关键字」过滤规则命中
 6. 确认日志输出到运行控制台，而不是独立日志文件
+
+想系统了解「日志里只有 `?` 占位符」的成因与各方案对比，见 [MyBatis 日志里的问号怎么变成真实参数](./mybatis-log-params.md)；不想为此给工程引入 p6spy 代理驱动的，见 [不用 p6spy 看带真实参数的完整 SQL](./without-p6spy.md)。
 
 ## gutter 右键「最近执行记录」是空的？
 

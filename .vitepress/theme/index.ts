@@ -10,7 +10,7 @@ import Steps from './components/Steps.vue'
 import CodeCompare from './components/CodeCompare.vue'
 import FeatureCards from './components/FeatureCards.vue'
 import CodeTabs from './components/CodeTabs.vue'
-import BadgeBar from './components/BadgeBar.vue'
+import DocFooterBar from './components/DocFooterBar.vue'
 import SiteNotice from './components/SiteNotice.vue'
 import NavBarGitee from './components/NavBarGitee.vue'
 import PagefindSearch from './components/PagefindSearch.vue'
@@ -32,28 +32,35 @@ export default {
   extends: DefaultTheme,
   Layout: () => {
     return h(DefaultTheme.Layout, null, {
-      'home-hero-info-after': () => h(BadgeBar),
+      'doc-footer-before': () => h(DocFooterBar),
       'layout-bottom': () => [h(SiteNotice), h(BackToTop)],
       'nav-bar-content-after': () => [h(NavBarGitee), h(PagefindSearch)],
       'nav-screen-content-after': () => h(PagefindSearch, { compact: true }),
-      'not-found': () =>
-        h('div', { style: { textAlign: 'center', padding: '6rem 1rem' } }, [
+      'not-found': () => {
+        // 404 页中英切换：/en 前缀走英文文案与英文链接。SSG 期无 location，按默认中文渲染，
+        // 客户端水合后再按真实路径切换（VitePress 只生成一份 404.html，无法在构建期分语言）。
+        const isEn = typeof location !== 'undefined' && location.pathname.startsWith('/en')
+        const t = isEn
+          ? { title: 'Page Not Found', desc: 'This link may be broken. Try a search or head back from the buttons below.', home: 'Back to Home', homeHref: '/en/', start: 'Quick Start', startHref: '/en/guide/getting-started' }
+          : { title: '页面不存在', desc: '链接可能已失效，试试搜索或从下面返回。', home: '返回首页', homeHref: '/', start: '快速开始', startHref: '/guide/getting-started' }
+        return h('div', { style: { textAlign: 'center', padding: '6rem 1rem' } }, [
           h('p', { style: { fontSize: '4rem', fontWeight: 'bold', margin: '0', lineHeight: '1.1', color: 'var(--vp-c-brand-1)' } }, '404'),
-          h('h1', { style: { fontSize: '1.5rem', margin: '0.5rem 0 1rem' } }, '页面不存在 / Page Not Found'),
-          h('p', { style: { color: 'var(--vp-c-text-2)', marginBottom: '1.5rem' } }, '链接可能已失效，试试搜索或从下面返回。'),
+          h('h1', { style: { fontSize: '1.5rem', margin: '0.5rem 0 1rem' } }, t.title),
+          h('p', { style: { color: 'var(--vp-c-text-2)', marginBottom: '1.5rem' } }, t.desc),
           h('div', { style: { display: 'flex', gap: '0.75rem', justifyContent: 'center' } }, [
             h(
               'a',
-              { href: '/', style: { padding: '0.5rem 1.25rem', borderRadius: '9999px', background: 'var(--vp-c-brand-1)', color: '#fff', textDecoration: 'none' } },
-              '返回首页'
+              { href: t.homeHref, style: { padding: '0.5rem 1.25rem', borderRadius: '9999px', background: 'var(--vp-c-brand-1)', color: '#fff', textDecoration: 'none' } },
+              t.home
             ),
             h(
               'a',
-              { href: '/guide/getting-started', style: { padding: '0.5rem 1.25rem', borderRadius: '9999px', border: '1px solid var(--vp-c-border)', color: 'var(--vp-c-text-1)', textDecoration: 'none' } },
-              '快速开始'
+              { href: t.startHref, style: { padding: '0.5rem 1.25rem', borderRadius: '9999px', border: '1px solid var(--vp-c-border)', color: 'var(--vp-c-text-1)', textDecoration: 'none' } },
+              t.start
             )
           ])
         ])
+      }
     })
   },
   enhanceApp({ app, router }) {
@@ -71,6 +78,7 @@ export default {
   },
   setup() {
     let scrollHandler: (() => void) | null = null
+    let outlineHandler: (() => void) | null = null
 
     onMounted(() => {
       const nav = document.querySelector('.VPNav')
@@ -90,9 +98,38 @@ export default {
       scrollHandler()
     })
 
+    // 手机端「页面导航」折叠态显示当前小节名（方案 A 加分项）：窄屏下侧栏大纲容器
+    // display:none，其 active 锚点不更新（实测 activeCount=0），故直接读正文标题自行
+    // 计算当前小节——取吸顶线以上最后一个带 id 的 h2/h3；顶部或无命中时还原默认标题。
+    onMounted(() => {
+      outlineHandler = () => {
+        const btn = document.querySelector<HTMLSpanElement>(
+          '.VPLocalNavOutlineDropdown button .menu-text',
+        )
+        if (!btn) return
+        if (!btn.dataset.default) btn.dataset.default = btn.textContent?.trim() ?? ''
+        if (window.scrollY <= 120) {
+          btn.textContent = btn.dataset.default
+          return
+        }
+        let current: string | null = null
+        document.querySelectorAll<HTMLElement>('.vp-doc h2[id], .vp-doc h3[id]').forEach((h) => {
+          if (h.getBoundingClientRect().top <= 141) {
+            current = (h.textContent ?? '').replace(/\u200b/g, '').trim() || current
+          }
+        })
+        btn.textContent = current ?? btn.dataset.default
+      }
+      window.addEventListener('scroll', outlineHandler, { passive: true })
+      outlineHandler()
+    })
+
     onUnmounted(() => {
       if (scrollHandler) {
         window.removeEventListener('scroll', scrollHandler)
+      }
+      if (outlineHandler) {
+        window.removeEventListener('scroll', outlineHandler)
       }
     })
   }

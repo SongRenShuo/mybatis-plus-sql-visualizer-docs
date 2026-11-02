@@ -2,6 +2,15 @@
 
 3 分钟上手 SQL Visualizer。
 
+## 我想做什么
+
+按目标直达，每条最多三步见效：
+
+1. **预览 Wrapper 链** — 装好插件（见下文「安装插件」），光标落在 Wrapper 链的变量声明行，点左侧 gutter 图标或按 <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>，弹窗即出 SQL。本页下方就是完整走法，深入用法见 [Wrapper → SQL 预览](../features/wrapper-preview.md)
+2. **预览 XML 动态 SQL** — 打开 mapper XML，点 `<select>` 等 SQL 标签行左侧的 gutter 图标。详见 [XML / HQL 动态 SQL 预览](../features/xml-preview.md)
+3. **预览 JPA / HQL** — 打开 Repository 方法、`@Query` 注解或 HQL 字符串所在行，点 gutter 图标。详见 [JPA / Hibernate SQL 预览](../features/jpa-preview.md)
+4. **看运行期 SQL 日志** — 项目启动后打开「SQL 日志」工具窗口，运行中的 SQL 带着真实参数入列。详见 [SQL 日志工具窗口](../features/sql-log.md)
+
 ## 安装插件
 
 <Steps :title="''">
@@ -11,7 +20,7 @@
 1. 打开 <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd>
 2. 搜索 `SQL Visualizer`
 3. 点击 <kbd>Install</kbd> 安装
-4. 重启 IDE 生效
+4. 首次安装后若未看到插件入口，重启一次 IDEA；后续版本更新通常免重启热生效（离线更新通道亦支持热替换）
 
 ![Marketplace 里搜索 SQL Visualizer：结果首条即本插件（作者 SongRenShuo），右侧详情页带「安装」按钮与版本号](/demo/install-marketplace.png)
 
@@ -20,7 +29,7 @@
 1. 在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) 或 [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases) 下载插件包
 2. 进入 IDE，打开 <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>⚙</kbd> > <kbd>Install Plugin from Disk...</kbd>
 3. 选择下载的插件包（无需解压）
-4. 重启 IDE 生效
+4. 首次安装后若未看到插件入口，重启一次 IDEA；后续版本更新通常免重启热生效（离线更新通道亦支持热替换）
 
 </Steps>
 

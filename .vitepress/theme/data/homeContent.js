@@ -48,10 +48,40 @@ export const homeContent = {
         'IntelliJ IDEA 插件：写代码时就看见最终 SQL——Wrapper 链、XML/注解/HQL 动态 SQL（含 MPJ 联表 JOIN）实时预览；跑起来后真实参数与耗时自动捕获，慢查询标红、EXPLAIN 看计划、一键跳回源码；SQL 也能反向转成 Java 代码。不启服务、不翻日志、不手拼参数。',
       install: '在 Marketplace 中安装',
       offline: '下载离线包',
+      offlineHref: 'https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases',
+      offlineTrack: 'gitee-releases',
       highlights: ['更新无需重启 IDEA', '内网环境离线可用', '不发使用数据 · 代码不出本机'],
       statLabels: ['最新版本', 'IDEA 支持', '开源协议'],
+      installPath: 'Settings → Plugins → Marketplace 搜索 SQL Visualizer',
       codeJavaLabel: 'UserService.java',
       codeSqlLabel: '实时预览 · 生成的 SQL',
+    },
+
+    /**
+     * 「安装即见效」三步区块（Hero 之后、技术栈跑马灯之前）：快速上手路径。
+     * items 与英文侧按下标一一对应；items[0].link 为 Marketplace 安装页外链。
+     * 配图固定引用 public/demo/wrapper-preview.gif（组件内直引）。
+     */
+    steps: {
+      eyebrow: 'Quick Start',
+      title: '安装即见效',
+      description: '三步：安装插件，打开项目，光标停好即见最终 SQL。',
+      items: [
+        {
+          title: '安装插件',
+          description: '从 JetBrains Marketplace 安装 SQL Visualizer。',
+          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+        },
+        {
+          title: '打开项目',
+          description: '光标停在任何 Wrapper 链或 Mapper 方法上。',
+        },
+        {
+          title: '立即看到最终 SQL',
+          description: '无需启动项目，预览面板直接给出最终 SQL。',
+        },
+      ],
+      imageAlt: '演示动图：Wrapper 链实时预览出最终 SQL',
     },
 
     socialProof: {
@@ -224,48 +254,38 @@ export const homeContent = {
     },
 
     testimonials: {
-      eyebrow: 'Testimonials',
-      badge: '用户评价',
-      titlePrefix: '开发者在',
-      titleAccent: '怎么用它',
-      subtitle: '三句来自实际使用的话，每句都对应一个具体场景。',
+      eyebrow: 'Facts',
+      badge: '数据事实',
+      titlePrefix: '不靠形容词，',
+      titleAccent: '靠可核验的数字',
+      subtitle: '不放假评价、不堆形容词——下面每个数字都能点开出处核对。',
       /**
-       * 每张卡是「一句结论 + 一条具体事实」的两段式：
-       * headline 可直接扫读，detail 给出支撑它的细节。
-       * 星级不统一成五颗——三张全五星的整齐感本身像刷的；这里是 5 / 5 / 4。
-       * 结论都落在「省掉了哪一步」「查到了什么」这类可验证的结果上，
-       * 而不是复述功能页措辞。
+       * 每张卡是「大号数字 + 出处标签 + 说明 + 出处链接」的四段式。
+       * 之前放的是三条无出处的用户评价，说服力立不住；现在全部换成
+       * 可核验的事实：下载数取自 Marketplace 公开页，版本节奏对着更新日志，
+       * 方言数对着方言支持矩阵——每个数字都能点开出处核对。
        */
       items: [
         {
-          stars: 5,
-          headline: '没启动项目，定位了分页翻错的问题',
-          detail:
-            '接手的项目一半是 MP、一半是 JdbcTemplate 字符串。现在两种写法行首都有图标，点一下出 SQL，StringBuilder 拼的也能还原。',
-          name: '夜航船',
-          role: 'Java 开发工程师',
-          initials: '夜',
-          color: '#6366f1',
+          value: '687 次安装',
+          label: 'JetBrains Marketplace 公开数据',
+          detail: '数字直接取自 Marketplace 公开页——没有试用墙，也没有解锁门槛。',
+          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          linkText: '查看 Marketplace',
         },
         {
-          stars: 5,
-          headline: '改一版查询，不用再拉同事帮忙跑项目',
-          detail:
-            '维护的 Hibernate 老项目实体还挂在 .hbm.xml 上，Criteria 链以前根本看不出最后跑什么。现在 HQL、Criteria、hbm 命名查询都能直接还原成 SQL。',
-          name: '不写注释的人',
-          role: '后端开发',
-          initials: '不',
-          color: '#0ea5e9',
+          value: '18 个版本 / 74 天',
+          label: '首版 2026-08-19',
+          detail: '平均约四天一个版本，更新日志全程公开。',
+          link: '/about/changelog',
+          linkText: '看更新日志',
         },
         {
-          stars: 4,
-          headline: '压测时挑出了两条没走索引的语句',
-          detail:
-            'SQL 日志窗口开项目就自动抓，参数拼好，慢查询直接标红，还能点回源码位置。装完不用重启 IDE 就能用。',
-          name: '半糖不加冰',
-          role: '全栈开发工程师',
-          initials: '半',
-          color: '#10b981',
+          value: '14 种数据库方言',
+          label: 'Apache-2.0 · 永久免费',
+          detail: '不发使用数据、代码不出本机；方言支持矩阵与验证依据全部公开。',
+          link: '/features/dialect-support',
+          linkText: '看方言支持矩阵',
         },
       ],
     },
@@ -324,12 +344,22 @@ export const homeContent = {
       button: '立即免费下载',
     },
 
+    /**
+     * 「最近更新」轻区块（PricingSection 与 CtaSection 之间）：只放标题与链接文案。
+     * 条目（版本 / 日期 / 中英一句话摘要）不在本文件——组件直接 import
+     * .vitepress/data/latest-updates.json，该文件构建期由脚本重写。
+     */
+    recentUpdates: {
+      title: '最近更新',
+      viewAll: '查看全部',
+      viewAllHref: '/about/changelog',
+    },
+
     cta: {
       eyebrow: 'Get Started',
       titleLine1: '准备好告别繁琐的',
       titleLine2: 'SQL 调试方式了吗？',
-      subtitle:
-        '加入超过 1000 名开发者的行列，在 IntelliJ IDEA 中享受更高效的 SQL 调试体验。所有功能永久免费。',
+      subtitle: '74 天 18 个版本，Apache-2.0 完全免费，支持 14 种数据库方言。',
       primary: '立即免费下载',
       secondary: '查看文档',
       trust: ['永久免费使用', '开箱即用', '无需注册'],
@@ -339,11 +369,12 @@ export const homeContent = {
       label: '页内章节导航',
       items: [
         { id: 'sec-tech', label: '技术栈' },
+        { id: 'sec-steps', label: '快速上手' },
         { id: 'sec-capability', label: '核心能力' },
         { id: 'sec-preview', label: '预览能力' },
         { id: 'sec-features', label: '更多特性' },
         { id: 'sec-opensource', label: '开源免费' },
-        { id: 'sec-testimonials', label: '用户评价' },
+        { id: 'sec-testimonials', label: '数据事实' },
         { id: 'sec-pricing', label: '免费下载' },
         { id: 'sec-start', label: '开始使用' },
       ],
@@ -386,14 +417,43 @@ export const homeContent = {
         'IntelliJ IDEA plugin: see the exact SQL while you write it — Wrapper chains, XML/annotation/HQL dynamic SQL (incl. MPJ joins) previewed live. Once it runs, real parameters and durations are captured automatically with slow-query highlighting, EXPLAIN plans and one-click jumps back to the source line; SQL also converts back into Java code. No server to start, no logs to dig through, no parameters to hand-assemble.',
       install: 'Install from Marketplace',
       offline: 'Download offline package',
+      offlineHref: 'https://github.com/SongRenShuo/mybatis-plus-sql-visualizer/releases',
+      offlineTrack: 'github-releases',
       highlights: [
         'Updates without restarting IDEA',
         'Works offline on intranets',
         'Reports no usage data · your code never leaves the machine',
       ],
       statLabels: ['Latest version', 'IDEA support', 'License'],
+      installPath: 'Settings → Plugins → Marketplace, search for SQL Visualizer',
       codeJavaLabel: 'UserService.java',
       codeSqlLabel: 'Live preview · generated SQL',
+    },
+
+    /**
+     * 「安装即见效」三步区块：与 zh.steps 按下标一一对应，缺键会退回中文。
+     */
+    steps: {
+      eyebrow: 'Quick Start',
+      title: 'Works right after install',
+      description:
+        'Three steps: install the plugin, open your project, rest the caret — the final SQL appears.',
+      items: [
+        {
+          title: 'Install the plugin',
+          description: 'Install SQL Visualizer from JetBrains Marketplace.',
+          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+        },
+        {
+          title: 'Open your project',
+          description: 'Rest the caret on any Wrapper chain or mapper method.',
+        },
+        {
+          title: 'See the final SQL instantly',
+          description: 'No project launch — the preview panel shows the final SQL directly.',
+        },
+      ],
+      imageAlt: 'Demo animation: a Wrapper chain previewed live as the final SQL',
     },
 
     socialProof: {
@@ -591,7 +651,7 @@ export const homeContent = {
       points: [
         {
           title: 'Multi-dialect support',
-          description: 'Pagination syntax for MySQL / PostgreSQL / Oracle / SQLServer and 7 more',
+          description: 'Pagination syntax for 14 dialects including MySQL / PostgreSQL / Oracle / SQLServer',
         },
         {
           title: 'Automatic parameter replacement',
@@ -628,41 +688,32 @@ export const homeContent = {
     },
 
     testimonials: {
-      eyebrow: 'Testimonials',
-      badge: 'Testimonials',
-      titlePrefix: 'How developers ',
-      titleAccent: 'actually use it',
-      subtitle: 'Three notes from real use — each one tied to a concrete scenario.',
+      eyebrow: 'By the numbers',
+      badge: 'Verifiable',
+      titlePrefix: 'No adjectives, ',
+      titleAccent: 'just checkable numbers',
+      subtitle: 'No fake quotes, no buzzwords — every number below links to its source.',
       items: [
         {
-          stars: 5,
-          headline: 'Found a pagination bug without starting the project',
-          detail:
-            'Half the projects I inherit are MP and half are JdbcTemplate string SQL. Both styles show an icon at the start of the line now — one click gives me the SQL, and even StringBuilder-assembled queries restore.',
-          name: '夜航船',
-          role: 'Java Developer',
-          initials: '夜',
-          color: '#6366f1',
+          value: '687 installs',
+          label: 'Public JetBrains Marketplace data',
+          detail: 'Taken straight from the public Marketplace page — no paywall, no gated unlock.',
+          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          linkText: 'View on Marketplace',
         },
         {
-          stars: 5,
-          headline: 'Changing a query no longer needs a colleague to run the app',
-          detail:
-            'Our legacy Hibernate project maps entities in .hbm.xml, and Criteria chains never showed what finally ran. Now HQL, Criteria and hbm named queries all restore to SQL directly.',
-          name: '不写注释的人',
-          role: 'Backend Developer',
-          initials: '不',
-          color: '#0ea5e9',
+          value: '18 releases in 74 days',
+          label: 'First release 2026-08-19',
+          detail: 'About one release every four days, with a fully public changelog.',
+          link: '/en/about/changelog',
+          linkText: 'Read the changelog',
         },
         {
-          stars: 4,
-          headline: 'Picked out two queries missing their index during a load test',
-          detail:
-            'The SQL log window captures automatically when the project opens, parameters come pre-filled, slow queries flag red, and you can click back to the source line. No IDE restart after install.',
-          name: '半糖不加冰',
-          role: 'Full-stack Developer',
-          initials: '半',
-          color: '#10b981',
+          value: '14 SQL dialects',
+          label: 'Apache-2.0 · free forever',
+          detail: 'No usage data collected, code stays local; the dialect support matrix and its evidence are public.',
+          link: '/en/features/dialect-support',
+          linkText: 'See the dialect matrix',
         },
       ],
     },
@@ -715,12 +766,21 @@ export const homeContent = {
       button: 'Install — Free',
     },
 
+    /**
+     * 「最近更新」轻区块：与 zh.recentUpdates 同构；viewAllHref 按 testimonials
+     * 的站内链接约定直接带 /en 前缀。
+     */
+    recentUpdates: {
+      title: 'Recent updates',
+      viewAll: 'View all',
+      viewAllHref: '/en/about/changelog',
+    },
+
     cta: {
       eyebrow: 'Get Started',
       titleLine1: 'Ready to leave tedious',
       titleLine2: 'SQL debugging behind?',
-      subtitle:
-        'Join 1000+ developers getting a better SQL debugging experience in IntelliJ IDEA. Every feature is free forever.',
+      subtitle: '18 releases in 74 days, free under Apache-2.0, 14 SQL dialects.',
       primary: 'Install — Free',
       secondary: 'Read the Docs',
       trust: ['Free forever', 'Works out of the box', 'No sign-up'],
@@ -730,11 +790,12 @@ export const homeContent = {
       label: 'On-page section navigation',
       items: [
         { id: 'sec-tech', label: 'Stack' },
+        { id: 'sec-steps', label: 'Quick start' },
         { id: 'sec-capability', label: 'Capabilities' },
         { id: 'sec-preview', label: 'Preview' },
         { id: 'sec-features', label: 'More Features' },
         { id: 'sec-opensource', label: 'Open Source' },
-        { id: 'sec-testimonials', label: 'Testimonials' },
+        { id: 'sec-testimonials', label: 'By the numbers' },
         { id: 'sec-pricing', label: 'Download' },
         { id: 'sec-start', label: 'Get Started' },
       ],

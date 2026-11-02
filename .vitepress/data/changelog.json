@@ -1,0 +1,110 @@
+[
+  {
+    "version": "2026.10.30",
+    "date": "2026-10-29",
+    "notesHtml": "<ul>\n    <li>装了 MyBatisCodeHelperPro 等同类插件时，Mapper 双向跳转图标不再和对方的跳转箭头叠在同一行</li>\n    <li>新增开关「与同类 MyBatis 导航插件共存时让出 Mapper 跳转图标」，默认开，关掉即恢复本插件图标</li>\n    <li>只让出跳转图标，SQL 预览等其余左侧图标不受影响</li>\n    <li>修复方言冲突时预览悬停证据丢失候选数据源的问题，此前只显示无精确绑定</li>\n    <li>好用的话，欢迎到 Marketplace 页评分留言</li>\n</ul>",
+    "summaryZh": "装了 MyBatisCodeHelperPro 等同类插件时，Mapper 双向跳转图标不再和对方的跳转箭头叠在同一行"
+  },
+  {
+    "version": "2026.10.29",
+    "date": "2026-10-29",
+    "notesHtml": "<ul>\n    <li>修复 IDEA 2026.1.x 启用 MCP Server 后内置服务对所有客户端不可用、必须卸载插件才恢复的问题</li>\n    <li>定时任务等后台线程里，增强捕获的调用栈摘要与弹层现在能看到项目代码，弹层标题还带线程名</li>\n    <li>日志列表暂停后不再被新 SQL 顶动，关键字换行模式正常显示三行</li>\n    <li>智能方言推断不再被 Redis 等非 SQL 数据源带偏，日志与历史预览沿用本次执行方言</li>\n    <li>多模块工程按来源模块与激活 profile 取方言证据，推断更准</li>\n    <li>调用栈折叠名单补入驱动与 MyBatis 内部包，行内栈摘要先取景再截断，长栈下也能看到项目类</li>\n    <li>Mapper 双向跳转的图标判定加接口前置与结果缓存，编辑大工程更轻</li>\n    <li>字符串 SQL 方法 gutter 改用方法体引号预筛，大文件检查开销下降</li>\n    <li>Hibernate 命名探测缓存与预览窗口登记改为有界，长会话不再缓慢累积内存</li>\n    <li>好用的话，欢迎到 Marketplace 页评分留言</li>\n</ul>",
+    "summaryZh": "修复 IDEA 2026.1.x 启用 MCP Server 后内置服务对所有客户端不可用、必须卸载插件才恢复的问题"
+  },
+  {
+    "version": "2026.10.28",
+    "date": "2026-10-28",
+    "notesHtml": "<ul>\n    <li>Mapper 接口方法与 XML 语句之间新增双向跳转，点行号旁的图标即可互跳</li>\n    <li>DDL 语句纳入类型着色与筛选，建表改表与删表清空各成一档，色条用虚线区分</li>\n    <li>预览面板执行 SQL 不再因方言不一致被拦下，改为提示后继续执行</li>\n    <li>增强捕获不再替换应用拿到的数据库连接，修复部分数据库工程启动即报 ClassCastException</li>\n    <li>修复预览头部显示已绑定某库、实际却在另一个库上执行的问题</li>\n    <li>修复日志列表头部信息顺序与类名被截断，以及自动滚动无法恢复</li>\n    <li>修复时间显示格式不跟随设置，宽栏与窄栏显示成两种形态</li>\n    <li>修复设置页切到具体方言后状态行文案不刷新</li>\n    <li>日志头部行渲染加缓存，长列表滚动更流畅</li>\n    <li>好用的话，欢迎到 Marketplace 页评分留言</li>\n</ul>",
+    "summaryZh": "Mapper 接口方法与 XML 语句之间新增双向跳转，点行号旁的图标即可互跳"
+  },
+  {
+    "version": "2026.10.23",
+    "date": "2026-10-25",
+    "notesHtml": "<ul>\n    <li>插件设置接入 IDE 自带设置搜索，搜「脱敏」「预设」等关键词可直接定位到对应设置项</li>\n    <li>实体类来自 jar 且工程里另有同名类时，HQL 预览能正确解析，不再降级为 task.*</li>\n    <li>实体解析兼容 jar 位于模块资源目录、跨模块同全限定名等形态，按源码形态与模块依赖收窄</li>\n    <li>方言不一致不再阻断执行，仍提示不一致并可切换数据源；只有方言未知时才拦</li>\n    <li>没有可用 Runner 时按目标数据源方言重映射再枚举一次，数据源连着就能正常执行</li>\n    <li>预览执行按目标数据源方言出 Runner，真实执行前核对来源方言与执行目标，冲突时给出就地修复入口</li>\n    <li>只读动作改走旁路，预估影响行数、EXPLAIN 与回滚快照不再替换预览编辑器里的 SQL</li>\n    <li>回滚快照支持表格与文本双态，并可在 CSV 编辑器中打开；无数据源时直接弹选择器</li>\n    <li>参数预设与参数历史按声明方法隔离，预设永久绑定方法，改 SQL 不再丢参数</li>\n    <li>EXPLAIN 计划可跨会话保存并对比两次执行的变化，预览可标注无法解析的列</li>\n    <li>AI 上下文复制新增「含表列名」出口，日志与导出支持选择性脱敏</li>\n    <li>FieldFill 字段填充可安全模拟字面量，不执行用户 Handler</li>\n    <li>新增执行前 Schema 预检、方言能力自检、DML 影响面试算与一键诊断报告</li>\n    <li>预览面板底部新增「复制 SQL 并关闭」，一次复制当前 SQL 并关掉面板</li>\n    <li>增强捕获默认开启，打开即授权；与 JRebel 等第三方 agent 共存时不再导致应用启动失败</li>\n    <li>结构化执行计划支持未存密码时交平台原生密码框，认证失败给出可行动指引</li>\n    <li>预览执行链的平台内部错误告警收口，退出 IDE 不再报内存泄漏</li>\n    <li>执行计划默认回到预览窗内嵌原生控制台，换源交还平台原生工具栏，根治取源与换源十二轮问题</li>\n    <li>执行计划按表归属与模块学习自动选源，选错源时就地引导换源，不再弹模态框打断</li>\n    <li>上次使用的数据源按模块隔离，多模块工程不再串用其他模块的数据源</li>\n    <li>SQL 日志工具栏动作组改走后台线程更新，消除每次抢占编辑线程 3~4 秒的卡顿</li>\n    <li>SQL 转 Java 条件组不再吞 OR、保留子组 NOT，逻辑删除条件不重复生成</li>\n    <li>历史检索与日志列表性能优化，大历史目录不再卡顿</li>\n    <li>SQL 日志时间、ShardingSphere 路由、反向转换与设置页一批问题修复</li>\n    <li>分发包补齐 LICENSE 与第三方声明，体积减少约 20%</li>\n    <li>好用的话，欢迎到 Marketplace 页评分留言</li>\n</ul>",
+    "summaryZh": "插件设置接入 IDE 自带设置搜索，搜「脱敏」「预设」等关键词可直接定位到对应设置项"
+  },
+  {
+    "version": "2026.10.16",
+    "date": "2026-10-16",
+    "notesHtml": "<ul>\n    <li>SQL 日志与历史列表跟随编辑器配色，窄侧栏展示更紧凑</li>\n    <li>单击列表只选中，快速预览按需打开，双击完整预览保持不变</li>\n    <li>手动浏览暂停尾部跟随，点击滚动到底部即可恢复</li>\n    <li>新增同结构聚类与按目标库分组排序，以及只看慢查询筛选</li>\n    <li>日志工具窗页签保持单行，历史首次进入即加载已有文件</li>\n    <li>调用栈优先显示业务帧，内部帧可展开，摘要可单击打开</li>\n    <li>修复 SQL 日志与历史列表的正常耗时颜色被灰色覆盖</li>\n    <li>修复预览准备期后台预热导致 IDE 卡死，预热增加超时兜底</li>\n    <li>移除校验报告中的三项仅供覆写 API 直接调用</li>\n    <li>同名实体按查询所在模块解析，不再误选其他模块的同名类</li>\n    <li>依赖 JAR 内实体可按表名反查，嵌入列命名约定可跨模块识别</li>\n    <li>SQL 日志工具栏新增交流群入口，扫码说明按需加载</li>\n    <li>好用的话，欢迎到 Marketplace 页评分留言</li>\n</ul>",
+    "summaryZh": "SQL 日志与历史列表跟随编辑器配色，窄侧栏展示更紧凑"
+  },
+  {
+    "version": "2026.10.13",
+    "date": "2026-10-15",
+    "notesHtml": "<ul>\n    <li>增强捕获与控制台对同一 SQL 的观测融合，补齐源码跳转与耗时信息</li>\n    <li>增强捕获接管瞬间同一次执行重复成两行修复</li>\n    <li>原生控制台结果组件无收益摘取收敛</li>\n    <li>SQL 快捷模板失败反馈不再静默</li>\n    <li>历史与 XML 编辑性能优化</li>\n    <li>mapper XML 高亮与补全再收敛，新增引用导航、代码折叠与颜色设置</li>\n    <li>方言引号不匹配静态告警</li>\n    <li>SQL 快捷模板支持光标压在表名上使用</li>\n    <li>更多 SQL 承载形态可预览，含同工程方法返回与 StringBuffer 拼接</li>\n    <li>嵌入列名前缀按工程 Hibernate 命名策略解析，预览列名与真库一致</li>\n    <li>首次点执行 SQL 看不到结果的问题修复</li>\n    <li>MPJ 联表 ON 两侧列别名与 JOIN 图标签页若干修复</li>\n    <li>mapper XML 语法高亮与列名补全</li>\n    <li>SQL 历史工作流，条目钉住、正则检索、多格式导出与版本对比</li>\n    <li>预览参数预设，按语句隔离并可折叠</li>\n    <li>分页拦截器模拟，LIMIT 与 COUNT 可分别控制</li>\n    <li>EXPLAIN 结构化渲染，新增 Oracle 与 SQL Server 模板</li>\n    <li>MCP 新增本地 SQL 历史检索工具</li>\n    <li>增强捕获支持 PostgreSQL / Oracle / SQL Server / 达梦运行中应用</li>\n    <li>原生 MyBatis 拦截器自动注入</li>\n    <li>数据源上下文角标，可切换仅显示数据库类型</li>\n    <li>动态 SQL 条件求值结果标注与 N+1 同模板计数徽章</li>\n    <li>CRUD 与回滚 SQL 可移植导出，日志转 SQL 支持从剪贴板读取</li>\n    <li>设置落地页能力矩阵与引导通知试用按钮</li>\n    <li>空态与引导链接点击定位设置项</li>\n</ul>",
+    "summaryZh": "增强捕获与控制台对同一 SQL 的观测融合，补齐源码跳转与耗时信息"
+  },
+  {
+    "version": "2026.10.9",
+    "date": "2026-10-08",
+    "notesHtml": "<ul>\n    <li>预览面板调用栈悬停调试器风格弹层，帧数可配置</li>\n    <li>最近执行记录弹框化，支持多选批量复制与右侧面板可编辑</li>\n    <li>弹框右键菜单六件与编辑器按钮图标化</li>\n    <li>SQL 历史标签页常驻，自定义保存目录下的历史文件不再看不到</li>\n    <li>SQL → Java 反向转换全覆盖，支持 groupBy/having/UNION 等子句</li>\n    <li>Map 响应形态支持与 VO 列别名驱动</li>\n    <li>返回类型自由输入与选类按钮</li>\n    <li>SQL 复制快捷键全界面统一，单击预览浮层复制失效修复</li>\n    <li>exists 双语义撞名修复</li>\n    <li>调用栈快照尾部穿透补 spring web/boot</li>\n    <li>单条错误上报点提交没反应修复</li>\n    <li>代码左侧 SQL 预览图标重复与点击后弹框卡住修复</li>\n</ul>",
+    "summaryZh": "预览面板调用栈悬停调试器风格弹层，帧数可配置"
+  },
+  {
+    "version": "2026.10.7",
+    "date": "2026-10-06",
+    "notesHtml": "<ul>\n    <li>JPA 链式 setParameter 参数预览错位修复，参数按名回填与书写顺序解耦</li>\n    <li>参数字面量与枚举常量自动预填参数框</li>\n    <li>SQL 日志工具栏新增滚动到底部动作与尾部跟随</li>\n    <li>并发 SQL 日志监听与历史加载性能优化</li>\n    <li>参数占位启发式复合词误报修复</li>\n    <li>帮助页与 Marketplace 自定义页文案精简</li>\n</ul>",
+    "summaryZh": "JPA 链式 setParameter 参数预览错位修复，参数按名回填与书写顺序解耦"
+  },
+  {
+    "version": "2026.10.6",
+    "date": "2026-10-05",
+    "notesHtml": "<ul>\n    <li>@Embedded 嵌入值对象识别补全，JPA 点路径覆写、Spring Data 形态与 prefix、MP 混合注解实体展平</li>\n    <li>SQL 日志屏蔽，右键一键屏蔽保活心跳类 SQL，管理对话框支持结构匹配与拖拽缩放</li>\n    <li>新增 OceanBase 与 openGauss 方言，方言扩至 11 种，执行计划与连接串推断同步支持</li>\n    <li>通用 XML 内嵌 SQL 识别，自研框架自定义标签内的 SQL 与 HQL 可直接预览</li>\n    <li>XML 预览 List 参数按签名拆分多值渲染</li>\n    <li>空参数填充策略三态化，默认保留 ? 占位提示，可切换 NULL 与空字符串</li>\n    <li>注入无法识别项目类型时改引导开启增强捕获</li>\n    <li>无别名 HQL 裸属性与嵌入段限定符位列名映射修复</li>\n    <li>嵌入段驼峰路径在派生查询中的伪列修复</li>\n    <li>foreach 集合元素值渲染修复，数值元素不再误加引号、所填值不再丢失</li>\n    <li>XML 预览无 Wrapper 参数语句误报红色警示修复</li>\n    <li>控制台通道在仅有语句行的工程零产出修复</li>\n    <li>premain 注入范围收窄，不再落入 Gradle 测试与 IDE 任务的 fork 进程</li>\n    <li>T-SQL 控制流批次切分误合并修复</li>\n    <li>回滚产物含 identity 包装时静态检查误报与默认执行不完整修复</li>\n    <li>MCP 只读闸门误杀同名标量函数修复，SQL Server 方括号语句不再整类拒绝</li>\n    <li>SQL Server 方括号语句在性能建议与批量合并链不再静默降级</li>\n    <li>agent 通道慢拨号不再被误判为正常掉线</li>\n</ul>",
+    "summaryZh": "@Embedded 嵌入值对象识别补全，JPA 点路径覆写、Spring Data 形态与 prefix、MP 混合注解实体展平"
+  },
+  {
+    "version": "2026.9.23",
+    "date": "2026-09-27",
+    "notesHtml": "<ul>\n    <li>增强捕获默认开启，条目显示目标库、日志原始时间、耗时与影响行数</li>\n    <li>增强捕获控制通道解析错位、30 秒掉线与停采后恢复失效三项根治，新增回执确认与看门狗</li>\n    <li>预览面板一键生成回滚 SQL，SQL Server 与达梦自增列包装打通</li>\n    <li>新增 MCP 能力，十个确定性只读工具接入平台 MCP Server，设置页可总开关与逐项门控</li>\n    <li>错误定位全链修复，含 Oracle 报错位置识别与 PostgreSQL 执行计划索引建议生效</li>\n    <li>数据库方言智能推断，跟随数据源自动判定，全局与项目级可配</li>\n    <li>实体列名按数据源真实列集校正，非标准命名不再产出不可执行 SQL</li>\n    <li>执行前确认列出无界写发现，含替换片段的语句执行前需确认</li>\n    <li>启动即捕获，应用启动阶段的 SQL 直接进增强通道</li>\n    <li>捕获源码位置不再被首个查询钉死</li>\n    <li>空白符可视化开关与 INSERT 目标列提示</li>\n    <li>foreach 集合快捷别名与跨命名空间 include 片段解析</li>\n    <li>参数面板按签名给类型提示，空参数填充策略可配</li>\n    <li>执行链超时护栏、XML 内联 DTD 膨胀防护与更新包解压有界化</li>\n    <li>错误上报默认脱敏，异常全文降为可勾选附加</li>\n    <li>设置导入不再静默重置未导出的配置</li>\n    <li>服务端报错进预览面板错误条，Oracle 标识符按大小写来源引用</li>\n    <li>HQL 副表别名与嵌入对象路径列名映射修复</li>\n    <li>JOIN 图整表列口径与数据源字段补全恢复</li>\n    <li>子类加载器下织入失效修复，覆盖 fat jar 部署</li>\n    <li>执行错误同列展示与日志直跳 mapper XML，新增方法与请求级聚焦页签</li>\n    <li>断连后 DDL 生效性探测与批量等值删除合并参考</li>\n    <li>SQL 快捷模板与多语句执行确认浮层</li>\n    <li>EXPLAIN 包装链硬化，仅放行只读查询表达式</li>\n    <li>项目级设置新增重置为跟随全局，设置搜索收录项目级条目</li>\n    <li>缺源码跳转引导按增强捕获状态分支，未开启时一键开启</li>\n    <li>预览链 2 秒阻塞消除与捕获链路性能收敛</li>\n    <li>三条控制台日志链路并发分桶配对修复</li>\n    <li>界面组件全面原生化首轮，含原生搜索、平台通知、右键菜单、工具栏与加载态</li>\n    <li>SQL 历史全量化与历史打开防卡顿，历史文件保留上限防磁盘膨胀</li>\n    <li>设置项真实性收敛，项目级设置全面生效</li>\n    <li>日志与历史列表时间来源切换、行号时间搜索与排序方式选择器</li>\n    <li>捕捉开关回归日志面板工具栏，帧过滤前缀输入框可见性修复</li>\n    <li>预览参数区背景丢失修复、JOIN 图默认自适应居中与连线丢失修复</li>\n    <li>预览控制台格式化显示回归修复与会话库上下文对齐</li>\n    <li>执行文件缓冲区冲突与写入上下文报错根治</li>\n    <li>增删改语句源码位置捕获修复与汇聚入口跳源码上溯</li>\n    <li>IN 字面量参数识别与 IN 列表全量竖向排列</li>\n    <li>HQL 继承与抽象类实体列信息降级修复</li>\n    <li>JdbcTemplate 集合参数方括号误入 SQL 修复</li>\n    <li>批量错误报告合并为单个弹窗，历史裁剪不再误删用户 SQL 文件</li>\n    <li>定时回归任务不再弹出系统浏览器</li>\n</ul>",
+    "summaryZh": "增强捕获默认开启，条目显示目标库、日志原始时间、耗时与影响行数"
+  },
+  {
+    "version": "2026.9.14",
+    "date": "2026-09-15",
+    "notesHtml": "<ul>\n    <li>SQL 列表 CRUD 类型颜色标记</li>\n    <li>gutter 左键直接预览与最近执行反查</li>\n    <li>真实 EXPLAIN 执行计划</li>\n    <li>错误与反馈一键上报官网需求池</li>\n    <li>SQL 列表三种显示模式</li>\n    <li>更多 ORM 预览支持</li>\n    <li>大日志列表性能优化</li>\n    <li>实体类与数据库表右键生成 CRUD SQL</li>\n    <li>SQL 预览字段列表自动折叠</li>\n    <li>全选全不选双按钮合一为状态切换按钮</li>\n    <li>SQL 列表多选批量复制</li>\n    <li>多模块注入勾选选择</li>\n    <li>插件市场内部 API 整改</li>\n    <li>执行计划首点结果缺失修复</li>\n    <li>报告提交失败原因可见与多条错误合并上报</li>\n    <li>设置页子项顺序随语言漂移修复</li>\n    <li>SQL 转 Java 选类重渲染异常逃逸修复</li>\n    <li>MPJ 括号条件反向转换退化修复</li>\n    <li>262 预览控制台静默挂载失败修复</li>\n</ul>",
+    "summaryZh": "SQL 列表 CRUD 类型颜色标记"
+  },
+  {
+    "version": "2026.9.11",
+    "date": "2026-09-11",
+    "notesHtml": "<ul>\n    <li>自更新免重启热替换</li>\n    <li>SQL 历史页参数识别丢失根治</li>\n    <li>无占位符 SQL 字面量参数恢复</li>\n    <li>262 平台热替换探测失败回退修复</li>\n    <li>更新通知入口去重与卸载警告缓解</li>\n</ul>",
+    "summaryZh": "自更新免重启热替换"
+  },
+  {
+    "version": "2026.9.10",
+    "date": "2026-09-10",
+    "notesHtml": "<ul>\n    <li>双击日志预览弹窗加载卡顿根治</li>\n    <li>预览打开 EDT 读权限断言刷屏全库排雷</li>\n    <li>Hibernate 双份日志参数分裂根治</li>\n    <li>竖向排列 VALUES 行尾列名标注配置项 + IN 列表展开阈值</li>\n    <li>预览顶部元信息压按钮行修复</li>\n    <li>执行 SQL 首次静默不执行修复 + 预览显示模式持久化</li>\n    <li>更新检查版本比较改用 IDEA 内置比较器</li>\n    <li>SQL 日志列表行号两处续修</li>\n</ul>",
+    "summaryZh": "双击日志预览弹窗加载卡顿根治"
+  },
+  {
+    "version": "2026.9.8",
+    "date": "2026-09-08",
+    "notesHtml": "<ul>\n    <li>SQL 日志列表 EDT 冻结 16 秒根治</li>\n    <li>SQL 列表悬停卡顿改单击预览：SQL 高亮可编辑编辑器，临时改字段值再复制</li>\n    <li>多行 JdbcTemplate 日志漏捕获修复</li>\n    <li>SQL 日志去重失效 + MP 分页计数误标双根因修复</li>\n    <li>SQL 日志双击预览平台断言硬抛崩溃修复</li>\n    <li>自研 DAO 字符串 SQL 预览 + 方法定义处锚点贯通</li>\n    <li>「项目启动时自动开始监听」联动失效与手动停止后永不自动捕捉修复</li>\n    <li>设置页缓存信息恒 0 B 修复</li>\n</ul>",
+    "summaryZh": "SQL 日志列表 EDT 冻结 16 秒根治"
+  },
+  {
+    "version": "2026.9.4",
+    "date": "2026-09-04",
+    "notesHtml": "<ul>\n    <li>JdbcTemplate / NamedParameterJdbcTemplate SQL 字符串源码预览</li>\n    <li>JOIN 图换用 IDEA 原生图框架</li>\n    <li>JOIN 图渲染对齐 Database 原生显示图</li>\n    <li>JOIN 图 B 路径：直接内嵌 Database 原生显示图 + 虚拟外键 JOIN 线</li>\n    <li>非 Wrapper 预览快捷键贯通 + @NamedQuery 实体级预览</li>\n    <li>SQL 日志列表 EDT 冻结修复 + 自动保存历史 SQL 无限递归修复</li>\n    <li>SqlFormatter 关键字分派修复 + SQL 预览关键字选择粘连修复</li>\n</ul>",
+    "summaryZh": "JdbcTemplate / NamedParameterJdbcTemplate SQL 字符串源码预览"
+  },
+  {
+    "version": "2026.8.21",
+    "date": "2026-08-22",
+    "notesHtml": "<ul>\n    <li>JPA/Hibernate SQL 预览支持（Derived / CriteriaQuery / HQL 三种查询风格）</li>\n    <li>Hibernate/JPA SQL 日志捕获支持（双解析器并列架构）</li>\n    <li>SQL→Java 反向子查询 JOIN 解析 + MConsumer 形态</li>\n    <li>JPA 分页修复（Pageable → LIMIT）+ @Query 路由优先</li>\n    <li>JPQL IN 子句三层修复 + 复制时剥离注释</li>\n</ul>",
+    "summaryZh": "JPA/Hibernate SQL 预览支持（Derived / CriteriaQuery / HQL 三种查询风格）"
+  },
+  {
+    "version": "2026.8.20",
+    "date": "2026-08-21",
+    "notesHtml": "<ul>\n    <li>参数导入交互体验升级（手动输入弹窗 + 驼峰/下划线自动匹配 + 清除按钮）</li>\n    <li>内存泄漏修复（面板 Disposer 树注册）</li>\n    <li>SQL 监听手动启动无需等待项目运行（armed 态）+ 解析兼容前缀与 SQL 分行形态</li>\n    <li>插件自更新静默失败修复（改用 PathManager 定位插件目录 + zip 顶层短名）</li>\n    <li>SQL→Java 调用类校验（VO/DTO 拒绝 + 白名单放行）+ 当前打开类智能识别（this/baseMapper 上下文感知）</li>\n    <li>MPJ 工厂链 selectAll 双图标修复（initializerHeadIsWrapper 回溯停在 qualifier 引用）</li>\n    <li>IN 子句参数多值回填（XML/MP/MPJ inList 标记 + 逗号分割渲染）+ 关键字换行格式化</li>\n    <li>ReadAction.compute 废弃 API 修复（T-M52 补充，@Suppress DEPRECATION）+ 测试覆盖缺口体系化修复（T0045，四类缺口 4 波修复）</li>\n</ul>",
+    "summaryZh": "参数导入交互体验升级（手动输入弹窗 + 驼峰/下划线自动匹配 + 清除按钮）"
+  },
+  {
+    "version": "2026.8.19",
+    "date": "2026-08-19",
+    "notesHtml": "<ul>\n    <li>废弃API全量清理（T-M51 + T-M52）：三版本 0 Internal + 0 Scheduled-removal + Deprecated 9/11/27→3/4/20</li>\n    <li>IService 内置 CRUD 方法预览支持无 Entity 后缀实体类</li>\n    <li>PluginManager.getPlugin() 完全消除（ProtectionDomain.codeSource.location + DeleteCommand 替代）</li>\n    <li>ProjectListenerRegistrar 删除（projectOpened() 无公开替代）</li>\n    <li>ToolWindowFactory Kotlin→Java 改写消除 synthetic bridge</li>\n    <li>功能截图 5 张替换真实截图 + Marketplace Custom Page + plugin.xml 清理内嵌图</li>\n</ul>",
+    "summaryZh": "废弃API全量清理（T-M51 + T-M52）：三版本 0 Internal + 0 Scheduled-removal + Deprecated 9/11…"
+  }
+]

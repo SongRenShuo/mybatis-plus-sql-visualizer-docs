@@ -1,3 +1,7 @@
+---
+description: "MCP Server hands SQL capabilities to AI agents — eleven read-only sqlv_* tools: render SQL, restore logs, schema, EXPLAIN plans, rollback plans, perf advice."
+---
+
 # MCP Server: SQL Tools for AI Agents
 
 The plugin registers eleven tools with IDEA's built-in MCP Server, letting external agents such as [Claude Code](https://code.claude.com/docs/en/overview), [Cursor](https://cursor.com/), [JetBrains AI Assistant](https://www.jetbrains.com/ai-ides/), [Codex](https://github.com/openai/codex), [ZCode](https://zcode.z.ai/cn) and [DeepSeek Harness](https://www.deepseek.com/harness/) call the plugin's SQL capabilities directly: render executable SQL, inspect table structures, fetch execution plans. You keep writing code in the IDE as usual while the agent works alongside — neither side interrupts the other.
@@ -31,7 +35,7 @@ Grouped the way an agent works: get the SQL first, then understand the database,
 | Tool | Input | Output |
 |------|-------|--------|
 | `sqlv_schema_context` | `tables`, a list of table names (optional `dataSource`, `maxTables` — default 8, cap 20) | Compact context of the data source's real columns, types and comments |
-| `sqlv_explain` | `selectSql`, a single SELECT (optional `dataSource`; omit `dialect` to auto-detect from the data source URL) | EXPLAIN plan text dispatched by dialect, with driver notices and index hints; Dameng uses `EXPLAIN FOR` and returns a 19-column plan table |
+| `sqlv_explain` | `selectSql`, a single SELECT (optional `dataSource`; omit `dialect` to auto-detect from the data source URL) | EXPLAIN plan text dispatched by dialect, with driver notices and index hints |
 
 ### Check Before Execution
 
@@ -69,9 +73,6 @@ Every step is deterministic output: the SQL is a real rendering-chain product, t
 | `sqlv_schema_context` / `sqlv_explain` | With several data sources configured, pass `dataSource` explicitly — when the intended data source isn't connected and introspected in the Database tool window, same-named tables may resolve from a different one; a successful `sqlv_schema_context` response discloses the data source it hit on the first line (`source: …`), marked `auto-resolved` with a pin hint when `dataSource` was omitted — follow the hint to pin the intended database |
 | `sqlv_render_logs` / `sqlv_rollback_plan` / `sqlv_mapper_check` | Statement headers carry the statement name (taken from a leading `-- Name:` log comment), keeping multi-statement output readable at a glance |
 | `sqlv_perf_advice` | Overly long entries are truncated — no unbounded output |
-| `sqlv_explain` data source | Relational databases only. When the data source URL belongs to a non-SQL family (`jdbc:redis://`, `jdbc:mongodb://` and the like) it returns `NOT_A_SQL_DATASOURCE` instead of guessing a dialect and firing away — sending EXPLAIN to Redis only yields a driver error that points you in the wrong direction |
-| `sqlv_explain` on Dameng | The plan statement is `EXPLAIN FOR <sql>`: a bare `EXPLAIN` returns no result set at all on DM8 (measured), while `EXPLAIN FOR` yields a 19-column structured plan table. Don't hand-build an `EXPLAIN` prefix when reproducing a plan |
-| `sqlv_render_sql` and custom templates | When the project's SQL lives outside the MyBatis ecosystem (root `<sqls>`, statements as `<sql id="…">`, `:named` parameters — a home-grown template format), configure a render command under "External SQL Template" in Settings: it receives the template path, the statement id and `paramsJson` and returns the SQL. Without it those locations keep returning `SOURCE_NOT_FOUND` |
 
 ## Error codes
 
@@ -83,12 +84,10 @@ Failures come back as structured `[CODE] message` text — no platform exception
 | `SQL_BLOCKED` | Statement shape rejected: multiple statements, locking reads (`FOR UPDATE` / `FOR SHARE`), `SELECT … INTO`, or a parse failure (if it can't be judged, it is refused rather than allowed) |
 | `INVALID_ARGUMENT` | Missing or malformed arguments (incomplete path, `line` out of range, unknown dialect name, …) |
 | `DATASOURCE_NOT_FOUND` | The data-source alias doesn't match, or the project has none yet; the message lists the available names |
-| `NOT_A_SQL_DATASOURCE` | The target data source isn't a relational SQL database (Redis / MongoDB style URL sub-protocols); the message carries only the sub-protocol, never credentials |
 | `DATASOURCE_UNREACHABLE` | Connect or execute failed (unreachable, authentication failure, …) |
 | `SCHEMA_NOT_AVAILABLE` | No metadata for the table in any data source (source not connected, or introspection unfinished) |
 | `DIALECT_UNSUPPORTED` | No EXPLAIN rendering for the current dialect |
 | `SOURCE_NOT_FOUND` | No recognisable SQL source at the given location: not a statement line, path outside the project, file missing, or a template format the plugin doesn't support yet |
-| `EXTERNAL_RENDER_FAILED` | External template rendering failed — invalid command template, launch failure, timeout, non-zero exit or empty output; only possible once "External SQL Template" is enabled |
 | `TOOL_DISABLED` | The tool is disabled in Settings; an external session that remembers the tool name and calls it directly gets this code too, and no tool logic runs |
 | `PROJECT_NOT_READY` | Project indexing unfinished or the project is closing — retry shortly |
 

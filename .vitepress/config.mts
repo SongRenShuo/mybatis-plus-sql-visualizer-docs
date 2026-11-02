@@ -48,6 +48,10 @@ const pluginVersion: string = (() => {
   }
 })()
 
+// 站点主描述（og:description 与站点 description 同文，避免两处手写漂移）
+const siteDescription =
+  'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），真实 EXPLAIN 执行计划，运行期捕获真实参数与耗时（慢查询标红与静态性能建议），日志一键跳回源码，SQL 反向转 Java 代码。'
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   // 忽略死链接（开发计划中的 localhost 链接）
@@ -63,11 +67,10 @@ export default defineConfig({
 
   // docs/ 为内部文档（开发计划、开发笔记、发行说明、验收文档、SQL 文件、memory-archive），
   // 不面向访客：直接从构建源排除，既不出页面，也不进 sitemap 与搜索索引。
-  srcExclude: ['docs/**'],
+  srcExclude: ['docs/**', 'README.md'],
 
   title: 'SQL Visualizer',
-  description:
-    'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器——Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），真实 EXPLAIN 执行计划，运行期捕获真实参数与耗时（慢查询标红与静态性能建议），日志一键跳回源码，SQL 反向转 Java 代码。',
+  description: siteDescription,
 
   // 默认语言
   lang: 'zh-CN',
@@ -82,6 +85,9 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'SQL Visualizer' }],
+    ['meta', { property: 'og:title', content: 'SQL Visualizer' }],
+    ['meta', { property: 'og:description', content: siteDescription }],
+    ['meta', { property: 'og:url', content: 'https://sql-visualizer.jvtools.cn/' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
     ['meta', { property: 'og:locale:alternate', content: 'en_US' }],
     ['meta', { property: 'og:image', content: 'https://sql-visualizer.jvtools.cn/og-image.png' }],
@@ -89,6 +95,8 @@ export default defineConfig({
     ['meta', { property: 'og:image:height', content: '630' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:image', content: 'https://sql-visualizer.jvtools.cn/og-image.png' }],
+    // RSS 自动发现（feed.xml 由 CF Pages Functions 输出）
+    ['link', { rel: 'alternate', type: 'application/rss+xml', title: 'SQL Visualizer Updates', href: 'https://sql-visualizer.jvtools.cn/feed.xml' }],
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
@@ -118,7 +126,7 @@ export default defineConfig({
         'Call-stack popup with click-a-frame-to-jump',
         'JPA / Hibernate derived query and CRUD preview',
         'MPJ join query live preview',
-        '11-dialect pagination rendering'
+        '14-dialect pagination rendering'
       ],
       'offers': {
         '@type': 'Offer',
@@ -190,6 +198,7 @@ export default defineConfig({
         'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器',
       themeConfig: {
         nav: [
+          { text: '安装', link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer' },
           { text: '首页', link: '/' },
           { text: '功能详解', link: '/features/wrapper-preview' },
           { text: '使用指南', link: '/guide/getting-started' },
@@ -205,10 +214,11 @@ export default defineConfig({
               { text: 'XML / HQL 动态 SQL 预览', link: '/features/xml-preview' },
               { text: 'JPA / Hibernate SQL 预览', link: '/features/jpa-preview' },
               { text: '注解 SQL 预览', link: '/features/annotation-preview' },
-              { text: 'SQL → Java 反向转换', link: '/features/sql-to-java' },
-              { text: 'SQL 日志工具窗口', link: '/features/sql-log' },
+              { text: 'SQL 转 QueryWrapper（Wrapper 反向生成 Java）', link: '/features/sql-to-java' },
+              { text: 'MyBatis 日志转完整 SQL（问号自动替换参数）', link: '/features/sql-log' },
               { text: '批量操作参数面板', link: '/features/batch-operation' },
-              { text: 'CRUD SQL 生成', link: '/features/crud-sql' },
+              { text: '根据实体类 / 表生成 INSERT 语句', link: '/features/crud-sql' },
+              { text: '数据库方言支持矩阵', link: '/features/dialect-support' },
               { text: 'SQL 代码补全', link: '/features/code-completion' },
               { text: 'MCP Server 工具', link: '/features/mcp' }
             ]
@@ -222,7 +232,9 @@ export default defineConfig({
               { text: '版本兼容', link: '/guide/compatibility' },
               { text: '内网与离线环境', link: '/guide/offline' },
               { text: '为什么选择 SQL Visualizer', link: '/guide/comparison' },
-              { text: '常见问题 FAQ', link: '/guide/faq' }
+              { text: '常见问题 FAQ', link: '/guide/faq' },
+              { text: 'MyBatis 日志里的问号怎么变成真实参数', link: '/guide/mybatis-log-params' },
+              { text: '不用 p6spy，怎么看到带真实参数的完整 SQL', link: '/guide/without-p6spy' }
             ]
           },
           '/about/': {
@@ -233,7 +245,8 @@ export default defineConfig({
               { text: '开发路线', link: '/about/roadmap' },
               { text: '需求反馈池', link: '/about/feedback' },
               { text: 'Bug 悬赏', link: '/about/bounty' },
-              { text: '友情推荐', link: '/about/friends' }
+              { text: '友情推荐', link: '/about/friends' },
+              { text: '隐私说明', link: '/about/privacy' }
             ]
           }
         },
@@ -245,6 +258,7 @@ export default defineConfig({
           level: [2, 3],
           label: '页面导航'
         },
+        returnToTopLabel: '回到顶部',
         docFooter: {
           prev: '上一篇',
           next: '下一篇'
@@ -270,9 +284,10 @@ export default defineConfig({
       lang: 'en-US',
       title: 'SQL Visualizer',
       description:
-        'IntelliJ IDEA Plugin: SQL debugging tool for MyBatis-Plus / MPJ — Wrapper chain, XML/annotation dynamic SQL live preview (incl. MPJ JOIN), console log restore, SQL to Java reverse conversion',
+        'IntelliJ IDEA plugin: SQL debugging companion for MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate — live SQL preview of Wrapper chains and XML/annotation/HQL dynamic SQL (incl. MPJ joins), real EXPLAIN execution plans, runtime capture of real parameters and durations with slow-query highlighting, log-to-source navigation, SQL-to-Java reverse conversion, and MCP Server tools.',
       themeConfig: {
         nav: [
+          { text: 'Install', link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer' },
           { text: 'Home', link: '/en/' },
           { text: 'Features', link: '/en/features/wrapper-preview' },
           { text: 'Guide', link: '/en/guide/getting-started' },
@@ -288,10 +303,11 @@ export default defineConfig({
               { text: 'XML / HQL Dynamic SQL Preview', link: '/en/features/xml-preview' },
               { text: 'JPA / Hibernate SQL Preview', link: '/en/features/jpa-preview' },
               { text: 'Annotation SQL Preview', link: '/en/features/annotation-preview' },
-              { text: 'SQL → Java Reverse Conversion', link: '/en/features/sql-to-java' },
-              { text: 'SQL Log Tool Window', link: '/en/features/sql-log' },
+              { text: 'SQL to QueryWrapper (Reverse-Generate Wrapper Java Code)', link: '/en/features/sql-to-java' },
+              { text: 'MyBatis Log to Real SQL (Auto Parameter Substitution)', link: '/en/features/sql-log' },
               { text: 'Batch Operation Panel', link: '/en/features/batch-operation' },
-              { text: 'CRUD SQL Generation', link: '/en/features/crud-sql' },
+              { text: 'Generate INSERT Statements from Entity Classes / Tables', link: '/en/features/crud-sql' },
+              { text: 'Dialect Support Matrix', link: '/en/features/dialect-support' },
               { text: 'SQL Code Completion', link: '/en/features/code-completion' },
               { text: 'MCP Server Tools', link: '/en/features/mcp' }
             ]
@@ -305,7 +321,9 @@ export default defineConfig({
               { text: 'Compatibility', link: '/en/guide/compatibility' },
               { text: 'Offline & Intranet', link: '/en/guide/offline' },
               { text: 'Why SQL Visualizer', link: '/en/guide/comparison' },
-              { text: 'FAQ', link: '/en/guide/faq' }
+              { text: 'FAQ', link: '/en/guide/faq' },
+              { text: 'Turning the ? marks in MyBatis logs into real parameters', link: '/en/guide/mybatis-log-params' },
+              { text: 'Seeing complete SQL with real parameters without p6spy', link: '/en/guide/without-p6spy' }
             ]
           },
           '/en/about/': {
@@ -316,7 +334,8 @@ export default defineConfig({
               { text: 'Roadmap', link: '/en/about/roadmap' },
               { text: 'Feedback Pool', link: '/en/about/feedback' },
               { text: 'Bug Bounty', link: '/en/about/bounty' },
-              { text: 'Friend Recommendations', link: '/en/about/friends' }
+              { text: 'Friend Recommendations', link: '/en/about/friends' },
+              { text: 'Privacy', link: '/en/about/privacy' }
             ]
           }
         },

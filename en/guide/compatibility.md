@@ -3,7 +3,7 @@
 ## IDE versions
 
 - [IntelliJ IDEA](https://www.jetbrains.com/idea/) **2024.3 or later** (build 243+), no upper bound — always adapted to the latest release
-- Other IntelliJ Platform IDEs (PyCharm, WebStorm, GoLand, etc. 2024.3+) install fine, but MyBatis / JPA capabilities need a Java context — IDEA Ultimate or Community is recommended
+- IntelliJ IDEA Community and Android Studio are also supported (2024.3+). The plugin depends on the IntelliJ Platform's Java module, so IDEs without built-in Java support are not supported — use a product with a Java context
 - Ultimate-only capability: executing SQL straight from the preview popup with `Ctrl+Enter` (requires the bundled Database plugin)
 
 ## Runtime
@@ -38,7 +38,7 @@ First-stage support: common chain and annotation styles are covered; rarer shape
 
 - **JetBrains Marketplace** (recommended): in the IDE, `Settings` > `Plugins` > `Marketplace`, search `SQL Visualizer`; with the IDE running you can also one-click install from the [Marketplace page](https://plugins.jetbrains.com/plugin/33633-sql-visualizer)
 - **Offline**: download the plugin package from [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases), then `Settings` > `Plugins` > ⚙ > `Install Plugin from Disk...`
-- Early-access builds ship through the Gitee internal update channel — see the [About page](../about/)
+- Early-access builds ship through the Gitee update channel — see [Offline & Intranet · Intranet update channel](./offline.md#intranet-update-channel) for how to enable it
 - **Intranet / no internet**: core features work entirely offline; see [Offline & Intranet](./offline.md) for network behavior, JDBC driver preparation and an internal update channel
 
 ## If something does not work

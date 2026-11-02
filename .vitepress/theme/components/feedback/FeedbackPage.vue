@@ -96,7 +96,7 @@ function readQueryPost(): string | null {
 // 仅接受合法 slug（与 FeedbackForm 的 categorySlugs 同一份枚举），非法值静默忽略
 const CATEGORY_SLUGS = [
   'wrapper', 'xml', 'annotation', 'sql-to-java',
-  'sql-log', 'batch', 'completion', 'other',
+  'sql-log', 'batch', 'completion', 'mcp', 'jpa', 'other',
 ]
 function readQueryCategory(): string | null {
   const q = new URLSearchParams(window.location.search).get('category')

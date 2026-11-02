@@ -34,7 +34,7 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 | Show DataPermissionInterceptor runtime-difference hint | Off | When on, the warning area of SELECT / UPDATE / DELETE previews notes that the interceptor appends conditions dynamically at runtime |
 | Data-permission mock condition | empty | A hand-written WHERE fragment (e.g. `dept_id IN (1,2,3)`) appended to the end of SELECT / UPDATE / DELETE, for previewing the statement as data permissions would shape it |
 | Structured EXPLAIN rendering inside the preview panel | Off (experimental) | By default the plan goes to the native database console; when on, MySQL-family (tabular rows) and PostgreSQL-family (FORMAT JSON tree) plans render structurally inside the preview panel with index suggestions, while other dialects and any failure path fall back to the native console (both channels coexist) |
-| Keep raw EXPLAIN plans across sessions | Off | Off means plans are only comparable within the current session. When on, snapshots are saved by "project + data source UUID + dialect + format + SQL fingerprint" for later comparison, up to 5 per history entry and 256 KiB each. **Off by default**: raw plans are not redacted and predicates may contain business values or credentials; clearing preview history deletes retained plans too. See [Wrapper → SQL Preview · Cross-Run Comparison and Plan History](/en/features/wrapper-preview#cross-run-comparison-and-plan-history) |
+| Keep raw EXPLAIN plans across sessions | Off | Off means plans are only comparable within the current session. When on, snapshots are saved by "project + data source UUID + dialect + format + SQL fingerprint" for later comparison, up to 5 per history entry and 256 KiB each. **Off by default**: raw plans are not redacted and predicates may contain business values or credentials; clearing preview history deletes retained plans too. See [Wrapper → SQL Preview · Cross-Run Comparison and Plan History](/en/features/wrapper-preview#cross-run-comparison-and-plan-history-experimental) |
 | Execution Timeout | 30 s | Timeout guard for the execute / EXPLAIN chain (0 = unlimited): a hung query no longer sits in loading forever — the statement is cancelled first, then an error is reported; multi-statement scripts get a budget scaled by statement count (capped at 8x) |
 | Calibrate Column Names from the Data Source | On | When an entity field name differs from the real column name in the database, column names in the preview SQL are corrected against the data source's real column set; global and project-level switches each available. See [Wrapper → SQL Preview · Parameter Fill-in](/en/features/wrapper-preview#parameter-fill-in) |
 | Empty-Parameter Fill Strategy | Placeholder `?` | How a parameter input row with signature info is filled when left empty — Placeholder `?` (default) / NULL literal / empty string, three options. See [XML / HQL Dynamic SQL Preview · Parameter Panel](/en/features/xml-preview#parameter-panel) |
@@ -152,41 +152,6 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 - Per-tool enable/disable for all eleven tools, plus "Enable All / Disable All" quick buttons
 - Changes take effect immediately — no IDE restart needed; disabled tools are not just removed from the list — the execution entry re-checks the switches before every call, so an external session calling a disabled tool by name gets a `TOOL_DISABLED` error
 - These switches gate the plugin's own tools only; the IDE-wide "Enable MCP Server" toggle under Tools → MCP Server is the platform master switch (other plugins and platform tools share the same service), and the two are independent — with the plugin's switch off, the platform service keeps running, while the plugin removes the `sqlv_*` tools from the agent's tool list dynamically through the platform's tool-filter extension, no restart needed
-
-## Banned APIs
-
-The "Banned APIs" subpage moves the team's hard rule ("these lines are not allowed") from grep-during-review into the editor. Rules are shared across projects (stored in `mp-sql-visualizer-banned-api.xml`), and edits apply immediately — there is no OK / Apply button.
-
-| Field | Meaning |
-|-------|---------|
-| Class | Exact mode takes a fully-qualified name (`com.acme.LegacyDao`); regex mode matches the whole string (`com\.acme\..*`) |
-| Match mode | Exact or regex — decides how the Class field is read |
-| Method name regex (optional) | Whole-string match; leave empty to cover every method of the class |
-| Level | Error (red) / Warning (yellow) |
-| Description (required) | Why it's banned and what to use instead — both the editor tooltip and the scan report quote this text |
-
-- Matching calls are underlined red or yellow in the editor, with your description on hover; when a single site is fine, suppress it with `@SuppressWarnings("BannedApi")`
-- **With no rules the inspection does nothing at all**: it stays out of the daemon, so installing the plugin doesn't suddenly litter the editor with warnings
-- Matching is by the method's **declaring class**: for overridden methods write the rule against the subclass; only Java call sites are covered today
-- "Count Banned API Usages" in the Tools menu runs one read-only scan over the project's Java files, summarising hits per rule with a detail list (capped at 500 entries) and opening the report in the editor; during indexing it asks you to try again later
-
-## External SQL Template
-
-A fallback channel for projects whose SQL doesn't live in MyBatis: formats like a `<sqls>` root, statements as `<sql id="…">` and `:named` parameters aren't something the plugin parses — rather than teaching it your grammar, point it at your own render command and use that as the function. Off by default; while off, `sqlv_render_sql` behaves exactly as before and no process is ever started.
-
-| Setting | Default | Meaning |
-|---------|---------|---------|
-| Render custom template statements with an external command | Off | Master switch; while off this path is never taken |
-| Statement tag names | `sql` | Comma-separated XML tag names (e.g. `sql,query`), case-insensitive; a caret inside these tags routes to the external renderer |
-| Render command | empty | Launched as an argument list (**never through a shell**), one token per argument; quote arguments containing spaces with `"…"` / `'…'` |
-| Timeout (seconds) | 10 | Clamped to 1–120; on timeout the process is killed |
-| Working directory | empty | Empty means the project root; a non-existent directory also falls back to the project root |
-
-Placeholders available to the command: `{template}` the template file path, `{sqlId}` the statement id, `{paramsJson}` the JSON passed to `sqlv_render_sql` (empty string when omitted). For example `node scripts/render.js {template} {sqlId} {paramsJson}`.
-
-A few boundaries worth stating plainly: the command runs **on your machine, as you**; the plugin neither validates its content nor sandboxes it — it is equivalent to typing the command yourself. Only the three placeholders above are substituted, and nothing else is interpreted by a shell (so globs, pipes and variable expansion won't work). When the command fails, times out or returns nothing, the call returns `EXTERNAL_RENDER_FAILED` rather than silently falling back to mapper logic and handing back a plausible-looking wrong answer. The parameter JSON goes to the command verbatim and never into logs or error text.
-
-Today this channel applies to the MCP `sqlv_render_sql` tool only; gutter previews and the preview panel still follow the plugin's built-in recognition rules and don't understand custom templates.
 
 ## Project-Level Settings
 

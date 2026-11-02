@@ -1,3 +1,7 @@
+---
+description: "mapper XML 与 Java SQL 注解字符串里的 SQL 补全——Ctrl+Space 补表名、列名、#{} 参数名与动态标签，配数据源后并入数据库真实列。"
+---
+
 # SQL 代码补全
 <GifPlayer src="/demo/code-completion.gif" alt="SQL 代码补全演示" />
 

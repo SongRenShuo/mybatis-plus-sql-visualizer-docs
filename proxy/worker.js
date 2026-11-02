@@ -19,7 +19,7 @@ export default {
     try {
       const res = await fetch(apiUrl, {
         headers: {
-          'User-Agent': 'MyBatis-Plus-SQL-Visualizer-Docs/1.0',
+          'User-Agent': 'SQL-Visualizer-Docs/1.0',
           'Accept': 'application/json',
         },
       })

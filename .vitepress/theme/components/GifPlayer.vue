@@ -47,6 +47,8 @@ function togglePlay() {
       v-else-if="!loadError"
       :src="src"
       :alt="alt || ''"
+      loading="lazy"
+      decoding="async"
       @error="loadError = true"
     />
     <div v-else style="min-height: 200px; background: var(--vp-c-bg-soft); border-radius: 12px" />

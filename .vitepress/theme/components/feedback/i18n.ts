@@ -124,6 +124,8 @@ const messages = {
     'cat.sql-log': 'SQL 日志',
     'cat.batch': '批量操作',
     'cat.completion': '代码补全',
+    'cat.jpa': 'JPA 预览',
+    'cat.mcp': 'MCP 工具',
     'cat.other': '其他',
   },
   en: {
@@ -245,6 +247,8 @@ const messages = {
     'cat.sql-log': 'SQL Log',
     'cat.batch': 'Batch Operations',
     'cat.completion': 'Code Completion',
+    'cat.jpa': 'JPA Preview',
+    'cat.mcp': 'MCP Tools',
     'cat.other': 'Other',
   },
 } as const

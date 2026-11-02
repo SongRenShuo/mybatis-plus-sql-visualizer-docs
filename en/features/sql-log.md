@@ -1,4 +1,9 @@
-# SQL Log Tool Window
+---
+title: "MyBatis Log to Real SQL (Auto Parameter Substitution)"
+description: "MyBatis log only shows question marks? Restore executable SQL with real parameters: slow queries red, EXPLAIN, jump to source. Hibernate / JdbcTemplate too."
+---
+
+# MyBatis Log to Real SQL (Auto Parameter Substitution)
 
 <GifPlayer src="/demo/sql-log.gif" alt="SQL log capture and restore demo" />
 
@@ -71,12 +76,6 @@ Manual log pasting lives in the panel's "Log → SQL" tab — paste MyBatis / Hi
 
 ## Features
 
-### Toolbar
-
-Left to right, the SQL log tab's toolbar carries: capture, manage suppression rules (eye-with-slash), clear, sort by duration, sort by time, SQL type filter (funnel), follow, dedupe, timestamp display, community, help. Every icon is a semantic SVG shipped with the plugin (the same registry as the other three tabs), so it does not depend on the IDE theme's built-in icons.
-
-> The former "pause capture" entry is implemented but currently hidden, so it is not on the toolbar.
-
 ### Auto-Open Tool Window
 
 When the setting "Auto-open log window on SQL found" (on by default) is active, capturing the first SQL auto-opens the log tool window — debounced to once per 60 seconds, without stealing editor focus.
@@ -97,7 +96,13 @@ When the setting "Auto-open log window on SQL found" (on by default) is active, 
 
 <GifPlayer src="/demo/capture-diagnostics.gif" alt="Capture diagnostics: the SQL log panel's empty state states 'no SQL captured yet' with three tiers of next steps (click Capture and run a console that emits SQL logs / restore manually from the Log to SQL tab / turn on enhanced capture in settings for real parameter values and precise timing); clicking the trailing Open Settings (jump to enhanced capture) link jumps straight to Settings > Tools > SQL Visualizer > SQL Log with the source-location capture group and its enhanced-capture toggle on screen" />
 
-### SQL Highlighting & Execution Time
+### Toolbar
+
+Left to right, the SQL log tab's toolbar carries: capture, manage suppression rules (eye-with-slash), clear, sort by duration, sort by time, SQL type filter (funnel), follow, dedupe, timestamp display, community, help. Every icon is a semantic SVG shipped with the plugin (the same registry as the other three tabs), so it does not depend on the IDE theme's built-in icons.
+
+> The former "pause capture" entry is implemented but currently hidden, so it is not on the toolbar.
+
+## SQL Highlighting & Execution Time
 
 - SQL summaries in the list are lexically colored: keywords, table names, strings, numbers and comments each in their own color; timestamps are dimmed gray, while durations are colored relative to the slow-query threshold
 - Durations on enhanced-capture entries are the real measured execution time (millisecond-accurate); console capture instead parses them from the log, supporting p6spy `elapsed`, MyBatis-Plus `Time:` output and a custom time prefix (configurable in settings, default `Time:`)

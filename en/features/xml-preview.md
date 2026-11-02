@@ -1,8 +1,13 @@
+---
+title: "XML / HQL Dynamic SQL Preview"
+description: "MyBatis XML dynamic SQL preview (foreach / if / choose result) — mapper XML rendered to executable SQL per MyBatis semantics; HQL and JPQL supported too."
+---
+
 # XML / HQL Dynamic SQL Preview
 
 <GifPlayer src="/demo/xml-preview.gif" alt="XML Dynamic SQL Preview Demo" />
 
-Complete preview of dynamic SQL in mapper XML — rendered per MyBatis semantics with OGNL expression toggles. Hibernate HQL and JPA JPQL previews are supported as well (see below).
+Complete preview of dynamic SQL in mapper XML — the stitched result of dynamic tags (foreach / if / choose) is rendered per MyBatis semantics, with OGNL expression toggles. Hibernate HQL and JPA JPQL previews are supported as well (see below).
 
 ## Trigger Method
 
