@@ -1,8 +1,4 @@
 ---
-prev:
-  text: 更新日志
-  link: /about/changelog
-next: false
 ---
 
 # 开发路线
@@ -63,7 +59,7 @@ next: false
 :::
 
 ::: details 转换与补全（8 项）
-- [x] SQL → Java 反向转换（五形态，多表 JOIN）
+- [x] SQL → Java 反向转换（五种默认形态，多表 JOIN）
 - [x] SQL → Java 能力扩展与方言宽容（分组 / 聚合 / 联合 / 返回类型自由输入）
 - [x] SQL 代码补全（表列名 / 注释 / 参数名）
 - [x] Wrapper 方法链智能补全

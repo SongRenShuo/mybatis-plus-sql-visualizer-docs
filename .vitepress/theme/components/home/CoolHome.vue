@@ -1,6 +1,7 @@
 <script setup>
 import NavHeader from './NavHeader.vue'
 import HeroSection from './HeroSection.vue'
+import HeroSteps from './HeroSteps.vue'
 import SocialProof from './SocialProof.vue'
 import FeatureAlternate from './FeatureAlternate.vue'
 import DocsShowcase from './DocsShowcase.vue'
@@ -8,6 +9,7 @@ import FeaturesGrid from './FeaturesGrid.vue'
 import WelfareCard from './WelfareCard.vue'
 import Testimonials from './Testimonials.vue'
 import PricingSection from './PricingSection.vue'
+import RecentUpdates from './RecentUpdates.vue'
 import CtaSection from './CtaSection.vue'
 import BackToTop from './BackToTop.vue'
 import { useReveal } from '../../composables/useReveal'
@@ -25,6 +27,7 @@ useReveal()
     <NavHeader />
     <main>
       <HeroSection />
+      <HeroSteps />
       <SocialProof />
       <FeatureAlternate />
       <DocsShowcase />
@@ -32,6 +35,7 @@ useReveal()
       <WelfareCard />
       <Testimonials />
       <PricingSection />
+      <RecentUpdates />
       <CtaSection />
     </main>
     <footer class="mp-footer">

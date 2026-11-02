@@ -2,6 +2,15 @@
 
 Get up and running with SQL Visualizer in 3 minutes.
 
+## What do you want to do?
+
+Jump straight to your goal — each path pays off in at most three steps:
+
+1. **Preview a Wrapper chain** — install the plugin (see "Installation" below), put the caret on the Wrapper chain's variable declaration line, click the gutter icon or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>, and the popup shows the SQL. The full walkthrough is right below on this page; for advanced usage see [Wrapper → SQL Preview](../features/wrapper-preview.md)
+2. **Preview XML dynamic SQL** — open a mapper XML and click the gutter icon next to a `<select>` (or other SQL statement) tag line. See [XML / HQL Dynamic SQL Preview](../features/xml-preview.md)
+3. **Preview JPA / HQL** — open the line holding a Repository method, a `@Query` annotation or an HQL string and click the gutter icon. See [JPA / Hibernate SQL Preview](../features/jpa-preview.md)
+4. **Watch runtime SQL logs** — with your project running, open the SQL Log tool window and captured SQL arrives with real parameters. See [SQL Log Tool Window](../features/sql-log.md)
+
 ## Installation
 
 <Steps :title="''">
@@ -11,7 +20,7 @@ Get up and running with SQL Visualizer in 3 minutes.
 1. Open <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd>
 2. Search for `SQL Visualizer`
 3. Click <kbd>Install</kbd>
-4. Restart IDE
+4. If the plugin entry does not appear right after install, restart IDEA once; later version updates usually hot-swap without a restart (the offline update channel supports hot-swap as well)
 
 ![Searching "SQL Visualizer" in the Marketplace: the first result is this plugin (author SongRenShuo), and the detail pane on the right carries the Install button and the version number](/demo/install-marketplace.png)
 
@@ -20,7 +29,7 @@ Get up and running with SQL Visualizer in 3 minutes.
 1. Download the plugin from [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) or [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases)
 2. In IDE, open <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>⚙</kbd> > <kbd>Install Plugin from Disk...</kbd>
 3. Select the downloaded plugin package (no extraction needed)
-4. Restart IDE
+4. If the plugin entry does not appear right after install, restart IDEA once; later version updates usually hot-swap without a restart (the offline update channel supports hot-swap as well)
 
 </Steps>
 

@@ -1,3 +1,7 @@
+---
+description: "Batch parameter panel for saveBatch / updateBatchById — expand by column with per-column toggles, UPSERT conflict clauses per dialect, FieldFill simulation."
+---
+
 # Batch Operation Panel
 <GifPlayer src="/demo/batch-operation.gif" alt="Batch Operation Panel Demo" />
 

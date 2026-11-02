@@ -35,11 +35,11 @@ const { c, isEnglish } = useHomeContent()
               <span>{{ c.hero.install }}</span>
             </a>
             <a
-              href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases"
+              :href="c.hero.offlineHref"
               target="_blank"
               rel="noopener noreferrer"
               class="btn-large btn-outline"
-              @click="trackDownload('gitee-releases')"
+              @click="trackDownload(c.hero.offlineTrack)"
             >
               <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                 <path d="M12 3v10m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
@@ -71,6 +71,9 @@ const { c, isEnglish } = useHomeContent()
               <span class="hero-stat-label">{{ c.hero.statLabels[2] }}</span>
             </div>
           </div>
+
+          <!-- 安装路径一行：与三个数字放在一起，给「从哪装」一个直给答案 -->
+          <p class="hero-install-path">{{ c.hero.installPath }}</p>
         </div>
 
         <div class="hero-visual">
@@ -303,6 +306,15 @@ const { c, isEnglish } = useHomeContent()
   color: var(--text-secondary);
   font-size: 0.75rem;
   margin-top: 0.25rem;
+}
+
+/* 安装路径 meta 小字：延续 hero-stat-label 的字号与次要色，负外边距
+   收紧与数字行的间距（hero-content 的 gap 1.5rem 对这行太大） */
+.hero-install-path {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  margin: -0.75rem 0 0;
 }
 
 /* Hero visual */

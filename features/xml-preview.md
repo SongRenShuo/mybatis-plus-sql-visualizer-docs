@@ -1,8 +1,13 @@
+---
+title: "XML / HQL 动态 SQL 预览"
+description: "MyBatis XML 动态 SQL 预览（foreach / if / choose 拼接结果）——mapper XML 按 MyBatis 语义渲染成可执行 SQL，OGNL 条件可勾选，Hibernate HQL 与 JPA JPQL 同样可预览。"
+---
+
 # XML / HQL 动态 SQL 预览
 
 <GifPlayer src="/demo/xml-preview.gif" alt="XML 动态 SQL 预览演示" />
 
-mapper XML 文件中的动态 SQL 完整预览——按 MyBatis 语义渲染，OGNL 表达式可在面板勾选。同样支持 Hibernate HQL 与 JPA JPQL 预览（见下文）。
+mapper XML 文件中的动态 SQL 完整预览——按 MyBatis 语义渲染，动态标签（foreach / if / choose）的拼接结果直接可见，OGNL 表达式可在面板勾选。同样支持 Hibernate HQL 与 JPA JPQL 预览（见下文）。
 
 ## 触发方式
 

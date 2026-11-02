@@ -29,7 +29,7 @@ function report(path: string, referrer: string | null): void {
  * 下载目标白名单。取值即上报的 q，后端原样写入 ext 列，
  * 后台按 `event_type='download' AND ext=<值>` 聚合——拼错的字符串会变成脏 ext，故运行时也要挡。
  */
-const DOWNLOAD_TARGETS = ['marketplace', 'gitee-releases'] as const
+const DOWNLOAD_TARGETS = ['marketplace', 'gitee-releases', 'github-releases', 'pricing'] as const
 
 export type DownloadTarget = (typeof DOWNLOAD_TARGETS)[number]
 
@@ -55,7 +55,7 @@ export function trackDownload(target: DownloadTarget): void {
   }
 }
 
-/** 归一化路由 path：去 hash/query、去 .html 后缀（本站未开 cleanUrls，VitePress 路由事件带 .html）、去尾斜杠 */
+/** 归一化路由 path：去 hash/query、去 .html 后缀兜底（本站已开 cleanUrls，正常路由不带 .html）、去尾斜杠 */
 function cleanPath(route: string): string {
   let path = route.split(/[?#]/)[0]
   if (path.endsWith('.html')) path = path.slice(0, -5)

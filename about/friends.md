@@ -1,10 +1,4 @@
 ---
-prev:
-  text: 更新日志
-  link: /about/changelog
-next:
-  text: 开发路线
-  link: /about/roadmap
 ---
 
 # 友情推荐

@@ -1,3 +1,7 @@
+---
+description: "Preview @Select / @Update / @Delete / @Insert annotation SQL — click the gutter icon for the SQL; <script> dynamic SQL and Provider annotations supported."
+---
+
 # Annotation SQL Preview
 <GifPlayer src="/demo/annotation-preview.gif" alt="Annotation SQL Preview Demo" />
 

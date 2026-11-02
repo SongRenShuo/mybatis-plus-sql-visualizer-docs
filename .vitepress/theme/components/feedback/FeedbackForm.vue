@@ -181,7 +181,7 @@ const types = computed<Array<{ value: number; label: string; icon: string; color
 
 const categorySlugs = [
   'wrapper', 'xml', 'annotation', 'sql-to-java',
-  'sql-log', 'batch', 'completion', 'other',
+  'sql-log', 'batch', 'completion', 'mcp', 'jpa', 'other',
 ]
 
 const categories = computed<Array<{ value: string; label: string }>>(() => {

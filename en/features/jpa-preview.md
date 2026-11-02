@@ -1,8 +1,16 @@
+---
+description: "Preview the SQL JPA / Hibernate generates — the alternative when show_sql only prints question marks. Repository methods, JPQL / HQL, Criteria, .hbm.xml."
+---
+
 # JPA / Hibernate SQL Preview
 
 <GifPlayer src="/demo/jpa-preview.gif" alt="JPA / Hibernate SQL Preview Demo" />
 
 Static SQL preview for [Spring Data JPA](https://spring.io/projects/spring-data-jpa) and [Hibernate](https://hibernate.org/orm/) projects — Repository methods, JPQL / HQL, Criteria chains, `.hbm.xml` mappings. No Spring context, no database connection: click the gutter icon next to the line and get the SQL.
+
+## vs. hibernate.show_sql
+
+`hibernate.show_sql=true` only prints statements with `?` placeholders to the console, while the real parameters are scattered across TRACE-level binding log lines — assembling one executable SQL means wiring up p6spy or a custom formatter and stitching it by hand. This plugin statically restores the complete SQL: Repository methods, JPQL / HQL and Criteria generate the statement directly, with parameters filled into the placeholders.
 
 ## Trigger Surfaces
 
@@ -114,4 +122,4 @@ Java-side `session.createNamedQuery("Entity.method")` calls that don't match a `
 
 Related pages: [Wrapper → SQL Preview](/en/features/wrapper-preview), [SQL Log Tool Window](/en/features/sql-log) (Hibernate / JdbcTemplate log capture).
 
-> Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback)
+> Have a suggestion or hit an issue with this feature? [Go to the feedback pool](/en/about/feedback?category=jpa)

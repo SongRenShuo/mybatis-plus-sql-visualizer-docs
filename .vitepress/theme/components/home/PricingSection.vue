@@ -1,5 +1,6 @@
 <script setup>
 import { useHomeContent } from '../../composables/useHomeContent'
+import { trackDownload } from '../../composables/useTracker'
 
 const { c } = useHomeContent()
 </script>
@@ -49,6 +50,7 @@ const { c } = useHomeContent()
             target="_blank"
             rel="noopener noreferrer"
             class="pricing-btn"
+            @click="trackDownload('pricing')"
           >
             {{ c.pricing.button }}
           </a>
