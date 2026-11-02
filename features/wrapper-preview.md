@@ -89,6 +89,8 @@ OceanBase 与 openGauss 的 upsert 冲突子句亦按各自真实形态渲染（
 
 带 `Page` / `IPage` 参数的语句按 MyBatis-Plus `PaginationInnerInterceptor` 的运行时行为模拟分页：预览在原语句后**尾追分页子句**，并**并列产出**一条 COUNT 包裹语句（`SELECT COUNT(*) FROM (原SQL) TOTAL`，带注释说明出处）；`searchCount=false` 与手写 LIMIT 的语句只产其一。COUNT 产物附在面板底部，需要滚到底才看得到。设置页「SQL 预览」子页可关掉整个模拟，或用「附分页 COUNT 查询预览」单独关掉 COUNT 那半。
 
+COUNT 只跟随真正的分页消费——`service.page(Page, wrapper)`、`selectPage` 这类调用，或带 `IPage` 形参的 mapper 方法。用 `wrapper.last("limit 20")` 拼出来的 LIMIT 不算分页：预览照常渲染那条 LIMIT（形参还会显示成 `?` 占位等回填），但不会再附一条 COUNT——条件构造器的字符串追加触发不了 MyBatis-Plus 的 COUNT 查询。
+
 <GifPlayer src="/demo/pagination-sim.gif" alt="分页拦截器模拟：XML 语句带 IPage 形参时，预览在原 SQL 后尾追 LIMIT 并并列产出带注释的 COUNT 包裹语句 SELECT COUNT(*) FROM (…) TOTAL" />
 
 ### JOIN 关系图
