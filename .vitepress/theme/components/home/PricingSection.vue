@@ -32,7 +32,7 @@ const { c } = useHomeContent()
           <div v-for="(group, gi) in c.pricing.groups" :key="gi" class="pricing-group">
             <div class="pricing-group-head">
               <h3 class="pricing-group-name">{{ group.name }}</h3>
-              <p class="pricing-group-caption hud-label">{{ group.caption }}</p>
+              <p class="pricing-group-caption">{{ group.caption }}</p>
             </div>
             <ul class="pricing-group-items">
               <li v-for="(item, ii) in group.items" :key="ii" class="pricing-item">
@@ -187,7 +187,9 @@ const { c } = useHomeContent()
 }
 
 .pricing-group-caption {
+  font-size: 0.8125rem;
   line-height: 1.6;
+  color: var(--text-secondary);
   margin: 0;
 }
 

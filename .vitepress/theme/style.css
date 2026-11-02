@@ -931,13 +931,16 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
    独立成行），本班是卡片/列表内的补充说明（小字号、等宽、0.12em 窄字距）。
    改造前同类信息散在 4 种正字距（0.2/0.12/0.08/0.01em）与 2 种 px 字距里，
    且字号从 0.8125rem 到 0.9375rem 不等，同一屏内肉眼可辨差异。
-   等宽字体是为了让「Java 开发工程师」这类中英混排行的字宽节奏一致；
-   uppercase 只对拉丁字符生效，中文不受影响，不会把中文身份行改写。 */
+   等宽字体是为了让「Java 开发工程师」这类中英混排行的字宽节奏一致。
+
+   **不使用 text-transform: uppercase**：实测会把「JPA / Hibernate」写成
+   「JPA / HIBERNATE」，把「Java 开发工程师」写成「JAVA 开发工程师」——
+   品牌名与中英混排身份被无谓改写，读者会读成另一个词。字距已足够承担
+   「这是标签」的信号，不需要再靠大写。 */
 .hud-label {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
   color: var(--text-secondary);
   font-family: var(--vp-font-family-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }

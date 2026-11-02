@@ -250,5 +250,9 @@ const cards = computed(() => (isEnglish.value ? enCoolCards : coolCards))
   min-height: 3.5em;
   margin: 0;
   line-height: 1.75;
+  /* .hud-label 的 0.12em 字距在这里会把最长的一条标签（「CRUD 一键生成 ·
+     真实 EXPLAIN · MCP 十一工具」）撑到换行，末行只剩一个「具」字。
+     实测 0.08em 是不换行的最大档，标签的「标签感」仍靠字距 + 等宽 + 字重承担。 */
+  letter-spacing: 0.08em;
 }
 </style>
