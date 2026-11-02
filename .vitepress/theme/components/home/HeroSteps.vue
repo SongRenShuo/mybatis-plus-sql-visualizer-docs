@@ -188,6 +188,18 @@ const { c } = useHomeContent()
   box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.25);
 }
 
+/* 手机端演示图整行出血：抵消 section 与内层 .container 各 24px 的水平内边距。
+   改造前该图只有 294px（容器内容宽），而下方 8 张能力图（.feature-video）
+   早已满宽出血到 390px——同一页两种宽度，唯独这张显小。
+   手法与 FeatureAlternate 的 .feature-video-wrapper 一致，见
+   docs/开发计划/20260920-1230-首页功能卡手机端演示图过小修复-开发计划.md */
+@media (max-width: 767px) {
+  .steps-media {
+    margin-left: -48px;
+    margin-right: -48px;
+  }
+}
+
 .steps-gif {
   width: 100%;
   display: block;
