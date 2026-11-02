@@ -134,8 +134,9 @@ onMounted(() => {
 
 .docs-showcase-title {
   font-size: 2rem;
-  font-weight: 800;
-  line-height: 1.2;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
   margin: 0;
 }

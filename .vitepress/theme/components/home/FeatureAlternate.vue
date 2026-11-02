@@ -123,7 +123,9 @@ onMounted(() => {
 
 .section-title {
   font-size: 2.25rem;
-  font-weight: bold;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
 }
 

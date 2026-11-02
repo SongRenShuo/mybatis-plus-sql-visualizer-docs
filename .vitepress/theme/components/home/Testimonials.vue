@@ -88,9 +88,10 @@ html.dark .testimonials-badge {
 
 .testimonials-title {
   font-size: clamp(2.5rem, 5vw, 3.25rem);
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
   line-height: 1.15;
+  letter-spacing: -0.02em;
   margin-bottom: 1rem;
   margin-top: 0;
 }

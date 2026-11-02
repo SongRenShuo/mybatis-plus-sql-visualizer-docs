@@ -237,8 +237,9 @@ function handleMouseLeave() {
 
 .welfare-title {
   font-size: 2rem;
-  font-weight: 800;
-  line-height: 1.25;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
   margin-bottom: 1rem;
   margin-top: 0;
