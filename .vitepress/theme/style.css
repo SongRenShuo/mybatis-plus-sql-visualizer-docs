@@ -387,6 +387,11 @@
   text-align: center;
 }
 
+/* 页首第一个 h2 紧跟文档标题，不需要区块间 100px 的呼吸距离 */
+.vp-doc h1 + h2 {
+  margin-top: 32px !important;
+}
+
 .vp-doc h2::after {
   content: '';
   display: block;
