@@ -1,20 +1,58 @@
 <script setup>
+import { onMounted, ref } from 'vue'
 import { useHomeContent } from '../../composables/useHomeContent'
 import updatesData from '../../../data/latest-updates.json'
+import { buildEntries, buildLatestUpdates } from '../../../../scripts/changelog-core.mjs'
 
 /**
  * 「最近更新」轻区块：PricingSection 与 CtaSection 之间，渲染最新 3 个版本。
  *
- * 条目数据来自 .vitepress/data/latest-updates.json（构建期由 C 车道脚本从
- * Marketplace API 重写，本组件只消费结构与 stub）。中英摘要按 isEnglish 取列，
- * 「查看全部」链中英各自带前缀（与 testimonials 的站内链接约定一致）。
+ * 构建期：.vitepress/data/latest-updates.json 由 C 车道脚本从 Marketplace API 重写，
+ * 本组件直接导入做 SSR 直出；中英摘要按 isEnglish 取列，「查看全部」链中英各自带前缀
+ * （与 testimonials 的站内链接约定一致）。
+ *
+ * 客户端：挂载后拉 /api/changelog，按与构建期相同的规则取最新 3 版（changelog-core.mjs），
+ * 发版后不重新部署也能刷新；既有中文摘要没变时沿用静态文件里的手工英文翻译，中文被改过
+ * 则退回中文同文。实时条目不足 3 条时用静态快照补齐，拉取失败完全沿用静态内容。
  *
  * 不进 SectionNav：轻区块跟随页面节奏，不设锚点。
  * 滚动揭示只挂 mp-reveal 类，观察器由 CoolHome 统一挂。
  */
 const { c, isEnglish } = useHomeContent()
 
-const updates = updatesData.updates.slice(0, 3)
+const staticUpdates = Array.isArray(updatesData?.updates) ? updatesData.updates : []
+const updates = ref(staticUpdates.slice(0, 3))
+
+function fillFromSnapshot(list) {
+  if (list.length >= 3) return list
+  const filled = [...list]
+  const seen = new Set(filled.map((u) => u.version))
+  for (const u of staticUpdates) {
+    if (filled.length >= 3) break
+    if (seen.has(u.version)) continue
+    filled.push(u)
+    seen.add(u.version)
+  }
+  return filled
+}
+
+async function syncFromMarketplace() {
+  const res = await fetch('/api/changelog', {
+    headers: { Accept: 'application/json' },
+    signal: AbortSignal.timeout(10000),
+  })
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  const live = buildEntries(await res.json())
+  if (!live.length) return
+  const next = fillFromSnapshot(buildLatestUpdates(live, { updates: staticUpdates }, 3))
+  if (JSON.stringify(next) !== JSON.stringify(updates.value)) updates.value = next
+}
+
+onMounted(() => {
+  syncFromMarketplace().catch(() => {
+    /* 实时通道不可用：保留构建期快照 */
+  })
+})
 </script>
 
 <template>

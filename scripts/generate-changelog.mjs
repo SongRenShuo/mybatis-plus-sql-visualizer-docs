@@ -17,7 +17,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { buildEntries, collectUpdates, normVersion, toDate } from './changelog-core.mjs'
+import { buildEntries, buildLatestUpdates, collectUpdates, toDate } from './changelog-core.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(here, '..')
@@ -66,25 +66,12 @@ async function fetchUpdates(url = API_URL) {
 
 const LATEST_COMMENT =
   '构建期由 scripts/generate-changelog.mjs 从 JetBrains Marketplace API 自动重写，手工改动会被覆盖。' +
-  'summaryZh 取对应版本 notes 首条纯文本（≤80 字）；summaryEn 沿用此前的手工翻译，新版本在翻译前与 summaryZh 同文。' +
+  'summaryZh 取对应版本 notes 首条纯文本（≤80 字）；summaryEn 沿用此前的手工翻译（中文摘要变了就不再沿用），新版本在翻译前与 summaryZh 同文。' +
+  '首页「最近更新」打开时会用 /api/changelog 实时刷新，本文件是构建期兜底。' +
   `数据来源 ${API_URL}`
 
 function buildLatestJson(entries, existing) {
-  const oldByVersion = new Map(
-    (Array.isArray(existing?.updates) ? existing.updates : []).map((u) => [normVersion(u.version), u]),
-  )
-  const updates = entries.slice(0, LATEST_COUNT).map((e) => {
-    const prev = oldByVersion.get(normVersion(e.version))
-    // 既有条目若带人工翻译（en !== zh），保留；新版本摘要中英同文
-    const summaryEn =
-      prev && prev.summaryEn && prev.summaryEn !== prev.summaryZh ? prev.summaryEn : e.summaryZh
-    return {
-      version: e.version,
-      date: e.date,
-      summaryZh: e.summaryZh,
-      summaryEn,
-    }
-  })
+  const updates = buildLatestUpdates(entries, existing, LATEST_COUNT)
   return `${JSON.stringify({ _comment: LATEST_COMMENT, updates }, null, 2)}\n`
 }
 

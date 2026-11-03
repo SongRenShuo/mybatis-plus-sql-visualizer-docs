@@ -160,3 +160,27 @@ export function mergeEntries(liveEntries, staticEntries) {
   }
   return [...byVersion.values()].sort(compareEntries)
 }
+
+/**
+ * 取最新 N 版摘要（首页「最近更新」用）。
+ * summaryEn 保留既有手工翻译，但只在中文摘要没变时才沿用——老版本说明被改过后，
+ * 旧译文已经对不上新中文，退回与中文同文，等人工重译。
+ */
+export function buildLatestUpdates(entries, existing, count = 3) {
+  const oldByVersion = new Map(
+    (Array.isArray(existing?.updates) ? existing.updates : []).map((u) => [normVersion(u.version), u]),
+  )
+  return entries.slice(0, count).map((e) => {
+    const prev = oldByVersion.get(normVersion(e.version))
+    const summaryEn =
+      prev && prev.summaryEn && prev.summaryEn !== prev.summaryZh && prev.summaryZh === e.summaryZh
+        ? prev.summaryEn
+        : e.summaryZh
+    return {
+      version: e.version,
+      date: e.date,
+      summaryZh: e.summaryZh,
+      summaryEn,
+    }
+  })
+}
