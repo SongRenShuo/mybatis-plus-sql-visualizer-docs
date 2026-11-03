@@ -61,10 +61,15 @@ onUnmounted(() => {
   >
     <div class="container">
       <div class="nav-content">
-        <div class="logo-area">
-          <img src="/logo.svg" alt="Logo" class="nav-logo" />
-          <span class="logo-text">SQL Visualizer</span>
-        </div>
+        <!-- 品牌：原 logo 标记在左，新字标在右。≥768 用完整字标（含 Visualizer），
+             窄屏换成独立标记；400 以下只留原 logo。
+             字标用背景图而不是 <picture>：picture 的 source 在视口变化后不保证重新选择
+             （实测从 1280 缩到 400 仍停在字标），背景图按媒体查询直接生效，
+             且同一时刻只会下载命中的那一张 -->
+        <span class="brand">
+          <img src="/logo.svg" alt="" class="nav-mark" aria-hidden="true" />
+          <span class="logo-area" role="img" aria-label="SQL Visualizer"></span>
+        </span>
 
         <nav class="nav-links">
           <a v-for="link in c.nav.links" :key="link.href" :href="link.href" class="nav-link">
@@ -125,6 +130,8 @@ onUnmounted(() => {
                 <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
               </svg>
             </button>
+            <PagefindSearch compact />
+
             <a
               href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer"
               target="_blank"
@@ -144,8 +151,6 @@ onUnmounted(() => {
             >
               <img src="/github-icon.png" alt="GitHub" class="nav-gitee-icon" />
             </a>
-
-            <PagefindSearch compact class="nav-search" />
           </div>
 
           <a
@@ -258,53 +263,73 @@ onUnmounted(() => {
   padding: 12px 0;
 }
 
-.logo-area {
+.brand {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
 }
 
-.nav-logo {
-  width: 26px;
-  height: 26px;
+.nav-mark {
+  display: block;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
-  .nav-logo {
-    width: 30px;
-    height: 30px;
+  .nav-mark {
+    width: 34px;
+    height: 34px;
   }
 }
 
-/* 品牌名要压过导航链接一档：18px 与正文同号会被读成「正文级」，且原色对比度只有
-   3.72:1（浅色）/ 2.36:1（暗色）。字号按断点分三档，颜色走导航专用变量，
-   不动全站 --primary-color（全站 80 处引用）。 */
-.logo-text {
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: var(--nav-brand-color);
-  white-space: nowrap;
-  letter-spacing: -0.01em;
+.logo-area {
+  display: block;
+  flex-shrink: 0;
+  /* 标记 275×96（2.87:1），24px 高 → 69px 宽 */
+  width: 69px;
+  height: 24px;
+  background-image: url(/logo-mark.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain;
 }
 
-/* 480 以下不显示品牌名：实测 400 视口下「logo + 品牌名(104) + 动作区(236)」= 374，
-   超出内容宽 337（111%），440 也还有 99%，只有到 480 才回到 90% */
+@media (min-width: 768px) {
+  /* 字标 685×96（7.14:1），32px 高 → 229px 宽。暗色版走 CSS 变量切换：
+     scoped 样式里的 :global(.dark) 祖先选择器会被编译器吃掉（实测编译成 .dark{...}），
+     变量放在 style.css 的 :root / .dark 里最稳 */
+  .logo-area {
+    width: 229px;
+    height: 32px;
+    background-image: var(--nav-logo-lockup);
+  }
+}
+
+/* 768~1023 一档导航链接最多、空间最紧（品牌 242 + 链接 212 + 动作区 228 ≈ 682 / 705），
+   标记回到 28、字标收到 24px 高（171 宽），链接间距 12px，占比压到 91% */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav-mark {
+    width: 28px;
+    height: 28px;
+  }
+
+  .logo-area {
+    width: 171px;
+    height: 24px;
+  }
+
+  .nav-links {
+    gap: 0.75rem;
+  }
+}
+
+/* 480 以下只留原 logo：标记 + 字标 + 动作区在 400 视口正好 100%，
+   没有余量留给字体放大 */
 @media (max-width: 479px) {
-  .logo-text {
+  .logo-area {
     display: none;
-  }
-}
-
-@media (min-width: 768px) {
-  .logo-text {
-    font-size: 1.125rem;
-  }
-}
-
-@media (min-width: 1280px) {
-  .logo-text {
-    font-size: 1.25rem;
   }
 }
 
