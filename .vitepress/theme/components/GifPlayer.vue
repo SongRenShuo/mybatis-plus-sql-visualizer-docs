@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { whenNear } from '../composables/lazyMedia'
 
 const props = defineProps<{
   src: string
-  /** mp4 演示视频地址，传入后优先用 video 渲染 */
+  /** 显式指定的 mp4 演示视频地址；不传时按 src 同名自动推导（x.gif → x.mp4） */
   video?: string
   alt?: string
   width?: string | number
@@ -15,15 +15,19 @@ const rootEl = ref<HTMLElement>()
 const playing = ref(true)
 const loadError = ref(false)
 /** 进到视口附近才写入 src，见 lazyMedia 的距离门控说明 */
-const imgSrc = ref('')
+const mediaSrc = ref('')
+
+// 同目录同名 mp4：仓库里每个演示 GIF 都有一份约 1/4 体积的 H.264 版本
+const derivedVideo = computed(() => props.src.replace(/\.gif$/i, '.mp4'))
+const useVideo = computed(() => !loadError.value)
 
 let cancelGate: (() => void) | null = null
 
 onMounted(() => {
-  // video 分支靠 preload="metadata" 自己控制，不需要门控
+  // 显式传 video 的分支靠自己的 preload 控制，不需要门控
   if (props.video) return
   cancelGate = whenNear(rootEl.value, 400, () => {
-    imgSrc.value = props.src
+    mediaSrc.value = derivedVideo.value
   })
 })
 
@@ -49,31 +53,41 @@ function togglePlay() {
       v-if="video"
       ref="videoEl"
       :src="video"
-      :alt="alt || ''"
       muted
       loop
       autoplay
       playsinline
       preload="metadata"
     ></video>
-    <!-- GIF 直出：src 由 lazyMedia 按距离写入。不用原生 loading="lazy"——它的触发距离
-         由浏览器按网络质量决定，慢网会把整页动图一次性全下（功能详解页一页二十多张）。
-         保留 img 元素常驻、只延迟 src，不做元素级替换，避免早期踩过的动态插入 GIF
-         解码停帧问题。 -->
+    <!-- 无显式 video 时用同名 mp4：GIF 52MB 全量转 H.264 后 18.7MB（-64%）。
+         src 由 lazyMedia 按距离写入，不用原生 loading="lazy"——它的触发距离由浏览器
+         按网络质量决定，慢网会把整页动图一次性全下。 -->
+    <video
+      v-else-if="useVideo && mediaSrc"
+      ref="videoEl"
+      :src="mediaSrc"
+      muted
+      loop
+      autoplay
+      playsinline
+      preload="metadata"
+      :aria-label="alt || undefined"
+      @error="loadError = true"
+    ></video>
+    <!-- 视频加载失败时退回原 GIF -->
     <img
-      v-else-if="!loadError"
-      :src="imgSrc || null"
+      v-else-if="loadError"
+      :src="mediaSrc || src"
       :alt="alt || ''"
       decoding="async"
-      @error="loadError = true"
     />
-    <div v-else style="min-height: 200px; background: var(--vp-c-bg-soft); border-radius: 12px" />
     <span v-if="video" class="mp-gif-player__badge">{{ playing ? 'DEMO' : '⏸' }}</span>
   </div>
 </template>
 
 <style scoped>
-.mp-gif-player img {
+.mp-gif-player img,
+.mp-gif-player video {
   display: block;
   width: 100%;
 }

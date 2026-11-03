@@ -156,6 +156,30 @@
   background: none !important;
 }
 
+/* 文档页顶栏品牌与首页对齐：30px 图标 + 20px/700 实色品牌蓝（首页 NavHeader 同款）。
+   VitePress 默认是 24px 图标 + 1rem/600 的次要色文字 */
+.VPNavBarTitle .title {
+  gap: 8px !important;
+}
+
+.VPNavBarTitle .title .VPImage.logo {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.VPNavBarTitle .title > span {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--nav-brand-color) !important;
+}
+
+@media (max-width: 1279px) {
+  .VPNavBarTitle .title > span {
+    font-size: 1.125rem !important;
+  }
+}
+
 .VPNavBar .link:hover {
   color: var(--primary-color) !important;
 }

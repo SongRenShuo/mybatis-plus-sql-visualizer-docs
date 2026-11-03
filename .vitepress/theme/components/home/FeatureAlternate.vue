@@ -20,15 +20,17 @@ const media = [
   { imageSrc: '/demo/xml-preview.gif', poster: '/demo/xml-preview.png', reverse: true },
   { imageSrc: '/demo/jpa-preview.gif', poster: '/demo/jpa-preview.png' },
   { imageSrc: '/demo/mcp-agent.gif', poster: '/demo/mcp-agent.png', reverse: true },
-]
+].map((m) => ({ ...m, videoSrc: m.imageSrc.replace(/\.gif$/i, '.mp4') }))
 
 /**
  * 按距离门控加载，不用原生 loading="lazy"：原生阈值由浏览器按网络质量决定，
- * 慢网会放大到几千像素（实测慢网下首页 8 位的 GIF + poster 会被一次性全下，
- * 合计约 10.6MB，单个 1~1.6MB 的 GIF 要跑 20 秒）。这里 poster 提前 800px、
- * GIF 到 200px 才下，与网络无关。
+ * 慢网会放大到几千像素（实测慢网下首页 8 位会被一次性全下）。这里 poster 提前
+ * 800px、视频到 200px 才下，与网络无关。
+ *
+ * 演示媒体从 GIF 换成 H.264 MP4：全站 69 个 GIF 合计 52MB，转码后 18.7MB（-64%），
+ * 首页这 8 位从约 7.0MB 降到约 2.4MB，且视频可流式播放，不必整份下完。
  */
-const states = reactive(media.map(() => ({ posterSrc: '', gifSrc: '', gifReady: false, gifError: false })))
+const states = reactive(media.map(() => ({ posterSrc: '', videoSrc: '', gifError: false })))
 
 const features = computed(() =>
   c.value.capability.items.map((item, i) => ({ ...item, ...media[i], ...states[i] })),
@@ -41,7 +43,7 @@ onMounted(() => {
   const wrappers = [...sectionEl.value.querySelectorAll('.feature-video-wrapper')]
   wrappers.forEach((el, i) => {
     gates.push(whenNear(el, 800, () => { states[i].posterSrc = media[i].poster }))
-    gates.push(whenNear(el, 200, () => { states[i].gifSrc = media[i].imageSrc }))
+    gates.push(whenNear(el, 200, () => { states[i].videoSrc = media[i].videoSrc }))
   })
 })
 
@@ -75,14 +77,17 @@ onBeforeUnmount(() => gates.forEach((cancel) => cancel()))
               decoding="async"
               class="feature-video"
             />
-            <img
-              v-if="item.gifSrc && !item.gifError"
-              :src="item.gifSrc"
-              :alt="item.title"
-              decoding="async"
-              class="feature-video feature-video--gif"
-              :class="{ 'feature-video--gif-ready': item.gifReady }"
-              @load="states[index].gifReady = true"
+            <video
+              v-if="item.videoSrc && !item.gifError"
+              :src="item.videoSrc"
+              :poster="item.posterSrc || undefined"
+              muted
+              loop
+              playsinline
+              autoplay
+              preload="metadata"
+              :aria-label="item.title"
+              class="feature-video feature-video--video"
               @error="states[index].gifError = true"
             />
           </div>
@@ -186,16 +191,13 @@ onBeforeUnmount(() => gates.forEach((cancel) => cancel()))
 }
 
 /* GIF 叠层：poster 常驻底层撑布局，GIF 就绪后淡入覆盖（T9c 弱网体验） */
-.feature-video--gif {
+/* 视频叠层：poster 常驻底层撑布局，视频直接用 poster 属性接上（不再做透明度淡入，
+   视频未就绪时显示的就是同一张 poster） */
+.feature-video--video {
   position: absolute;
   inset: 0;
   height: 100%;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-.feature-video--gif-ready {
-  opacity: 1;
+  object-fit: cover;
 }
 
 @media (max-width: 767px) {

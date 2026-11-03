@@ -45,12 +45,17 @@ const { c } = useHomeContent()
         </ol>
 
         <div class="steps-media mp-reveal">
-          <img
-            src="/demo/wrapper-preview.gif"
-            :alt="c.steps.imageAlt"
-            loading="lazy"
+          <video
+            src="/demo/wrapper-preview.mp4"
+            poster="/demo/wrapper-preview.png"
+            :aria-label="c.steps.imageAlt"
+            muted
+            loop
+            playsinline
+            autoplay
+            preload="metadata"
             class="steps-gif"
-          />
+          ></video>
         </div>
       </div>
     </div>
