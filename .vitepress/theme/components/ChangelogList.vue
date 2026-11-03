@@ -79,11 +79,13 @@ onMounted(() => {
 }
 
 /* 版本标题不走全站 .vp-doc h2 的营销样式（28~40px 居中大字 + 下划线横杠 + 100px 上距），
-   覆写为常规文档小节标题，日期不再像第二个版本号 */
+   覆写为常规文档小节标题：版本号居左，日期灰字右对齐同一行 */
 .changelog-version-title {
   display: flex;
   align-items: baseline;
+  justify-content: space-between;
   gap: 0.75rem;
+  flex-wrap: wrap;
   margin: 0 !important;
   font-size: 1.35rem !important;
   font-weight: 700 !important;
