@@ -1119,4 +1119,120 @@ async function handleSubmit() {
     font-size: 1rem;
   }
 }
+
+/* 组件库语言：16px 卡片、12px 输入、胶囊按钮 */
+.bounty-form-card {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface);
+}
+
+.form-title {
+  border: none;
+  padding: 0;
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ui-fg);
+}
+
+.form-sub {
+  color: var(--ui-fg-muted);
+  font-size: 12px;
+}
+
+.form-section {
+  border-color: var(--ui-border);
+}
+
+.form-section legend {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ui-fg);
+}
+
+.form-group label {
+  font-size: 12px;
+  color: var(--ui-fg-muted);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  font-size: 13px;
+  color: var(--ui-fg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-group input,
+.form-group select {
+  height: 36px;
+  padding: 0 12px;
+}
+
+.form-group textarea {
+  padding: 10px 12px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--ui-border-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-fg) 6%, transparent);
+}
+
+.severity-btn {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+}
+
+.severity-btn.active {
+  border-color: color-mix(in srgb, var(--ui-accent) 55%, var(--ui-border));
+  background: var(--ui-accent-soft);
+}
+
+.btn-primary,
+.submit-btn {
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-accent);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.btn-ghost {
+  border-radius: var(--ui-radius-pill);
+  border: 1px solid var(--ui-border);
+  color: var(--ui-fg-soft);
+}
+
+.att-picker {
+  border-radius: var(--ui-radius-field);
+  border-color: var(--ui-border);
+}
+
+.sensitive-box,
+.tips {
+  border-radius: var(--ui-radius-field);
+  border-color: var(--ui-border);
+}
+
+@media (max-width: 640px) {
+  /* <16px 的输入框聚焦会触发 iOS 自动放大 */
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    transition: none;
+  }
+}
 </style>

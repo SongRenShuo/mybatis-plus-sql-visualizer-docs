@@ -10,37 +10,49 @@
       {{ budgetMessage }}
     </p>
 
-    <!-- 顶部：标题、说明、按钮、聚合统计 -->
-    <section class="bounty-hero">
-      <p class="hero-eyebrow">{{ t('hero.badge', locale) }}</p>
+    <header class="bounty-hero">
+      <p class="ui-eyebrow">{{ t('hero.badge', locale) }}</p>
       <h1 class="hero-title">{{ t('hero.title', locale) }}</h1>
       <p class="hero-sub">{{ t('hero.subtitle', locale) }}</p>
       <p class="hero-note">{{ t('hero.note', locale) }}</p>
       <p v-if="policyReady && !policy.enabled" class="hero-paused" role="status">{{ t('hero.paused', locale) }}</p>
 
       <div class="hero-actions">
-        <a href="#bounty-form" class="hero-btn primary">{{ t('hero.submit', locale) }}</a>
-        <a href="#bounty-policy" class="hero-btn">{{ t('hero.policy', locale) }}</a>
+        <UiButton variant="primary" href="#bounty-form">{{ t('hero.submit', locale) }}</UiButton>
+        <UiButton variant="outline" href="#bounty-policy">{{ t('hero.policy', locale) }}</UiButton>
       </div>
 
       <BountyStats :stats="stats" :locale="locale" />
-    </section>
+    </header>
 
     <!-- 奖励标准 -->
     <BountyPolicy :policy="policy" :locale="locale" :ready="policyReady" :load-error="policyLoadFailed" />
 
-    <!-- 处理流程 -->
+    <!-- 处理流程看板：四列 = 四个阶段，卡片是该阶段的口径 -->
     <section class="flow-section">
-      <h2>{{ t('flow.title', locale) }}</h2>
-      <ol class="flow-list">
-        <li v-for="(step, i) in flowSteps" :key="step.title" class="flow-item">
-          <span class="flow-no" aria-hidden="true">{{ i + 1 }}</span>
-          <div class="flow-body">
-            <h3>{{ step.title }}</h3>
-            <p>{{ step.desc }}</p>
-          </div>
-        </li>
-      </ol>
+      <h2>{{ t('board.title', locale) }}</h2>
+      <p class="section-sub">{{ t('board.subtitle', locale) }}</p>
+      <KanbanBoard :columns="flowColumns" :scroll-body="false">
+        <template #default="{ column }">
+          <KanbanCard
+            v-for="card in column.items"
+            :key="card.id"
+            :item-id="card.id"
+            :label="card.title"
+            :interactive="false"
+          >
+            <template #title>
+              <span class="kb-card-title">{{ card.title }}</span>
+            </template>
+            <template #description>
+              <span class="kb-card-desc">{{ card.desc }}</span>
+            </template>
+            <template #footer>
+              <UiChip>{{ card.chip }}</UiChip>
+            </template>
+          </KanbanCard>
+        </template>
+      </KanbanBoard>
     </section>
 
     <!-- 提交表单（页内内联） -->
@@ -67,10 +79,15 @@ import BountyStats from './BountyStats.vue'
 import BountyPolicy from './BountyPolicy.vue'
 import BountyForm from './BountyForm.vue'
 import BountyLookup from './BountyLookup.vue'
-import { t, type Locale } from './i18n'
+import KanbanBoard from '../kanban/KanbanBoard.vue'
+import KanbanCard from '../kanban/KanbanCard.vue'
+import UiButton from '../ui/UiButton.vue'
+import UiChip from '../ui/UiChip.vue'
+import { t, type Locale, type MessageKey } from './i18n'
 import {
   DEFAULT_POLICY,
   budgetNotice,
+  formatMoney,
   normalizePolicy,
   normalizeStats,
   type BountyPolicyData,
@@ -98,16 +115,6 @@ const policyReady = ref(false)
 const budgetMessage = computed(() =>
   policyReady.value ? budgetNotice(policy.value.budgetStatus, locale.value) : '',
 )
-
-const flowSteps = computed(() => {
-  const hours = policy.value.reviewSlaHours || 72
-  return [
-    { title: t('flow.step1Title', locale.value), desc: t('flow.step1Desc', locale.value) },
-    { title: t('flow.step2Title', locale.value), desc: t('flow.step2Desc', locale.value, { h: hours }) },
-    { title: t('flow.step3Title', locale.value), desc: t('flow.step3Desc', locale.value) },
-    { title: t('flow.step4Title', locale.value), desc: t('flow.step4Desc', locale.value) },
-  ]
-})
 
 onMounted(() => {
   loadPolicy()
@@ -160,6 +167,84 @@ async function loadStats() {
 function onSubmitted() {
   loadStats()
 }
+
+interface FlowCard {
+  id: string
+  title: string
+  desc: string
+  chip: string
+}
+
+// 四阶段看板：时限、金额、系数全部来自 /bounty/policy，缺省时才用默认值兜底
+const flowColumns = computed(() => {
+  const localeValue = locale.value
+  const hours = policy.value.reviewSlaHours || DEFAULT_POLICY.reviewSlaHours
+  const tiers = policy.value.tiers?.length ? policy.value.tiers : DEFAULT_POLICY.tiers
+  const low = Math.min(...tiers.map(tier => tier.min))
+  const high = Math.max(...tiers.map(tier => tier.max))
+  const range = `${formatMoney(low)} – ${formatMoney(high)}`
+  const cap = Math.max(high, policy.value.maxReward)
+  const partial = Number(policy.value.validityFactors?.['2'] ?? 0.5)
+
+  const card = (
+    id: string,
+    title: MessageKey,
+    desc: MessageKey,
+    chip: MessageKey,
+    params?: Record<string, string | number>
+  ): FlowCard => ({
+    id,
+    title: t(title, localeValue),
+    desc: t(desc, localeValue, params),
+    chip: t(chip, localeValue, params),
+  })
+
+  return [
+    {
+      id: 'submit',
+      title: t('board.colSubmit', localeValue),
+      color: '#6b7280',
+      items: [
+        card('s1', 'board.c1t1', 'board.c1d1', 'board.chipRequired'),
+        card('s2', 'board.c1t2', 'board.c1d2', 'board.chipRequired'),
+        card('s3', 'board.c1t3', 'board.c1d3', 'board.chipOptional'),
+      ],
+    },
+    {
+      id: 'review',
+      title: t('board.colReview', localeValue),
+      color: '#3b82f6',
+      items: [
+        card('r1', 'board.c2t1', 'board.c2d1', 'board.chipSla', { h: hours }),
+        card('r2', 'board.c2t2', 'board.c2d2', 'board.chipScope'),
+        card('r3', 'board.c2t3', 'board.c2d3', 'board.chipDedupe'),
+      ],
+    },
+    {
+      id: 'payout',
+      title: t('board.colPayout', localeValue),
+      color: '#f59e0b',
+      items: [
+        card('p1', 'board.c3t1', 'board.c3d1', 'board.chipTier', {
+          range,
+          max: formatMoney(cap),
+        }),
+        card('p2', 'board.c3t2', 'board.c3d2', 'board.chipFactor', { f: partial }),
+        card('p3', 'board.c3t3', 'board.c3d3', 'board.chipPayout'),
+      ],
+    },
+    {
+      id: 'close',
+      title: t('board.colClose', localeValue),
+      color: '#10b981',
+      items: [
+        card('c1', 'board.c4t1', 'board.c4d1', 'board.chipIssue'),
+        card('c2', 'board.c4t2', 'board.c4d2', 'board.chipPrivacy'),
+        card('c3', 'board.c4t3', 'board.c4d3', 'board.chipWithdraw'),
+      ],
+    },
+  ]
+})
 </script>
 
 <style scoped>
@@ -169,115 +254,72 @@ function onSubmitted() {
   padding: 1.5rem 24px 3rem;
 }
 
-.bounty-hero {
-  padding: 2rem 0 0.5rem;
-  text-align: center;
-}
-
 /* 预算状态横幅：只承载状态文字，不渲染任何金额 */
 .budget-banner {
   max-width: 760px;
-  margin: 0 auto 0;
-  padding: 0.7rem 1rem;
+  margin: 0 auto;
+  padding: 10px 14px;
   border: 1px solid #f59e0b;
-  border-radius: 10px;
-  background: color-mix(in srgb, #f59e0b 10%, var(--vp-c-bg));
+  border-radius: var(--ui-radius-field);
+  background: color-mix(in srgb, #f59e0b 10%, var(--ui-surface));
   color: #b45309;
-  font-size: 0.85rem;
+  font-size: 13px;
   line-height: 1.6;
   text-align: center;
 }
 
 .budget-banner.is-reached {
   border-color: #ef4444;
-  background: color-mix(in srgb, #ef4444 10%, var(--vp-c-bg));
+  background: color-mix(in srgb, #ef4444 10%, var(--ui-surface));
   color: #b91c1c;
 }
 
-.hero-eyebrow {
-  display: inline-block;
-  margin: 0 0 0.75rem;
-  padding: 0.2rem 0.7rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 999px;
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-2);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.bounty-hero {
+  padding: 2.25rem 0 0.5rem;
+  text-align: center;
 }
 
 .hero-title {
-  margin: 0 0 0.75rem;
+  margin: 12px 0 0.75rem;
+  border: none;
+  padding: 0;
   font-size: clamp(2rem, 5vw, 2.75rem);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--ui-fg);
 }
 
 .hero-sub {
   max-width: 640px;
   margin: 0 auto 0.5rem;
-  color: var(--vp-c-text-2);
-  font-size: 1rem;
-  line-height: 1.8;
+  color: var(--ui-fg-soft);
+  font-size: 15px;
+  line-height: 1.75;
 }
 
 .hero-note {
   margin: 0 auto;
-  color: var(--vp-c-text-3);
-  font-size: 0.8rem;
+  color: var(--ui-fg-muted);
+  font-size: 12px;
 }
 
 .hero-paused {
   max-width: 680px;
-  margin: 0.875rem auto 0;
-  padding: 0.7rem 1rem;
+  margin: 14px auto 0;
+  padding: 10px 14px;
   border: 1px solid #f59e0b;
-  border-radius: 10px;
-  background: color-mix(in srgb, #f59e0b 10%, var(--vp-c-bg));
+  border-radius: var(--ui-radius-field);
+  background: color-mix(in srgb, #f59e0b 10%, var(--ui-surface));
   color: #b45309;
-  font-size: 0.85rem;
+  font-size: 13px;
 }
 
 .hero-actions {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
-}
-
-.hero-btn {
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  min-width: 150px;
-  padding: 0.65rem 1.5rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 8px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.hero-btn:hover {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
-}
-
-.hero-btn.primary {
-  border-color: var(--vp-c-brand-1);
-  background: var(--vp-c-brand-1);
-  color: #fff;
-}
-
-.hero-btn.primary:hover {
-  opacity: 0.9;
-  color: #fff;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .flow-section {
@@ -287,54 +329,23 @@ function onSubmitted() {
 }
 
 .flow-section h2 {
-  margin: 0 0 1.25rem;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  text-align: center;
-}
-
-.flow-list {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin: 0;
+  margin: 0 0 0.5rem;
+  border: none;
   padding: 0;
-  list-style: none;
-}
-
-.flow-item {
-  display: flex;
-  gap: 0.75rem;
-  padding: 1rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 12px;
-  background: var(--vp-c-bg-soft);
-}
-
-.flow-no {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--vp-c-brand-1);
-  color: #fff;
-  font-size: 0.8rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--ui-fg);
 }
 
-.flow-body h3 {
-  margin: 0 0 0.25rem;
-  font-size: 0.9rem;
-  color: var(--vp-c-text-1);
-}
-
-.flow-body p {
-  margin: 0;
-  font-size: 0.78rem;
-  line-height: 1.65;
-  color: var(--vp-c-text-3);
+.section-sub {
+  max-width: 680px;
+  margin: 0 auto 1.75rem;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ui-fg-muted);
 }
 
 .bounty-form-section {
@@ -342,29 +353,17 @@ function onSubmitted() {
   scroll-margin-top: calc(var(--vp-nav-height) + 16px);
 }
 
-@media (max-width: 860px) {
-  .flow-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 767px) {
   .bounty-page {
-    padding: 1rem 16px 2.5rem;
+    padding: 1.75rem 16px 2.5rem;
   }
 
   .hero-actions {
     flex-direction: column;
   }
 
-  .hero-btn {
+  .hero-actions > * {
     width: 100%;
-  }
-}
-
-@media (max-width: 520px) {
-  .flow-list {
-    grid-template-columns: 1fr;
   }
 }
 </style>

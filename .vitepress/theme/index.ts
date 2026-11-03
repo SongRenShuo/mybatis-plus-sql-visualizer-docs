@@ -27,6 +27,8 @@ import { setupTracker } from './composables/useTracker'
 
 // 自定义样式
 import './style.css'
+// 需求池 / 悬赏页组件库 token（对齐 beui 的 shadcn 口径）
+import './components/ui/ui.css'
 
 export default {
   extends: DefaultTheme,

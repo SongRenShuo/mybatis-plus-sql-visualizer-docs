@@ -171,4 +171,35 @@ function handleVote() {
 .vote-btn.sm .vote-count {
   min-width: 1rem;
 }
+
+/* 组件库语言：胶囊 + 发丝线，与卡片底部 chip 同档 */
+.vote-btn {
+  height: 30px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-surface);
+  color: var(--ui-fg-soft);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.vote-btn.sm {
+  height: 26px;
+  min-height: 0;
+  padding: 0 9px;
+  border-radius: var(--ui-radius-pill);
+  font-size: 12px;
+}
+
+.vote-btn:hover {
+  border-color: color-mix(in srgb, var(--ui-accent) 45%, var(--ui-border));
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+}
+
+.vote-btn.voted {
+  border-color: color-mix(in srgb, var(--ui-accent) 45%, var(--ui-border));
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+}
 </style>

@@ -9,6 +9,11 @@ const messages = {
     // Pool
     title: '需求反馈池',
     subtitle: '提交您的需求、Bug 或建议，社区投票决定优先级',
+    poolEyebrow: 'Community Roadmap',
+    statTotal: '需求总数',
+    statVotes: '总票数',
+    viewLabel: '切换视图',
+    poolSummary: '共 {n} 条 · {m} 列',
     list: '列表',
     board: '看板',
     filterStatus: '状态',
@@ -87,6 +92,14 @@ const messages = {
     // Board
     noItems: '暂无',
     closed: '已关闭',
+    pinned: '置顶',
+    boardAllTypes: '全部',
+    boardNoMatch: '没有匹配的需求',
+    boardEmptyColumn: '这个状态下暂无条目',
+    boardSearchLabel: '搜索需求',
+    boardClearSearch: '清除搜索',
+    boardResultCount: '筛出 {n} 条需求',
+    boardHint: '看板按状态分列，回车打开详情；方向键在列内上下移动，左右切换到相邻列。',
     // Activity
     activity: '需求池动态',
     activityEmpty: '暂无动态',
@@ -132,6 +145,11 @@ const messages = {
     // Pool
     title: 'Feedback Pool',
     subtitle: 'Submit your feature requests, bugs, or suggestions. Community votes decide priority.',
+    poolEyebrow: 'Community Roadmap',
+    statTotal: 'Total requests',
+    statVotes: 'Total votes',
+    viewLabel: 'Switch view',
+    poolSummary: '{n} items · {m} columns',
     list: 'List',
     board: 'Board',
     filterStatus: 'Status',
@@ -210,6 +228,14 @@ const messages = {
     // Board
     noItems: 'None',
     closed: 'Closed',
+    pinned: 'Pinned',
+    boardAllTypes: 'All',
+    boardNoMatch: 'No matching feedback',
+    boardEmptyColumn: 'Nothing in this status yet',
+    boardSearchLabel: 'Search feedback',
+    boardClearSearch: 'Clear search',
+    boardResultCount: '{n} feedback items matched',
+    boardHint: 'The board groups feedback by status. Press Enter to open details; arrow keys move within a column and across columns.',
     // Activity
     activity: 'Pool Activity',
     activityEmpty: 'No activity yet',

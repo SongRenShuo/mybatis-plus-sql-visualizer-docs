@@ -225,4 +225,58 @@ onBeforeUnmount(close)
 .fs-check {
   font-size: 0.7rem;
 }
+
+/* 组件库语言：32px 高、12px 圆角、12px 字号 */
+.fs-trigger {
+  height: 32px;
+  padding: 0 10px;
+  gap: 6px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+  color: var(--ui-fg-soft);
+  font-size: 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fs-trigger:hover,
+.fs-trigger.open {
+  border-color: var(--ui-border-strong);
+  color: var(--ui-fg);
+}
+
+.fs-trigger:focus-visible {
+  border-color: var(--ui-border-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-fg) 6%, transparent);
+}
+
+.fs-chevron {
+  font-size: 0.6rem;
+  color: var(--ui-fg-muted);
+}
+
+.fs-panel {
+  padding: 4px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-md);
+}
+
+.fs-option {
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--ui-fg-soft);
+}
+
+.fs-option.active {
+  background: var(--ui-surface-muted);
+  color: var(--ui-fg);
+}
+
+.fs-option.selected {
+  color: var(--ui-accent);
+  font-weight: 600;
+}
 </style>

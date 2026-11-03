@@ -72,71 +72,99 @@ async function subscribe() {
 <style scoped>
 .subscribe-card {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px 14px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  background: var(--vp-c-bg-soft);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 16px 20px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface-muted);
   margin: 0;
 }
 .subscribe-text {
   display: flex;
+  min-width: 0;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 .subscribe-title {
   font-weight: 600;
   font-size: 14px;
+  color: var(--ui-fg);
 }
 .subscribe-desc {
   font-size: 12px;
-  opacity: 0.75;
+  line-height: 1.6;
+  color: var(--ui-fg-muted);
 }
 .subscribe-form {
   display: flex;
+  flex: 0 1 420px;
   gap: 8px;
 }
 .subscribe-input {
   flex: 1;
   min-width: 0;
-  padding: 6px 10px;
+  height: 36px;
+  padding: 0 12px;
+  font-family: inherit;
   font-size: 13px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+  color: var(--ui-fg);
+  transition: border-color 0.15s ease;
 }
 .subscribe-input:focus {
   outline: none;
-  border-color: var(--vp-c-brand-1);
+  border-color: var(--ui-border-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-fg) 6%, transparent);
 }
 .subscribe-btn {
-  padding: 6px 14px;
+  height: 36px;
+  padding: 0 18px;
+  font-family: inherit;
   font-size: 13px;
+  font-weight: 500;
   border: none;
-  border-radius: 6px;
-  background: var(--vp-c-brand-1);
-  color: var(--vp-button-brand-text);
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-accent);
+  color: #fff;
   cursor: pointer;
   white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+.subscribe-btn:hover:not(:disabled) {
+  opacity: 0.9;
 }
 .subscribe-btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
 .subscribe-tip {
+  flex-basis: 100%;
   font-size: 12px;
 }
 .subscribe-tip.is-ok {
-  color: var(--vp-c-brand-1);
+  color: var(--ui-accent);
 }
 .subscribe-tip.is-err {
   color: var(--vp-c-danger-1);
 }
 @media (max-width: 640px) {
   .subscribe-form {
+    flex: 1 1 100%;
     flex-direction: column;
+  }
+  .subscribe-input {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .subscribe-input,
+  .subscribe-btn {
+    transition: none;
   }
 }
 </style>

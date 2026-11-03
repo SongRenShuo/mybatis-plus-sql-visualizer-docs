@@ -547,4 +547,62 @@ async function lookup() {
     width: 100%;
   }
 }
+
+/* 组件库语言：12px 输入、胶囊按钮、16px 结果卡 */
+.lookup-form {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface-muted);
+}
+
+.lookup-fields input {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+  font-size: 13px;
+  color: var(--ui-fg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.lookup-fields input:focus {
+  border-color: var(--ui-border-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-fg) 6%, transparent);
+}
+
+.lookup-btn {
+  height: 36px;
+  border: none;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-accent);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.result-card {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface);
+}
+
+.result-no {
+  font-family: var(--vp-font-family-mono, monospace);
+}
+
+.badge {
+  border-radius: var(--ui-radius-pill);
+}
+
+@media (max-width: 640px) {
+  .lookup-fields input {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lookup-fields input {
+    transition: none;
+  }
+}
 </style>

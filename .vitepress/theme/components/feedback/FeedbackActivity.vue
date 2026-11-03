@@ -264,4 +264,64 @@ defineExpose({ reload: loadActivity })
   margin-left: auto;
   white-space: nowrap;
 }
+
+/* 组件库语言：16px 圆角卡片、14px 内边距、浅底行悬停 */
+.feedback-activity {
+  padding: 14px 16px 10px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface);
+}
+
+.activity-title {
+  margin: 0 0 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ui-border);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ui-fg);
+}
+
+.activity-item {
+  gap: 8px;
+  padding: 8px 6px;
+  border-bottom: 1px solid transparent;
+  border-radius: 8px;
+}
+
+.activity-item:hover {
+  background: var(--ui-surface-muted);
+}
+
+.activity-item:last-child {
+  padding-bottom: 8px;
+}
+
+.activity-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.activity-label {
+  border-radius: var(--ui-radius-pill);
+  padding: 1px 8px;
+  font-size: 11px;
+}
+
+.activity-post-title {
+  font-size: 13px;
+  color: var(--ui-fg);
+}
+
+.activity-meta {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--ui-fg-muted);
+}
+
+.activity-operator {
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+}
 </style>

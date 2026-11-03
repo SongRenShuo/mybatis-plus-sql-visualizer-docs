@@ -1,66 +1,77 @@
 <template>
   <div class="feedback-pool">
-    <!-- Header -->
-    <div class="pool-header">
-      <div class="pool-title">
-        <h2>{{ t('title', locale) }}</h2>
-        <p>{{ t('subtitle', locale) }}</p>
+    <!-- 页头：眉标 + 标题 + 副文案 + 主操作 -->
+    <header class="pool-head">
+      <div class="pool-heading">
+        <p class="ui-eyebrow">{{ t('poolEyebrow', locale) }}</p>
+        <h2 class="pool-title">{{ t('title', locale) }}</h2>
+        <p class="pool-sub">{{ t('subtitle', locale) }}</p>
       </div>
+      <div class="pool-head-actions">
+        <UiButton variant="outline" :disabled="loading" @click="loadData">
+          <span class="refresh-icon" :class="{ spinning: loading }" aria-hidden="true">↻</span>
+          {{ t('refresh', locale) }}
+        </UiButton>
+        <UiButton variant="primary" @click="showForm = true">
+          <span class="btn-plus" aria-hidden="true">+</span>
+          {{ t('submitNew', locale) }}
+        </UiButton>
+      </div>
+    </header>
+
+    <!-- 统计条：总数与总票数来自 stats，处理中/已完成来自 statusStats -->
+    <div class="pool-stats">
+      <UiStat :value="stats.totalPosts" :label="t('statTotal', locale)" />
+      <UiStat :value="stats.totalVotes" :label="t('statVotes', locale)" />
+      <UiStat :value="groupCount(1)" :label="t('statusGroup.inProgress', locale)" dot="#3b82f6" />
+      <UiStat :value="groupCount(2)" :label="t('statusGroup.done', locale)" dot="#10b981" />
     </div>
 
-    <!-- Toolbar: 列表/看板切换(左) + 刷新/新增反馈(右) -->
+    <!-- 视图切换 -->
     <div class="pool-toolbar">
-      <div class="view-toggle">
-        <button :class="{ active: view === 'list' }" @click="view = 'list'">{{ t('list', locale) }}</button>
-        <button :class="{ active: view === 'board' }" @click="view = 'board'">{{ t('board', locale) }}</button>
-      </div>
-      <div class="pool-actions">
-        <button class="pool-refresh-btn" :disabled="loading" @click="loadData">
-          <span class="refresh-icon" :class="{ spinning: loading }">↻</span>{{ t('refresh', locale) }}
-        </button>
-        <button class="submit-open-btn" @click="showForm = true">
-          <span class="submit-plus">＋</span>{{ t('submitNew', locale) }}
-        </button>
-      </div>
+      <UiTabs v-model="view" :items="viewTabs" :aria-label="t('viewLabel', locale)" />
+      <span class="pool-summary ui-num">{{ t('poolSummary', locale, { n: stats.totalPosts, m: STATUS_GROUPS.length }) }}</span>
     </div>
 
-    <!-- List View -->
-    <div v-if="view === 'list'">
-      <!-- Filters -->
-      <div class="filters">
-        <div class="filter-group">
-          <label>{{ t('filterStatus', locale) }}</label>
+    <!-- 列表视图 -->
+    <div v-if="view === 'list'" class="list-view">
+      <div class="list-filters">
+        <span class="filter-item">
+          <span class="filter-label">{{ t('filterStatus', locale) }}</span>
           <FilterSelect v-model="filterStatus" :options="statusOptions" />
-        </div>
-        <div class="filter-group">
-          <label>{{ t('filterType', locale) }}</label>
+        </span>
+        <span class="filter-item">
+          <span class="filter-label">{{ t('filterType', locale) }}</span>
           <FilterSelect v-model="filterType" :options="typeOptions" />
-        </div>
-        <div class="filter-group">
-          <label>{{ t('filterSort', locale) }}</label>
+        </span>
+        <span class="filter-item">
+          <span class="filter-label">{{ t('filterSort', locale) }}</span>
           <FilterSelect v-model="sortBy" :options="sortOptions" />
-        </div>
-        <div class="filter-group filter-search">
-          <input
-            v-model="searchKeyword"
-            type="text"
-            :placeholder="t('search', locale)"
-            @keyup.enter="applySearch"
-          />
-        </div>
+        </span>
+        <UiInput
+          v-model="searchKeyword"
+          :placeholder="t('search', locale)"
+          :aria-label="t('boardSearchLabel', locale)"
+          size="sm"
+          class="list-search"
+          @enter="applySearch"
+        />
       </div>
 
-      <!-- Post List -->
-      <div v-if="loading" class="loading">{{ t('loading', locale) }}</div>
-      <div v-else-if="!filteredPosts.length" class="empty">{{ t('empty', locale) }}</div>
+      <div v-if="loading" class="pool-empty">{{ t('loading', locale) }}</div>
+      <div v-else-if="!filteredPosts.length" class="pool-empty">{{ t('empty', locale) }}</div>
       <div v-else class="post-list">
-        <div
+        <article
           v-for="post in filteredPosts"
           :key="post.postNo"
-          class="post-card"
+          class="post-row"
+          role="button"
+          tabindex="0"
+          :aria-label="post.title"
           @click="selectPost(post.postNo)"
+          @keydown.enter.prevent="selectPost(post.postNo)"
         >
-          <div class="card-left">
+          <div class="post-vote">
             <VoteButton
               :post-no="post.postNo"
               :count="post.voteCount"
@@ -69,82 +80,105 @@
               @update="(c, v) => onVoteUpdate(post.postNo, c, v)"
             />
           </div>
-          <div class="card-right">
-            <div class="card-header">
-              <h3 class="card-title">
-                <span v-if="post.isPinned" class="card-pin" title="置顶"><FbIcon name="pin" :size="13" /></span>{{ post.title }}
+          <div class="post-body">
+            <div class="post-head">
+              <h3 class="post-title">
+                <span v-if="post.isPinned" class="post-pin" :title="t('pinned', locale)"><FbIcon name="pin" :size="13" /></span>{{ post.title }}
               </h3>
               <StatusBadge :status="post.status" :locale="locale" />
             </div>
-            <div class="card-meta">
-              <span class="meta-type"><FbIcon :name="post.typeIcon" :size="14" /> {{ typeLabel(post.type) }}</span>
-              <span v-if="post.category" class="meta-category">{{ categoryLabel(post.category) }}</span>
-              <span class="meta-date">{{ formatDateTime(post.createdAt) }}</span>
-              <span class="meta-comments"><FbIcon name="message" :size="13" /> {{ post.commentCount }}</span>
+            <div class="post-meta">
+              <span class="post-type"><FbIcon :name="post.typeIcon" :size="13" />{{ typeLabel(post.type) }}</span>
+              <span v-if="post.category" class="post-category">{{ categoryLabel(post.category) }}</span>
+              <span class="post-date ui-num">{{ formatDateTime(post.createdAt) }}</span>
+              <span class="post-comments"><FbIcon name="message" :size="12" />{{ post.commentCount }}</span>
+              <span class="post-no">{{ post.postNo }}</span>
             </div>
           </div>
-        </div>
+        </article>
       </div>
     </div>
 
-    <!-- Board View -->
-    <div v-else>
-      <div class="board-search">
-        <input
-          v-model="searchKeyword"
-          type="text"
-          :placeholder="t('search', locale)"
-          @keyup.enter="applySearch"
-        />
-      </div>
-      <div v-if="boardStats.length" class="board-stats">
-        <span v-for="s in boardStats" :key="s.key" class="board-stat">
-          <span class="board-stat-dot" :style="{ background: s.color }"></span>
-          {{ t(s.key, locale) }} {{ s.count }}
+    <!-- 看板视图：按状态分列，卡片点击开右侧详情抽屉 -->
+    <div v-else class="board-view">
+      <KanbanBoard
+        v-model:filter="boardType"
+        v-model:query="boardQuery"
+        :filters="boardTypeFilters"
+        :columns="boardColumns"
+        :filtered="boardFiltered"
+        :filter-label="t('filterType', locale)"
+        :search-placeholder="t('search', locale)"
+        :search-label="t('boardSearchLabel', locale)"
+        :clear-label="t('boardClearSearch', locale)"
+        :empty-text="t('boardNoMatch', locale)"
+        :idle-text="t('boardEmptyColumn', locale)"
+        :instructions="t('boardHint', locale)"
+        :status-text="boardStatusText"
+      >
+        <template #default="{ column }">
+          <KanbanCard
+            v-for="post in column.items"
+            :key="post.postNo"
+            :item-id="post.postNo"
+            :label="post.title"
+            :pinned="post.isPinned"
+            @open="selectPost(post.postNo)"
+          >
+            <template #title>
+              <span class="kb-card-title">
+                <span v-if="post.isPinned" class="post-pin" :title="t('pinned', locale)"><FbIcon name="pin" :size="13" /></span>{{ post.title }}
+              </span>
+            </template>
+            <template #meta>
+              <span class="kb-inline"><FbIcon :name="post.typeIcon" :size="13" />{{ post.typeLabel }}</span>
+              <span v-if="post.category" class="kb-category">{{ categoryLabel(post.category) }}</span>
+              <span class="kb-date">{{ formatDateTime(post.createdAt) }}</span>
+            </template>
+            <template #footer>
+              <VoteButton
+                size="sm"
+                :post-no="post.postNo"
+                :count="post.voteCount"
+                :has-voted="post.hasVoted"
+                :api-base="apiBase"
+                @update="(c, v) => onVoteUpdate(post.postNo, c, v)"
+              />
+              <UiChip><FbIcon name="message" :size="12" />{{ post.commentCount }}</UiChip>
+              <UiChip mono class="kb-post-no">{{ post.postNo }}</UiChip>
+            </template>
+          </KanbanCard>
+        </template>
+      </KanbanBoard>
+    </div>
+
+    <!-- 提交弹窗 -->
+    <UiModal
+      v-if="showForm"
+      :title="t('submitTitle', locale)"
+      :subtitle="t('formTip', locale)"
+      :close-label="t('close', locale)"
+      @close="closeForm"
+    >
+      <FeedbackForm ref="formRef" :api-base="apiBase" :locale="locale" embedded @done="onSubmitted" />
+      <template #footer>
+        <span v-if="!formRef?.canSubmit" class="modal-hint">
+          <FbIcon name="alert" :size="14" /> {{ (formRef?.invalidTips || []).join('，') }}
         </span>
-      </div>
-      <RoadmapBoard
-        :posts="postsForBoard"
-        :api-base="apiBase"
-        :locale="locale"
-        @select="selectPost"
-        @vote="onVoteUpdate"
-      />
-    </div>
+        <UiButton variant="ghost" @click="closeForm">{{ t('cancel', locale) }}</UiButton>
+        <UiButton variant="primary" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">
+          {{ t('submitBtn', locale) }}
+        </UiButton>
+      </template>
+    </UiModal>
 
-    <!-- Submit modal -->
-    <Teleport to="body">
-      <div v-if="showForm" class="modal-overlay" @mousedown.self="closeForm">
-        <div class="modal-dialog" role="dialog" aria-modal="true">
-          <button class="modal-close" :title="t('close', locale)" :aria-label="t('close', locale)" @click="closeForm">
-            ×
-          </button>
-          <div class="modal-body">
-            <FeedbackForm ref="formRef" :api-base="apiBase" :locale="locale" embedded @done="onSubmitted" />
-          </div>
-          <div class="modal-footer">
-            <span v-if="!formRef?.canSubmit" class="modal-hint"><FbIcon name="alert" :size="14" /> {{ (formRef?.invalidTips || []).join('，') }}</span>
-            <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
-            <button class="modal-submit" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">{{ t('submitBtn', locale) }}</button>
-          </div>
-        </div>
-      </div>
-    </Teleport>
-
-    <!-- 提交成功 toast：弹窗会立刻关闭，编号只能由父级在这之后展示 -->
+    <!-- 提交成功 toast -->
     <Teleport to="body">
       <div v-if="toast" class="pool-toast" role="status">
-        <span>{{ toast.text }}</span>
+        <span class="pool-toast-text">{{ toast.text }}</span>
         <a v-if="toast.link" :href="toast.link.href" class="pool-toast-link">{{ toast.link.label }}</a>
       </div>
     </Teleport>
-
-    <!-- Stats Bar -->
-    <div class="stats-bar">
-      <span>{{ t('totalPosts', locale, { n: stats.totalPosts }) }}</span>
-      <span>·</span>
-      <span>{{ t('totalVotes', locale, { n: stats.totalVotes }) }}</span>
-    </div>
   </div>
 </template>
 
@@ -155,7 +189,14 @@ import FbIcon from './FbIcon.vue'
 import FilterSelect from './FilterSelect.vue'
 import VoteButton from './VoteButton.vue'
 import FeedbackForm from './FeedbackForm.vue'
-import RoadmapBoard from './RoadmapBoard.vue'
+import KanbanBoard from '../kanban/KanbanBoard.vue'
+import KanbanCard from '../kanban/KanbanCard.vue'
+import UiButton from '../ui/UiButton.vue'
+import UiChip from '../ui/UiChip.vue'
+import UiInput from '../ui/UiInput.vue'
+import UiModal from '../ui/UiModal.vue'
+import UiStat from '../ui/UiStat.vue'
+import UiTabs from '../ui/UiTabs.vue'
 import { t, type Locale, type MessageKey } from './i18n'
 import { formatDateTime } from './dateTime'
 import { STATUS_GROUPS } from './status'
@@ -202,15 +243,22 @@ const filterStatus = ref('')
 const filterType = ref('')
 const sortBy = ref('votes')
 const searchKeyword = ref('')
+// 看板自带的筛选/搜索：与列表视图的状态分开，避免两个视图互相污染
+const boardType = ref('')
+const boardQuery = ref('')
 
-// 状态筛选下拉：4 个归并组（值=STATUS_GROUPS 下标）
+const viewTabs = computed(() => [
+  { value: 'board', label: t('board', props.locale) },
+  { value: 'list', label: t('list', props.locale) },
+])
+
 const statusOptions = computed(() => [
-  { value: '', label: props.locale === 'zh' ? '全部' : 'All' },
+  { value: '', label: t('boardAllTypes', props.locale) },
   ...STATUS_GROUPS.map((g, i) => ({ value: String(i), label: t(g.key, props.locale) })),
 ])
 
 const typeOptions = computed(() => [
-  { value: '', label: props.locale === 'zh' ? '全部' : 'All' },
+  { value: '', label: t('boardAllTypes', props.locale) },
   { value: '1', label: t('type.feature', props.locale) },
   { value: '2', label: t('type.bug', props.locale) },
   { value: '3', label: t('type.improvement', props.locale) },
@@ -235,15 +283,61 @@ function typeLabel(type: number): string {
   return typeKeys[type] ? t(typeKeys[type], props.locale) : ''
 }
 
-// 看板顶部统计条：原始状态计数按归并组聚合（顺序随 STATUS_GROUPS，零计数组不显示）
-const boardStats = computed(() =>
-  STATUS_GROUPS.map(g => ({
-    key: g.key,
-    color: g.color,
-    count: (statusStats.value || [])
-      .filter(s => g.statuses.includes(s.status))
-      .reduce((sum, s) => sum + s.count, 0),
-  })).filter(s => s.count > 0),
+// 统计条里的归并组计数：statusStats 是后端给的全量状态计数
+function groupCount(groupIndex: number): number {
+  const group = STATUS_GROUPS[groupIndex]
+  if (!group) return 0
+  return (statusStats.value || [])
+    .filter(row => group.statuses.includes(row.status))
+    .reduce((sum, row) => sum + row.count, 0)
+}
+
+// 看板类型筛选用胶囊：状态已经由列表达，这里只筛类型
+const boardTypeFilters = computed(() => [
+  { value: '', label: t('boardAllTypes', props.locale) },
+  { value: '1', label: t('type.feature', props.locale) },
+  { value: '2', label: t('type.bug', props.locale) },
+  { value: '3', label: t('type.improvement', props.locale) },
+  { value: '4', label: t('type.question', props.locale) },
+])
+
+const boardFiltered = computed(
+  () => boardType.value !== '' || boardQuery.value.trim() !== ''
+)
+
+// 看板内做本地筛选：数据本来就一次最多 100 条（与列表同一个请求），本地过滤才能即时响应输入
+const boardMatched = computed(() => {
+  const needle = boardQuery.value.trim().toLocaleLowerCase()
+  return posts.value.filter(p => {
+    if (boardType.value && p.type !== Number(boardType.value)) return false
+    if (!needle) return true
+    return [p.title, p.postNo, typeLabel(p.type), categoryLabel(p.category)]
+      .join(' ')
+      .toLocaleLowerCase()
+      .includes(needle)
+  })
+})
+
+// 列序随 STATUS_GROUPS；列内置顶在前、票数降序（与旧看板口径一致）
+const boardColumns = computed(() =>
+  STATUS_GROUPS.map((group, index) => ({
+    id: String(index),
+    title: t(group.key, props.locale),
+    color: group.color,
+    items: boardMatched.value
+      .filter(p => group.statuses.includes(p.status))
+      .sort((a, b) => {
+        if (!!a.isPinned !== !!b.isPinned) return a.isPinned ? -1 : 1
+        return b.voteCount - a.voteCount
+      }),
+  }))
+)
+
+// 只给读屏播报结果数，视觉上由列头计数承担
+const boardStatusText = computed(() =>
+  boardFiltered.value
+    ? t('boardResultCount', props.locale, { n: boardMatched.value.length })
+    : ''
 )
 
 function categoryLabel(category: string): string {
@@ -268,23 +362,6 @@ const filteredPosts = computed(() => {
   return result
 })
 
-const postsForBoard = computed(() =>
-  posts.value.map(p => ({
-    postNo: p.postNo,
-    title: p.title,
-    type: p.type,
-    typeIcon: typeIcons[p.type] || '',
-    typeLabel: typeLabel(p.type),
-    status: p.status,
-    voteCount: p.voteCount,
-    commentCount: p.commentCount,
-    category: p.category,
-    isPinned: !!p.isPinned,
-    hasVoted: !!p.hasVoted,
-    createdAt: p.createdAt,
-  }))
-)
-
 onMounted(loadData)
 onMounted(() => window.addEventListener('keydown', onKeydown))
 onBeforeUnmount(() => {
@@ -295,9 +372,8 @@ onBeforeUnmount(() => {
 watch([filterStatus, filterType, sortBy], () => {
   loadData()
 })
-// 切到看板：看板没有筛选入口，沿用列表筛选会出现「只剩一列有数据」的错觉。
-// 重置即由上面的筛选 watch 触发唯一一次 loadData，这里不再额外请求；
-// 切回列表时筛选保持默认空值。
+// 切到看板：看板用的是自己那套类型胶囊，列表筛选若还在生效就只剩一列有数据。
+// 重置由上面的筛选 watch 触发唯一一次 loadData，这里不再额外请求。
 watch(view, (v) => {
   if (v !== 'board') return
   if (filterStatus.value !== '' || filterType.value !== '') {
@@ -434,312 +510,46 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
 
 <style scoped>
 .feedback-pool {
-  max-width: none;
-}
-
-.pool-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.pool-header h2 {
-  font-size: 1.75rem;
-  margin: 0 0 0.5rem;
-}
-
-.pool-header p {
-  color: var(--vp-c-text-2);
-  margin: 0;
-}
-
-.pool-title {
-  text-align: center;
-}
-
-.pool-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.pool-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.view-toggle {
-  display: flex;
-  gap: 0;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--vp-c-border);
-  width: fit-content;
-}
-
-.view-toggle button {
-  padding: 0.5rem 1.25rem;
-  border: none;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s;
-}
-
-.view-toggle button.active {
-  background: var(--vp-c-brand-1);
-  color: #fff;
-}
-
-.filters {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.filter-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.filter-group label {
-  font-size: 0.8rem;
-  color: var(--vp-c-text-3);
-  white-space: nowrap;
-}
-
-.filter-search input {
-  padding: 0.375rem 0.75rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 6px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
-  /* 与同行三个 FilterSelect 触发器同档，工具栏一排控件字号一致 */
-  font-size: 0.85rem;
-  width: 200px;
-}
-
-.filter-search input:focus {
-  outline: none;
-  border-color: var(--vp-c-brand-1);
-}
-
-.loading, .empty {
-  text-align: center;
-  padding: 3rem 1rem;
-  color: var(--vp-c-text-3);
-}
-
-.post-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.post-card {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.post-card:hover {
-  border-color: var(--vp-c-brand-1);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-}
-
-.card-left {
-  flex-shrink: 0;
-}
-
-.card-right {
-  flex: 1;
   min-width: 0;
 }
 
-.card-header {
+/* 页头 */
+.pool-head {
   display: flex;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.375rem;
+  gap: 16px;
+  padding-bottom: 18px;
 }
 
-.card-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0;
-  line-height: 1.4;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.card-pin {
-  margin-right: 0.25rem;
-}
-
-.card-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.75rem;
-  color: var(--vp-c-text-3);
-  flex-wrap: wrap;
-}
-
-.meta-category {
-  padding: 1px 8px;
-  border-radius: 4px;
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand-1);
-}
-
-.pool-toast {
-  position: fixed;
-  left: 50%;
-  bottom: 32px;
-  transform: translateX(-50%);
-  z-index: 1200;
-  max-width: min(90vw, 520px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.75rem 1.25rem;
-  border-radius: 10px;
-  background: color-mix(in srgb, #10b981 12%, var(--vp-c-bg));
-  border: 1px solid #10b981;
-  color: #10b981;
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.pool-toast-link {
-  color: #059669;
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.stats-bar {
-  text-align: center;
-  padding: 1rem;
-  font-size: 0.8rem;
-  color: var(--vp-c-text-3);
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.board-search {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
-}
-
-.board-search input {
-  padding: 0.375rem 0.75rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 6px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
-  /* 与列表视图的筛选控件、下拉选项同档 */
-  font-size: 0.85rem;
-  width: 240px;
-}
-
-.board-search input:focus {
-  outline: none;
-  border-color: var(--vp-c-brand-1);
-}
-
-.board-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.5rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 10px;
-  background: var(--vp-c-bg-soft);
-  font-size: 0.8rem;
-  color: var(--vp-c-text-2);
-}
-
-.board-stat {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  white-space: nowrap;
-}
-
-.board-stat-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.submit-open-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 1.25rem;
+.pool-title {
+  margin: 10px 0 6px;
   border: none;
-  border-radius: 8px;
-  background: var(--vp-c-brand-1);
-  color: #fff;
+  padding: 0;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ui-fg);
+}
+
+.pool-sub {
+  margin: 0;
   font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  white-space: nowrap;
+  line-height: 1.7;
+  color: var(--ui-fg-muted);
 }
 
-.submit-open-btn:hover {
-  opacity: 0.9;
-}
-
-.submit-plus {
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.pool-refresh-btn {
-  display: inline-flex;
+.pool-head-actions {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.375rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 8px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
+  gap: 8px;
 }
 
-.pool-refresh-btn:hover:not(:disabled) {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
-}
-
-.pool-refresh-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.btn-plus {
+  font-size: 15px;
+  line-height: 1;
 }
 
 .refresh-icon {
@@ -752,168 +562,270 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
 }
 
 @keyframes refresh-spin {
-  from {
-    transform: rotate(0deg);
-  }
   to {
     transform: rotate(360deg);
   }
 }
 
-/* Modal */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.55);
-  overflow-y: auto;
+/* 统计条 */
+.pool-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding-bottom: 16px;
 }
 
-.modal-dialog {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 880px;
-  max-height: 90vh;
-  overflow: hidden;
-  border-radius: 12px;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-border);
-  padding: 1.25rem 1.5rem 1rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  /* 配合 overlay 滚动：内容超高时从顶部开始而非垂直居中被裁剪 */
-  margin: auto;
-}
-
-.modal-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding-right: 0.25rem;
-}
-
-.modal-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--vp-c-text-3);
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-  transition: all 0.2s;
-  z-index: 1;
-}
-
-.modal-close:hover {
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-1);
-}
-
-.modal-footer {
-  flex-shrink: 0;
+/* 工具栏 */
+.pool-toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--vp-c-border);
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 14px;
 }
 
-.modal-cancel {
-  padding: 0.5rem 1.25rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 8px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
-  font-size: 0.875rem;
+.pool-summary {
+  font-size: 12px;
+  color: var(--ui-fg-muted);
+}
+
+/* 列表视图 */
+.list-view {
+  min-width: 0;
+}
+
+.list-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+}
+
+.filter-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-label {
+  font-size: 12px;
+  color: var(--ui-fg-muted);
+  white-space: nowrap;
+}
+
+.list-search {
+  width: 220px;
+  margin-left: auto;
+}
+
+.pool-empty {
+  padding: 48px 16px;
+  border: 1px dashed var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  text-align: center;
+  font-size: 13px;
+  color: var(--ui-fg-muted);
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.post-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.modal-cancel:hover {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
+.post-row:hover {
+  border-color: color-mix(in srgb, var(--ui-accent) 45%, var(--ui-border));
+  box-shadow: var(--ui-shadow-md);
 }
 
+.post-row:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ui-surface), 0 0 0 4px var(--ui-ring);
+}
+
+.post-vote {
+  flex-shrink: 0;
+}
+
+.post-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.post-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.post-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--ui-fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-pin {
+  margin-right: 4px;
+  color: var(--ui-fg-muted);
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 12px;
+  color: var(--ui-fg-muted);
+}
+
+.post-type,
+.post-comments {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.post-category {
+  padding: 1px 8px;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+}
+
+.post-no {
+  font-family: var(--vp-font-family-mono, monospace);
+  font-size: 11px;
+}
+
+/* 看板视图 */
+.board-view {
+  min-width: 0;
+}
+
+.kb-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kb-category {
+  color: var(--ui-accent);
+}
+
+.kb-date {
+  font-variant-numeric: tabular-nums;
+}
+
+.kb-post-no {
+  margin-left: auto;
+}
+
+/* 提交弹窗校验提示 */
 .modal-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   margin-right: auto;
-  font-size: 0.8125rem;
+  font-size: 12px;
   font-weight: 500;
   color: #d97706;
 }
 
-.modal-submit {
-  padding: 0.5rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  background: var(--vp-c-brand-1);
-  color: #fff;
-  font-size: 0.875rem;
+/* 提交成功 toast */
+.pool-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  z-index: 1200;
+  display: flex;
+  max-width: min(90vw, 520px);
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 18px;
+  transform: translateX(-50%);
+  border: 1px solid color-mix(in srgb, #10b981 55%, var(--ui-border));
+  border-radius: 12px;
+  background: color-mix(in srgb, #10b981 12%, var(--ui-surface));
+  box-shadow: var(--ui-shadow-md);
+  text-align: center;
+}
+
+.pool-toast-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: #059669;
+}
+
+.dark .pool-toast-text {
+  color: #34d399;
+}
+
+.pool-toast-link {
+  font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
+  color: #047857;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
-.modal-submit:hover:not(:disabled) {
-  opacity: 0.9;
+.dark .pool-toast-link {
+  color: #6ee7b7;
 }
 
-.modal-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+@media (max-width: 860px) {
+  .pool-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-@media (max-width: 768px) {
-  /* <16px 的输入控件聚焦会触发 iOS Safari 自动放大页面 */
-  .fs-trigger,
-  .filter-search input,
-  .board-search input {
-    font-size: 1rem;
-    min-height: 38px;
-  }
-
-  /* 窄屏工具栏按钮换行，避免挤压 */
-  .pool-toolbar {
-    flex-wrap: wrap;
-  }
-
-  .pool-actions {
-    flex: 1 1 100%;
-    justify-content: flex-end;
-  }
-
-  .board-search {
+@media (max-width: 767px) {
+  .pool-head-actions {
     width: 100%;
   }
 
-  .board-search input {
+  .pool-head-actions > * {
+    flex: 1;
+  }
+
+  .list-filters {
+    gap: 6px;
+  }
+
+  .list-search {
     width: 100%;
+    margin-left: 0;
   }
 
-  .filter-search {
-    flex: 1 1 100%;
+  .post-title {
+    white-space: normal;
   }
+}
 
-  .filter-search input {
-    width: 100%;
-  }
-
-  /* 校验提示独占一行，不挤占取消/提交按钮 */
-  .modal-hint {
-    flex-basis: 100%;
-    margin-right: 0;
+@media (prefers-reduced-motion: reduce) {
+  .post-row {
+    transition: none;
   }
 }
 </style>

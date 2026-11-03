@@ -25,7 +25,7 @@ const color = computed(() => group.value.color)
 .status-badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
+  padding: 3px 9px;
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;

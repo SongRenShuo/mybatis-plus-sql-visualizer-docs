@@ -1,0 +1,68 @@
+/**
+ * 页面级设计 token 与通用类。
+ *
+ * 这套 token 对齐 beui 的 shadcn 风格（background / foreground / muted / border / ring），
+ * 但值全部映射到 VitePress 的 --vp-c-* 变量，因此深浅色自动跟随、不额外维护一套主题。
+ */
+
+:root {
+  --ui-radius-card: 16px;
+  --ui-radius-field: 12px;
+  --ui-radius-pill: 999px;
+
+  --ui-fg: var(--vp-c-text-1);
+  --ui-fg-soft: var(--vp-c-text-2);
+  --ui-fg-muted: var(--vp-c-text-3);
+
+  --ui-surface: var(--vp-c-bg);
+  --ui-surface-muted: var(--vp-c-bg-soft);
+
+  --ui-border: var(--vp-c-border);
+  --ui-border-strong: color-mix(in srgb, var(--vp-c-text-1) 24%, var(--vp-c-border));
+
+  --ui-accent: var(--vp-c-brand-1);
+  --ui-accent-soft: color-mix(in srgb, var(--vp-c-brand-1) 12%, var(--vp-c-bg));
+  --ui-ring: color-mix(in srgb, var(--vp-c-brand-1) 55%, transparent);
+
+  --ui-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --ui-shadow-md: 0 2px 12px rgba(0, 0, 0, 0.07);
+  --ui-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.24);
+}
+
+/* 卡片：16px 圆角 + 发丝线，是这两个页面所有「一块内容」的统一容器 */
+.ui-card {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface);
+}
+
+.ui-card--muted {
+  background: var(--ui-surface-muted);
+}
+
+/* 小标题：全站这两个页面的眉标（eyebrow）口径 */
+.ui-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 2px 10px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-surface-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ui-fg-muted);
+}
+
+/* 组件库里的 muted 小字 */
+.ui-muted {
+  color: var(--ui-fg-muted);
+}
+
+/* 数字统一等宽，避免统计跳动 */
+.ui-num {
+  font-variant-numeric: tabular-nums;
+}

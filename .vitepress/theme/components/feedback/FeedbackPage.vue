@@ -31,31 +31,32 @@
       @commented="onDrawerCommented"
     />
 
-    <!-- 深链 ?category=xxx 直开提交表单（与反馈池内「提交反馈」弹窗同款交互） -->
-    <Teleport to="body">
-      <div v-if="deepLinkCategory" class="modal-overlay" @mousedown.self="closeForm">
-        <div class="modal-dialog" role="dialog" aria-modal="true">
-          <button class="modal-close" :title="t('close', locale)" :aria-label="t('close', locale)" @click="closeForm">
-            ×
-          </button>
-          <div class="modal-body">
-            <FeedbackForm
-              ref="formRef"
-              :api-base="apiBase"
-              :locale="locale"
-              :initial-category="deepLinkCategory || undefined"
-              embedded
-              @done="onDeepLinkSubmitted"
-            />
-          </div>
-          <div class="modal-footer">
-            <span v-if="!formRef?.canSubmit" class="modal-hint"><FbIcon name="alert" :size="14" /> {{ (formRef?.invalidTips || []).join('，') }}</span>
-            <button class="modal-cancel" @click="closeForm">{{ t('cancel', locale) }}</button>
-            <button class="modal-submit" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">{{ t('submitBtn', locale) }}</button>
-          </div>
-        </div>
-      </div>
-    </Teleport>
+    <!-- 深链 ?category=xxx 直开提交表单（与反馈池内「提交反馈」弹窗同款外壳） -->
+    <UiModal
+      v-if="deepLinkCategory"
+      :title="t('submitTitle', locale)"
+      :subtitle="t('formTip', locale)"
+      :close-label="t('close', locale)"
+      @close="closeForm"
+    >
+      <FeedbackForm
+        ref="formRef"
+        :api-base="apiBase"
+        :locale="locale"
+        :initial-category="deepLinkCategory || undefined"
+        embedded
+        @done="onDeepLinkSubmitted"
+      />
+      <template #footer>
+        <span v-if="!formRef?.canSubmit" class="modal-hint">
+          <FbIcon name="alert" :size="14" /> {{ (formRef?.invalidTips || []).join('，') }}
+        </span>
+        <UiButton variant="ghost" @click="closeForm">{{ t('cancel', locale) }}</UiButton>
+        <UiButton variant="primary" :disabled="!formRef?.canSubmit" @click="formRef?.submit()">
+          {{ t('submitBtn', locale) }}
+        </UiButton>
+      </template>
+    </UiModal>
   </div>
 </template>
 
@@ -69,6 +70,8 @@ import FeedbackDetailDrawer from './FeedbackDetailDrawer.vue'
 import FeedbackActivity from './FeedbackActivity.vue'
 import FeedbackForm from './FeedbackForm.vue'
 import SubscribeCard from './SubscribeCard.vue'
+import UiButton from '../ui/UiButton.vue'
+import UiModal from '../ui/UiModal.vue'
 
 const props = defineProps<{
   apiBase: string
@@ -172,157 +175,48 @@ onBeforeUnmount(() => {
 /* 页面走 VitePress layout: page：主题自渲染顶栏（VPNavBar，含中英文切换），
    无 VPDoc 右侧大纲 .aside、无文档顶部留白，容器宽度与留白全部在这里自控 */
 .feedback-page {
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 24px 24px 64px;
-}
-
-@media (max-width: 767px) {
-  .feedback-page {
-    padding: 16px 16px 48px;
-  }
+  padding: 28px 24px 64px;
 }
 
 /* 两栏布局：左侧反馈池 + 右侧需求池动态 */
 .feedback-page-body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
   align-items: start;
 }
 
-/* 窄屏折到下方（动态面板排在反馈池之后） */
+/* 窄屏折到下方（动态面板排在反馈池之后）。
+   minmax(0,1fr) 而不是 1fr：1fr 的最小值是 min-content，筛选行/看板会把整列撑出视口 */
 @media (max-width: 1024px) {
   .feedback-page-body {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
-/* 页尾订阅卡：与上方两栏留间距（卡片自身不带外边距，由这里按位置给） */
 .feedback-subscribe {
   margin-top: 16px;
 }
 
-/* 深链直开的提交表单弹窗（与 FeedbackPool 内提交弹窗同款样式，scoped 各自隔离） */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.55);
-  overflow-y: auto;
-}
-
-.modal-dialog {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 880px;
-  max-height: 90vh;
-  overflow: hidden;
-  border-radius: 12px;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-border);
-  padding: 1.25rem 1.5rem 1rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  /* 配合 overlay 滚动：内容超高时从顶部开始而非垂直居中被裁剪 */
-  margin: auto;
-}
-
-.modal-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding-right: 0.25rem;
-}
-
-.modal-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--vp-c-text-3);
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-  transition: all 0.2s;
-  z-index: 1;
-}
-
-.modal-close:hover {
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-1);
-}
-
-.modal-footer {
-  flex-shrink: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--vp-c-border);
-}
-
 .modal-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   margin-right: auto;
-  font-size: 0.8125rem;
+  font-size: 12px;
   font-weight: 500;
   color: #d97706;
 }
 
-.modal-cancel {
-  padding: 0.5rem 1.25rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 8px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
+@media (max-width: 767px) {
+  .feedback-page {
+    padding: 18px 16px 48px;
+  }
 
-.modal-cancel:hover {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
-}
-
-.modal-submit {
-  padding: 0.5rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  background: var(--vp-c-brand-1);
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.modal-submit:hover:not(:disabled) {
-  opacity: 0.9;
-}
-
-.modal-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* 校验提示独占一行，不挤占取消/提交按钮 */
-@media (max-width: 768px) {
   .modal-hint {
     flex-basis: 100%;
-    margin-right: 0;
   }
 }
 </style>

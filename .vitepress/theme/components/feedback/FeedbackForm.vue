@@ -861,4 +861,87 @@ async function handleSubmit() {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* 组件库语言：12px 圆角输入、胶囊按钮、统一发丝线 */
+.form-group label {
+  font-size: 12px;
+  color: var(--ui-fg-muted);
+}
+
+.form-group input,
+.form-group textarea {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  font-size: 13px;
+  color: var(--ui-fg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-group input {
+  height: 36px;
+  padding: 0 12px;
+}
+
+.form-group textarea {
+  padding: 10px 12px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--ui-border-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-fg) 6%, transparent);
+}
+
+.type-btn {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+  font-size: 12px;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.type-btn:hover {
+  border-color: var(--ui-border-strong);
+}
+
+.type-btn.active {
+  border-color: color-mix(in srgb, var(--ui-accent) 55%, var(--ui-border));
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+}
+
+.submit-btn {
+  height: 36px;
+  padding: 0 20px;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-accent);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.att-picker {
+  border-radius: var(--ui-radius-field);
+  border-color: var(--ui-border);
+}
+
+.form-tip {
+  color: var(--ui-fg-muted);
+  font-size: 12px;
+}
+
+@media (max-width: 640px) {
+  /* <16px 的输入框聚焦会触发 iOS 自动放大 */
+  .form-group input,
+  .form-group textarea {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-group input,
+  .form-group textarea,
+  .type-btn {
+    transition: none;
+  }
+}
 </style>

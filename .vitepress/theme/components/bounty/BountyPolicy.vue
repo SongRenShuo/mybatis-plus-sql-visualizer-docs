@@ -6,32 +6,22 @@
     <p v-if="ready && !policy.enabled" class="paused-notice" role="status">{{ t('policy.paused', locale) }}</p>
     <p v-if="loadError" class="load-error">{{ t('policy.loadFailed', locale) }}</p>
 
-    <div class="tier-table-wrap">
-      <table class="tier-table">
-        <thead>
-          <tr>
-            <th>{{ t('policy.tier', locale) }}</th>
-            <th>{{ t('policy.range', locale) }}</th>
-            <th>{{ t('policy.desc', locale) }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="tier in tiers" :key="tier.severity">
-            <td :data-label="t('policy.tier', locale)">
-              <span class="tier-badge" :style="{ '--tier-color': tier.color }">
-                <span class="tier-dot" aria-hidden="true"></span>{{ tier.label }}
-              </span>
-            </td>
-            <td :data-label="t('policy.range', locale)" class="tier-range">{{ tier.range }}</td>
-            <td :data-label="t('policy.desc', locale)" class="tier-desc">{{ tier.desc }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- 等级卡：等级 / 金额区间 / 适用情形，四列并排 -->
+    <div class="tier-grid">
+      <div v-for="tier in tiers" :key="tier.severity" class="tier-card">
+        <span class="tier-badge">
+          <span class="tier-dot" :style="{ background: tier.color }" aria-hidden="true" />{{ tier.label }}
+        </span>
+        <span class="tier-range ui-num">{{ tier.range }}</span>
+        <p class="tier-desc">{{ tier.desc }}</p>
+      </div>
     </div>
 
     <div class="policy-foot">
       <p class="policy-note">{{ t('policy.note', locale, { max: formatMoney(policy.maxReward) }) }}</p>
-      <p class="policy-cap">{{ t('policy.maxReward', locale) }}：<strong>{{ formatMoney(policy.maxReward) }}</strong></p>
+      <p class="policy-cap">
+        {{ t('policy.maxReward', locale) }}<strong class="ui-num">{{ formatMoney(policy.maxReward) }}</strong>
+      </p>
     </div>
 
     <h3 class="validity-title">{{ t('policy.validityTitle', locale) }}</h3>
@@ -111,92 +101,87 @@ const validityRows = computed(() => {
 
 .bounty-policy h2 {
   margin: 0 0 0.5rem;
+  border: none;
+  padding: 0;
   font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   text-align: center;
+  color: var(--ui-fg);
 }
 
 .section-sub {
   margin: 0 auto 1.5rem;
   max-width: 720px;
   text-align: center;
-  color: var(--vp-c-text-2);
+  font-size: 13px;
   line-height: 1.7;
+  color: var(--ui-fg-muted);
 }
 
 .paused-notice {
   max-width: 760px;
   margin: 0 auto 1rem;
-  padding: 0.75rem 1rem;
+  padding: 10px 14px;
   border: 1px solid #f59e0b;
-  border-radius: 10px;
-  background: color-mix(in srgb, #f59e0b 10%, var(--vp-c-bg));
+  border-radius: var(--ui-radius-field);
+  background: color-mix(in srgb, #f59e0b 10%, var(--ui-surface));
   color: #b45309;
-  font-size: 0.875rem;
+  font-size: 13px;
   text-align: center;
 }
 
 .load-error {
   margin: 0 0 1rem;
   text-align: center;
-  color: var(--vp-c-text-3);
-  font-size: 0.8rem;
+  color: var(--ui-fg-muted);
+  font-size: 12px;
 }
 
-.tier-table-wrap {
-  border: 1px solid var(--vp-c-border);
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--vp-c-bg);
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
 }
 
-.tier-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.tier-table th,
-.tier-table td {
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--vp-c-border);
-  font-size: 0.9rem;
-}
-
-.tier-table th {
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-2);
-  font-weight: 600;
-  font-size: 0.8rem;
-}
-
-.tier-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.tier-range {
-  white-space: nowrap;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-  font-variant-numeric: tabular-nums;
-}
-
-.tier-desc {
-  color: var(--vp-c-text-2);
+.tier-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface);
 }
 
 .tier-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 6px;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--vp-c-text-1);
+  color: var(--ui-fg-soft);
 }
 
 .tier-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--tier-color);
+}
+
+.tier-range {
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ui-fg);
+}
+
+.tier-desc {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ui-fg-muted);
 }
 
 .policy-foot {
@@ -204,132 +189,97 @@ const validityRows = computed(() => {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem 1rem;
-  margin-top: 0.75rem;
+  gap: 8px 16px;
+  margin-top: 12px;
 }
 
 .policy-note {
   margin: 0;
   flex: 1 1 320px;
-  color: var(--vp-c-text-3);
-  font-size: 0.8rem;
+  color: var(--ui-fg-muted);
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 .policy-cap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin: 0;
-  color: var(--vp-c-text-2);
-  font-size: 0.85rem;
+  padding: 4px 10px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-pill);
+  color: var(--ui-fg-muted);
+  font-size: 12px;
 }
 
 .policy-cap strong {
-  color: var(--vp-c-brand-1);
-  font-size: 1rem;
+  color: var(--ui-accent);
+  font-size: 13px;
 }
 
 .validity-title {
   margin: 2rem 0 0.25rem;
-  font-size: 1.05rem;
+  border: none;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ui-fg);
 }
 
 .validity-hint {
-  margin: 0 0 0.75rem;
-  color: var(--vp-c-text-3);
-  font-size: 0.8rem;
+  margin: 0 0 10px;
+  color: var(--ui-fg-muted);
+  font-size: 12px;
 }
 
 .validity-list {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
+  gap: 10px;
 }
 
 .validity-item {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.75rem;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 10px;
-  background: var(--vp-c-bg-soft);
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface-muted);
 }
 
 .validity-factor {
   align-self: flex-start;
-  padding: 0 0.5rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--validity-color) 12%, var(--vp-c-bg));
+  padding: 1px 8px;
+  border-radius: var(--ui-radius-pill);
+  background: color-mix(in srgb, var(--validity-color) 14%, var(--ui-surface));
   color: var(--validity-color);
-  font-size: 0.75rem;
+  font-size: 11px;
   font-weight: 700;
 }
 
 .validity-name {
-  font-size: 0.875rem;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--vp-c-text-1);
+  color: var(--ui-fg);
 }
 
 .validity-desc {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-3);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ui-fg-muted);
 }
 
 @media (max-width: 860px) {
+  .tier-grid,
   .validity-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* 窄屏等级表改为卡片列表，不横向滚动 */
-@media (max-width: 640px) {
-  .tier-table-wrap {
-    border: none;
-    background: transparent;
-    overflow: visible;
-  }
-
-  .tier-table thead {
-    display: none;
-  }
-
-  .tier-table,
-  .tier-table tbody,
-  .tier-table tr,
-  .tier-table td {
-    display: block;
-    width: 100%;
-  }
-
-  .tier-table tr {
-    margin-bottom: 0.75rem;
-    padding: 0.75rem 0.875rem;
-    border: 1px solid var(--vp-c-border);
-    border-radius: 10px;
-    background: var(--vp-c-bg);
-  }
-
-  .tier-table td {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.25rem 0;
-    border-bottom: none;
-    text-align: right;
-  }
-
-  .tier-table td::before {
-    content: attr(data-label);
-    flex-shrink: 0;
-    color: var(--vp-c-text-3);
-    font-size: 0.75rem;
-    text-align: left;
-  }
-
-  .tier-badge {
-    justify-content: flex-end;
-  }
-
+@media (max-width: 520px) {
+  .tier-grid,
   .validity-list {
     grid-template-columns: 1fr;
   }
