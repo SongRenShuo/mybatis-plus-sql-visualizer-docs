@@ -1,6 +1,7 @@
 <script setup>
 import { computed, reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useHomeContent } from '../../composables/useHomeContent'
+import { whenNear } from '../../composables/lazyMedia'
 
 const { c } = useHomeContent()
 const sectionEl = ref(null)
@@ -33,44 +34,18 @@ const features = computed(() =>
   c.value.capability.items.map((item, i) => ({ ...item, ...media[i], ...states[i] })),
 )
 
-let cleanup = null
+const gates = []
 
 onMounted(() => {
   if (!sectionEl.value) return
   const wrappers = [...sectionEl.value.querySelectorAll('.feature-video-wrapper')]
-  if (!wrappers.length) return
-
-  const viewportHeight = () => window.innerHeight || document.documentElement.clientHeight
-
-  const loadWithin = (margin, key) => {
-    const limit = viewportHeight() + margin
-    wrappers.forEach((el, i) => {
-      const state = states[i]
-      if (!state || state[key]) return
-      if (el.getBoundingClientRect().top >= limit) return
-      state[key] = key === 'posterSrc' ? media[i].poster : media[i].imageSrc
-    })
-  }
-
-  const check = () => {
-    loadWithin(800, 'posterSrc')
-    loadWithin(200, 'gifSrc')
-    // 全部加载完就摘掉监听，之后不再有 rect 读取
-    if (wrappers.every((_, i) => states[i].gifSrc || states[i].gifError)) cleanup?.()
-  }
-
-  cleanup = () => {
-    window.removeEventListener('scroll', check)
-    window.removeEventListener('resize', check)
-    cleanup = null
-  }
-
-  check()
-  window.addEventListener('scroll', check, { passive: true })
-  window.addEventListener('resize', check)
+  wrappers.forEach((el, i) => {
+    gates.push(whenNear(el, 800, () => { states[i].posterSrc = media[i].poster }))
+    gates.push(whenNear(el, 200, () => { states[i].gifSrc = media[i].imageSrc }))
+  })
 })
 
-onBeforeUnmount(() => cleanup?.())
+onBeforeUnmount(() => gates.forEach((cancel) => cancel()))
 </script>
 
 <template>
