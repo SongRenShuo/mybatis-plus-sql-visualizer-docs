@@ -14,9 +14,10 @@
         @keydown.enter="$emit('select-post', item.postNo)"
       >
         <span
-          class="activity-icon"
-          :class="item.type === 'new' ? 'icon-new' : 'icon-status'"
-        ><FbIcon :name="item.type === 'new' ? 'plus-circle' : 'refresh'" :size="14" /></span>
+          class="activity-dot"
+          :class="item.type === 'new' ? 'is-new' : 'is-status'"
+          aria-hidden="true"
+        />
         <div class="activity-body">
           <p class="activity-line">
             <span
@@ -43,7 +44,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { t, type Locale, type MessageKey } from './i18n'
-import FbIcon from './FbIcon.vue'
 import { parseUtcDate } from './dateTime'
 
 const props = defineProps<{
@@ -122,118 +122,149 @@ defineExpose({ reload: loadActivity })
 
 <style scoped>
 .feedback-activity {
-  border: 1px solid var(--vp-c-border);
-  border-radius: 12px;
-  background: var(--vp-c-bg-soft);
-  padding: 1rem 1.25rem;
+  padding: 14px 16px 6px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface);
 }
 
 .activity-title {
-  font-size: 1rem;
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ui-border);
+  font-size: 15px;
   font-weight: 600;
-  margin: 0 0 0.75rem;
-  padding-bottom: 0.625rem;
-  border-bottom: 1px solid var(--vp-c-border);
+  color: var(--ui-fg);
 }
 
 .activity-empty {
   padding: 1.5rem 0;
   text-align: center;
-  font-size: 0.8rem;
-  color: var(--vp-c-text-3);
+  font-size: 12px;
+  color: var(--ui-fg-muted);
 }
 
+/* 时间线：左侧一条竖线 + 彩色节点，替掉原来「浅色圆圈图标 + 同色标签胶囊」
+   两个并排的色块（图标只有 14px，看着脏也有点丑） */
 .activity-list {
+  position: relative;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 18px;
+  /* 动态最多 20 条，不限高会把右栏拉成一整屏长条，与左侧看板高度失衡 */
+  max-height: min(70vh, 620px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ui-fg) 24%, transparent) transparent;
+}
+
+.activity-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.activity-list::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ui-fg) 24%, transparent);
+}
+
+.activity-list::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 14px;
+  width: 1px;
+  background: var(--ui-border);
 }
 
 .activity-item {
+  position: relative;
   display: flex;
-  gap: 0.625rem;
-  padding: 0.625rem 0;
-  border-bottom: 1px solid var(--vp-c-border);
+  gap: 8px;
+  padding: 7px 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background-color 0.15s ease;
 }
 
 .activity-item:hover {
-  background: var(--vp-c-bg-mute);
+  background: var(--ui-surface-muted);
 }
 
 .activity-item:hover .activity-post-title {
-  color: var(--vp-c-brand-1);
+  color: var(--ui-accent);
 }
 
 .activity-item:focus-visible {
-  outline: 2px solid var(--vp-c-brand-1);
+  outline: 2px solid var(--ui-accent);
   outline-offset: -2px;
-  border-radius: 6px;
 }
 
-.activity-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.activity-icon {
-  flex-shrink: 0;
-  width: 1.75rem;
-  height: 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.activity-dot {
+  position: absolute;
+  left: -16px;
+  top: 13px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  font-size: 0.875rem;
-  line-height: 1;
+  /* 与面板同色的外环，让节点压在竖线上而不是糊成一条 */
+  box-shadow: 0 0 0 3px var(--ui-surface);
 }
 
-.icon-new {
-  background: rgba(16, 185, 129, 0.12);
+.activity-item:hover .activity-dot {
+  box-shadow: 0 0 0 3px var(--ui-surface-muted);
 }
 
-.icon-status {
-  background: rgba(59, 130, 246, 0.12);
+.is-new {
+  background: #10b981;
+}
+
+.is-status {
+  background: #3b82f6;
 }
 
 .activity-body {
-  flex: 1;
   min-width: 0;
+  flex: 1;
 }
 
 .activity-line {
   display: flex;
   align-items: baseline;
-  gap: 0.375rem;
+  gap: 6px;
   margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .activity-label {
   flex-shrink: 0;
-  font-size: 0.75rem;
+  font-size: 11px;
   font-weight: 600;
-  padding: 1px 6px;
-  border-radius: 4px;
   white-space: nowrap;
 }
 
 .label-new {
-  background: rgba(16, 185, 129, 0.12);
-  color: #10b981;
+  color: #059669;
 }
 
 .label-status {
-  background: rgba(59, 130, 246, 0.12);
-  color: #3b82f6;
+  color: #2563eb;
+}
+
+.dark .label-new {
+  color: #34d399;
+}
+
+.dark .label-status {
+  color: #60a5fa;
 }
 
 .activity-post-title {
-  flex: 1;
   min-width: 0;
-  color: var(--vp-c-text-1);
+  flex: 1;
+  color: var(--ui-fg);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -243,21 +274,24 @@ defineExpose({ reload: loadActivity })
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.375rem 0.5rem;
-  margin: 0.125rem 0 0;
-  font-size: 0.75rem;
-  color: var(--vp-c-text-3);
+  gap: 4px 8px;
+  margin: 3px 0 0;
+  font-size: 11px;
+  color: var(--ui-fg-muted);
 }
 
 .activity-status {
-  color: var(--vp-c-text-2);
+  color: var(--ui-fg-soft);
+  font-variant-numeric: tabular-nums;
 }
 
 .activity-operator {
   padding: 0 6px;
-  border-radius: 4px;
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand-1);
+  border-radius: 999px;
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+  font-size: 10px;
+  line-height: 16px;
 }
 
 .activity-time {
@@ -265,63 +299,9 @@ defineExpose({ reload: loadActivity })
   white-space: nowrap;
 }
 
-/* 组件库语言：16px 圆角卡片、14px 内边距、浅底行悬停 */
-.feedback-activity {
-  padding: 14px 16px 10px;
-  border: 1px solid var(--ui-border);
-  border-radius: var(--ui-radius-card);
-  background: var(--ui-surface);
-}
-
-.activity-title {
-  margin: 0 0 8px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--ui-border);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ui-fg);
-}
-
-.activity-item {
-  gap: 8px;
-  padding: 8px 6px;
-  border-bottom: 1px solid transparent;
-  border-radius: 8px;
-}
-
-.activity-item:hover {
-  background: var(--ui-surface-muted);
-}
-
-.activity-item:last-child {
-  padding-bottom: 8px;
-}
-
-.activity-icon {
-  width: 26px;
-  height: 26px;
-}
-
-.activity-label {
-  border-radius: var(--ui-radius-pill);
-  padding: 1px 8px;
-  font-size: 11px;
-}
-
-.activity-post-title {
-  font-size: 13px;
-  color: var(--ui-fg);
-}
-
-.activity-meta {
-  margin-top: 3px;
-  font-size: 11px;
-  color: var(--ui-fg-muted);
-}
-
-.activity-operator {
-  border-radius: var(--ui-radius-pill);
-  background: var(--ui-accent-soft);
-  color: var(--ui-accent);
+@media (prefers-reduced-motion: reduce) {
+  .activity-item {
+    transition: none;
+  }
 }
 </style>
