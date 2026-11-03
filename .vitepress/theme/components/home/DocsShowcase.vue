@@ -78,6 +78,8 @@ onMounted(() => {
           <img
             src="/demo/wrapper-preview.png"
             :alt="mediaAlt"
+            loading="lazy"
+            decoding="async"
             class="docs-showcase-video"
           />
           <img

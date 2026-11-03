@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref, onMounted } from 'vue'
+import { computed, reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useHomeContent } from '../../composables/useHomeContent'
 
 const { c } = useHomeContent()
@@ -21,25 +21,56 @@ const media = [
   { imageSrc: '/demo/mcp-agent.gif', poster: '/demo/mcp-agent.png', reverse: true },
 ]
 
-// GIF 加载状态与文案无关，独立保存，避免 computed 重算时丢掉
-const gifStates = reactive(media.map(() => ({ gifReady: false, gifError: false })))
+/**
+ * 按距离门控加载，不用原生 loading="lazy"：原生阈值由浏览器按网络质量决定，
+ * 慢网会放大到几千像素（实测慢网下首页 8 位的 GIF + poster 会被一次性全下，
+ * 合计约 10.6MB，单个 1~1.6MB 的 GIF 要跑 20 秒）。这里 poster 提前 800px、
+ * GIF 到 200px 才下，与网络无关。
+ */
+const states = reactive(media.map(() => ({ posterSrc: '', gifSrc: '', gifReady: false, gifError: false })))
 
 const features = computed(() =>
-  c.value.capability.items.map((item, i) => ({ ...item, ...media[i], ...gifStates[i] })),
+  c.value.capability.items.map((item, i) => ({ ...item, ...media[i], ...states[i] })),
 )
 
-// GIF 命中 HTTP 缓存时 load 事件可能早于 Vue 挂载监听器触发（hydration 输掉竞态，
-// gifReady 永不置位 → 叠层恒透明退化为静态 poster），挂载后按 complete 状态直接补位；
-// v-for DOM 顺序与 features 一致，按序号回填
+let cleanup = null
+
 onMounted(() => {
   if (!sectionEl.value) return
-  const imgs = sectionEl.value.querySelectorAll('img.feature-video--gif')
-  imgs.forEach((img, index) => {
-    if (!img.complete || !gifStates[index]) return
-    if (img.naturalWidth > 0) gifStates[index].gifReady = true
-    else gifStates[index].gifError = true
-  })
+  const wrappers = [...sectionEl.value.querySelectorAll('.feature-video-wrapper')]
+  if (!wrappers.length) return
+
+  const viewportHeight = () => window.innerHeight || document.documentElement.clientHeight
+
+  const loadWithin = (margin, key) => {
+    const limit = viewportHeight() + margin
+    wrappers.forEach((el, i) => {
+      const state = states[i]
+      if (!state || state[key]) return
+      if (el.getBoundingClientRect().top >= limit) return
+      state[key] = key === 'posterSrc' ? media[i].poster : media[i].imageSrc
+    })
+  }
+
+  const check = () => {
+    loadWithin(800, 'posterSrc')
+    loadWithin(200, 'gifSrc')
+    // 全部加载完就摘掉监听，之后不再有 rect 读取
+    if (wrappers.every((_, i) => states[i].gifSrc || states[i].gifError)) cleanup?.()
+  }
+
+  cleanup = () => {
+    window.removeEventListener('scroll', check)
+    window.removeEventListener('resize', check)
+    cleanup = null
+  }
+
+  check()
+  window.addEventListener('scroll', check, { passive: true })
+  window.addEventListener('resize', check)
 })
+
+onBeforeUnmount(() => cleanup?.())
 </script>
 
 <template>
@@ -64,20 +95,20 @@ onMounted(() => {
         >
           <div class="feature-video-wrapper" :class="{ reverse: item.reverse }">
             <img
-              :src="item.poster"
+              :src="item.posterSrc || null"
               :alt="item.title"
-              loading="lazy"
+              decoding="async"
               class="feature-video"
             />
             <img
-              v-if="!item.gifError"
-              :src="item.imageSrc"
+              v-if="item.gifSrc && !item.gifError"
+              :src="item.gifSrc"
               :alt="item.title"
-              loading="lazy"
+              decoding="async"
               class="feature-video feature-video--gif"
               :class="{ 'feature-video--gif-ready': item.gifReady }"
-              @load="gifStates[index].gifReady = true"
-              @error="gifStates[index].gifError = true"
+              @load="states[index].gifReady = true"
+              @error="states[index].gifError = true"
             />
           </div>
 
