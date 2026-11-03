@@ -63,7 +63,7 @@ IDE 的 `vmoptions` / 启动脚本 / `idea.properties` 同级位置均可配置�
 
 通道开关与版本信息都在设置页的「更新与诊断」区（`设置 > Tools > SQL Visualizer > 关于`）：
 
-![SQL Visualizer 设置页「更新与诊断」区：插件缓存占用与条目数、当前版本与「检查更新」、「抢先体验：启用 Gitee 更新通道」开关、报告问题 / 需求池入口、内部构建号与插件设置导入导出](/demo/update-channel.png)
+![SQL Visualizer 设置页「更新与诊断」区：插件缓存占用与条目数、当前版本与「检查更新」、「抢先体验：启用 Gitee 更新通道」开关、报告问题 / 需求池入口、内部构建号与插件设置导入导出](/demo/update-channel.webp)
 
 ### 清单格式
 

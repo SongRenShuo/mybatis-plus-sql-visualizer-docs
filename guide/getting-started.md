@@ -22,7 +22,7 @@
 3. 点击 <kbd>Install</kbd> 安装
 4. 首次安装后若未看到插件入口，重启一次 IDEA；后续版本更新通常免重启热生效（离线更新通道亦支持热替换）
 
-![Marketplace 里搜索 SQL Visualizer：结果首条即本插件（作者 SongRenShuo），右侧详情页带「安装」按钮与版本号](/demo/install-marketplace.png)
+![Marketplace 里搜索 SQL Visualizer：结果首条即本插件（作者 SongRenShuo），右侧详情页带「安装」按钮与版本号](/demo/install-marketplace.webp)
 
 ### 方式二：手动下载插件安装
 

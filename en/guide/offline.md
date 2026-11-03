@@ -63,7 +63,7 @@ Set it in the IDE's `vmoptions` file, its launch script, or alongside `idea.prop
 
 Both the channel switch and the version info live in the settings page's "Update & Diagnostics" area (`Settings > Tools > SQL Visualizer > About`):
 
-![SQL Visualizer settings "Update & Diagnostics" area: plugin cache size and entry count, current version with Check-Update, the "Early access: enable Gitee update channel" switch, the Report-an-issue / Feedback-board entries, the internal build number, and settings import / export](/demo/update-channel.png)
+![SQL Visualizer settings "Update & Diagnostics" area: plugin cache size and entry count, current version with Check-Update, the "Early access: enable Gitee update channel" switch, the Report-an-issue / Feedback-board entries, the internal build number, and settings import / export](/demo/update-channel.webp)
 
 ### Manifest format
 

@@ -12,14 +12,14 @@ const sectionEl = ref(null)
  * 两边按数组下标一一对应，改文案不需要碰这个文件。
  */
 const media = [
-  { imageSrc: '/demo/wrapper-preview.gif', poster: '/demo/wrapper-preview.png' },
-  { imageSrc: '/demo/sql-log.gif', poster: '/demo/sql-log.png', reverse: true },
-  { imageSrc: '/demo/sql-log-jump-source.gif', poster: '/demo/sql-log-jump-source.png' },
-  { imageSrc: '/demo/sql-to-java.gif', poster: '/demo/sql-to-java.png', reverse: true },
-  { imageSrc: '/demo/crud-sql.gif', poster: '/demo/crud-sql.png' },
-  { imageSrc: '/demo/xml-preview.gif', poster: '/demo/xml-preview.png', reverse: true },
-  { imageSrc: '/demo/jpa-preview.gif', poster: '/demo/jpa-preview.png' },
-  { imageSrc: '/demo/mcp-agent.gif', poster: '/demo/mcp-agent.png', reverse: true },
+  { imageSrc: '/demo/wrapper-preview.gif', poster: '/demo/wrapper-preview.webp' },
+  { imageSrc: '/demo/sql-log.gif', poster: '/demo/sql-log.webp', reverse: true },
+  { imageSrc: '/demo/sql-log-jump-source.gif', poster: '/demo/sql-log-jump-source.webp' },
+  { imageSrc: '/demo/sql-to-java.gif', poster: '/demo/sql-to-java.webp', reverse: true },
+  { imageSrc: '/demo/crud-sql.gif', poster: '/demo/crud-sql.webp' },
+  { imageSrc: '/demo/xml-preview.gif', poster: '/demo/xml-preview.webp', reverse: true },
+  { imageSrc: '/demo/jpa-preview.gif', poster: '/demo/jpa-preview.webp' },
+  { imageSrc: '/demo/mcp-agent.gif', poster: '/demo/mcp-agent.webp', reverse: true },
 ].map((m) => ({ ...m, videoSrc: m.imageSrc.replace(/\.gif$/i, '.mp4') }))
 
 /**

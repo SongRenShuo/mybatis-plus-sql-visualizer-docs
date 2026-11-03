@@ -65,7 +65,7 @@ const gifError = ref(false)
 
         <div class="docs-showcase-video-wrap mp-reveal">
           <img
-            src="/demo/wrapper-preview.png"
+            src="/demo/wrapper-preview.webp"
             :alt="mediaAlt"
             loading="lazy"
             decoding="async"
@@ -74,7 +74,7 @@ const gifError = ref(false)
           <video
             v-if="!gifError"
             :src="'/demo/wrapper-preview.mp4'"
-            poster="/demo/wrapper-preview.png"
+            poster="/demo/wrapper-preview.webp"
             :aria-label="mediaAlt"
             muted
             loop

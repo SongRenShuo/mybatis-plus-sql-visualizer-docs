@@ -2,11 +2,11 @@
 
 All settings are located at `Settings > Tools > SQL Visualizer`. The search box at the top-left of the Settings dialog finds these entries directly — every plugin setting is registered with the IDE settings search index. The plugin landing page has its own search box on top of that; both index the same data and return the same hits.
 
-![SQL Visualizer main settings page (Tools > SQL Visualizer)](/demo/settings.png)
+![SQL Visualizer main settings page (Tools > SQL Visualizer)](/demo/settings.webp)
 
 The bottom of the top-level "SQL Visualizer" settings page carries a **capability matrix** — four lines stating what the plugin does: runtime capture of real parameters and timings, static pre-execution reconstruction without a database, eleven MCP tools for AI agents, and where the compatibility matrix and docs live.
 
-![Capability matrix at the bottom of the settings landing page (runtime capture / preview without a DB / eleven MCP tools / compatibility matrix and docs)](/demo/settings-landing.png)
+![Capability matrix at the bottom of the settings landing page (runtime capture / preview without a DB / eleven MCP tools / compatibility matrix and docs)](/demo/settings-landing.webp)
 
 No IDE restart needed: re-trigger a preview and the new settings apply.
 
@@ -66,11 +66,11 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 
 ## SQL Log
 
-![Settings page, Source Location Capture group: enhanced capture switch, enhanced-capture redaction, display & export masking, call-stack snapshot frame count (12–64), attached status line and the two frame filter lists](/demo/settings-enhanced-capture.png)
+![Settings page, Source Location Capture group: enhanced capture switch, enhanced-capture redaction, display & export masking, call-stack snapshot frame count (12–64), attached status line and the two frame filter lists](/demo/settings-enhanced-capture.webp)
 
-![Settings page groups for List Display / CRUD color marking / slow-query threshold: SQL display mode, per-statement color markers with reset, slow-query threshold, list cache and dedup window](/demo/settings-log-list.png)
+![Settings page groups for List Display / CRUD color marking / slow-query threshold: SQL display mode, per-statement color markers with reset, slow-query threshold, list cache and dedup window](/demo/settings-log-list.webp)
 
-![Settings page "ORM Frameworks" group: enable Hibernate/JPA log capture (with SQL and parameter prefixes), enable Spring JdbcTemplate log capture, enable ShardingSphere log capture; the "Auto Save" group sits below](/demo/settings-orm-capture.png)
+![Settings page "ORM Frameworks" group: enable Hibernate/JPA log capture (with SQL and parameter prefixes), enable Spring JdbcTemplate log capture, enable ShardingSphere log capture; the "Auto Save" group sits below](/demo/settings-orm-capture.webp)
 
 | Setting | Default | Description |
 |---------|---------|-------------|
@@ -132,17 +132,20 @@ The three are independent: clearing preview history does not delete parameter sn
 
 **Gutter icons grouped by source**: beyond the table above, the preview icons in the left gutter are split into six independently toggled source groups (mapper XML statements / annotation SQL (@Select family) / JPA·HQL family / JdbcTemplate string SQL / generic embedded XML fallback / Wrapper chains and method-name string SQL) — switch a group off and that kind of code stops showing gutter icons, handy when you only care about one kind of SQL in a project.
 
-![UI and Actions page: the six gutter source-group switches plus the mapper XML syntax-highlighting master switch](/demo/settings-gutter-groups.png)
+![UI and Actions page: the six gutter source-group switches plus the mapper XML syntax-highlighting master switch](/demo/settings-gutter-groups.webp)
 
 **mapper XML syntax highlighting**: the plugin injects its own syntax colouring into mapper XML — statement keywords, `#{}` / `${}` parameter placeholders and inline SQL text are coloured separately (the "mapper XML syntax highlighting (keywords + parameter placeholders)" checkbox in the screenshot above is its master switch). Turn it off and mapper XML falls back to the IDE's native XML colouring.
 
-![Injected colouring in OrderMapper.xml: select tags and SQL keywords coloured, ${orderBy} placeholder highlighted separately](/demo/xml-syntax-highlight.gif)
+<figure>
+  <video :src="'/demo/xml-syntax-highlight.mp4'" :poster="'/demo/xml-syntax-highlight-poster.webp'" aria-label="Injected colouring in OrderMapper.xml: select tags and SQL keywords coloured, ${orderBy} placeholder highlighted separately" autoplay muted loop playsinline preload="metadata"></video>
+  <figcaption class="visually-hidden">Injected colouring in OrderMapper.xml: select tags and SQL keywords coloured, ${orderBy} placeholder highlighted separately</figcaption>
+</figure>
 
 **Mapper two-way navigation icons and peer yielding**: the gutter icons that jump between mapper XML statement lines and Mapper interface method lines (see [XML Preview · Mapper Two-Way Navigation](/en/features/xml-preview#mapper-two-way-navigation)) obey the master switch and the "mapper XML statements" group switch above. There is also a dedicated setting, "**Yield Mapper navigation icons when a peer MyBatis navigation plugin is present**" (on by default, in the same block as the gutter group switches): when a peer MyBatis navigation plugin (currently MyBatisCodeHelperPro) is detected as enabled, these two icons hide so they don't stack with the peer's own arrow on one line; turn it off to keep this plugin's icons even when the peer is present.
 
 ## MCP Tools
 
-![Settings page, MCP subpage: the master switch, MCP output masking, and a per-tool enable checkbox for each of the eleven read-only tools](/demo/settings-mcp.png)
+![Settings page, MCP subpage: the master switch, MCP output masking, and a per-tool enable checkbox for each of the eleven read-only tools](/demo/settings-mcp.webp)
 
 The plugin exposes 11 read-only tools to AI agents (Claude Code / Cursor / AI Assistant, etc.) through the platform's MCP Server; the "MCP Tools" subpage in settings provides the gating:
 
@@ -157,7 +160,7 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 
 `Settings > Tools > SQL Visualizer (Current Project)` offers 10 overrides below the master switch: database dialect, parameter substitution, SQL formatting, logic-delete injection, logic-delete value, table prefix / suffix, table-name inference strategy, ignored fields, and calibrate columns against the data source (4 of them are checkboxes). Enhanced capture is a global setting and is not part of the project-level overrides.
 
-![SQL Visualizer project-level settings page (Tools > SQL Visualizer (Current Project)): with the master switch off, every row below grays out and shows the effective global values](/demo/settings-project.png)
+![SQL Visualizer project-level settings page (Tools > SQL Visualizer (Current Project)): with the master switch off, every row below grays out and shows the effective global values](/demo/settings-project.webp)
 
 - When the "Use project settings" master switch is off, all 10 override rows gray out and show the effective global values — what you see is what runs; a "Reset to follow global" button clears this project's overrides in one click
 - With the dialect on "Auto-infer", the project level takes precedence over the global decision
@@ -178,7 +181,7 @@ For the tool surface and version requirements, see [MCP Server Tools](/en/featur
 
 The settings page's "Update & Diagnostics" area (`Settings > Tools > SQL Visualizer > About`) gathers these entries in one place, and "Report a Problem…" opens this dialog:
 
-![SQL Visualizer "Report to the feedback pool" dialog: title, type, category and description are required, an exception-stack .txt can be attached, nickname and email are optional, and it supports anonymous submission or handing off to the browser](/demo/feedback-dialog.png)
+![SQL Visualizer "Report to the feedback pool" dialog: title, type, category and description are required, an exception-stack .txt can be attached, nickname and email are optional, and it supports anonymous submission or handing off to the browser](/demo/feedback-dialog.webp)
 
 ::: details Privacy and dedup rules of the feedback dialog (When to read: you care about the upload scope or about duplicate reports)
 "Report a Problem / Feedback Pool": by default only the exception class name and a stack-frame summary are prefilled; the full exception message and complete stack, plus the stack attachment, are opt-in checkboxes — uploaded only when checked, and they may contain local paths and class names. The same exception is deduplicated for 24 hours; the Help menu's "SQL Visualizer Feedback / Feedback Pool" entry and the IDE's internal error dialog offer one-click reporting too; reporting several entries selected in the IDE error list merges them into a single post (items beyond the rate-limit threshold are queued and sent staggered automatically); when a submission is rejected the dialog stays open and the status line shows the exact reason returned by the server — fix it and retry directly.

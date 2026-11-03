@@ -378,6 +378,19 @@
   line-height: 1.8;
 }
 
+/* 正文里的演示视频（个别页面把动图换成了 <video>，见 guide/configuration 的
+   mapper XML 语法高亮一节）：与正文截图同宽、圆角、块级，figure 去掉默认缩进 */
+.vp-doc figure {
+  margin: 1.5rem 0;
+}
+
+.vp-doc video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
 /* ---------- 表格样式 ---------- */
 /* display:table 才能让 width:100% 撑满内容列；block 下表格网格按内容收缩，右侧留白 */
 .vp-doc table {

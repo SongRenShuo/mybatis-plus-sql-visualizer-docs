@@ -22,7 +22,7 @@ Jump straight to your goal — each path pays off in at most three steps:
 3. Click <kbd>Install</kbd>
 4. If the plugin entry does not appear right after install, restart IDEA once; later version updates usually hot-swap without a restart (the offline update channel supports hot-swap as well)
 
-![Searching "SQL Visualizer" in the Marketplace: the first result is this plugin (author SongRenShuo), and the detail pane on the right carries the Install button and the version number](/demo/install-marketplace.png)
+![Searching "SQL Visualizer" in the Marketplace: the first result is this plugin (author SongRenShuo), and the detail pane on the right carries the Install button and the version number](/demo/install-marketplace.webp)
 
 ### Method 2: Manual Download & Install
 

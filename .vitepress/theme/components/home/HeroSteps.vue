@@ -47,7 +47,7 @@ const { c } = useHomeContent()
         <div class="steps-media mp-reveal">
           <video
             src="/demo/wrapper-preview.mp4"
-            poster="/demo/wrapper-preview.png"
+            poster="/demo/wrapper-preview.webp"
             :aria-label="c.steps.imageAlt"
             muted
             loop

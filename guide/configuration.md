@@ -2,11 +2,11 @@
 
 所有配置位于 `Settings > Tools > SQL Visualizer`。设置对话框左上角的搜索框能直接搜到这些条目——插件的每个设置项都登记进了 IDE 设置搜索的索引；插件自己的落地页里另有一个页内搜索，两者索引同一份数据，命中结果一致。
 
-![SQL Visualizer 设置主页面（Tools > SQL Visualizer）](/demo/settings.png)
+![SQL Visualizer 设置主页面（Tools > SQL Visualizer）](/demo/settings.webp)
 
 设置顶层「SQL Visualizer」页底部是**能力矩阵**——四行讲清这个插件做什么：运行期捕获真实参数与耗时、不启库的写前静态还原、MCP 十一工具给 AI agent 用、以及兼容矩阵与文档入口。
 
-![设置落地页底部的能力矩阵（增强捕获 / 免库预览 / MCP 十一工具 / 兼容矩阵与文档）](/demo/settings-landing.png)
+![设置落地页底部的能力矩阵（增强捕获 / 免库预览 / MCP 十一工具 / 兼容矩阵与文档）](/demo/settings-landing.webp)
 
 设置变更无需重启 IDE：重新触发预览即按新配置生效。
 
@@ -66,11 +66,11 @@
 
 ## SQL 日志
 
-![设置页「源码位置捕获」分组：增强捕获开关、增强捕获脱敏、展示与导出脱敏、调用栈快照帧数（12~64）、已挂载状态行与两组帧过滤前缀](/demo/settings-enhanced-capture.png)
+![设置页「源码位置捕获」分组：增强捕获开关、增强捕获脱敏、展示与导出脱敏、调用栈快照帧数（12~64）、已挂载状态行与两组帧过滤前缀](/demo/settings-enhanced-capture.webp)
 
-![设置页「列表显示 / CRUD 颜色标记 / 慢查询阈值」等分组：SQL 显示模式、四类语句的颜色标记与恢复默认、慢查询阈值、列表缓存与去重窗口](/demo/settings-log-list.png)
+![设置页「列表显示 / CRUD 颜色标记 / 慢查询阈值」等分组：SQL 显示模式、四类语句的颜色标记与恢复默认、慢查询阈值、列表缓存与去重窗口](/demo/settings-log-list.webp)
 
-![设置页「ORM 框架」分组：启用 Hibernate/JPA 日志捕获（含 SQL 与参数前缀）、启用 Spring JdbcTemplate 日志捕获、启用 ShardingSphere 日志捕获；下方为「自动保存」分组](/demo/settings-orm-capture.png)
+![设置页「ORM 框架」分组：启用 Hibernate/JPA 日志捕获（含 SQL 与参数前缀）、启用 Spring JdbcTemplate 日志捕获、启用 ShardingSphere 日志捕获；下方为「自动保存」分组](/demo/settings-orm-capture.webp)
 
 | 配置项 | 默认值 | 作用 |
 |--------|--------|------|
@@ -132,17 +132,20 @@
 
 **gutter 图标按来源分组显隐**：上表之外，左侧 gutter 的预览图标按语句来源分成六组独立开关（mapper XML 语句 / 注解 SQL（@Select 族）/ JPA·HQL 族 / JdbcTemplate 字符串 SQL / 通用 XML 内嵌兜底 / Wrapper 链与方法名字符串 SQL）——关掉哪组，哪类代码左侧就不再出图标，适合只想看某一类 SQL 的工程。
 
-![UI and Actions 页：六组 gutter 来源开关 + mapper XML 语法高亮总开关](/demo/settings-gutter-groups.png)
+![UI and Actions 页：六组 gutter 来源开关 + mapper XML 语法高亮总开关](/demo/settings-gutter-groups.webp)
 
 **mapper XML 语法高亮注入**：插件给 mapper XML 注入一套语法着色——语句关键字、`#{}` / `${}` 参数占位、内联 SQL 文本分别着色（上图中那条「mapper XML 语法高亮（关键字 + 参数占位着色）」就是它的总开关）。关闭后 mapper XML 回落 IDE 原生 XML 着色。
 
-![OrderMapper.xml 的注入着色：select 标签与 SQL 关键字着色、${orderBy} 占位单独高亮](/demo/xml-syntax-highlight.gif)
+<figure>
+  <video :src="'/demo/xml-syntax-highlight.mp4'" :poster="'/demo/xml-syntax-highlight-poster.webp'" aria-label="OrderMapper.xml 的注入着色：select 标签与 SQL 关键字着色、${orderBy} 占位单独高亮" autoplay muted loop playsinline preload="metadata"></video>
+  <figcaption class="visually-hidden">OrderMapper.xml 的注入着色：select 标签与 SQL 关键字着色、${orderBy} 占位单独高亮</figcaption>
+</figure>
 
 **Mapper 双向跳转图标与共存让位**：mapper XML 语句行与 Mapper 接口方法行之间互跳的 gutter 图标（见 [XML 预览 · Mapper 双向跳转](../features/xml-preview.md#mapper-双向跳转)）受上面的总开关与「mapper XML 语句」组开关控制。另有设置项「**与同类 MyBatis 导航插件共存时让出 Mapper 跳转图标**」（默认开，与 gutter 分组开关同区块）：检测到同类 MyBatis 导航插件（当前登记 MyBatisCodeHelperPro）启用时隐藏这两个跳转图标，避免与对方自带的箭头叠在一行；关闭则即使对方在位也保留本插件图标。
 
 ## MCP 工具
 
-![设置页 MCP 子页：总开关、MCP 输出脱敏，以及十一个只读工具的逐项启用复选框](/demo/settings-mcp.png)
+![设置页 MCP 子页：总开关、MCP 输出脱敏，以及十一个只读工具的逐项启用复选框](/demo/settings-mcp.webp)
 
 插件在平台 MCP Server 上向 AI agent（Claude Code / Cursor / AI Assistant 等）暴露 11 个只读工具，设置页「MCP 工具」子页提供门控：
 
@@ -157,7 +160,7 @@
 
 `Settings > Tools > SQL Visualizer（当前项目）`在总开关之下提供 10 项覆盖：数据库方言、参数替换、SQL 格式化、逻辑删除注入、逻辑删除值、表前缀 / 表后缀、表名推断策略、忽略字段、按数据源校正列名（其中 4 项是勾选）。增强捕获属于全局设置，不在项目级覆盖范围内。
 
-![SQL Visualizer 项目级设置页（Tools > SQL Visualizer（当前项目））：总开关未开启时下列各项置灰并显示全局生效值](/demo/settings-project.png)
+![SQL Visualizer 项目级设置页（Tools > SQL Visualizer（当前项目））：总开关未开启时下列各项置灰并显示全局生效值](/demo/settings-project.webp)
 
 - 总开关「使用项目设置」关闭时，10 项覆盖全部置灰并显示全局生效值——页面所见即运行时所用；「重置为跟随全局」一键清空本项目覆盖
 - 方言选「智能推断」时项目级优先于全局判定
@@ -178,7 +181,7 @@
 
 设置页的「更新与诊断」区（`设置 > Tools > SQL Visualizer > 关于`）把这些入口聚在一处，「报告问题…」弹出的是下面这个对话框：
 
-![SQL Visualizer 报告到需求池对话框：标题、类型、分类、描述四项必填，可勾选附带异常堆栈 .txt，昵称与邮箱选填，支持匿名提交或转浏览器填写](/demo/feedback-dialog.png)
+![SQL Visualizer 报告到需求池对话框：标题、类型、分类、描述四项必填，可勾选附带异常堆栈 .txt，昵称与邮箱选填，支持匿名提交或转浏览器填写](/demo/feedback-dialog.webp)
 
 ::: details 反馈对话框的隐私与去重规则（何时看：关心上传内容范围或重复上报时）
 「报告问题 / 需求池」：默认仅预填异常类名与栈帧摘要；异常消息全文与完整堆栈、以及堆栈附件均为可勾选项，勾选后才上传，可能含本地路径与类名。同一异常 24 小时内去重；帮助菜单「SQL Visualizer 反馈 / 需求池」与 IDE 内部错误对话框亦可一键上报；从 IDE 错误列表勾选多条报告时合并为一条提交（超出限流阈值的条目自动错峰补发）；提交被拒时对话框不关闭，状态行给出服务端返回的具体原因，改完可直接重试。
