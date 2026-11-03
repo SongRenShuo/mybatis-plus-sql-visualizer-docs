@@ -218,7 +218,6 @@
               maxlength="10"
               :placeholder="t('form.postNoPlaceholder', locale)"
             />
-            <p class="field-hint">{{ t('form.postNoPlaceholder', locale) }}</p>
           </div>
         </fieldset>
 
@@ -679,7 +678,7 @@ async function handleSubmit() {
 
 .char-count {
   font-size: 0.72rem;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -742,7 +741,7 @@ async function handleSubmit() {
 .field-hint {
   margin: 0.375rem 0 0;
   font-size: 0.75rem;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
   line-height: 1.6;
 }
 
@@ -801,7 +800,7 @@ async function handleSubmit() {
 .link-btn {
   border: none;
   background: none;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
   font-size: 0.78rem;
   text-decoration: underline;
   cursor: pointer;
@@ -889,7 +888,7 @@ async function handleSubmit() {
 }
 
 .att-status.upload {
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
 }
 
 .att-status.ok {
@@ -916,7 +915,7 @@ async function handleSubmit() {
 .att-remove {
   border: none;
   background: none;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
   cursor: pointer;
   font-size: 0.75rem;
   padding: 0.5rem;
@@ -1062,7 +1061,7 @@ async function handleSubmit() {
   margin: 0 auto 1rem;
   max-width: 560px;
   font-size: 0.8rem;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
   line-height: 1.6;
 }
 
@@ -1121,11 +1120,12 @@ async function handleSubmit() {
 }
 
 /* 组件库语言：整张白卡 + 分区发丝线（此前每个 fieldset 各自是浅灰卡片，
-   边框被 legend 切出缺口，整块看起来像灰色积木） */
+   边框被 legend 切出缺口，整块看起来像灰色积木）。760px 与反馈弹窗同宽，
+   长输入框不至于拉到 820px；标题左对齐与字段对齐 */
 .bounty-form-card {
-  max-width: 880px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 28px 28px 24px;
+  padding: 24px 28px 20px;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-card);
   background: var(--ui-surface);
@@ -1135,17 +1135,23 @@ async function handleSubmit() {
   margin: 0 0 6px;
   border: none;
   padding: 0;
-  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  font-size: clamp(1.4rem, 3vw, 1.6rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--ui-fg);
-  text-align: center;
+  text-align: left;
 }
 
 .form-sub {
-  margin: 0 auto 8px;
+  margin: 0 0 10px;
   color: var(--ui-fg-muted);
   font-size: 13px;
+  text-align: left;
+}
+
+/* 版本下拉的说明跟在两列下拉后面，贴住上面的行、和下面的「操作系统」拉开 */
+.form-row + .field-hint {
+  margin: 2px 0 16px;
 }
 
 .form-section {
@@ -1358,5 +1364,15 @@ async function handleSubmit() {
   .form-group select {
     transition: none;
   }
+}
+</style>
+
+<style scoped>
+/* 占位文字同样加深：浏览器默认灰在浅色卡上偏浅 */
+.form-group input::placeholder,
+.form-group textarea::placeholder,
+.form-group select::placeholder {
+  color: var(--ui-fg-muted);
+  opacity: 0.75;
 }
 </style>

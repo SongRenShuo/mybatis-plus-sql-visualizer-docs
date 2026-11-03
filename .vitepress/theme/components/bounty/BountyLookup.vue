@@ -316,7 +316,7 @@ async function lookup() {
 .privacy-hint {
   margin: 0.625rem 0 0;
   font-size: 0.74rem;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
 }
 
 .lookup-error {
@@ -405,7 +405,7 @@ async function lookup() {
 
 .cell-label {
   font-size: 0.72rem;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
 }
 
 .cell-value {
@@ -500,7 +500,7 @@ async function lookup() {
 
 .timeline-time {
   font-size: 0.72rem;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
 }
 
 .result-attachments {
@@ -534,7 +534,7 @@ async function lookup() {
 }
 
 .att-size {
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
   white-space: nowrap;
 }
 

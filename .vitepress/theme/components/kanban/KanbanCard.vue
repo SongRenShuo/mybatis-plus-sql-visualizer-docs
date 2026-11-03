@@ -110,7 +110,7 @@ function onKeydown(event: KeyboardEvent) {
   margin-top: 4px;
   font-size: 12px;
   line-height: 1.6;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
   overflow: hidden;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -124,7 +124,7 @@ function onKeydown(event: KeyboardEvent) {
   gap: 4px 8px;
   margin-top: 8px;
   font-size: 12px;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
 }
 
 .kb-card-meta:empty {
@@ -139,7 +139,7 @@ function onKeydown(event: KeyboardEvent) {
   padding: 8px 12px;
   border-top: 1px solid var(--vp-c-border);
   font-size: 12px;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
 }
 
 .kb-card-foot:empty {

@@ -12,7 +12,9 @@
 
   --ui-fg: var(--vp-c-text-1);
   --ui-fg-soft: var(--vp-c-text-2);
-  --ui-fg-muted: var(--vp-c-text-3);
+  /* 次要文字用 text-2 而不是 text-3：text-3（#9ca3af）在白底上只有 2.8:1，
+     标签、说明、提示这类需要读的字看不清 */
+  --ui-fg-muted: var(--vp-c-text-2);
 
   --ui-surface: var(--vp-c-bg);
   --ui-surface-muted: var(--vp-c-bg-soft);

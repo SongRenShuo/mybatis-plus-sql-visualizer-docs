@@ -999,3 +999,12 @@ async function handleSubmit() {
   }
 }
 </style>
+
+<style scoped>
+/* 占位文字同样加深：浏览器默认灰在浅色卡上偏浅 */
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--ui-fg-muted);
+  opacity: 0.75;
+}
+</style>

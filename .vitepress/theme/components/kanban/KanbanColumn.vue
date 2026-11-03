@@ -138,7 +138,7 @@ watch(
   font-family: var(--vp-font-family-mono, monospace);
   font-size: 11px;
   line-height: 20px;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -198,6 +198,6 @@ watch(
   border-radius: 12px;
   text-align: center;
   font-size: 12px;
-  color: var(--vp-c-text-3);
+  color: var(--ui-fg-muted);
 }
 </style>
