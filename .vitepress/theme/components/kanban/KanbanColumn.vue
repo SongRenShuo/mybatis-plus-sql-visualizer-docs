@@ -1,7 +1,8 @@
 <template>
   <section class="kb-col" :data-kb-col="column.id" :aria-label="column.title">
-    <header class="kb-col-head">
-      <span class="kb-col-dot" :style="{ background: column.color }" aria-hidden="true" />
+    <header class="kb-col-head" :style="{ '--col-color': column.color }">
+      <span v-if="column.step" class="kb-col-step">{{ column.step }}</span>
+      <span v-else class="kb-col-dot" :style="{ background: column.color }" aria-hidden="true" />
       <h3 class="kb-col-title">{{ column.title }}</h3>
       <span class="kb-col-count">{{ column.items.length }}</span>
     </header>
@@ -83,6 +84,31 @@ watch(
   align-items: center;
   gap: 8px;
   padding: 0 2px 10px;
+}
+
+/* 流程看板（带阶段号）：列头加阶段色顶线 + 序号胶囊，读起来是一条流水线，
+   而不是四个并列的列表 */
+.kb-col-head:has(.kb-col-step) {
+  margin-bottom: 4px;
+  padding: 12px 2px 10px;
+  border-top: 2px solid color-mix(in srgb, var(--col-color) 60%, var(--vp-c-border));
+}
+
+.kb-col-step {
+  display: inline-flex;
+  min-width: 26px;
+  height: 20px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--col-color) 13%, var(--vp-c-bg));
+  color: var(--col-color);
+  font-family: var(--vp-font-family-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .kb-col-dot {

@@ -9,6 +9,8 @@ export interface KanbanColumnData<T = unknown> {
   title: string
   /** 列头左侧圆点色 */
   color: string
+  /** 可选阶段号（流程看板用），如 "01" */
+  step?: string
   items: T[]
 }
 

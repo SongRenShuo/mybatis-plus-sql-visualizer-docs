@@ -47,7 +47,7 @@
             <template #description>
               <span class="kb-card-desc">{{ card.desc }}</span>
             </template>
-            <template #footer>
+            <template #meta>
               <UiChip>{{ card.chip }}</UiChip>
             </template>
           </KanbanCard>
@@ -202,6 +202,7 @@ const flowColumns = computed(() => {
   return [
     {
       id: 'submit',
+      step: '01',
       title: t('board.colSubmit', localeValue),
       color: '#6b7280',
       items: [
@@ -212,6 +213,7 @@ const flowColumns = computed(() => {
     },
     {
       id: 'review',
+      step: '02',
       title: t('board.colReview', localeValue),
       color: '#3b82f6',
       items: [
@@ -222,6 +224,7 @@ const flowColumns = computed(() => {
     },
     {
       id: 'payout',
+      step: '03',
       title: t('board.colPayout', localeValue),
       color: '#f59e0b',
       items: [
@@ -235,6 +238,7 @@ const flowColumns = computed(() => {
     },
     {
       id: 'close',
+      step: '04',
       title: t('board.colClose', localeValue),
       color: '#10b981',
       items: [
