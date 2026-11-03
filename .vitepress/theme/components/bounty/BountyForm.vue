@@ -1143,6 +1143,8 @@ async function handleSubmit() {
 
 .form-section {
   border-color: var(--ui-border);
+  /* fieldset 的 UA 默认 min-width: min-content 会让它在窄屏撑出容器（360px 下溢出 18px） */
+  min-width: 0;
 }
 
 .form-section legend {

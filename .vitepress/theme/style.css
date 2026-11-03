@@ -180,6 +180,35 @@
   }
 }
 
+/* ≤420px 时品牌文字（124px）与右侧图标组（178px）加起来超出容器 29px，
+   汉堡按钮被挤出屏幕；这里让文字让位，只留 30px 图标，功能图标全部保留 */
+@media (max-width: 420px) {
+  .VPNavBarTitle .title > span {
+    display: none !important;
+  }
+}
+
+/* 本站导航有 7 个菜单项 + 自定义仓库入口，VitePress 默认 768px 就切桌面菜单：
+   实测 768 宽度下溢出 99px，英文在 960 宽度下仍溢出 23px。把汉堡模式延到 1024：
+   菜单与「更多」浮层收起，汉堡与全屏菜单接管（VPNavScreen 只在打开时渲染，强制显示无副作用） */
+@media (max-width: 1023px) {
+  .VPNavBarMenu {
+    display: none !important;
+  }
+
+  .VPNavBarExtra {
+    display: none !important;
+  }
+
+  .VPNavBarHamburger {
+    display: flex !important;
+  }
+
+  .VPNavScreen {
+    display: block !important;
+  }
+}
+
 .VPNavBar .link:hover {
   color: var(--primary-color) !important;
 }

@@ -280,7 +280,10 @@ const modKey = computed(() => {
   display: none;
 }
 
-@media (min-width: 960px) {
+/* 960-1279 段导航仍要显示 7 个菜单项 + 语言/主题 + 仓库入口，192px 搜索空壳会把右侧
+   内容组顶出容器（1024 下溢出 7px、960 下溢出 71px）。文字化搜索框只在 1280 起出现，
+   更窄时退回图标按钮，仍能打开同一个搜索弹窗 */
+@media (min-width: 1280px) {
   .pf-trigger-text {
     display: inline;
   }
