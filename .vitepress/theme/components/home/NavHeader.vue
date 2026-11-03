@@ -61,14 +61,14 @@ onUnmounted(() => {
   >
     <div class="container">
       <div class="nav-content">
-        <!-- 品牌：原 logo 标记在左，新字标在右。≥768 用完整字标（含 Visualizer），
-             窄屏换成独立标记；400 以下只留原 logo。
+        <!-- 品牌：新字标在左，原 logo 标记在右。≥768 用完整字标（含 Visualizer），
+             窄屏换成独立标记；480 以下只留原 logo。
              字标用背景图而不是 <picture>：picture 的 source 在视口变化后不保证重新选择
              （实测从 1280 缩到 400 仍停在字标），背景图按媒体查询直接生效，
              且同一时刻只会下载命中的那一张 -->
         <span class="brand">
-          <img src="/logo.svg" alt="" class="nav-mark" aria-hidden="true" />
           <span class="logo-area" role="img" aria-label="SQL Visualizer"></span>
+          <img src="/logo.svg" alt="" class="nav-mark" aria-hidden="true" />
         </span>
 
         <nav class="nav-links">
