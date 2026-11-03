@@ -1,7 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useData } from 'vitepress'
 import staticEntries from '../../data/changelog.json'
 import { buildEntries, mergeEntries } from '../../../scripts/changelog-core.mjs'
+
+const { lang } = useData()
+// 日期自带「发布于」前缀，避免 2026-11-03 被误读成第二个版本号
+const datePrefix = computed(() => (lang.value.startsWith('zh') ? '发布于 ' : 'Released '))
 
 /**
  * 更新日志列表：构建期快照 SSR 直出 + 打开页面后实时补齐。
@@ -54,7 +59,7 @@ onMounted(() => {
     >
       <h2 class="changelog-version-title">
         <a :href="`#${anchorId(e.version)}`" class="changelog-version-anchor">v{{ e.version }}</a>
-        <span class="changelog-version-date">{{ e.date }}</span>
+        <span class="changelog-version-date">{{ datePrefix }}{{ e.date }}</span>
       </h2>
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div class="changelog-notes" v-html="e.notesHtml" />
@@ -73,12 +78,20 @@ onMounted(() => {
   border-bottom: none;
 }
 
+/* 版本标题不走全站 .vp-doc h2 的营销样式（28~40px 居中大字 + 下划线横杠 + 100px 上距），
+   覆写为常规文档小节标题，日期不再像第二个版本号 */
 .changelog-version-title {
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
-  margin: 0;
+  margin: 0 !important;
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
   line-height: 1.6;
+}
+
+.changelog-version-title::after {
+  content: none !important;
 }
 
 .changelog-version-anchor {
