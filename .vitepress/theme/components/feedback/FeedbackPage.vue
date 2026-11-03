@@ -37,6 +37,7 @@
       :title="t('submitTitle', locale)"
       :subtitle="t('formTip', locale)"
       :close-label="t('close', locale)"
+      width="760px"
       @close="closeForm"
     >
       <FeedbackForm

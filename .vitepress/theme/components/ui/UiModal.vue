@@ -149,6 +149,17 @@ onBeforeUnmount(() => {
   min-height: 0;
   overflow-y: auto;
   padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ui-fg) 18%, transparent) transparent;
+}
+
+.ui-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ui-modal-body::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ui-fg) 18%, transparent);
 }
 
 .ui-modal-foot {

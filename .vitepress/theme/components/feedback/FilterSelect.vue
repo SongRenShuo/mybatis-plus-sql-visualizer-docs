@@ -255,6 +255,20 @@ onBeforeUnmount(close)
   color: var(--ui-fg-muted);
 }
 
+/* ▾ 在小字号下渲染成一个点，改用纯 CSS 三角，尺寸稳定 */
+.fs-chevron {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  color: var(--ui-fg-muted);
+  transition: transform 0.15s ease;
+}
+
 .fs-panel {
   padding: 4px;
   border: 1px solid var(--ui-border);

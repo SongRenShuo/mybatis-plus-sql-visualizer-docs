@@ -158,6 +158,7 @@
       :title="t('submitTitle', locale)"
       :subtitle="t('formTip', locale)"
       :close-label="t('close', locale)"
+      width="760px"
       @close="closeForm"
     >
       <FeedbackForm ref="formRef" :api-base="apiBase" :locale="locale" embedded @done="onSubmitted" />
@@ -807,6 +808,12 @@ function onVoteUpdate(postNo: string, count: number, hasVoted: boolean) {
 
   .pool-head-actions > * {
     flex: 1;
+  }
+
+  /* 校验提示独占一行，取消/提交两个按钮不被挤散 */
+  .modal-hint {
+    flex-basis: 100%;
+    margin-right: 0;
   }
 
   .list-filters {

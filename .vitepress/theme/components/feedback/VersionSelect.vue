@@ -288,8 +288,16 @@ onBeforeUnmount(() => {
 
 .vs-chevron {
   flex-shrink: 0;
-  font-size: 0.7rem;
-  color: var(--vp-c-text-3);
+  /* ▾ 在小字号下会渲染成一个点，改用纯 CSS 三角 */
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  color: var(--ui-fg-muted);
   transition: transform 0.15s;
 }
 
@@ -375,5 +383,46 @@ onBeforeUnmount(() => {
   padding: 8px 10px;
   color: var(--vp-c-text-3);
   font-size: 0.8rem;
+}
+
+/* 组件库语言：与同排的标题/描述输入框同高同圆角同字号（36px / 12px / 13px） */
+.vs-trigger {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+  color: var(--ui-fg);
+  font-size: 13px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vs-trigger:hover:not(.disabled),
+.vs-trigger.open {
+  border-color: var(--ui-border-strong);
+}
+
+.vs-trigger:focus-visible {
+  border-color: var(--ui-border-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-fg) 6%, transparent);
+}
+
+.vs-panel {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-md);
+}
+
+.vs-option {
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+@media (max-width: 640px) {
+  /* <16px 的输入框聚焦会触发 iOS 自动放大 */
+  .vs-trigger {
+    font-size: 16px;
+  }
 }
 </style>

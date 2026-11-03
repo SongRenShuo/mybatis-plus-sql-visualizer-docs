@@ -1,6 +1,7 @@
 <template>
   <div class="feedback-form" :class="{ embedded }">
-    <h3>{{ t('submitTitle', props.locale || 'zh') }}</h3>
+    <!-- 弹窗模式（embedded）标题由 UiModal 头部承担，表单内不再重复一遍 -->
+    <h3 v-if="!embedded">{{ t('submitTitle', props.locale || 'zh') }}</h3>
 
     <!-- T-ErrReport：IDE 插件一键报告直达时自动携带的环境徽标（?source=ide&ideVersion=…&pluginVersion=…） -->
     <p v-if="ideContext" class="ide-badge">{{ fromIdeLabel }}</p>
@@ -910,6 +911,55 @@ async function handleSubmit() {
   color: var(--ui-accent);
 }
 
+/* 分类下拉与同排输入框/版本下拉对齐到 36px；.fs-wrap 默认 inline-flex 会把
+   trigger 的 width:100% 解析成收缩宽度（实测只剩 74px），这里把外层也撑满 */
+.form-group :deep(.fs-wrap) {
+  display: flex;
+  width: 100%;
+}
+
+.form-group :deep(.fs-trigger) {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--ui-radius-field);
+  border-color: var(--ui-border);
+  font-size: 13px;
+}
+
+.form-group :deep(.fs-trigger):focus-visible {
+  border-color: var(--ui-border-strong);
+}
+
+.form-group :deep(.fs-chevron) {
+  font-size: 11px;
+  color: var(--ui-fg-muted);
+}
+
+/* 悬赏意向块：虚线蓝框换成与卡片一致的实线浅底 */
+.bounty-intent {
+  margin: -0.25rem 0 1rem;
+  padding: 12px 14px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface-muted);
+}
+
+.bounty-intent-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ui-fg);
+}
+
+.bounty-intent-label input {
+  accent-color: var(--ui-accent);
+}
+
+.bounty-intent-hint {
+  color: var(--ui-fg-muted);
+  font-size: 12px;
+}
+
 .submit-btn {
   height: 36px;
   padding: 0 20px;
@@ -933,6 +983,10 @@ async function handleSubmit() {
   /* <16px 的输入框聚焦会触发 iOS 自动放大 */
   .form-group input,
   .form-group textarea {
+    font-size: 16px;
+  }
+
+  .form-group :deep(.fs-trigger) {
     font-size: 16px;
   }
 }
