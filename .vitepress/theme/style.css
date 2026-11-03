@@ -124,7 +124,8 @@
   left: 0;
   right: 0;
   z-index: 50 !important;
-  background-color: transparent !important;
+  /* 常驻不透明：透明态会让 layout: page 页面（需求池 / 悬赏）的标题从导航底下穿过 */
+  background-color: var(--bg-primary) !important;
   backdrop-filter: none !important;
   border-bottom: none !important;
   transition: all 0.3s !important;

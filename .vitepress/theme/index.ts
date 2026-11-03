@@ -84,13 +84,15 @@ export default {
       const nav = document.querySelector('.VPNav')
       if (!nav) return
 
+      // 导航底色常驻不透明（见 style.css 的 .VPNav）：透明态没有任何页面受益——
+      // 文档页靠 .VPNavBar.has-sidebar 本就不透明，首页走自建 NavHeader 不用 .VPNav，
+      // 而 layout: page 的自定义页（需求池 / 悬赏）内容紧贴导航下沿，透明态会让标题
+      // 从导航底下穿过。scrolled 现在只负责滚动后的阴影与描边。
       scrollHandler = () => {
         if (window.scrollY > 50) {
           nav.classList.add('scrolled')
-          nav.classList.remove('transparent')
         } else {
           nav.classList.remove('scrolled')
-          nav.classList.add('transparent')
         }
       }
 
