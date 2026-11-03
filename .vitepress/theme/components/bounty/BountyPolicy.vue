@@ -285,3 +285,34 @@ const validityRows = computed(() => {
   }
 }
 </style>
+
+<style scoped>
+/* 有效性系数：与等级卡同为白底发丝线；系数与名称并排一行、说明一行，
+   替掉原来四个竖排浅灰盒（整块看起来像没修过的表格） */
+.validity-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 8px;
+  row-gap: 2px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+}
+
+.validity-factor {
+  grid-row: 1;
+  align-self: center;
+}
+
+.validity-name {
+  grid-row: 1;
+  font-size: 13px;
+}
+
+.validity-desc {
+  grid-column: 1 / -1;
+  font-size: 12px;
+}
+</style>

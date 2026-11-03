@@ -607,3 +607,73 @@ async function lookup() {
   }
 }
 </style>
+
+<style scoped>
+/* 审核结果里的字段格：去掉灰底小方盒，改成发丝线分隔的干净数据网格 */
+.result-grid {
+  gap: 12px 24px;
+  margin-top: 14px;
+}
+
+.result-cell {
+  padding: 8px 0 0;
+  border: none;
+  border-top: 1px solid var(--ui-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.cell-label {
+  font-size: 11px;
+  color: var(--ui-fg-muted);
+}
+
+.cell-value {
+  font-size: 13px;
+}
+
+.cell-value.reward {
+  color: var(--ui-accent);
+}
+
+.review-note {
+  border-left: 2px solid var(--ui-accent);
+  border-radius: 0 var(--ui-radius-field) var(--ui-radius-field) 0;
+  background: var(--ui-surface-muted);
+}
+
+.review-note p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ui-fg-soft);
+}
+
+.timeline h4,
+.result-attachments h4 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ui-fg-muted);
+}
+
+.timeline-action {
+  font-size: 13px;
+}
+
+.timeline-note {
+  font-size: 12px;
+  color: var(--ui-fg-soft);
+}
+
+.timeline-time {
+  font-size: 11px;
+  color: var(--ui-fg-muted);
+}
+
+.result-attachments li {
+  font-size: 12px;
+  color: var(--ui-fg-soft);
+}
+</style>
