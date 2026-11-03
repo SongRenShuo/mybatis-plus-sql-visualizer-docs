@@ -180,8 +180,8 @@ const { c } = useHomeContent()
   line-height: 1.65;
 }
 
-/* 媒体容器与 FeatureAlternate 同款：圆角 + 阴影在外层，clip-path 裁掉
-   素材自带的浅灰窗框（暗色模式下呈白边），两层各司其职 */
+/* 媒体容器与 FeatureAlternate 同款：圆角 + 阴影在外层；
+   素材的浅灰窗框已在源文件裁掉，图片本身不再做 clip-path */
 .steps-media {
   border-radius: 1rem;
   overflow: hidden;
@@ -204,6 +204,6 @@ const { c } = useHomeContent()
   width: 100%;
   display: block;
   background-color: var(--bg-secondary);
-  clip-path: inset(0.15% 0.6% 0.85% 0.6%);
+  /* 窗框已在源文件裁掉，不再用 clip-path 补偿 */
 }
 </style>

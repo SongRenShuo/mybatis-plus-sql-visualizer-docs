@@ -223,8 +223,7 @@ onBeforeUnmount(() => gates.forEach((cancel) => cancel()))
   aspect-ratio: 1440 / 1034;
   border-radius: 1rem;
   background-color: var(--bg-secondary);
-  /* 裁掉素材自带的浅灰窗框（暗色模式下呈白边），poster 与 GIF 叠层同类共用 */
-  clip-path: inset(0.15% 0.6% 0.85% 0.6%);
+  /* 窗框已在源文件裁掉，不再用 clip-path 补偿（它会给无框素材留一圈透明边） */
 }
 
 .feature-content {

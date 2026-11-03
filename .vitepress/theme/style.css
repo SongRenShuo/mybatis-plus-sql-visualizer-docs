@@ -670,13 +670,10 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
   }
 }
 
-/* 演示素材四边带录制窗口的浅灰窗框（左/右 7-8px、底部 2-8px、顶部 0-1px，实测值），
-   亮色页面下不可见，暗色模式下呈白边。按百分比裁边随渲染尺寸等比缩放，
-   覆盖 1280×920 与 1440×1034 两批素材的最大窗框厚度 */
-.mp-gif-player img,
-.mp-gif-player video {
-  clip-path: inset(0.15% 0.6% 0.85% 0.6%);
-}
+/* 演示素材四边的浅灰窗框已在源文件裁掉（2026-11-03 批量裁剪：34 个素材按实测
+   左/右 5~7px、底部 4~7px、顶部 0~1px 逐张裁，PSNR inf 零损失）。
+   这里原先用 clip-path: inset(...) 补偿，但那条规则对本身没有窗框的素材（如
+   wrapper-preview）会切掉真实画面、留一圈透明边——浅色主题下看起来就是白边。 */
 
 .mp-gif-player__badge {
   position: absolute;
