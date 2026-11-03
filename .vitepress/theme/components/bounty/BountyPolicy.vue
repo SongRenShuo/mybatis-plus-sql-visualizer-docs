@@ -6,31 +6,36 @@
     <p v-if="ready && !policy.enabled" class="paused-notice" role="status">{{ t('policy.paused', locale) }}</p>
     <p v-if="loadError" class="load-error">{{ t('policy.loadFailed', locale) }}</p>
 
-    <!-- 等级卡：等级 / 金额区间 / 适用情形，四列并排 -->
-    <div class="tier-grid">
-      <div v-for="tier in tiers" :key="tier.severity" class="tier-card">
-        <span class="tier-badge">
-          <span class="tier-dot" :style="{ background: tier.color }" aria-hidden="true" />{{ tier.label }}
-        </span>
-        <span class="tier-range ui-num">{{ tier.range }}</span>
-        <p class="tier-desc">{{ tier.desc }}</p>
+    <!-- 等级 + 有效性合成一张卡：上面是四行等级（色点 / 适用情形 / 区间），
+         下面一行是有效性系数。原先两排 4 列灰盒拼在一起，看起来像没修过的表格 -->
+    <div class="policy-card">
+      <ul class="tier-list">
+        <li v-for="tier in tiers" :key="tier.severity" class="tier-row">
+          <span class="tier-badge">
+            <span class="tier-dot" :style="{ background: tier.color }" aria-hidden="true" />{{ tier.label }}
+          </span>
+          <span class="tier-desc">{{ tier.desc }}</span>
+          <span class="tier-range ui-num">{{ tier.range }}</span>
+        </li>
+      </ul>
+
+      <div class="policy-div">
+        <span class="policy-div-label">{{ t('policy.validityTitle', locale) }}</span>
+        <span class="policy-div-hint">{{ t('policy.validityHint', locale) }}</span>
       </div>
-    </div>
 
-    <div class="policy-foot">
-      <p class="policy-note">{{ t('policy.note', locale, { max: formatMoney(policy.maxReward) }) }}</p>
-      <p class="policy-cap">
-        {{ t('policy.maxReward', locale) }}<strong class="ui-num">{{ formatMoney(policy.maxReward) }}</strong>
-      </p>
-    </div>
+      <ul class="factor-row">
+        <li v-for="row in validityRows" :key="row.validity" class="factor-item">
+          <em class="factor-num" :style="{ color: row.color }">{{ row.factor }}</em>
+          <span class="factor-name">{{ row.label }}</span>
+        </li>
+      </ul>
 
-    <h3 class="validity-title">{{ t('policy.validityTitle', locale) }}</h3>
-    <p class="validity-hint">{{ t('policy.validityHint', locale) }}</p>
-    <div class="validity-list">
-      <div v-for="row in validityRows" :key="row.validity" class="validity-item">
-        <span class="validity-factor" :style="{ '--validity-color': row.color }">{{ row.factor }}</span>
-        <span class="validity-name">{{ row.label }}</span>
-        <span class="validity-desc">{{ row.desc }}</span>
+      <div class="policy-foot">
+        <p class="policy-note">{{ t('policy.note', locale, { max: formatMoney(policy.maxReward) }) }}</p>
+        <p class="policy-cap">
+          {{ t('policy.maxReward', locale) }}<strong class="ui-num">{{ formatMoney(policy.maxReward) }}</strong>
+        </p>
       </div>
     </div>
   </section>
@@ -138,29 +143,41 @@ const validityRows = computed(() => {
   font-size: 12px;
 }
 
-.tier-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.tier-card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 14px;
+.policy-card {
+  padding: 6px 20px;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-card);
   background: var(--ui-surface);
+}
+
+/* 等级行：色点等级 | 适用情形 | 金额区间（右对齐等宽），行间发丝线 */
+.tier-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tier-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: 6px 16px;
+  padding: 13px 0;
+  border-top: 1px solid var(--ui-border);
+}
+
+.tier-row:first-child {
+  border-top: none;
 }
 
 .tier-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--ui-fg-soft);
+  color: var(--ui-fg);
+  white-space: nowrap;
 }
 
 .tier-dot {
@@ -169,19 +186,67 @@ const validityRows = computed(() => {
   border-radius: 50%;
 }
 
-.tier-range {
-  font-size: 19px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  color: var(--ui-fg);
-}
-
 .tier-desc {
-  margin: 0;
+  min-width: 0;
   font-size: 12px;
   line-height: 1.6;
   color: var(--ui-fg-muted);
+}
+
+.tier-range {
+  justify-self: end;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ui-fg);
+  white-space: nowrap;
+}
+
+/* 分区标题行：小字 + 说明，替代原来独立成段的 h3 */
+.policy-div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin-top: 6px;
+  padding: 14px 0 4px;
+  border-top: 1px solid var(--ui-border);
+}
+
+.policy-div-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ui-fg-muted);
+}
+
+.policy-div-hint {
+  font-size: 11px;
+  color: var(--ui-fg-muted);
+}
+
+/* 有效性系数：一行四个「系数 + 名称」 */
+.factor-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 0;
+  padding: 2px 0 14px;
+  list-style: none;
+}
+
+.factor-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--ui-fg-soft);
+}
+
+.factor-num {
+  font-style: normal;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .policy-foot {
@@ -190,7 +255,8 @@ const validityRows = computed(() => {
   align-items: center;
   justify-content: space-between;
   gap: 8px 16px;
-  margin-top: 12px;
+  padding: 12px 0 14px;
+  border-top: 1px solid var(--ui-border);
 }
 
 .policy-note {
@@ -218,101 +284,31 @@ const validityRows = computed(() => {
   font-size: 13px;
 }
 
-.validity-title {
-  margin: 2rem 0 0.25rem;
-  border: none;
-  padding: 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ui-fg);
-}
+@media (max-width: 640px) {
+  .policy-card {
+    padding: 2px 14px;
+  }
 
-.validity-hint {
-  margin: 0 0 10px;
-  color: var(--ui-fg-muted);
-  font-size: 12px;
-}
+  .tier-row {
+    grid-template-columns: auto 1fr;
+    row-gap: 2px;
+  }
 
-.validity-list {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-}
+  .tier-range {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+  }
 
-.validity-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px;
-  border: 1px solid var(--ui-border);
-  border-radius: var(--ui-radius-field);
-  background: var(--ui-surface-muted);
-}
-
-.validity-factor {
-  align-self: flex-start;
-  padding: 1px 8px;
-  border-radius: var(--ui-radius-pill);
-  background: color-mix(in srgb, var(--validity-color) 14%, var(--ui-surface));
-  color: var(--validity-color);
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.validity-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ui-fg);
-}
-
-.validity-desc {
-  font-size: 11px;
-  line-height: 1.55;
-  color: var(--ui-fg-muted);
-}
-
-@media (max-width: 860px) {
-  .tier-grid,
-  .validity-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .tier-desc {
+    grid-column: 2;
+    grid-row: 2;
   }
 }
 
-@media (max-width: 520px) {
-  .tier-grid,
-  .validity-list {
-    grid-template-columns: 1fr;
+@media (prefers-reduced-motion: reduce) {
+  .policy-card {
+    transition: none;
   }
-}
-</style>
-
-<style scoped>
-/* 有效性系数：与等级卡同为白底发丝线；系数与名称并排一行、说明一行，
-   替掉原来四个竖排浅灰盒（整块看起来像没修过的表格） */
-.validity-item {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 8px;
-  row-gap: 2px;
-  align-items: center;
-  padding: 12px 14px;
-  border: 1px solid var(--ui-border);
-  border-radius: var(--ui-radius-field);
-  background: var(--ui-surface);
-}
-
-.validity-factor {
-  grid-row: 1;
-  align-self: center;
-}
-
-.validity-name {
-  grid-row: 1;
-  font-size: 13px;
-}
-
-.validity-desc {
-  grid-column: 1 / -1;
-  font-size: 12px;
 }
 </style>
