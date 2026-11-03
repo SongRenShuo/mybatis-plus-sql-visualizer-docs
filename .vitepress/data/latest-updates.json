@@ -8,16 +8,16 @@
       "summaryEn": "Fixed IDEA 2026.2: \"Execute SQL\" in the preview window reported no matching configured data source and refused to run — platform-side failures now report the real cause instead of being blamed on a dialect mismatch"
     },
     {
+      "version": "2026.10.31",
+      "date": "2026-10-31",
+      "summaryZh": "新增 GaussDB、瀚高 HighGo、海量 Vastbase 三种方言，可格式化的数据库方言总数 11 → 14 种；GaussDB 在设置页、日志角标与…",
+      "summaryEn": "新增 GaussDB、瀚高 HighGo、海量 Vastbase 三种方言，可格式化的数据库方言总数 11 → 14 种；GaussDB 在设置页、日志角标与…"
+    },
+    {
       "version": "2026.10.30",
       "date": "2026-10-29",
       "summaryZh": "装了 MyBatisCodeHelperPro 等同类插件时，Mapper 双向跳转图标不再和对方的跳转箭头叠在同一行",
       "summaryEn": "Mapper two-way jump icons no longer overlap with arrows from similar plugins such as MyBatisCodeHelperPro"
-    },
-    {
-      "version": "2026.10.29",
-      "date": "2026-10-29",
-      "summaryZh": "修复 IDEA 2026.1.x 启用 MCP Server 后内置服务对所有客户端不可用、必须卸载插件才恢复的问题",
-      "summaryEn": "Fixed IDEA 2026.1.x: after enabling the MCP Server the built-in service was unavailable to all clients until the plugin was uninstalled"
     }
   ]
 }

@@ -17,6 +17,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { buildEntries, collectUpdates, normVersion, toDate } from './changelog-core.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(here, '..')
@@ -28,7 +29,6 @@ const CHANGELOG_OUT = resolve(repoRoot, '.vitepress/data/changelog.json')
 const LATEST_OUT = resolve(repoRoot, '.vitepress/data/latest-updates.json')
 const FACTS_OUT = resolve(repoRoot, '.vitepress/data/facts.json')
 const LATEST_COUNT = 3
-const SUMMARY_MAX = 80
 
 // ---------- 拉取 ----------
 
@@ -62,108 +62,7 @@ async function fetchUpdates(url = API_URL) {
 
 // ---------- 版本条目整理 ----------
 
-const normVersion = (v) => String(v ?? '').trim().replace(/^v/i, '')
-
-function toDate(cdate) {
-  const n = Number(cdate)
-  const ms = String(cdate).length >= 13 ? n : n * 1000
-  return new Date(ms).toISOString().slice(0, 10)
-}
-
-/** 去重（按归一化版本号，保留 cdate 最新的条目）+ 倒序 */
-function collectUpdates(raw) {
-  if (!Array.isArray(raw)) throw new Error('API 返回不是数组')
-  const byVersion = new Map()
-  for (const item of raw) {
-    const version = normVersion(item.version)
-    if (!version) continue
-    const prev = byVersion.get(version)
-    if (!prev || Number(item.cdate) > Number(prev.cdate)) byVersion.set(version, item)
-  }
-  return [...byVersion.values()].sort((a, b) => Number(b.cdate) - Number(a.cdate))
-}
-
-/**
- * 从累计 notes 里截取属于该版本的 h2 小节（不含小节标题本身）。
- * 找不到精确匹配标题时返回 null（由调用方退回整段 notes）。
- */
-function extractOwnSection(notes, version) {
-  if (!notes) return null
-  const target = normVersion(version).toLowerCase()
-  const re = /<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]\s*>/gi
-  let start = -1
-  let headerLen = 0
-  let m
-  while ((m = re.exec(notes))) {
-    const text = m[1].replace(/<[^>]+>/g, '').trim()
-    if (start === -1 && normVersion(text).toLowerCase() === target) {
-      start = m.index
-      headerLen = m[0].length
-    } else if (start > -1) {
-      return notes.slice(start + headerLen, m.index)
-    }
-  }
-  if (start > -1) return notes.slice(start + headerLen)
-  return null
-}
-
-// ---------- HTML 净化（零依赖白名单） ----------
-
-const ALLOWED_TAGS = new Set(['p', 'ul', 'ol', 'li', 'b', 'strong', 'a', 'code', 'h4', 'br'])
-const VOID_TAGS = new Set(['br'])
-const ALLOWED_ATTRS = { a: ['href'] }
-
-function sanitizeHtml(html) {
-  if (!html) return ''
-  let s = html
-  // script/style 连内容一起丢
-  s = s.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, '')
-  // 其余标题统一降为白名单内的 h4
-  s = s.replace(/<(\/?)h[1-6]\b[^>]*>/gi, (_m, close) => `<${close}h4>`)
-  // 非白名单标签剥壳留内容；白名单标签重建，只保留许可属性
-  s = s.replace(/<\/?([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g, (m, name, attrs) => {
-    const tag = name.toLowerCase()
-    if (!ALLOWED_TAGS.has(tag)) return ''
-    if (VOID_TAGS.has(tag)) return '<br>'
-    if (m.startsWith('</')) return `</${tag}>`
-    const kept = []
-    const allow = ALLOWED_ATTRS[tag] || []
-    for (const am of attrs.matchAll(/([a-zA-Z-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/g)) {
-      const attr = am[1].toLowerCase()
-      if (!allow.includes(attr)) continue
-      const val = (am[2] ?? am[3] ?? am[4] ?? '').trim()
-      if (!/^(https?:\/\/|\/|#|mailto:)/i.test(val)) continue // 拦 javascript: 等危险协议
-      kept.push(`href="${val.replace(/"/g, '&quot;')}"`)
-    }
-    return `<${tag}${kept.length ? ' ' + kept.join(' ') : ''}>`
-  })
-  // 残留的孤立尖括号转义，避免破坏页面结构
-  s = s.replace(/<(?![a-zA-Z/!])/g, '&lt;')
-  return s.trim()
-}
-
-// ---------- 摘要 ----------
-
-function decodeEntities(text) {
-  return text
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#0?39;/g, "'")
-}
-
-/** 取净化后小节的首段纯文本（跳过裸版本号行），截 80 字 */
-function firstSummaryText(sectionHtml) {
-  const lines = decodeEntities(sectionHtml.replace(/<[^>]+>/g, '\n'))
-    .split('\n')
-    .map((l) => l.trim())
-    .filter(Boolean)
-  const body = lines.filter((l) => !/^v?\d{4}(\.\d+)+$/.test(l))
-  const text = body[0] ?? ''
-  return text.length > SUMMARY_MAX ? `${text.slice(0, SUMMARY_MAX - 1)}…` : text
-}
+// 归一化 / 截取 / 净化 / 摘要都放在 changelog-core.mjs，前端实时补齐复用同一套规则。
 
 const LATEST_COMMENT =
   '构建期由 scripts/generate-changelog.mjs 从 JetBrains Marketplace API 自动重写，手工改动会被覆盖。' +
@@ -251,16 +150,7 @@ async function main() {
     process.exit(0)
   }
 
-  const entries = updates.map((u) => {
-    const own = extractOwnSection(u.notes, u.version)
-    const notesHtml = sanitizeHtml(own ?? u.notes ?? '')
-    return {
-      version: normVersion(u.version),
-      date: toDate(u.cdate),
-      notesHtml,
-      summaryZh: firstSummaryText(notesHtml),
-    }
-  })
+  const entries = buildEntries(raw)
 
   const changed1 = writeIfChanged(
     CHANGELOG_OUT,

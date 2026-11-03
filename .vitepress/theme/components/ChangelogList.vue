@@ -1,19 +1,47 @@
 <script setup>
-import entries from '../../data/changelog.json'
+import { onMounted, ref } from 'vue'
+import staticEntries from '../../data/changelog.json'
+import { buildEntries, mergeEntries } from '../../../scripts/changelog-core.mjs'
 
 /**
- * 更新日志静态列表（C 车道）。
+ * 更新日志列表：构建期快照 SSR 直出 + 打开页面后实时补齐。
  *
- * changelog.json 由 scripts/generate-changelog.mjs 在构建期生成（每版
- * { version, date, notesHtml }），本组件构建期直接导入，SSR 直出正文——
- * 页面不再有客户端加载/报错态，搜索引擎可直接收录。
+ * 构建期：scripts/generate-changelog.mjs 把 Marketplace 全量更新写进
+ * changelog.json（每版 { version, date, notesHtml, summaryZh }），这里直接导入，
+ * SSR 直出正文，搜索引擎可收录，也不存在「加载中/报错」态。
+ *
+ * 客户端：挂载后拉 /api/changelog（Cloudflare Pages Function 实时代理），用与构建期
+ * 完全相同的规则（changelog-core.mjs）整理成条目，再与静态快照合并——实时数据优先，
+ * 所以「发版后没重新部署」能补上新版本，「老版本说明被改过」也能同步更新；
+ * 实时里缺的版本仍保留静态快照，拉取失败则完全沿用静态内容。
  *
  * 每版一节，锚点 #v-<version 点转连字符>（如 #v-2026-10-30）便于外链。
- * notesHtml 已在生成期做白名单净化，这里 v-html 直渲；排版跟随 .vp-doc。
+ * notesHtml 已在整理时做白名单净化，这里 v-html 直渲；排版跟随 .vp-doc。
  */
+const entries = ref(staticEntries)
+
 function anchorId(version) {
   return `v-${String(version).replace(/\./g, '-')}`
 }
+
+async function syncFromMarketplace() {
+  const res = await fetch('/api/changelog', {
+    headers: { Accept: 'application/json' },
+    signal: AbortSignal.timeout(10000),
+  })
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  const live = buildEntries(await res.json())
+  if (!live.length) return
+  const merged = mergeEntries(live, staticEntries)
+  // 内容没变就不动，避免无谓重渲染（正常情况实时与快照一致）
+  if (JSON.stringify(merged) !== JSON.stringify(entries.value)) entries.value = merged
+}
+
+onMounted(() => {
+  syncFromMarketplace().catch(() => {
+    /* 实时通道不可用：保留构建期快照 */
+  })
+})
 </script>
 
 <template>
