@@ -47,9 +47,6 @@
             <template #description>
               <span class="kb-card-desc">{{ card.desc }}</span>
             </template>
-            <template #meta>
-              <UiChip>{{ card.chip }}</UiChip>
-            </template>
           </KanbanCard>
         </template>
       </KanbanBoard>
@@ -82,7 +79,6 @@ import BountyLookup from './BountyLookup.vue'
 import KanbanBoard from '../kanban/KanbanBoard.vue'
 import KanbanCard from '../kanban/KanbanCard.vue'
 import UiButton from '../ui/UiButton.vue'
-import UiChip from '../ui/UiChip.vue'
 import { t, type Locale, type MessageKey } from './i18n'
 import {
   DEFAULT_POLICY,
@@ -172,7 +168,6 @@ interface FlowCard {
   id: string
   title: string
   desc: string
-  chip: string
 }
 
 // 四阶段看板：时限、金额、系数全部来自 /bounty/policy，缺省时才用默认值兜底
@@ -183,20 +178,17 @@ const flowColumns = computed(() => {
   const low = Math.min(...tiers.map(tier => tier.min))
   const high = Math.max(...tiers.map(tier => tier.max))
   const range = `${formatMoney(low)} – ${formatMoney(high)}`
-  const cap = Math.max(high, policy.value.maxReward)
   const partial = Number(policy.value.validityFactors?.['2'] ?? 0.5)
 
   const card = (
     id: string,
     title: MessageKey,
     desc: MessageKey,
-    chip: MessageKey,
     params?: Record<string, string | number>
   ): FlowCard => ({
     id,
     title: t(title, localeValue),
     desc: t(desc, localeValue, params),
-    chip: t(chip, localeValue, params),
   })
 
   return [
@@ -206,9 +198,9 @@ const flowColumns = computed(() => {
       title: t('board.colSubmit', localeValue),
       color: '#6b7280',
       items: [
-        card('s1', 'board.c1t1', 'board.c1d1', 'board.chipRequired'),
-        card('s2', 'board.c1t2', 'board.c1d2', 'board.chipRequired'),
-        card('s3', 'board.c1t3', 'board.c1d3', 'board.chipOptional'),
+        card('s1', 'board.c1t1', 'board.c1d1'),
+        card('s2', 'board.c1t2', 'board.c1d2'),
+        card('s3', 'board.c1t3', 'board.c1d3'),
       ],
     },
     {
@@ -217,9 +209,9 @@ const flowColumns = computed(() => {
       title: t('board.colReview', localeValue),
       color: '#3b82f6',
       items: [
-        card('r1', 'board.c2t1', 'board.c2d1', 'board.chipSla', { h: hours }),
-        card('r2', 'board.c2t2', 'board.c2d2', 'board.chipScope'),
-        card('r3', 'board.c2t3', 'board.c2d3', 'board.chipDedupe'),
+        card('r1', 'board.c2t1', 'board.c2d1', { h: hours }),
+        card('r2', 'board.c2t2', 'board.c2d2'),
+        card('r3', 'board.c2t3', 'board.c2d3'),
       ],
     },
     {
@@ -228,12 +220,9 @@ const flowColumns = computed(() => {
       title: t('board.colPayout', localeValue),
       color: '#f59e0b',
       items: [
-        card('p1', 'board.c3t1', 'board.c3d1', 'board.chipTier', {
-          range,
-          max: formatMoney(cap),
-        }),
-        card('p2', 'board.c3t2', 'board.c3d2', 'board.chipFactor', { f: partial }),
-        card('p3', 'board.c3t3', 'board.c3d3', 'board.chipPayout'),
+        card('p1', 'board.c3t1', 'board.c3d1', { range }),
+        card('p2', 'board.c3t2', 'board.c3d2', { f: partial }),
+        card('p3', 'board.c3t3', 'board.c3d3'),
       ],
     },
     {
@@ -242,9 +231,9 @@ const flowColumns = computed(() => {
       title: t('board.colClose', localeValue),
       color: '#10b981',
       items: [
-        card('c1', 'board.c4t1', 'board.c4d1', 'board.chipIssue'),
-        card('c2', 'board.c4t2', 'board.c4d2', 'board.chipPrivacy'),
-        card('c3', 'board.c4t3', 'board.c4d3', 'board.chipWithdraw'),
+        card('c1', 'board.c4t1', 'board.c4d1'),
+        card('c2', 'board.c4t2', 'board.c4d2'),
+        card('c3', 'board.c4t3', 'board.c4d3'),
       ],
     },
   ]
