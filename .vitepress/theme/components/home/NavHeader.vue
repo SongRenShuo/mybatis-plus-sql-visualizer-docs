@@ -61,15 +61,21 @@ onUnmounted(() => {
   >
     <div class="container">
       <div class="nav-content">
-        <!-- 品牌：新字标在左，原 logo 标记在右。≥768 用完整字标（含 Visualizer），
-             窄屏换成独立标记；480 以下只留原 logo。
-             字标用背景图而不是 <picture>：picture 的 source 在视口变化后不保证重新选择
-             （实测从 1280 缩到 400 仍停在字标），背景图按媒体查询直接生效，
-             且同一时刻只会下载命中的那一张 -->
+        <!-- 新品牌图（字标 + 原 logo 标记）暂时停用，恢复「原 logo + 文字」组合。
+             素材仍在 public/：logo-lockup.png / logo-lockup-dark.png / logo-mark.png，
+             要切回来把下面这段取消注释、并把 .logo-text 那组规则注释掉即可。
+             注意当时踩过的坑：<picture> 的 source 在视口变化后不保证重新选择，
+             所以字标走的是背景图 + 媒体查询，暗色版走 --nav-logo-lockup 变量。
         <span class="brand">
           <span class="logo-area" role="img" aria-label="SQL Visualizer"></span>
           <img src="/logo.svg" alt="" class="nav-mark" aria-hidden="true" />
         </span>
+        -->
+
+        <div class="logo-area">
+          <img src="/logo.svg" alt="Logo" class="nav-logo" />
+          <span class="logo-text">SQL Visualizer</span>
+        </div>
 
         <nav class="nav-links">
           <a v-for="link in c.nav.links" :key="link.href" :href="link.href" class="nav-link">
@@ -263,6 +269,9 @@ onUnmounted(() => {
   padding: 12px 0;
 }
 
+/* 品牌 = 原 logo 标记 + 文字。新品牌图（logo-lockup / logo-mark）的规则暂时停用，
+   要切回去把下面这段取消注释、并注释掉 .logo-text 那组即可。
+
 .brand {
   display: flex;
   align-items: center;
@@ -287,7 +296,6 @@ onUnmounted(() => {
 .logo-area {
   display: block;
   flex-shrink: 0;
-  /* 标记 275×96（2.87:1），24px 高 → 69px 宽 */
   width: 69px;
   height: 24px;
   background-image: url(/logo-mark.png);
@@ -297,9 +305,6 @@ onUnmounted(() => {
 }
 
 @media (min-width: 768px) {
-  /* 字标 685×96（7.14:1），32px 高 → 229px 宽。暗色版走 CSS 变量切换：
-     scoped 样式里的 :global(.dark) 祖先选择器会被编译器吃掉（实测编译成 .dark{...}），
-     变量放在 style.css 的 :root / .dark 里最稳 */
   .logo-area {
     width: 229px;
     height: 32px;
@@ -307,8 +312,6 @@ onUnmounted(() => {
   }
 }
 
-/* 768~1023 一档导航链接最多、空间最紧（品牌 242 + 链接 212 + 动作区 228 ≈ 682 / 705），
-   标记回到 28、字标收到 24px 高（171 宽），链接间距 12px，占比压到 91% */
 @media (min-width: 768px) and (max-width: 1023px) {
   .nav-mark {
     width: 28px;
@@ -319,17 +322,69 @@ onUnmounted(() => {
     width: 171px;
     height: 24px;
   }
-
-  .nav-links {
-    gap: 0.75rem;
-  }
 }
 
-/* 480 以下只留原 logo：标记 + 字标 + 动作区在 400 视口正好 100%，
-   没有余量留给字体放大 */
 @media (max-width: 479px) {
   .logo-area {
     display: none;
+  }
+}
+*/
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.nav-logo {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .nav-logo {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* 品牌名要压过导航链接一档：18px 与正文同号会被读成「正文级」，且 --primary-color
+   带 0.84 透明度，叠底后对比度只有 3.72:1（浅色）/ 2.36:1（暗色）。这里用实色版
+   --nav-brand-color，只作用于 .logo-text，不动全站变量（80 处引用）。 */
+.logo-text {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--nav-brand-color);
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+/* 480 以下不显示品牌名：400 视口下 logo + 文字 + 动作区会顶满内容宽 */
+@media (max-width: 479px) {
+  .logo-text {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-text {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .logo-text {
+    font-size: 1.25rem;
+  }
+}
+
+/* 768~1023 一档导航链接最多、空间最紧，链接间距收到 12px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav-links {
+    gap: 0.75rem;
   }
 }
 
