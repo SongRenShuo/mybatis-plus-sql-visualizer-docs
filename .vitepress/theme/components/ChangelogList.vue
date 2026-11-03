@@ -124,9 +124,11 @@ onMounted(() => {
   gap: 0.75rem;
   flex-wrap: wrap;
   margin: 0 !important;
-  font-size: 1.35rem !important;
+  font-size: 1.25rem !important;
   font-weight: 700 !important;
-  line-height: 1.6;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
 
 .changelog-version-title::after {
@@ -166,12 +168,37 @@ onMounted(() => {
   font-weight: 400;
 }
 
+/* 内容排版：比版本标题低一档的灰字、紧凑行距，项目符号弱化为灰点，
+   长列表读起来不散（覆盖 .vp-doc 的默认 ul/li 间距） */
 .changelog-notes {
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--vp-c-text-2);
+}
+
+.changelog-notes :deep(ul) {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.changelog-notes :deep(li) {
+  margin-top: 0.5rem;
+  line-height: 1.75;
+}
+
+.changelog-notes :deep(li)::marker {
+  color: var(--vp-c-text-3);
 }
 
 .changelog-notes :deep(h4) {
-  margin-top: 1.25rem;
+  margin: 1.25rem 0 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.changelog-notes :deep(p) {
+  margin: 0.5rem 0 0;
 }
 
 @media (max-width: 640px) {
