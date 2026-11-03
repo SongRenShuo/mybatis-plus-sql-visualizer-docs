@@ -73,78 +73,80 @@ onUnmounted(() => {
         </nav>
 
         <div class="nav-actions">
-          <div ref="langRef" class="nav-lang">
+          <!-- 工具簇：语言 / 主题 / 源码仓库 / 搜索统一 36×36、8px 圆角、悬浮软底，
+               簇内 4px；与主 CTA 之间 16px。仓库图标只在 ≥768 出现，窄屏收进全屏菜单 -->
+          <div class="nav-tools">
+            <div ref="langRef" class="nav-lang">
+              <button
+                class="nav-lang-btn"
+                :aria-expanded="langOpen"
+                aria-haspopup="true"
+                :title="c.nav.langMenuLabel"
+                @click="langOpen = !langOpen"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-lang-icon">
+                  <path d="M4 5h9M8.5 5c0 3.5-1.8 6.4-4.5 8.2" />
+                  <path d="M6 9.2c1.2 2.1 3 3.6 5.2 4.5" />
+                  <path d="M13 20l4-10 4 10M14.4 17h5.2" />
+                </svg>
+                <span class="nav-lang-label">{{ c.nav.langLabel }}</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-lang-chevron">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+
+              <Transition name="lang-fade">
+                <div v-if="langOpen" class="nav-lang-menu">
+                  <a
+                    v-for="l in c.nav.langs"
+                    :key="l.href"
+                    :href="l.href"
+                    class="nav-lang-item"
+                    :class="{ 'is-active': l.active }"
+                    :aria-current="l.active ? 'true' : undefined"
+                  >
+                    {{ l.text }}
+                  </a>
+                </div>
+              </Transition>
+            </div>
+
             <button
-              class="nav-lang-btn"
-              :aria-expanded="langOpen"
-              aria-haspopup="true"
-              :title="c.nav.langMenuLabel"
-              @click="langOpen = !langOpen"
+              class="theme-toggle"
+              :title="isDark ? c.nav.themeToLight : c.nav.themeToDark"
+              :aria-label="isDark ? c.nav.themeAriaLight : c.nav.themeAriaDark"
+              @click="isDark = !isDark"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-lang-icon">
-                <path d="M4 5h9M8.5 5c0 3.5-1.8 6.4-4.5 8.2" />
-                <path d="M6 9.2c1.2 2.1 3 3.6 5.2 4.5" />
-                <path d="M13 20l4-10 4 10M14.4 17h5.2" />
+              <svg v-if="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
               </svg>
-              <span class="nav-lang-label">{{ c.nav.langLabel }}</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-lang-chevron">
-                <path d="M6 9l6 6 6-6" />
+              <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
               </svg>
             </button>
+            <a
+              href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="nav-gitee"
+              :title="c.nav.giteeTitle"
+            >
+              <img src="/gitee-icon.png" alt="Gitee" class="nav-gitee-icon" />
+            </a>
+            <!-- 2026-10-22 双仓：GitHub 是镜像仓，源码链接也用它，故与 Gitee 并列展示 -->
+            <a
+              href="https://github.com/SongRenShuo/mybatis-plus-sql-visualizer"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="nav-gitee"
+              :title="c.nav.githubTitle"
+            >
+              <img src="/github-icon.png" alt="GitHub" class="nav-gitee-icon" />
+            </a>
 
-            <Transition name="lang-fade">
-              <div v-if="langOpen" class="nav-lang-menu">
-                <a
-                  v-for="l in c.nav.langs"
-                  :key="l.href"
-                  :href="l.href"
-                  class="nav-lang-item"
-                  :class="{ 'is-active': l.active }"
-                  :aria-current="l.active ? 'true' : undefined"
-                >
-                  {{ l.text }}
-                </a>
-              </div>
-            </Transition>
+            <PagefindSearch compact class="nav-search" />
           </div>
-
-          <button
-            class="theme-toggle"
-            :title="isDark ? c.nav.themeToLight : c.nav.themeToDark"
-            :aria-label="isDark ? c.nav.themeAriaLight : c.nav.themeAriaDark"
-            @click="isDark = !isDark"
-          >
-            <svg v-if="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <circle cx="12" cy="12" r="4" />
-              <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-            </svg>
-            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-            </svg>
-          </button>
-          <a
-            href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="nav-gitee"
-            :title="c.nav.giteeTitle"
-          >
-            <img src="/gitee-icon.png" alt="Gitee" class="nav-gitee-icon" />
-          </a>
-          <!-- 2026-10-22 双仓：GitHub 是镜像仓，源码链接也用它，故与 Gitee 并列展示 -->
-          <a
-            href="https://github.com/SongRenShuo/mybatis-plus-sql-visualizer"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="nav-gitee"
-            :title="c.nav.githubTitle"
-          >
-            <img src="/github-icon.png" alt="GitHub" class="nav-gitee-icon" />
-          </a>
-
-          <!-- 搜索挨着下载按钮收在右端（对齐 VitePress 默认导航「搜索在 CTA 之前」的排布），
-               原先它排在动作区最左，视觉上离导航链接太近、显得偏中 -->
-          <PagefindSearch compact />
 
           <a
             href="https://plugins.jetbrains.com/plugin/33633-sql-visualizer"
@@ -204,6 +206,26 @@ onUnmounted(() => {
               >{{ l.text }}</a>
             </div>
           </div>
+
+          <!-- 源码仓库入口在窄屏从顶栏收进菜单：顶栏图标位在 <768 留给语言/主题/搜索/CTA，
+               否则 390 视口下动作区会占到 76% 宽 -->
+          <div class="mobile-lang">
+            <span class="mobile-lang-title">{{ c.nav.reposTitle }}</span>
+            <div class="mobile-lang-items">
+              <a
+                href="https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mobile-lang-item"
+              >{{ c.nav.giteeTitle }}</a>
+              <a
+                href="https://github.com/SongRenShuo/mybatis-plus-sql-visualizer"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mobile-lang-item"
+              >{{ c.nav.githubTitle }}</a>
+            </div>
+          </div>
         </div>
       </div>
     </Transition>
@@ -240,18 +262,38 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .nav-logo {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
 }
 
+@media (min-width: 768px) {
+  .nav-logo {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* 品牌名要压过导航链接一档：18px 与正文同号会被读成「正文级」，且原色对比度只有
+   3.72:1（浅色）/ 2.36:1（暗色）。字号按断点分三档，颜色走导航专用变量，
+   不动全站 --primary-color（全站 80 处引用）。 */
 .logo-text {
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--primary-color);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--nav-brand-color);
   white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+/* 480 以下不显示品牌名：实测 400 视口下「logo + 品牌名(104) + 动作区(236)」= 374，
+   超出内容宽 337（111%），440 也还有 99%，只有到 480 才回到 90% */
+@media (max-width: 479px) {
+  .logo-text {
+    display: none;
+  }
 }
 
 @media (min-width: 768px) {
@@ -260,10 +302,17 @@ onUnmounted(() => {
   }
 }
 
+@media (min-width: 1280px) {
+  .logo-text {
+    font-size: 1.25rem;
+  }
+}
+
 .nav-links {
   display: none;
   align-items: center;
   gap: 2rem;
+  flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
@@ -277,6 +326,7 @@ onUnmounted(() => {
   transition: color 0.3s;
   text-decoration: none;
   font-size: 0.875rem;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -287,17 +337,55 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
+/* 工具图标簇：簇内 4px，簇与主 CTA 之间由 .nav-actions 的 1rem 控制 */
+.nav-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* 源码仓库两个图标与语言/主题/搜索同尺寸同形状：36×36、8px 圆角、悬浮软底。
+   位图本身保持 20×20 不缩放，避免糊 */
 .nav-gitee {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.25s;
 }
 
-/* 双仓两个图标（Gitee + GitHub）在 flex gap:1rem 下距离偏松，且它们视觉上是同一组
-   「源码仓库」入口——用负边距把它俩收成一簇，与相邻控件仍保持 1rem。 */
-.nav-gitee + .nav-gitee {
-  margin-left: -0.625rem;
+.nav-gitee:hover {
+  background-color: var(--bg-hover);
+}
+
+@media (max-width: 767px) {
+  /* 窄屏把仓库入口收进全屏菜单，顶栏只留语言 / 主题 / 搜索 / CTA */
+  .nav-gitee {
+    display: none;
+  }
+}
+
+/* 768~1023 一档：四个导航链接 + 五个工具位 + CTA 塞不进内容宽（实测 816 / 705，
+   溢出 111px）。这里把源码仓库入口和语言文字一起收掉，链接间距减半，
+   三组宽度和降到约 626，留出余量；仓库入口在 <768 的全屏菜单里可点。 */
+@media (max-width: 1023px) {
+  .nav-gitee {
+    display: none;
+  }
+
+  .nav-lang-label,
+  .nav-lang-chevron {
+    display: none;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
 }
 
 /* 语言切换与明暗切换共用同一套按钮外观（对齐英文版 VitePress 默认导航的
@@ -331,6 +419,28 @@ onUnmounted(() => {
   width: 1.125rem;
   height: 1.125rem;
   flex-shrink: 0;
+}
+
+.nav-lang-label {
+  white-space: nowrap;
+}
+
+/* 搜索图标按钮与簇内其它图标同款：PagefindSearch 的 compact 变体自己带 9999px 圆角，
+   这里用 :deep() 覆盖成 8px 方角软底（不动组件内部样式，避免影响文档页）。
+   注意选择器要挂在 .nav-tools 上——PagefindSearch 是多根节点组件，传进去的 class
+   不会落到 .pf-trigger 上，用 .nav-search 匹配不到。 */
+.nav-tools :deep(.pf-trigger-icon) {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--text-secondary);
+  transition: color 0.25s, background-color 0.25s;
+}
+
+.nav-tools :deep(.pf-trigger-icon:hover) {
+  color: var(--text-primary);
+  background-color: var(--bg-hover);
 }
 
 .nav-lang-chevron {
@@ -417,6 +527,8 @@ onUnmounted(() => {
   display: inline-block;
   font-size: 0.875rem;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .btn-primary:hover {
@@ -575,12 +687,21 @@ onUnmounted(() => {
 
 /* 小屏收紧：320px 视口顶栏不溢出不重叠 */
 @media (max-width: 480px) {
-  .logo-text {
-    display: none;
-  }
-
   .nav-actions {
     gap: 0.5rem;
+  }
+
+  /* 图标按钮收到 32×32：390 下 logo + 品牌名 + 动作区要挤进 327px 内容宽 */
+  .nav-lang-btn,
+  .theme-toggle,
+  .nav-hamburger {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .nav-tools :deep(.pf-trigger-icon) {
+    width: 2rem;
+    height: 2rem;
   }
 
   .btn-primary {

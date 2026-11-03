@@ -38,6 +38,7 @@ export const homeContent = {
       themeAriaDark: 'Switch to dark mode',
       giteeTitle: 'Gitee 源码仓库',
       githubTitle: 'GitHub 镜像仓库',
+      reposTitle: '源码仓库',
       menuLabel: '导航菜单',
     },
 
@@ -407,6 +408,7 @@ export const homeContent = {
       themeAriaDark: 'Switch to dark mode',
       giteeTitle: 'Gitee repository',
       githubTitle: 'GitHub mirror',
+      reposTitle: 'Source code',
       menuLabel: 'Navigation menu',
     },
 

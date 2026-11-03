@@ -49,6 +49,10 @@
   --primary-color: #2e6ae0d6;
   --primary-light: #4FC1FF;
   --primary-dark: #0B6BCB;
+  /* 首页导航品牌名专用色：--primary-color 带 0.84 透明度，叠底后对比度只有
+     3.72:1（浅色）/ 2.36:1（暗色），达不到 4.5:1。这里用实色版，且只作用于
+     .logo-text——--primary-color 全站 80 处引用，不能为了一个标题改全局 */
+  --nav-brand-color: #2e6ae0;
   --accent-green: #6FD39B;
   --bg-primary: #ffffff;
   --bg-secondary: #f9fafb;
@@ -102,6 +106,8 @@
 
   /* 自定义变量 */
   --primary-color: #2e6ae0d6;
+  /* 暗色下品牌名改用亮蓝，对 #2b2d30 的对比度约 6.8:1 */
+  --nav-brand-color: #4FC1FF;
   --bg-primary: #2b2d30;
   --bg-secondary: #26282c;
   --bg-card: #26282c;
@@ -879,7 +885,7 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
   line-height: 1.25;
 }
 
-/* 页内跳转落点避让：两级吸顶导航（主导航 60px + 章节条 44px）实测合计 108px，
+/* 页内跳转落点避让：两级吸顶导航（主导航 64px + 章节条 44px）实测合计 108px，
    留 124px 让区块顶部与吸顶栏之间保有约 16px 空隙。
    定义成 CSS 变量供 SectionNav 的点击落点复用，保证「原生锚点跳转」与
    「脚本跳转」两个路径的避让量同源，不会各改各的。 */

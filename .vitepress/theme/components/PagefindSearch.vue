@@ -284,7 +284,9 @@ const modKey = computed(() => {
   .pf-trigger-text {
     display: inline;
   }
-  .pf-trigger {
+  /* 只给带文字的非 compact 变体定宽：首页用的是图标变体（.pf-trigger-icon），
+     被这条规则撑成 192px 空壳，把首页右侧动作区顶乱 */
+  .pf-trigger:not(.pf-trigger-icon) {
     width: 192px;
     padding: 0 12px;
   }
