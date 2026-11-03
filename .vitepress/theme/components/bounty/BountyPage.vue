@@ -254,6 +254,14 @@ const flowColumns = computed(() => {
   padding: 1.5rem 24px 3rem;
 }
 
+/* VitePress 只在 ≥960 给 .VPPage 加 64px 顶部偏移；更窄时导航 fixed，
+   内容从 0 开始会被顶栏压住（眉标看不见），这里补出导航高度 */
+@media (max-width: 959px) {
+  .bounty-page {
+    padding-top: calc(var(--vp-nav-height) + 20px);
+  }
+}
+
 /* 预算状态横幅：只承载状态文字，不渲染任何金额 */
 .budget-banner {
   max-width: 760px;
@@ -355,7 +363,7 @@ const flowColumns = computed(() => {
 
 @media (max-width: 767px) {
   .bounty-page {
-    padding: 1.75rem 16px 2.5rem;
+    padding: calc(var(--vp-nav-height) + 14px) 16px 2.5rem;
   }
 
   .hero-actions {

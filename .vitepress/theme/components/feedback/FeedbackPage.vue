@@ -180,6 +180,14 @@ onBeforeUnmount(() => {
   padding: 28px 24px 64px;
 }
 
+/* VitePress 只在 ≥960 给 .VPPage 加 64px 顶部偏移；更窄时导航是 fixed，
+   页面内容会从 0 开始被顶栏压住（眉标整个看不见），这里自己补出导航高度 */
+@media (max-width: 959px) {
+  .feedback-page {
+    padding-top: calc(var(--vp-nav-height) + 18px);
+  }
+}
+
 /* 两栏布局：左侧反馈池 + 右侧需求池动态 */
 .feedback-page-body {
   display: grid;
@@ -212,7 +220,7 @@ onBeforeUnmount(() => {
 
 @media (max-width: 767px) {
   .feedback-page {
-    padding: 18px 16px 48px;
+    padding: calc(var(--vp-nav-height) + 14px) 16px 48px;
   }
 
   .modal-hint {
