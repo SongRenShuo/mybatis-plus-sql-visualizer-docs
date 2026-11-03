@@ -552,7 +552,8 @@ async function lookup() {
 .lookup-form {
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-card);
-  background: var(--ui-surface-muted);
+  /* 与提交表单、结果卡同一种白卡，不再单独用浅灰底 */
+  background: var(--ui-surface);
 }
 
 .lookup-fields input {

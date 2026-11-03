@@ -1172,6 +1172,33 @@ html[lang^='en'] .hero-title-highlight {
   background: var(--vp-c-text-3);
 }
 
+/* 页面级滚动条（窗口右边缘）：上面那套只覆盖了容器，整页滚动条还是 Windows 默认的
+   17px 深灰方块滑轨，长页面里非常显眼。这里统一成 10px 细轨 + 圆角滑块。 */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--vp-c-border) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: var(--vp-c-border);
+  border-radius: 999px;
+  /* 与页面背景同色的描边，让 10px 轨道里的滑块观感约 4px */
+  border: 3px solid var(--vp-c-bg);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-text-3);
+}
+
 /* —— 手机端「页面导航」下拉强化（T-SiteOpt1101 方案 A）——
    折叠态胶囊化提升可点感；≥640px 长列表双列排布；面板限高内部滚动为组件自带。
    折叠态显示当前小节名的逻辑在 theme/index.ts setup()（读侧栏大纲的 active 锚点写回按钮）。 */
@@ -1199,3 +1226,4 @@ html[lang^='en'] .hero-title-highlight {
     column-gap: 24px;
   }
 }
+

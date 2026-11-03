@@ -1120,37 +1120,62 @@ async function handleSubmit() {
   }
 }
 
-/* 组件库语言：16px 卡片、12px 输入、胶囊按钮 */
+/* 组件库语言：整张白卡 + 分区发丝线（此前每个 fieldset 各自是浅灰卡片，
+   边框被 legend 切出缺口，整块看起来像灰色积木） */
 .bounty-form-card {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 28px 28px 24px;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-card);
   background: var(--ui-surface);
 }
 
 .form-title {
+  margin: 0 0 6px;
   border: none;
   padding: 0;
   font-size: clamp(1.4rem, 3vw, 1.75rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--ui-fg);
+  text-align: center;
 }
 
 .form-sub {
+  margin: 0 auto 8px;
   color: var(--ui-fg-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .form-section {
-  border-color: var(--ui-border);
-  /* fieldset 的 UA 默认 min-width: min-content 会让它在窄屏撑出容器（360px 下溢出 18px） */
+  margin: 0;
+  padding: 22px 0 2px;
+  border: none;
+  border-top: 1px solid var(--ui-border);
+  border-radius: 0;
+  background: transparent;
+  /* fieldset 的 UA 默认 min-width: min-content 会在窄屏撑出容器 */
   min-width: 0;
 }
 
+.form-section:first-of-type {
+  border-top: none;
+  padding-top: 12px;
+}
+
 .form-section legend {
-  font-size: 13px;
+  margin: 0 0 10px;
+  padding: 0;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--ui-fg);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ui-fg-muted);
+}
+
+.form-group {
+  margin-bottom: 14px;
 }
 
 .form-group label {
@@ -1185,15 +1210,70 @@ async function handleSubmit() {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-fg) 6%, transparent);
 }
 
-.severity-btn {
+/* 分类下拉：.fs-wrap 默认 inline-flex 会把 trigger 的 width:100% 解析成收缩宽度 */
+.form-group :deep(.fs-wrap) {
+  display: flex;
+  width: 100%;
+}
+
+.form-group :deep(.fs-trigger) {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-field);
   background: var(--ui-surface);
+  color: var(--ui-fg);
+  font-size: 13px;
+}
+
+.form-group :deep(.fs-trigger):focus-visible {
+  border-color: var(--ui-border-strong);
+}
+
+.form-group :deep(.fs-chevron) {
+  font-size: 11px;
+  color: var(--ui-fg-muted);
+}
+
+.form-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.severity-grid {
+  gap: 8px;
+}
+
+.severity-btn {
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface);
+  color: var(--ui-fg-soft);
+  font-size: 12px;
+}
+
+.severity-btn:hover {
+  border-color: var(--ui-border-strong);
+  color: var(--ui-fg);
 }
 
 .severity-btn.active {
   border-color: color-mix(in srgb, var(--ui-accent) 55%, var(--ui-border));
   background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+}
+
+.checkbox-row {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ui-fg);
+}
+
+.checkbox-row input {
+  accent-color: var(--ui-accent);
 }
 
 .btn-primary,
@@ -1204,28 +1284,70 @@ async function handleSubmit() {
   font-weight: 500;
 }
 
+.submit-btn {
+  height: 40px;
+  padding: 0 20px;
+}
+
 .btn-ghost {
+  height: 36px;
+  padding: 0 16px;
   border-radius: var(--ui-radius-pill);
   border: 1px solid var(--ui-border);
+  background: var(--ui-surface);
   color: var(--ui-fg-soft);
+  font-size: 13px;
 }
 
 .att-picker {
   border-radius: var(--ui-radius-field);
+  border-style: dashed;
+  border-color: var(--ui-border-strong);
+  color: var(--ui-fg-soft);
+  font-size: 12px;
+}
+
+.attachment-item {
+  border-radius: var(--ui-radius-field);
   border-color: var(--ui-border);
 }
 
-.sensitive-box,
-.tips {
+.sensitive-box {
   border-radius: var(--ui-radius-field);
   border-color: var(--ui-border);
+  background: var(--ui-surface-muted);
+}
+
+.tips {
+  border-radius: var(--ui-radius-field);
+  border-color: color-mix(in srgb, #f59e0b 45%, var(--ui-border));
+  font-size: 12px;
+}
+
+.linked-post {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface-muted);
+}
+
+.budget-hint,
+.field-hint {
+  font-size: 12px;
+  color: var(--ui-fg-muted);
+}
+
+@media (max-width: 767px) {
+  .bounty-form-card {
+    padding: 20px 16px 18px;
+  }
 }
 
 @media (max-width: 640px) {
   /* <16px 的输入框聚焦会触发 iOS 自动放大 */
   .form-group input,
   .form-group textarea,
-  .form-group select {
+  .form-group select,
+  .form-group :deep(.fs-trigger) {
     font-size: 16px;
   }
 }

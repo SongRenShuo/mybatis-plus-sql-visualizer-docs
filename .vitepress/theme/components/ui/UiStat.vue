@@ -28,7 +28,8 @@ withDefaults(
   flex-direction: column;
   gap: 3px;
   padding: 12px 14px;
-  background: var(--ui-surface-muted);
+  /* 与同页的等级卡/流程卡同一种卡面（白底 + 发丝线），不再用浅灰底 */
+  background: var(--ui-surface);
 }
 
 .ui-stat-value {

@@ -80,23 +80,32 @@ import BountyPage from '@theme/components/bounty/BountyPage.vue'
 </div>
 
 <style>
+/* 页尾静态规则：与上方组件区同宽（内容 1100）同字阶（标题 28 / 小标题 14 / 正文 13） */
 .bounty-static {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 1rem 24px 64px;
+  max-width: 1148px;
+  margin: 3.5rem auto 0;
+  padding: 2.5rem 24px 64px;
+  border-top: 1px solid var(--vp-c-border);
 }
 
 .bounty-static h2 {
-  margin: 3rem 0 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--vp-c-border);
+  margin: 3rem 0 0.75rem;
+  padding: 0;
+  border: none;
   font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.3;
 }
 
+.bounty-static > h2:first-child {
+  margin-top: 0;
+}
+
 .bounty-static h3 {
-  margin: 1.5rem 0 0.5rem;
-  font-size: 1.05rem;
+  margin: 1.75rem 0 0.5rem;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--vp-c-text-1);
 }
 
@@ -104,11 +113,15 @@ import BountyPage from '@theme/components/bounty/BountyPage.vue'
 .bounty-static li {
   color: var(--vp-c-text-2);
   line-height: 1.8;
-  font-size: 0.925rem;
+  font-size: 13px;
 }
 
 .bounty-static ul {
-  padding-left: 1.25rem;
+  padding-left: 1.15rem;
+}
+
+.bounty-static li {
+  margin: 4px 0;
 }
 
 .bounty-static a {
@@ -119,12 +132,13 @@ import BountyPage from '@theme/components/bounty/BountyPage.vue'
   margin: 0.75rem 0;
   padding: 0 1rem;
   border: 1px solid var(--vp-c-border);
-  border-radius: 10px;
+  border-radius: var(--ui-radius-field, 12px);
   background: var(--vp-c-bg-soft);
 }
 
 .bounty-static details.custom-block summary {
   padding: 0.85rem 0;
+  font-size: 13px;
   font-weight: 600;
   color: var(--vp-c-text-1);
   cursor: pointer;
@@ -144,7 +158,8 @@ import BountyPage from '@theme/components/bounty/BountyPage.vue'
 
 @media (max-width: 767px) {
   .bounty-static {
-    padding: 0.5rem 16px 48px;
+    margin-top: 2.5rem;
+    padding: 2rem 16px 48px;
   }
 }
 </style>

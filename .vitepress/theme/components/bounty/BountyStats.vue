@@ -37,7 +37,8 @@ const avgReview = computed(() => {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  max-width: 880px;
+  /* 与下方奖励标准/流程看板同宽（1100），此前 880 会让统计条比正文窄一截 */
+  max-width: 1100px;
   margin: 28px auto 0;
   text-align: left;
 }
