@@ -1,5 +1,5 @@
 <template>
-  <div class="bounty-form-card">
+  <div class="bounty-form-card" :class="{ embedded }">
     <div v-if="success" class="success-card" role="status">
       <div class="success-icon" aria-hidden="true"><FbIcon name="check" :size="12" /></div>
       <h3>{{ t('form.successTitle', locale) }}</h3>
@@ -9,14 +9,14 @@
       </p>
       <p class="success-hint">{{ t('form.successHint', locale) }}</p>
       <div class="success-actions">
-        <a href="#bounty-lookup" class="btn-primary">{{ t('form.goLookup', locale) }}</a>
+        <button type="button" class="btn-primary" @click="$emit('lookup')">{{ t('form.goLookup', locale) }}</button>
         <button type="button" class="btn-ghost" @click="startAnother">{{ t('form.again', locale) }}</button>
       </div>
     </div>
 
     <template v-else>
-      <h2 class="form-title">{{ t('form.title', locale) }}</h2>
-      <p class="form-sub">{{ t('form.subtitle', locale) }}</p>
+      <h2 v-if="!embedded" class="form-title">{{ t('form.title', locale) }}</h2>
+      <p v-if="!embedded" class="form-sub">{{ t('form.subtitle', locale) }}</p>
 
       <p v-if="policyReady && !policy.enabled" class="closed-notice" role="status">{{ t('form.planClosed', locale) }}</p>
 
@@ -313,10 +313,14 @@ const props = defineProps<{
   policyReady?: boolean
   /** 月度预算状态：只用于提示，不参与提交拦截（reached 仍可正常提交） */
   budgetStatus?: BudgetStatus
+  /** 弹窗模式：标题/副标题由 UiModal 承担，卡片自身不再画壳 */
+  embedded?: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'submitted', submissionNo: string): void
+  /** 成功卡片里的「查询进度」：由父级打开查询弹窗 */
+  (e: 'lookup'): void
 }>()
 
 const form = reactive({
@@ -1129,6 +1133,15 @@ async function handleSubmit() {
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-card);
   background: var(--ui-surface);
+}
+
+/* 弹窗模式：外壳交给 UiModal，卡片自身退成纯内容 */
+.bounty-form-card.embedded {
+  max-width: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
 }
 
 .form-title {

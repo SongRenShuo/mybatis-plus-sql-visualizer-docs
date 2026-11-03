@@ -15,7 +15,8 @@ const messages = {
     'hero.subtitle': '提交可复现的插件 Bug，审核确认后按等级获得小额悬赏。',
     'hero.note': '按等级区间与审核结果发放，单笔不超过 ¥9.88。',
     'hero.submit': '提交报告',
-    'hero.policy': '查看奖励标准',
+    'hero.lookup': '查询进度',
+    'close': '关闭',
     'hero.paused': 'Bug 悬赏计划当前暂停接收新报告；已提交的记录仍会正常审核与发放。',
 
     // 月度预算状态（只给状态文字，不给任何金额）
@@ -251,7 +252,8 @@ const messages = {
     'hero.subtitle': 'Report a reproducible plugin bug and earn a small bounty once it is verified.',
     'hero.note': 'Paid by tier range and review result, up to ¥9.88 per report.',
     'hero.submit': 'Submit a report',
-    'hero.policy': 'View reward tiers',
+    'hero.lookup': 'Track progress',
+    'close': 'Close',
     'hero.paused': 'The bug bounty program is currently paused for new reports. Submitted reports are still being reviewed and paid.',
 
     // Monthly budget status (status text only, never amounts)

@@ -18,8 +18,8 @@
       <p v-if="policyReady && !policy.enabled" class="hero-paused" role="status">{{ t('hero.paused', locale) }}</p>
 
       <div class="hero-actions">
-        <UiButton variant="primary" href="#bounty-form">{{ t('hero.submit', locale) }}</UiButton>
-        <UiButton variant="outline" href="#bounty-policy">{{ t('hero.policy', locale) }}</UiButton>
+        <UiButton variant="primary" @click="showSubmit = true">{{ t('hero.submit', locale) }}</UiButton>
+        <UiButton variant="outline" @click="openLookup()">{{ t('hero.lookup', locale) }}</UiButton>
       </div>
 
       <BountyStats :stats="stats" :locale="locale" />
@@ -52,20 +52,38 @@
       </KanbanBoard>
     </section>
 
-    <!-- 提交表单（页内内联） -->
-    <section id="bounty-form" class="bounty-form-section">
+    <!-- 提交报告弹窗 -->
+    <UiModal
+      v-if="showSubmit"
+      :title="t('form.title', locale)"
+      :subtitle="t('form.subtitle', locale)"
+      :close-label="t('lookup.close', locale)"
+      width="760px"
+      @close="showSubmit = false"
+    >
       <BountyForm
         :api-base="apiBase"
         :locale="locale"
         :policy="policy"
         :policy-ready="policyReady"
         :budget-status="policy.budgetStatus"
+        embedded
         @submitted="onSubmitted"
+        @lookup="openLookup()"
       />
-    </section>
+    </UiModal>
 
-    <!-- 查询进度 -->
-    <BountyLookup :api-base="apiBase" :locale="locale" />
+    <!-- 查询进度弹窗 -->
+    <UiModal
+      v-if="showLookup"
+      :title="t('lookup.title', locale)"
+      :subtitle="t('lookup.subtitle', locale)"
+      :close-label="t('lookup.close', locale)"
+      width="640px"
+      @close="showLookup = false"
+    >
+      <BountyLookup :api-base="apiBase" :locale="locale" embedded :initial-no="lastNo" />
+    </UiModal>
   </div>
 </template>
 
@@ -79,6 +97,7 @@ import BountyLookup from './BountyLookup.vue'
 import KanbanBoard from '../kanban/KanbanBoard.vue'
 import KanbanCard from '../kanban/KanbanCard.vue'
 import UiButton from '../ui/UiButton.vue'
+import UiModal from '../ui/UiModal.vue'
 import { t, type Locale, type MessageKey } from './i18n'
 import {
   DEFAULT_POLICY,
@@ -106,6 +125,17 @@ const stats = ref<BountyStatsData | null>(null)
 const policyLoadFailed = ref(false)
 // 策略请求完成前不展示「暂停」，避免首屏先闪一句暂停提示
 const policyReady = ref(false)
+
+// 提交 / 查询两个弹窗；lastNo 用于从提交成功卡跳查询时预填编号
+const showSubmit = ref(false)
+const showLookup = ref(false)
+const lastNo = ref('')
+
+function openLookup(no?: string) {
+  if (no) lastNo.value = no
+  showSubmit.value = false
+  showLookup.value = true
+}
 
 // 预算状态文案（normal 为空串）；策略就绪前不显示，避免首屏闪出提示
 const budgetMessage = computed(() =>
@@ -160,7 +190,9 @@ async function loadStats() {
 }
 
 // 提交成功后只刷新聚合统计，策略无需重拉
-function onSubmitted() {
+// 提交成功：编号记下来（成功卡的「查询进度」会预填），只刷新聚合统计
+function onSubmitted(submissionNo: string) {
+  lastNo.value = submissionNo
   loadStats()
 }
 
@@ -347,11 +379,6 @@ const flowColumns = computed(() => {
   font-size: 13px;
   line-height: 1.7;
   color: var(--ui-fg-muted);
-}
-
-.bounty-form-section {
-  padding: 3.5rem 0 0;
-  scroll-margin-top: calc(var(--vp-nav-height) + 16px);
 }
 
 @media (max-width: 767px) {

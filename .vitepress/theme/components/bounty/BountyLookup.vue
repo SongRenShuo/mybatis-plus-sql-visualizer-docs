@@ -1,7 +1,9 @@
 <template>
-  <section id="bounty-lookup" class="bounty-lookup">
-    <h2>{{ t('lookup.title', locale) }}</h2>
-    <p class="section-sub">{{ t('lookup.subtitle', locale) }}</p>
+  <section id="bounty-lookup" class="bounty-lookup" :class="{ embedded }">
+    <template v-if="!embedded">
+      <h2>{{ t('lookup.title', locale) }}</h2>
+      <p class="section-sub">{{ t('lookup.subtitle', locale) }}</p>
+    </template>
 
     <form class="lookup-form" novalidate @submit.prevent="lookup">
       <div class="lookup-fields">
@@ -120,7 +122,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { t, type Locale } from './i18n'
 import { formatDateTime } from '../feedback/dateTime'
 import {
@@ -137,6 +139,10 @@ import {
 const props = defineProps<{
   apiBase: string
   locale: Locale
+  /** 弹窗模式：标题/副标题由 UiModal 承担 */
+  embedded?: boolean
+  /** 从提交成功弹窗带过来的编号，直接预填 */
+  initialNo?: string
 }>()
 
 interface TimelineEntry {
@@ -174,6 +180,15 @@ const email = ref('')
 const loading = ref(false)
 const error = ref('')
 const result = ref<LookupResult | null>(null)
+
+// 提交成功弹窗带过来的编号直接预填，省一次手抄
+watch(
+  () => props.initialNo,
+  (value) => {
+    if (value) submissionNo.value = value
+  },
+  { immediate: true }
+)
 
 const canQuery = computed(() => !!submissionNo.value.trim() && !!email.value.trim())
 
@@ -675,5 +690,33 @@ async function lookup() {
 .result-attachments li {
   font-size: 12px;
   color: var(--ui-fg-soft);
+}
+</style>
+
+<style scoped>
+/* 弹窗模式：外壳交给 UiModal；查询卡与结果卡都退成内容。
+   section 自带 3.5rem 顶部留白（页内排版用），弹窗里必须清掉 */
+.bounty-lookup.embedded {
+  padding: 0;
+}
+
+.bounty-lookup.embedded .lookup-form {
+  padding: 14px 16px;
+  border: none;
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-surface-muted);
+}
+
+.bounty-lookup.embedded .lookup-fields {
+  grid-template-columns: 1fr;
+}
+
+.bounty-lookup.embedded .lookup-btn {
+  width: 100%;
+}
+
+.bounty-lookup.embedded .result-card {
+  margin-top: 14px;
+  background: var(--ui-surface-muted);
 }
 </style>
