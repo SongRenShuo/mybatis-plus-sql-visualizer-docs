@@ -1,7 +1,5 @@
 <template>
   <div class="feedback-page">
-    <!-- 周报订阅入口：后端带双重确认，这里只收集邮箱并透传后端文案 -->
-    <SubscribeCard :api-base="apiBase" :locale="locale" />
     <!-- 两栏常驻：点卡片/动态条目不再整页切换，改为右侧抽屉滑出详情 -->
     <div class="feedback-page-body">
       <FeedbackPool
@@ -18,6 +16,9 @@
         @select-post="selectedPost = $event"
       />
     </div>
+
+    <!-- 周报订阅入口放页尾：先看池子再收邮箱（后端带双重确认，这里只收集邮箱并透传后端文案） -->
+    <SubscribeCard class="feedback-subscribe" :api-base="apiBase" :locale="locale" />
 
     <!-- 详情右侧抽屉：关闭（×/遮罩/Esc/返回列表）回到列表原位 -->
     <FeedbackDetailDrawer
@@ -195,6 +196,11 @@ onBeforeUnmount(() => {
   .feedback-page-body {
     grid-template-columns: 1fr;
   }
+}
+
+/* 页尾订阅卡：与上方两栏留间距（卡片自身不带外边距，由这里按位置给） */
+.feedback-subscribe {
+  margin-top: 16px;
 }
 
 /* 深链直开的提交表单弹窗（与 FeedbackPool 内提交弹窗同款样式，scoped 各自隔离） */

@@ -78,7 +78,7 @@ async function subscribe() {
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
   background: var(--vp-c-bg-soft);
-  margin-bottom: 12px;
+  margin: 0;
 }
 .subscribe-text {
   display: flex;
