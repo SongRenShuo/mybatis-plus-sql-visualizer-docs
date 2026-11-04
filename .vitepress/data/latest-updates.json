@@ -2,6 +2,12 @@
   "_comment": "构建期由 scripts/generate-changelog.mjs 从 JetBrains Marketplace API 自动重写，手工改动会被覆盖。summaryZh 取对应版本 notes 首条纯文本（≤80 字）；summaryEn 沿用此前的手工翻译（中文摘要变了就不再沿用），新版本在翻译前与 summaryZh 同文。首页「最近更新」打开时会用 /api/changelog 实时刷新，本文件是构建期兜底。数据来源 https://plugins.jetbrains.com/api/plugins/33633/updates",
   "updates": [
     {
+      "version": "2026.11.3",
+      "date": "2026-11-03",
+      "summaryZh": "修复执行 SQL 后预览面板下半区空白、连原生控制台工具栏都不出现的问题，结果不再只落在 Database 工具窗",
+      "summaryEn": "修复执行 SQL 后预览面板下半区空白、连原生控制台工具栏都不出现的问题，结果不再只落在 Database 工具窗"
+    },
+    {
       "version": "2026.11.2",
       "date": "2026-11-02",
       "summaryZh": "修复 IDEA 2026.2 上预览窗「执行 SQL」提示没有匹配的已配置数据源、点了也执行不了的问题，现在平台侧出错会如实报出原因，不再一律归到方言不匹配",
@@ -12,12 +18,6 @@
       "date": "2026-10-31",
       "summaryZh": "新增 GaussDB、瀚高 HighGo、海量 Vastbase 三种方言，可格式化的数据库方言总数 11 → 14 种；GaussDB 在设置页、日志角标与…",
       "summaryEn": "新增 GaussDB、瀚高 HighGo、海量 Vastbase 三种方言，可格式化的数据库方言总数 11 → 14 种；GaussDB 在设置页、日志角标与…"
-    },
-    {
-      "version": "2026.10.30",
-      "date": "2026-10-29",
-      "summaryZh": "装了 MyBatisCodeHelperPro 等同类插件时，Mapper 双向跳转图标不再和对方的跳转箭头叠在同一行",
-      "summaryEn": "Mapper two-way jump icons no longer overlap with arrows from similar plugins such as MyBatisCodeHelperPro"
     }
   ]
 }
