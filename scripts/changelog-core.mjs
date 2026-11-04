@@ -5,8 +5,14 @@
 // 版本小节」会出现口径差异（例如累计日志截取、HTML 白名单净化）。
 //
 // 关键事实（2026-11-01 实测）：updates API 每条 notes 是「累计日志」——最新一条里
-// 按 h2 逐版列出全部历史；因此每条只截取与自身版本号匹配的那个 h2 小节。
-// cdate 是 13 位毫秒时间戳（不是秒），日期取 UTC。
+// 按 h2 逐版列出全部历史；cdate 是 13 位毫秒时间戳（不是秒），日期取 UTC。
+//
+// 但每条 update 的 notes 是**该版本上架当时的快照**，不是后台当前内容：后台后来
+// 从老版本说明里删掉的句子（例如「好用的话，欢迎到 Marketplace 页评分留言」只该留在
+// 最新版，后台会在下次发版时从老版本小节里删掉）仍留在老快照里。因此内容一律以
+// **最新一条 notes** 的累计日志为准，只在最新日志缺该版本时才回退到自身快照。
+// 2026-11-04 实测：按老快照截取时 2026.10.16~2026.11.3 八版都带评分留言，
+// 按最新日志截取后只剩 2026.11.3 带，与 Marketplace 公开页一致。
 
 export const SUMMARY_MAX = 80
 
@@ -29,6 +35,31 @@ export function collectUpdates(raw) {
     if (!prev || Number(item.cdate) > Number(prev.cdate)) byVersion.set(version, item)
   }
   return [...byVersion.values()].sort((a, b) => Number(b.cdate) - Number(a.cdate))
+}
+
+/**
+ * 把累计 notes 按标题切成小节，返回 Map<归一化版本号, 小节 HTML（不含标题本身）>。
+ * 标题形如 `<h2>v2026.11.3</h2>`，key 取标题里的版本号。
+ */
+export function parseSections(notes) {
+  const map = new Map()
+  if (!notes) return map
+  const re = /<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]\s*>/gi
+  const heads = []
+  let m
+  while ((m = re.exec(notes))) {
+    heads.push({
+      version: normVersion(m[1].replace(/<[^>]+>/g, '')),
+      start: m.index,
+      bodyStart: m.index + m[0].length,
+    })
+  }
+  for (let i = 0; i < heads.length; i += 1) {
+    const bodyEnd = i + 1 < heads.length ? heads[i + 1].start : notes.length
+    const section = notes.slice(heads[i].bodyStart, bodyEnd)
+    if (heads[i].version && !map.has(heads[i].version)) map.set(heads[i].version, section)
+  }
+  return map
 }
 
 /**
@@ -113,13 +144,22 @@ export function firstSummaryText(sectionHtml) {
   return text.length > SUMMARY_MAX ? `${text.slice(0, SUMMARY_MAX - 1)}…` : text
 }
 
-/** API 原始数组 → 页面用的版本条目（倒序） */
+/**
+ * API 原始数组 → 页面用的版本条目（倒序）。
+ *
+ * 内容一律取最新一条 notes 的累计日志（后台当前状态），版本号与上架日期取各条 API
+ * 记录。老快照只作回退：最新日志缺该版本（刚上架、累计日志还没带上）时才用。
+ */
 export function buildEntries(raw) {
-  return collectUpdates(raw).map((u) => {
-    const own = extractOwnSection(u.notes, u.version)
+  const updates = collectUpdates(raw)
+  if (!updates.length) return []
+  const sections = parseSections(updates[0].notes)
+  return updates.map((u) => {
+    const version = normVersion(u.version)
+    const own = sections.get(version) ?? extractOwnSection(u.notes, version)
     const notesHtml = sanitizeHtml(own ?? u.notes ?? '')
     return {
-      version: normVersion(u.version),
+      version,
       date: toDate(u.cdate),
       notesHtml,
       summaryZh: firstSummaryText(notesHtml),
