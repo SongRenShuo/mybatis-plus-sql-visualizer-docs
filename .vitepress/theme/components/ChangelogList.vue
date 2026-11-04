@@ -21,13 +21,25 @@ const latestLabel = computed(() => (lang.value.startsWith('zh') ? '最新' : 'La
  * 所以「发版后没重新部署」能补上新版本，「老版本说明被改过」也能同步更新；
  * 实时里缺的版本仍保留静态快照，拉取失败则完全沿用静态内容。
  *
- * 每版一节，锚点 #v-<version 点转连字符>（如 #v-2026-10-30）便于外链。
+ * 每版一节，锚点 #v-<version 点转连字符>（如 #v-2026-10-30）保留在 section 上，
+ * 便于直接分享定位；版本号本身链到 Gitee 该版本的发布页（页内跳转没意义）。
  * notesHtml 已在整理时做白名单净化，这里 v-html 直渲；排版跟随 .vp-doc。
  */
 const entries = ref(staticEntries)
 
+// 插件仓 Gitee 地址：release 卡片锚点形如 #release-<版本>，跳列表页对应卡片。
+// 不用 /releases/tag/<版本>——那个路径未登录时会 302 跳源码 zip 下载。
+const GITEE_RELEASES = 'https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases'
+const releaseTitle = computed(() =>
+  lang.value.startsWith('zh') ? '在 Gitee 查看该版本的发布页' : 'View this release on Gitee',
+)
+
 function anchorId(version) {
   return `v-${String(version).replace(/\./g, '-')}`
+}
+
+function releaseHref(version) {
+  return `${GITEE_RELEASES}#release-${version}`
 }
 
 async function syncFromMarketplace() {
@@ -61,7 +73,14 @@ onMounted(() => {
       <span class="changelog-node" :class="{ 'is-latest': i === 0 }" aria-hidden="true" />
       <h2 class="changelog-version-title">
         <span class="changelog-version-head">
-          <a :href="`#${anchorId(e.version)}`" class="changelog-version-anchor">v{{ e.version }}</a>
+          <a
+            :href="releaseHref(e.version)"
+            class="changelog-version-anchor"
+            target="_blank"
+            rel="noopener noreferrer"
+            :title="releaseTitle"
+            >v{{ e.version }}</a
+          >
           <span v-if="i === 0" class="changelog-latest">{{ latestLabel }}</span>
         </span>
         <span class="changelog-version-date">{{ datePrefix }}{{ e.date }}</span>
@@ -142,11 +161,11 @@ onMounted(() => {
 }
 
 .changelog-version-anchor {
-  color: inherit;
+  color: var(--vp-c-brand-1);
 }
 
 .changelog-version-anchor:hover {
-  color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-2);
 }
 
 .changelog-latest {

@@ -36,6 +36,12 @@
     "summaryZh": "Mapper 接口方法与 XML 语句之间新增双向跳转，点行号旁的图标即可互跳"
   },
   {
+    "version": "2026.10.26",
+    "date": "2026-10-26",
+    "notesHtml": "<ul>\n    <li>实体打包进 JAR/lib 模块且该模块无命名配置时，嵌入列前缀按查询宿主模块判定，@Embedded 不再丢前缀</li>\n    <li>嵌入列解析新增诊断日志，报障时可在 idea.log 按关键词定位判定链路</li>\n</ul>",
+    "summaryZh": "实体打包进 JAR/lib 模块且该模块无命名配置时，嵌入列前缀按查询宿主模块判定，@Embedded 不再丢前缀"
+  },
+  {
     "version": "2026.10.23",
     "date": "2026-10-25",
     "notesHtml": "<ul>\n    <li>插件设置接入 IDE 自带设置搜索，搜「脱敏」「预设」等关键词可直接定位到对应设置项</li>\n    <li>实体类来自 jar 且工程里另有同名类时，HQL 预览能正确解析，不再降级为 task.*</li>\n    <li>实体解析兼容 jar 位于模块资源目录、跨模块同全限定名等形态，按源码形态与模块依赖收窄</li>\n    <li>方言不一致不再阻断执行，仍提示不一致并可切换数据源；只有方言未知时才拦</li>\n    <li>没有可用 Runner 时按目标数据源方言重映射再枚举一次，数据源连着就能正常执行</li>\n    <li>预览执行按目标数据源方言出 Runner，真实执行前核对来源方言与执行目标，冲突时给出就地修复入口</li>\n    <li>只读动作改走旁路，预估影响行数、EXPLAIN 与回滚快照不再替换预览编辑器里的 SQL</li>\n    <li>回滚快照支持表格与文本双态，并可在 CSV 编辑器中打开；无数据源时直接弹选择器</li>\n    <li>参数预设与参数历史按声明方法隔离，预设永久绑定方法，改 SQL 不再丢参数</li>\n    <li>EXPLAIN 计划可跨会话保存并对比两次执行的变化，预览可标注无法解析的列</li>\n    <li>AI 上下文复制新增「含表列名」出口，日志与导出支持选择性脱敏</li>\n    <li>FieldFill 字段填充可安全模拟字面量，不执行用户 Handler</li>\n    <li>新增执行前 Schema 预检、方言能力自检、DML 影响面试算与一键诊断报告</li>\n    <li>预览面板底部新增「复制 SQL 并关闭」，一次复制当前 SQL 并关掉面板</li>\n    <li>增强捕获默认开启，打开即授权；与 JRebel 等第三方 agent 共存时不再导致应用启动失败</li>\n    <li>结构化执行计划支持未存密码时交平台原生密码框，认证失败给出可行动指引</li>\n    <li>预览执行链的平台内部错误告警收口，退出 IDE 不再报内存泄漏</li>\n    <li>执行计划默认回到预览窗内嵌原生控制台，换源交还平台原生工具栏，根治取源与换源十二轮问题</li>\n    <li>执行计划按表归属与模块学习自动选源，选错源时就地引导换源，不再弹模态框打断</li>\n    <li>上次使用的数据源按模块隔离，多模块工程不再串用其他模块的数据源</li>\n    <li>SQL 日志工具栏动作组改走后台线程更新，消除每次抢占编辑线程 3~4 秒的卡顿</li>\n    <li>SQL 转 Java 条件组不再吞 OR、保留子组 NOT，逻辑删除条件不重复生成</li>\n    <li>历史检索与日志列表性能优化，大历史目录不再卡顿</li>\n    <li>SQL 日志时间、ShardingSphere 路由、反向转换与设置页一批问题修复</li>\n    <li>分发包补齐 LICENSE 与第三方声明，体积减少约 20%</li>\n</ul>",
@@ -96,6 +102,12 @@
     "summaryZh": "双击日志预览弹窗加载卡顿根治"
   },
   {
+    "version": "2026.9.9",
+    "date": "2026-09-09",
+    "notesHtml": "<ul>\n    <li>SQL 日志列表增加行号：会话内捕获序号，项目启动清零</li>\n    <li>预览刷新后内嵌 Database 丢失根治：多弹窗僵尸监听抢共享控制台</li>\n    <li>执行临时文件失败可见化 + 复制错误信息按钮对号反馈</li>\n    <li>预览点击侧边栏闪烁根治：日志重放守卫 + EDT 慢操作消解</li>\n    <li>三处弃用 API 换现代等价物：三平台兼容性报告再收敛</li>\n    <li>单击预览四轮优化：编辑器高亮与列表同色 + 可编辑焦点修复</li>\n    <li>单击预览复制按钮点击换对号反馈</li>\n    <li>双击预览无数据源时不再抢占侧边栏</li>\n    <li>2026.2 平台兼容性修复：插件市场发布受阻解除</li>\n    <li>发现 SQL 自动打开日志窗口假开关复活</li>\n    <li>dev 已修转换语义/定位误报/导入导出反馈批量移植</li>\n    <li>INSERT 租户列子开关接线 + 关闭工具窗停止监听开关转正</li>\n    <li>启动项目清除自动展开会话抑制</li>\n</ul>",
+    "summaryZh": "SQL 日志列表增加行号：会话内捕获序号，项目启动清零"
+  },
+  {
     "version": "2026.9.8",
     "date": "2026-09-08",
     "notesHtml": "<ul>\n    <li>SQL 日志列表 EDT 冻结 16 秒根治</li>\n    <li>SQL 列表悬停卡顿改单击预览：SQL 高亮可编辑编辑器，临时改字段值再复制</li>\n    <li>多行 JdbcTemplate 日志漏捕获修复</li>\n    <li>SQL 日志去重失效 + MP 分页计数误标双根因修复</li>\n    <li>SQL 日志双击预览平台断言硬抛崩溃修复</li>\n    <li>自研 DAO 字符串 SQL 预览 + 方法定义处锚点贯通</li>\n    <li>「项目启动时自动开始监听」联动失效与手动停止后永不自动捕捉修复</li>\n    <li>设置页缓存信息恒 0 B 修复</li>\n</ul>",
@@ -108,6 +120,12 @@
     "summaryZh": "JdbcTemplate / NamedParameterJdbcTemplate SQL 字符串源码预览"
   },
   {
+    "version": "2026.9.2",
+    "date": "2026-09-02",
+    "notesHtml": "<ul>\n    <li>SQL 预览面板原生 Database 控制台内嵌</li>\n    <li>SQL 预览原生语法高亮 + 智能补全</li>\n    <li>JPA/Hibernate：HQL 关联字段解析 + Hibernate XML 映射支持 + maintainPage XML 预览</li>\n    <li>SQL 日志合并主侧边栏 + 精确跳转源码 + 自动保存历史 + 两级导航</li>\n    <li>JOIN 关系图自绘 Swing 引擎</li>\n    <li>Spring JdbcTemplate SQL 日志捕获</li>\n    <li>设置页左侧树导航 + 折叠面板 + 搜索过滤</li>\n</ul>",
+    "summaryZh": "SQL 预览面板原生 Database 控制台内嵌"
+  },
+  {
     "version": "2026.8.21",
     "date": "2026-08-22",
     "notesHtml": "<ul>\n    <li>JPA/Hibernate SQL 预览支持</li>\n    <li>Hibernate/JPA SQL 日志捕获支持</li>\n    <li>SQL→Java 反向子查询 JOIN 解析 + MConsumer 形态</li>\n    <li>JPA 分页修复（Pageable → LIMIT）+ @Query 路由优先</li>\n    <li>JPQL IN 子句三层修复 + 复制时剥离注释</li>\n</ul>",
@@ -118,5 +136,47 @@
     "date": "2026-08-21",
     "notesHtml": "<ul>\n    <li>参数导入交互体验升级</li>\n    <li>内存泄漏修复（面板 Disposer 树注册）</li>\n    <li>SQL 监听手动启动无需等待项目运行 + 解析兼容前缀与 SQL 分行形态</li>\n    <li>插件自更新静默失败修复</li>\n    <li>SQL→Java 调用类校验+ 当前打开类智能识别</li>\n    <li>MPJ 工厂链 selectAll 双图标修复</li>\n    <li>IN 子句参数多值回填 + 关键字换行格式化</li>\n    <li>ReadAction.compute 废弃 API 修复</li>\n</ul>",
     "summaryZh": "参数导入交互体验升级"
+  },
+  {
+    "version": "2026.8.19",
+    "date": "2026-08-19",
+    "notesHtml": "<ul>\n    <li>废弃API全量清理 + 插件更新机制修复</li>\n    <li>IService 内置 CRUD 方法预览支持无 Entity 后缀实体类</li>\n    <li>功能截图替换 + Marketplace Custom Page</li>\n</ul>",
+    "summaryZh": "废弃API全量清理 + 插件更新机制修复"
+  },
+  {
+    "version": "2026.8.18",
+    "date": "2026-08-18",
+    "notesHtml": "<ul>\n    <li>监听启动时机修正</li>\n    <li>关闭工具窗口时停止监听设置生效</li>\n    <li>SQL 日志列表改为正序 + 工具栏捕捉按钮状态实时刷新</li>\n    <li>项目停止后监听不关闭修复</li>\n    <li>第一条 SQL 丢失修复 + 手动停止后重启不再自动开启</li>\n    <li>SQL→Java 联表反向转换修复</li>\n    <li>invocationHasMpj 接口继承 + 泛型超类型误判修复</li>\n    <li>selectAs 字符串联接 + VO-only + VO 属性方法引用修复</li>\n    <li>实体选择弹窗唯一推断时跳过+ notificationGroup schema 报错修复</li>\n</ul>",
+    "summaryZh": "监听启动时机修正"
+  },
+  {
+    "version": "2026.8.17",
+    "date": "2026-08-17",
+    "notesHtml": "<ul>\n    <li>SQL→Java 生成代码三改进</li>\n    <li>调用方法按调用类真实 API 选择</li>\n    <li>UPSERT 按方言渲染与反向分页宽容</li>\n    <li>日志五项修复</li>\n    <li>三处图标统一优化 + 功能截图 5 张入库</li>\n    <li>SQL→Java 右键预览高亮 + 快捷键可配置</li>\n    <li>SQL→Java 调用形态按 MPJ 1.5.6 实证重写 + 性能修复</li>\n    <li>手动选择实体类 + AUTO 形态 @TableName 反查 + ? 占位符反向识别</li>\n</ul>",
+    "summaryZh": "SQL→Java 生成代码三改进"
+  },
+  {
+    "version": "2026.8.16",
+    "date": "2026-08-16",
+    "notesHtml": "<ul>\n    <li>SQL 日志工具窗口 + SQL→Java 双向转换</li>\n    <li>反向联表修复</li>\n    <li>invocationHasMpj 接口继承 + 泛型超类型误判修复</li>\n    <li>实体选择弹窗唯一推断时跳过 + notificationGroup schema 报错修复</li>\n</ul>",
+    "summaryZh": "SQL 日志工具窗口 + SQL→Java 双向转换"
+  },
+  {
+    "version": "2026.8.15",
+    "date": "2026-08-15",
+    "notesHtml": "<ul>\n    <li>XML + 注解动态 SQL 预览引擎</li>\n    <li>更新链路全面兼容</li>\n    <li>SQL→Java 反向 ? 占位符识别缺陷修复</li>\n</ul>",
+    "summaryZh": "XML + 注解动态 SQL 预览引擎"
+  },
+  {
+    "version": "2026.8.14",
+    "date": "2026-08-14",
+    "notesHtml": "<ul>\n    <li>官方 API 全覆盖 + 批量参数增强</li>\n    <li>SQL→Java 反向转换增强 + 方言全兼容</li>\n</ul>",
+    "summaryZh": "官方 API 全覆盖 + 批量参数增强"
+  },
+  {
+    "version": "2026.8.13",
+    "date": "2026-08-13",
+    "notesHtml": "<ul>\n    <li>首发版本：MP SQL 预览弹窗 + Gutter 图标 + 工具窗口</li>\n    <li>基础正向渲染 + 历史参数召回</li>\n</ul>",
+    "summaryZh": "首发版本：MP SQL 预览弹窗 + Gutter 图标 + 工具窗口"
   }
 ]

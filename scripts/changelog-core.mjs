@@ -145,26 +145,54 @@ export function firstSummaryText(sectionHtml) {
 }
 
 /**
+ * 版本号即日期（`YYYY.M.D`）时的兜底日期：草稿 / 已隐藏 / 已删除的版本不在 updates
+ * API 里，Marketplace 任何公开位置也不给它们日期，只能用版本号推。实测约一半正式
+ * 版本的实际上架日期与版本号同日，其余差 1~4 天（上架流程延迟），故这是近似值。
+ */
+export function dateFromVersion(version) {
+  const m = String(version).match(/^(\d{4})\.(\d{1,2})\.(\d{1,2})$/)
+  if (!m) return null
+  const [, y, mo, d] = m
+  return `${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}`
+}
+
+/**
  * API 原始数组 → 页面用的版本条目（倒序）。
  *
  * 内容一律取最新一条 notes 的累计日志（后台当前状态），版本号与上架日期取各条 API
  * 记录。老快照只作回退：最新日志缺该版本（刚上架、累计日志还没带上）时才用。
+ *
+ * 累计日志里有、API 里没有的版本（草稿 / 已隐藏 / 已删除——实测 2026.10.26 在后台是
+ * Approved·Hidden，故被公开 API 略去）也一并补出，日期用版本号推导，与 Marketplace
+ * 公开页 What's New 的 30 版口径一致。
  */
 export function buildEntries(raw) {
   const updates = collectUpdates(raw)
   if (!updates.length) return []
   const sections = parseSections(updates[0].notes)
-  return updates.map((u) => {
+  const byVersion = new Map()
+  for (const u of updates) {
     const version = normVersion(u.version)
     const own = sections.get(version) ?? extractOwnSection(u.notes, version)
     const notesHtml = sanitizeHtml(own ?? u.notes ?? '')
-    return {
+    byVersion.set(version, {
       version,
       date: toDate(u.cdate),
       notesHtml,
       summaryZh: firstSummaryText(notesHtml),
-    }
-  })
+    })
+  }
+  for (const [version, html] of sections) {
+    if (byVersion.has(version) || !dateFromVersion(version)) continue
+    const notesHtml = sanitizeHtml(html)
+    byVersion.set(version, {
+      version,
+      date: dateFromVersion(version),
+      notesHtml,
+      summaryZh: firstSummaryText(notesHtml),
+    })
+  }
+  return [...byVersion.values()].sort(compareEntries)
 }
 
 function versionParts(version) {
