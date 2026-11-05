@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.3",
-  "source": "env:PLUGIN_VERSION",
-  "syncedAt": "2026-11-03T15:53:44.359Z"
+  "version": "2026.11.4",
+  "source": "plugin-repo:gradle.properties",
+  "syncedAt": "2026-11-05T03:21:32.221Z"
 }
