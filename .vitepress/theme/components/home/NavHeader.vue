@@ -1,13 +1,25 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, watchPostEffect, onMounted, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
 import PagefindSearch from '../PagefindSearch.vue'
 import SectionNav from './SectionNav.vue'
 import { useHomeContent } from '../../composables/useHomeContent'
 import { trackDownload } from '../../composables/useTracker'
+import { useThemeTransition } from '../../composables/useThemeTransition'
 
 const { isDark } = useData()
-const { c } = useHomeContent()
+const { c, localePath } = useHomeContent()
+const { toggle: toggleTheme } = useThemeTransition()
+
+// title / aria 挂载后再写：SSR 阶段 isDark 恒为 false，直接绑定的话暗色用户
+// 水合时会与首屏不一致（与模板里两个图标常驻同一类问题）。初值取亮色态文案，
+// 这样首帧按钮就有可读的名字，暗色用户在水合后由 watchPostEffect 纠正
+const themeToggleTitle = ref(c.value.nav.themeToDark)
+const themeToggleAria = ref(c.value.nav.themeAriaDark)
+watchPostEffect(() => {
+  themeToggleTitle.value = isDark.value ? c.value.nav.themeToLight : c.value.nav.themeToDark
+  themeToggleAria.value = isDark.value ? c.value.nav.themeAriaLight : c.value.nav.themeAriaDark
+})
 
 const scrolled = ref(false)
 const mobileOpen = ref(false)
@@ -72,10 +84,17 @@ onUnmounted(() => {
         </span>
         -->
 
-        <div class="logo-area">
-          <img src="/logo.svg" alt="Logo" class="nav-logo" />
+        <!-- 品牌区是回首页的入口：href 走 localePath，英文站回 /en/ 而不是掉回中文站。
+             首页是 layout:false 自绘顶栏，拿不到 VitePress 的 VPNavBarTitle（那边天生是 <a>），
+             这块以前一直是裸 <div>，点了没反应。 -->
+        <a
+          class="logo-area"
+          :href="localePath('/')"
+          aria-label="SQL Visualizer"
+        >
+          <img src="/logo.svg" alt="" class="nav-logo" aria-hidden="true" />
           <span class="logo-text">SQL Visualizer</span>
-        </div>
+        </a>
 
         <nav class="nav-links">
           <a v-for="link in c.nav.links" :key="link.href" :href="link.href" class="nav-link">
@@ -122,17 +141,21 @@ onUnmounted(() => {
               </Transition>
             </div>
 
+            <!-- 两个图标都渲染、用 CSS 按 .dark 切换显隐：SSR 阶段拿不到 localStorage，
+                 若用 v-if="isDark" 判断，暗色用户水合时图标与 title 会和首屏不一致
+                 （实测报 Hydration completed but contains mismatches）。title / aria 也同理，
+                 挂载后再补，形态对齐 VitePress 自己的 VPSwitchAppearance。 -->
             <button
               class="theme-toggle"
-              :title="isDark ? c.nav.themeToLight : c.nav.themeToDark"
-              :aria-label="isDark ? c.nav.themeAriaLight : c.nav.themeAriaDark"
-              @click="isDark = !isDark"
+              :title="themeToggleTitle"
+              :aria-label="themeToggleAria"
+              @click="toggleTheme($event, $event.currentTarget)"
             >
-              <svg v-if="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                 <circle cx="12" cy="12" r="4" />
                 <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
               </svg>
-              <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
               </svg>
             </button>
@@ -336,6 +359,14 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-area:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 .nav-logo {
@@ -499,6 +530,26 @@ onUnmounted(() => {
   width: 1.125rem;
   height: 1.125rem;
   flex-shrink: 0;
+}
+
+/* 明暗图标按 .dark 显隐（理由见模板注释）：暗色下露太阳（点了切回亮色），
+   亮色下露月亮。写成整条 :global(...)，避免 scoped 把 .dark 部分编译丢；
+   带 html 前缀是为了让暗色规则的选择器权重高过上面的 scoped 规则，
+   不依赖压缩器把两条规则排成什么顺序 */
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+.theme-toggle .icon-moon {
+  display: block;
+}
+
+:global(html.dark .theme-toggle .icon-sun) {
+  display: block;
+}
+
+:global(html.dark .theme-toggle .icon-moon) {
+  display: none;
 }
 
 .nav-lang-label {

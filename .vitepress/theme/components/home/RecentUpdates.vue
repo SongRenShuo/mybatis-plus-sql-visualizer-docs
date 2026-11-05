@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { useHomeContent } from '../../composables/useHomeContent'
 import updatesData from '../../../data/latest-updates.json'
 import { buildEntries, buildLatestUpdates } from '../../../../scripts/changelog-core.mjs'
+import { getLiveUpdates } from '../../composables/liveUpdates'
 
 /**
  * 「最近更新」轻区块：PricingSection 与 CtaSection 之间，渲染最新 3 个版本。
@@ -37,12 +38,10 @@ function fillFromSnapshot(list) {
 }
 
 async function syncFromMarketplace() {
-  const res = await fetch('/api/changelog', {
-    headers: { Accept: 'application/json' },
-    signal: AbortSignal.timeout(10000),
-  })
-  if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  const live = buildEntries(await res.json())
+  // 与首屏版本号共用一次请求（见 composables/liveUpdates.js）
+  const raw = await getLiveUpdates()
+  if (!raw) return
+  const live = buildEntries(raw)
   if (!live.length) return
   const next = fillFromSnapshot(buildLatestUpdates(live, { updates: staticUpdates }, 3))
   if (JSON.stringify(next) !== JSON.stringify(updates.value)) updates.value = next

@@ -24,6 +24,7 @@ import FeedbackPage from './components/feedback/FeedbackPage.vue'
 
 // 访问埋点
 import { setupTracker } from './composables/useTracker'
+import { useThemeTransition } from './composables/useThemeTransition'
 
 // 自定义样式
 import './style.css'
@@ -82,6 +83,24 @@ export default {
     let scrollHandler: (() => void) | null = null
     let outlineHandler: (() => void) | null = null
 
+    // 文档页与移动端导航里的明暗开关是 VitePress 默认的 VPSwitchAppearance，
+    // 它自己直接改 isDark，接不上首页那套圆形揭示动画。这里在捕获阶段把点击
+    // 拦下来交给同一个 toggle；若哪天 VitePress 换了类名，拦截失效但开关照旧能用，
+    // 只是退回无动画的瞬时切换，不会把功能弄坏。
+    const { toggle: toggleThemeWithTransition } = useThemeTransition()
+    const onAppearanceClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null
+      const btn = target?.closest?.('.VPSwitchAppearance') as HTMLElement | null
+      if (!btn) return
+      e.preventDefault()
+      e.stopPropagation()
+      toggleThemeWithTransition(e, btn)
+    }
+
+    onMounted(() => {
+      document.addEventListener('click', onAppearanceClick, true)
+    })
+
     onMounted(() => {
       const nav = document.querySelector('.VPNav')
       if (!nav) return
@@ -135,6 +154,7 @@ export default {
       if (outlineHandler) {
         window.removeEventListener('scroll', outlineHandler)
       }
+      document.removeEventListener('click', onAppearanceClick, true)
     })
   }
 } satisfies Theme
