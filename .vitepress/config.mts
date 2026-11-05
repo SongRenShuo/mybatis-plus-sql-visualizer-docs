@@ -67,7 +67,9 @@ export default defineConfig({
 
   // docs/ 为内部文档（开发计划、开发笔记、发行说明、验收文档、SQL 文件、memory-archive），
   // 不面向访客：直接从构建源排除，既不出页面，也不进 sitemap 与搜索索引。
-  srcExclude: ['docs/**', 'README.md'],
+  // tmp/ 是临时工作目录（探针脚本、构建日志、验收截图），同样不能出页面——
+  // 2026-11-05 发现它此前没被排除，临时写进 tmp/ 的 markdown 会直接发布成公开页。
+  srcExclude: ['docs/**', 'tmp/**', 'README.md'],
 
   title: 'SQL Visualizer',
   description: siteDescription,
@@ -162,7 +164,7 @@ export default defineConfig({
     // 防止有人临时改动 srcExclude 时内部文档混进 llms 索引。
     // ignoreFiles 为 minimatch 模式，匹配相对 srcDir 的路径；`docs/**` 递归排除 docs/ 下所有层级文件
     plugins: [pagefindDevAssets(), llmstxt({
-      ignoreFiles: ['docs/**']
+      ignoreFiles: ['docs/**', 'tmp/**']
     })],
     server: {
       // 本地 dev 关闭 HMR 错误遮罩：缺静的 GIF（录制中）触发 import-analysis 全遮罩，妨碍调试与页面验收

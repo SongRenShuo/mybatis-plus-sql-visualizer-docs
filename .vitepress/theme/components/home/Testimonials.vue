@@ -27,7 +27,11 @@ const cards = computed(() =>
       const value = zh
         ? `${facts.versions.value} 个版本 / ${facts.days.value} 天`
         : `${facts.versions.value} releases in ${facts.days.value} days`
-      return { ...t, value }
+      // 首版日期跟着实时数据走：写死在文案里会和「N 天」自相矛盾
+      const label = facts.firstDate.value
+        ? `${zh ? '首版' : 'First release'} ${facts.firstDate.value}`
+        : t.label
+      return { ...t, value, label }
     }
     return t
   }),

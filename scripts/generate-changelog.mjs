@@ -17,7 +17,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { buildEntries, buildLatestUpdates, collectUpdates, toDate } from './changelog-core.mjs'
+import { buildEntries, buildLatestUpdates, collectUpdates, factsFromEntries } from './changelog-core.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(here, '..')
@@ -94,23 +94,8 @@ function writeIfChanged(file, content, label) {
 }
 
 // ---------- 事实卡读数（facts.json：构建期兜底，前台经 /api/plugin-info 实时刷新） ----------
-
-function buildFacts(updates, downloads) {
-  const dates = updates
-    .map((u) => Date.parse(toDate(u.cdate)))
-    .filter((n) => !Number.isNaN(n))
-  const firstDate = dates.length ? new Date(Math.min(...dates)).toISOString().slice(0, 10) : null
-  const days = firstDate
-    ? Math.max(1, Math.round((Date.now() - Date.parse(firstDate)) / 86400000))
-    : null
-  return {
-    downloads: Number.isFinite(downloads) ? downloads : null,
-    versions: updates.length,
-    firstDate,
-    days,
-    syncedAt: new Date().toISOString().slice(0, 10),
-  }
-}
+// 版本数 / 首版 / 天数由 changelog-core 的 factsFromEntries 统一算（与前端实时同规则），
+// 口径是「更新日志页列出的版本」，不是 Marketplace 列表接口的条数——后者默认只回 20 条。
 
 // ---------- 主流程 ----------
 
@@ -167,7 +152,11 @@ async function main() {
       /* 首次生成 */
     }
   }
-  const changed3 = writeIfChanged(FACTS_OUT, `${JSON.stringify(buildFacts(updates, downloads), null, 2)}\n`, 'facts.json')
+  const changed3 = writeIfChanged(
+    FACTS_OUT,
+    `${JSON.stringify(factsFromEntries(entries, downloads), null, 2)}\n`,
+    'facts.json',
+  )
 
   console.log(
     `[changelog] 共 ${entries.length} 版，最新 ${entries

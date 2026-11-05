@@ -48,27 +48,22 @@ The shortcut requires the caret to be **on a concrete code element** — a varia
 
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper preview demo: cursor on a Wrapper chain, SQL generated in a popup" />
 
-<code-group>
-<div title="Java Code">
+::: code-group
 
-```java
+```java [Java Code]
 LambdaQueryWrapper<DeviceInfoEntity> wrapper = new LambdaQueryWrapper<DeviceInfoEntity>()
     .eq(DeviceInfoEntity::getId, 1001L)
     .isNotNull(DeviceInfoEntity::getStationId);
 ```
 
-</div>
-<div title="Generated SQL">
-
-```sql
+```sql [Generated SQL]
 SELECT id, station_id, share_scheme_id
 FROM device_info_entity
 WHERE id = 1001
     AND station_id IS NOT NULL
 ```
 
-</div>
-</code-group>
+:::
 
 Once you can see the SQL, there is a bit more to try in the preview panel: the "EXPLAIN" button wraps the SQL into an EXPLAIN statement for the current dialect and submits it to the native database console, showing the real execution plan (requires IntelliJ IDEA Ultimate with a configured data source).
 

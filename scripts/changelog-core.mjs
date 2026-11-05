@@ -252,3 +252,23 @@ export function buildLatestUpdates(entries, existing, count = 3) {
     }
   })
 }
+
+/**
+ * 事实卡读数（版本数 / 首版日期 / 天数）：构建期兜底与前端实时共用同一套规则。
+ *
+ * 口径取「更新日志页上列出的版本」而不是 Marketplace 列表页的条数：
+ * 列表接口默认只回 20 条、会把最早的几版截掉，而日志页由 buildEntries 从累计
+ * 日志补全（含未上架版本），两边对不上时卡片会少报版本数、天数也会算错。
+ */
+export function factsFromEntries(entries, downloads = null, now = Date.now()) {
+  const dates = entries.map((e) => e.date).filter(Boolean).sort()
+  const firstDate = dates[0] ?? null
+  const days = firstDate ? Math.max(1, Math.round((now - Date.parse(firstDate)) / 86400000)) : null
+  return {
+    downloads: Number.isFinite(downloads) ? downloads : null,
+    versions: entries.length,
+    firstDate,
+    days,
+    syncedAt: new Date(now).toISOString().slice(0, 10),
+  }
+}

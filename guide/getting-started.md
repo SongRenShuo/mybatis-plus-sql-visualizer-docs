@@ -49,27 +49,22 @@
 
 <GifPlayer src="/demo/wrapper-preview.gif" alt="Wrapper 预览演示：光标置于 Wrapper 链，弹窗实时生成 SQL" />
 
-<code-group>
-<div title="Java 代码">
+::: code-group
 
-```java
+```java [Java 代码]
 LambdaQueryWrapper<DeviceInfoEntity> wrapper = new LambdaQueryWrapper<DeviceInfoEntity>()
     .eq(DeviceInfoEntity::getId, 1001L)
     .isNotNull(DeviceInfoEntity::getStationId);
 ```
 
-</div>
-<div title="生成的 SQL">
-
-```sql
+```sql [生成的 SQL]
 SELECT id, station_id, share_scheme_id
 FROM device_info_entity
 WHERE id = 1001
     AND station_id IS NOT NULL
 ```
 
-</div>
-</code-group>
+:::
 
 看到 SQL 之后还可以再走一步：点预览面板的「执行计划」（英文界面 EXPLAIN）按钮，插件把当前 SQL 按方言包装成 EXPLAIN 语句提交原生数据库控制台，查看真实执行计划（需 IntelliJ IDEA Ultimate 且已配置数据源）。
 
