@@ -40,12 +40,21 @@ export function useThemeTransition() {
       return
     }
 
-    // 键盘触发的 click 事件 clientX/clientY 都是 0，这时退回按钮几何中心；
-    // 拿不到按钮再退回右上角（顶栏开关的常规位置）。
-    const rect = el?.getBoundingClientRect()
-    const fromPointer = Boolean(event && (event.clientX || event.clientY))
-    const x = fromPointer ? event!.clientX : rect ? rect.left + rect.width / 2 : window.innerWidth - 40
-    const y = fromPointer ? event!.clientY : rect ? rect.top + rect.height / 2 : 40
+    // 出发点按方向分开（取法 cool-request-web）：
+    //   切到亮色 —— 固定从视口左下角起，光像从底部「掀」上来，整页一起亮；
+    //   切到暗色 —— 从点击处起，暗色像从你按下的那颗按钮渗开。
+    // 两个方向的观感因此不一样，而不是永远从按钮扩散。
+    const toLight = !next
+    let x = 0
+    let y = window.innerHeight
+    if (!toLight) {
+      // 键盘触发的 click 事件 clientX/clientY 都是 0，这时退回按钮几何中心；
+      // 拿不到按钮再退回右上角（顶栏开关的常规位置）。
+      const rect = el?.getBoundingClientRect()
+      const fromPointer = Boolean(event && (event.clientX || event.clientY))
+      x = fromPointer ? event!.clientX : rect ? rect.left + rect.width / 2 : window.innerWidth - 40
+      y = fromPointer ? event!.clientY : rect ? rect.top + rect.height / 2 : 40
+    }
     const radius = Math.hypot(
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y),
