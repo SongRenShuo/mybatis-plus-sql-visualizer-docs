@@ -78,6 +78,7 @@ The dialect count goes from 11 to 14: GaussDB is split out of the merged openGau
 | MySQL / MariaDB | `LIMIT [offset,] count` |
 | OceanBase (MySQL mode) | `LIMIT [offset,] count` |
 | DM (Dameng) | `LIMIT [offset,] count` |
+| GoldenDB | `LIMIT [offset,] count` |
 | PostgreSQL / openGauss | `LIMIT count OFFSET offset` |
 | KingBase | `LIMIT count OFFSET offset` |
 | GaussDB / HighGo / Vastbase | `LIMIT count OFFSET offset` |

@@ -46,6 +46,7 @@ Wrapper 锚点涉及批量操作时，弹窗自动切换到批量参数面板。
 | 方言 | 冲突子句 |
 |------|---------|
 | MySQL / MariaDB / OceanBase（MySQL 模式） | `ON DUPLICATE KEY UPDATE` |
+| GoldenDB（金篆） | `ON DUPLICATE KEY UPDATE`（MySQL 形态） |
 | openGauss | `ON DUPLICATE KEY UPDATE`（不是 PG 的 `ON CONFLICT`） |
 | GaussDB | `ON DUPLICATE KEY UPDATE`（同 openGauss；A 兼容模式实证/在册） |
 | PostgreSQL / KingBase（金仓）/ SQLite / HighGo（瀚高）/ Vastbase（海量） | `ON CONFLICT (key) DO UPDATE SET`（海量 A 模式实证两种形态均可用，取 PG 形态） |

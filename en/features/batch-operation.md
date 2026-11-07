@@ -46,6 +46,7 @@ Auto-determine quoting by field type:
 | Dialect | Conflict Clause |
 |---------|----------------|
 | MySQL / MariaDB / OceanBase (MySQL mode) | `ON DUPLICATE KEY UPDATE` |
+| GoldenDB | `ON DUPLICATE KEY UPDATE` (MySQL form) |
 | openGauss | `ON DUPLICATE KEY UPDATE` (not PG's `ON CONFLICT`) |
 | GaussDB | `ON DUPLICATE KEY UPDATE` (same as openGauss) |
 | PostgreSQL / KingBase / SQLite / HighGo / Vastbase | `ON CONFLICT (key) DO UPDATE SET` (both forms verified on Vastbase A-mode; PG form chosen) |
