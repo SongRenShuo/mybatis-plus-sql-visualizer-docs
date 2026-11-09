@@ -76,7 +76,7 @@ description: "查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL—�
 
 | 方言 | 分页语法 |
 |------|---------|
-| MySQL / MariaDB | `LIMIT [offset,] count` |
+| MySQL / MariaDB / GoldenDB | `LIMIT [offset,] count` |
 | OceanBase（MySQL 模式） | `LIMIT [offset,] count` |
 | DM（达梦） | `LIMIT [offset,] count` |
 | PostgreSQL / openGauss | `LIMIT count OFFSET offset` |
