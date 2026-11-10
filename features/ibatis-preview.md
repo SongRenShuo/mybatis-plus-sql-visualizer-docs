@@ -9,7 +9,7 @@ iBatis 2.x 的 `<sqlMap>` 文件与 MyBatis mapper 同待遇：语句预览、SQ
 
 渲染口径以 iBatis 官方 2.3.4.726 引擎做黄金对照——不连数据库直取引擎真值，20 种典型形态逐字节一致，包括「`prepend` 逐字拼接不补空格」这类反直觉行为（真实输出会出现 `ANDORG_NAME` 这种粘连，预览原样复现、不做美化）。
 
-<GifPlayer src="/demo/ib1_ibatis_preview.gif" alt="iBatis 2.x 语句预览：点 User.xml 的 selectByCondition 语句行 gutter 图标弹出预览，动态条件逐框勾选（ID = 1 / STATUS = 1 / AGE > 19 逐段进 WHERE），username 条件填值 tom 后 SQL 实时出现 USER_NAME LIKE '%tom%'——勾选与填值都按 iBatis 引擎语义即时渲染，不满足条件的段由引擎裁掉" />
+<GifPlayer src="/demo/ib1_ibatis_preview.gif" alt="iBatis 2.x 语句预览：点 User.xml 的 selectByCondition 语句行 gutter 图标弹出预览，点「全选」四条件齐勾、WHERE 三段（ID = 1 / STATUS = 1 / AGE > 19）同时出现；取消勾 isNotNull: id 后 AND ID = 1 消失、勾回还原；username 条件填值 tom 后 SQL 实时出现 USER_NAME LIKE '%tom%'——勾选与填值都按 iBatis 引擎语义即时渲染，不满足条件的段由引擎裁掉" />
 
 ## 触发方式
 

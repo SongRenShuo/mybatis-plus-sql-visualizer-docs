@@ -9,7 +9,7 @@ iBatis 2.x `<sqlMap>` files get the same treatment as MyBatis mappers: statement
 
 Rendering fidelity is golden-checked against the official iBatis 2.3.4.726 engine — values captured from the engine itself without a database, across 20 typical forms, byte-for-byte identical. That includes counter-intuitive behaviors such as "prepend concatenates verbatim without adding a space": a real run can produce glued text like `ANDORG_NAME`, and the preview reproduces it as-is rather than prettifying it.
 
-<GifPlayer src="/demo/ib1_ibatis_preview.gif" alt="iBatis 2.x statement preview: clicking the gutter icon on User.xml's selectByCondition statement line opens the preview; ticking the dynamic conditions one by one feeds ID = 1 / STATUS = 1 / AGE > 19 into the WHERE clause segment by segment, and typing tom into the username condition makes USER_NAME LIKE '%tom%' appear in real time — both toggles and fills render immediately under official iBatis engine semantics, and segments whose condition is not met are cut by the engine" />
+<GifPlayer src="/demo/ib1_ibatis_preview.gif" alt="iBatis 2.x statement preview: clicking the gutter icon on User.xml's selectByCondition statement line opens the preview; Select all ticks every condition at once and the WHERE clause gains ID = 1 / STATUS = 1 / AGE > 19 immediately; unticking isNotNull: id drops AND ID = 1 and re-ticking restores it; typing tom into the username condition makes USER_NAME LIKE '%tom%' appear in real time — toggles and fills all render live under official iBatis engine semantics, and segments whose condition is not met are cut by the engine" />
 
 ## Trigger
 
