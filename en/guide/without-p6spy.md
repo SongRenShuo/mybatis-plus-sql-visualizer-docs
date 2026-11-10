@@ -28,6 +28,8 @@ The [SQL Log tool window](/en/features/sql-log) shows complete SQL without touch
 - **Enhanced capture** (on by default): once the application starts, the plugin attaches capture points inside the application JVM on your machine; executed SQL arrives in the list with real parameters, timings and affected rows, each entry carrying a call stack that jumps precisely back to the source line that triggered it
 - **Console capture** (fallback channel): parses `Preparing:` / `Parameters:` lines in the run console (including the `==> Preparing:` mixed-prefix form) and joins the parameters back into the statement automatically
 
+<GifPlayer src="/demo/enhanced-capture.gif" alt="Enhanced capture: entries stream in with real parameters, millisecond durations, database badges and execution errors side by side, with source locations down to the code line" />
+
 Already using p6spy is no conflict either: its output goes to the application log, and the plugin's console channel parses MyBatis-form logs — the two travel their own separate channels.
 
 The restored SQL is ready to use — watch it in the IDE as you develop, without adding a proxy driver to the project just to see one statement.

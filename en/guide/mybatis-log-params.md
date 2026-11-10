@@ -37,4 +37,6 @@ The [SQL Log tool window](/en/features/sql-log) does this inside the IDE, on two
 - **Enhanced capture** (on by default): once the application starts, the plugin attaches capture points inside the application JVM on your machine; executed SQL arrives in the list with real parameters, timings and affected rows, each entry carrying a call stack that jumps precisely back to the source line that triggered it
 - **Console capture** (fallback channel): parses `Preparing:` / `Parameters:` lines in the run console (including the `==> Preparing:` mixed-prefix form) and joins the parameters back into the statement automatically — no project changes required
 
+<GifPlayer src="/demo/sql-log.gif" alt="Restored complete SQL in the SQL Log tool window: entries carry timestamps, millisecond durations and target-database badges, with parameters shown as real values" />
+
 The restored SQL is ready to use — no p6spy, no log configuration changes. Install the plugin and watch.
