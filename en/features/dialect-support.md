@@ -1,13 +1,13 @@
 ---
 title: "Database Dialect Support Matrix"
-description: "14-dialect matrix: MySQL, PostgreSQL, Oracle, SQL Server, DM, KingBase, GaussDB, OceanBase, openGauss and more — per-dialect pagination rendering and EXPLAIN."
+description: "15-dialect matrix: MySQL, PostgreSQL, Oracle, SQL Server, DM, KingBase, GaussDB, OceanBase, openGauss, GoldenDB and more — per-dialect pagination rendering and EXPLAIN."
 ---
 
 # Database Dialect Support Matrix
 
-The plugin ships with 14 SQL dialects, used for rendering SQL from Wrappers, XML / annotation dynamic SQL, JPA / Hibernate and other sources (pagination, identifier quoting, UPSERT, batch inserts), as well as dialect detection for execution plans and enhanced capture.
+The plugin ships with 15 SQL dialects, used for rendering SQL from Wrappers, XML / annotation dynamic SQL, JPA / Hibernate and other sources (pagination, identifier quoting, UPSERT, batch inserts), as well as dialect detection for execution plans and enhanced capture.
 
-**Will my database work?** Mainstream databases are covered — MySQL, MariaDB, PostgreSQL, Oracle, SQL Server, SQLite, H2, DM (Dameng), KingBase, OceanBase, openGauss, GaussDB, HighGo and Vastbase, 14 dialects in total. The plugin renders SQL for your current dialect out of the box, no configuration needed; the full set has graduated from beta (since v2026.10.31 — see the [changelog](/en/about/changelog) for the per-version history).
+**Will my database work?** Mainstream databases are covered — MySQL, MariaDB, GoldenDB, PostgreSQL, Oracle, SQL Server, SQLite, H2, DM (Dameng), KingBase, OceanBase, openGauss, GaussDB, HighGo and Vastbase, 15 dialects in total. The plugin renders SQL for your current dialect out of the box, no configuration needed; the full set has graduated from beta (since v2026.10.31 — see the [changelog](/en/about/changelog) for the per-version history).
 
 ## Dialect quick reference
 
@@ -17,6 +17,7 @@ One row per dialect with the four things you look up most often. "First supporte
 |---------|-------------------------|----------------------|---------|-------------------|
 | MySQL | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN <sql>`, verified on a real engine | Table-row plan |
 | MariaDB | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` | `EXPLAIN <sql>`, verified on a real engine | Table-row plan |
+| GoldenDB (ZTE) | [See changelog](/en/about/changelog) | `LIMIT [offset,] count` | — (no execution-plan template registered) | — |
 | PostgreSQL | [See changelog](/en/about/changelog) | `LIMIT count OFFSET offset` | `EXPLAIN (FORMAT JSON, VERBOSE) <sql>`, verified on a real engine | JSON plan |
 | Oracle | [See changelog](/en/about/changelog) | `OFFSET n ROWS FETCH NEXT m ROWS ONLY` (`FETCH FIRST m ROWS ONLY` without an offset) | `EXPLAIN PLAN FOR <sql>`, verified on a real engine | Text plan |
 | SQL Server | [See changelog](/en/about/changelog) | `OFFSET {offset\|0} ROWS FETCH NEXT count ROWS ONLY` | `SET STATISTICS XML`, verified on the official image | Text plan |
@@ -35,6 +36,8 @@ One row per dialect with the four things you look up most often. "First supporte
 - SQL Server requires `OFFSET … FETCH` to follow `ORDER BY`: for pagination without sorting the plugin adds an `ORDER BY (SELECT NULL)` placeholder — without it the statement fails with a syntax error on a real engine
 - OceanBase's execution plan comes back as an OceanBase-specific ASCII plan tree (a single `Query Plan` column), presented as text
 - The GaussDB execution plan is documentation-only verified for now (real-engine readings still owed); HighGo / Vastbase were verified on community third-party images and OceanBase on a community-edition image
+- GoldenDB rendering shapes come from vendor documentation and driver-level comparison (the vendor driver against a MySQL 8.0-protocol instance, with a full 384-word reserved-word sweep PASS); it has not been verified on a GoldenDB engine; no execution-plan template is registered, so the capability matrix honestly reports it as unsupported
+- PanWeiDB: `jdbc:panwei:` / `jdbc:panweidb:` connections are recognized and enhanced capture is registered, with log badges showing "Panwei"; rendering always follows the Oracle dialect — PanWeiDB's SQL compatibility mode is decided by the database creation parameter (factory default A = Oracle), so libraries in PG / MySQL modes need a manual switch in the panel
 - Enhanced capture (the SQL log's enhanced channel) has no attach end-to-end readings yet for KingBase, HighGo or Vastbase; SQL rendering and preview are unaffected
 
 ::: details Evidence and verification records (for maintainers)
@@ -69,21 +72,23 @@ The word count in the "Rendering" column is the dialect's full reserved-word swe
 | GaussDb | GaussDB | Real-engine (Kernel 503) | PASS, 197 words | Documentation-only | Byte weaving | `e767edc7`, `afd3d091`, `20261031-1512` release notes |
 | HighGo | HighGo | Community-image | PASS, 153 words | Community image | Weaving + smoke test | `b29ca61e`, `427f69c9`, `20261030-1300` release notes |
 | Vastbase | Vastbase | Community-image | PASS, 201 words | Community image | Weaving + smoke test | `b29ca61e`, `427f69c9`, `d9f9262e` |
+| GoldenDb | GoldenDB (ZTE) | Documentation-only (driver-level substitute) | PASS, 384 words (vendor driver × MySQL 8.0.46-protocol instance) | Not registered | Driver-byte registration | `20261109-1705` release notes |
 
 Capture depths:
 
 - **attach end-to-end**: after attaching the agent to a real application, SQL events flowing back to the IDE have been observed.
 - **Weaving + smoke test**: real driver bytes passed weaving and JVM link-time verification, and a premain / attach smoke test ran on a real JVM (`matched` / `woven` counts, no host cast exception); IDE event round-trip is not verified.
 - **Byte weaving**: real driver bytes passed weaving and JVM link-time verification; no attach smoke test was run.
+- **Driver-byte registration**: the weaving faces are registered from real vendor-driver bytes (connection / statement / prepare), with no smoke test or attach reading.
 
 **Known limitations (level scope)**
 
 - Level scope: "Real-engine" means the rendering suite was executed on a standalone database instance (including instances deployed from official vendor images); "Community-image" is used only for community-edition or community third-party images (not a vendor commercial instance). H2 and SQLite are embedded engines — verification runs in-process but still counts as execution on a real engine.
-- Every one of the 14 dialects has a real-engine or image-instance rendering reading, but "all dialects verified on vendor official instances" does not hold: HighGo and Vastbase are community third-party images (HighGo is V6.0.1, not the V9 line); OceanBase was verified on a community-edition (OB CE) image; the GaussDB and openGauss readings both come from GaussDB Kernel 503.1.0 (a 2023 kernel with the legacy A/B/C/PG naming, not the new naming and keyword tables of openGauss 5.x / 6.x), and the official openGauss 5.0.0 instance could not create fixture tables because the public schema lacks CREATE privilege; commercial GaussDB requires Huawei authorization or a cloud instance and is not verified.
+- Every dialect except GoldenDB has a real-engine or image-instance rendering reading, but "all dialects verified on vendor official instances" does not hold: HighGo and Vastbase are community third-party images (HighGo is V6.0.1, not the V9 line); OceanBase was verified on a community-edition (OB CE) image; the GaussDB and openGauss readings both come from GaussDB Kernel 503.1.0 (a 2023 kernel with the legacy A/B/C/PG naming, not the new naming and keyword tables of openGauss 5.x / 6.x), and the official openGauss 5.0.0 instance could not create fixture tables because the public schema lacks CREATE privilege; commercial GaussDB requires Huawei authorization or a cloud instance and is not verified; GoldenDB only has vendor documentation and a driver-level substitute comparison, with no engine readings.
 - Enhanced capture has no attach end-to-end reading for KingBase, HighGo or Vastbase, so "enhanced capture verified" does not hold for these three.
 - SQL Server requires `OFFSET … FETCH` to follow `ORDER BY`; for pagination without sorting the plugin adds an `ORDER BY (SELECT NULL)` placeholder (`b0e79325`, verified on a real engine).
 - OceanBase `EXPLAIN` returns an OceanBase-specific ASCII plan tree (a single `Query Plan` column), which is handled as text (`58b8b5f3`, verified on a community image).
-- The dialect list is defined by `DialectRegistry.dialects` in the plugin repository — 14 entries; the settings dropdown order matches this table.
+- The dialect list is defined by `DialectRegistry.dialects` in the plugin repository — 15 entries; the settings dropdown order matches this table.
 
 **Evidence index**
 
@@ -104,6 +109,7 @@ Capture depths:
 | `20261010-1535` release notes | Plugin repository `docs/发行说明/20261010-1535-编码期能力补齐与增强捕获方言扩面-发行说明.md`: enhanced capture attach weaving expanded to running PostgreSQL / Oracle / SQL Server / Dameng DM8 applications |
 | `20261030-1300` release notes | Plugin repository `docs/发行说明/20261030-1300-十四方言与采集方言无关化-发行说明.md`: beta release for the 14 dialects and dialect-independent capture, including known limitations |
 | `20261031-1512` release notes | Plugin repository `docs/发行说明/20261031-1512-十四方言转正与动态标签补全修复-发行说明.md`: official 14-dialect release, including the GaussDB Kernel 503 and capture attach caveats |
+| `20261109-1705` release notes | Plugin repository `docs/发行说明/20261109-1705-内测-beta.1-iBatis2支持与GoldenDB方言与SQL列表提速-发行说明.md`: GoldenDB as the 15th dialect (rendering shapes from vendor documentation plus a driver-level comparison of the vendor driver against a MySQL 8.0-protocol instance, full 384-word sweep PASS) and three-face capture registration |
 | `DialectH2VerificationTest` | Plugin repository `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectH2VerificationTest.kt`: TC suite and reserved-word sweep on the embedded H2 2.3.232 engine |
 | `DialectSqliteVerificationTest` | Plugin repository `src/test/kotlin/cn/song/mybatisplus/visualizer/sql/verify/DialectSqliteVerificationTest.kt`: TC suite and reserved-word sweep on the embedded SQLite 3.50.3 engine |
 

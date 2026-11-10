@@ -15,6 +15,8 @@ mapper XML 的 `<select>` / `<update>` / `<delete>` / `<insert>` 行左侧 gutte
 
 自研框架的 mapper XML（根元素名不固定、SQL 写在自定义标签的 CDATA 或文本里，如 RFListPage）同样可预览：叶子标签的首段文本以 SELECT / INSERT / UPDATE / DELETE / WITH / REPLACE 开头即出现 gutter 图标，不依赖标签名与根元素名。
 
+自研框架 `<pages>` 页面 XML 的 `<datasource>` 也支持：判定为 HQL 时走 JPA / HQL 转换管道——实体名→表名、属性路径→列名、JOIN 副表实体映射、命名 / 位置参数提取，框架占位符（如 `#{SESSION_BASE_ORGAN}`）预处理成命名参数；预览面板给「来源: HQL（已转换）」与「原文」两个只读页签对照。源语言判定默认自动（按 entityClass 与语句根标识符的关系），设置页「自研框架数据源语言」可固定为仅 SQL / 仅 HQL 两档兜底。
+
 设置页「界面与操作」提供总开关「识别通用 XML 内嵌 SQL（叶子标签文本/CDATA）」，默认开。
 
 ::: details 通用 XML 的 HQL 载体（何时看：自定义标签里写的是 HQL 时）
@@ -27,10 +29,12 @@ mapper XML 的 `select` / `insert` / `update` / `delete` 标签行与 Mapper 接
 
 跳转目标按 `namespace` + 标签 `id` 解析，解析不到就不显示图标，也不会猜一个同名方法凑数。图标受设置页 gutter 总开关与「mapper XML 语句」分组开关控制。
 
+除点击图标外，跳转也接入了 IDEA 原生入口：Ctrl+B / Ctrl+Click 在 Mapper 接口方法与 XML 语句间双向跳转，Ctrl+Alt+Home 弹出「关联符号」选择——键位归平台 action 所有，在 Keymap 里改绑自动跟随。
+
 <GifPlayer src="/demo/mapper-nav-jump.gif" alt="Mapper 双向跳转：UserMapper.xml 里点 selectUserListByXml 语句行的跳转图标，编辑器落到 UserMapper 接口中同名的 selectUserListByXml 方法行；再点该接口方法行的跳转图标，跳回 XML 语句" />
 
 ::: details 与同类导航插件共存（何时看：装了 MyBatisCodeHelperPro 等同类插件时）
-同类 MyBatis 导航插件（当前登记 MyBatisCodeHelperPro）启用时，对方会在同一行画自己的跳转箭头，两枚图标叠在一行没有意义——插件默认**让出**这两个跳转图标。行为由设置项「与同类 MyBatis 导航插件共存时让出 Mapper 跳转图标」控制（默认开，在 gutter 分组开关同一区块）：关闭后即使对方在位也保留本插件图标。其余 gutter（SQL 预览、注解 SQL、JPA / HQL、JDBC、Wrapper 链等）不受让位影响。
+同类 MyBatis 导航插件（当前登记 MyBatisCodeHelperPro）启用时，对方会在同一行画自己的跳转箭头，两枚图标叠在一行没有意义——插件默认**让出**这两个跳转图标。行为由设置项「与同类 MyBatis 导航插件共存时让出 Mapper 跳转图标」控制（默认开，在 gutter 分组开关同一区块）：关闭后即使对方在位也保留本插件图标。其余 gutter（SQL 预览、注解 SQL、JPA / HQL、JDBC、Wrapper 链等）不受让位影响。让位门只作用于 MyBatis mapper 文件——iBatis 的跳转箭头照常显示，竞品没有 iBatis 能力、不存在图标冲突（见 [iBatis 2.x SQL 预览与跳转](./ibatis-preview)）。
 :::
 
 ## 支持的动态标签

@@ -9,8 +9,9 @@ Windows / Linux 与 macOS 的默认键位，以及各功能的入口方式。
 | SQL 预览（Wrapper / XML / 注解 / HQL·JPQL / 自定义 DAO HQL / JdbcTemplate / `@NamedQuery` / `.hbm.xml` 命名查询 / 方法体内字符串 SQL） | `Alt+Shift+Q` | `Option+Shift+Q` |
 | SQL → Java 反向转换 | `Alt+Shift+J` | `Cmd+Shift+J` |
 | 预览弹窗中执行 SQL（Ultimate + Database 插件） | `Ctrl+Enter` | `Cmd+Enter` |
+| Mapper / iBatis 双向跳转 | `Ctrl+B` / `Ctrl+Click`（`Ctrl+Alt+Home` 弹出关联符号） | `Cmd+B` / `Cmd+Click`（关联符号键位见 Keymap） |
 
-键位可在 IDE 的 `Settings` > `Keymap` 中搜索插件动作名自行修改。
+键位可在 IDE 的 `Settings` > `Keymap` 中搜索插件动作名自行修改。跳转快捷键归平台 action（gotoDeclarationHandler / gotoRelatedProvider）所有，Keymap 改绑自动跟随；未命中插件位置时回落平台原生行为。
 
 ## 非快捷键入口
 
@@ -19,7 +20,8 @@ Windows / Linux 与 macOS 的默认键位，以及各功能的入口方式。
 | SQL 预览 | 光标置于 Wrapper 链 / mapper 语句上 → 右键 `Convert to SQL`；或行首 gutter 图标（Wrapper 锚点左键直接预览、右键可选「最近执行记录」） |
 | 注解 SQL 预览 | `@Select` / `@Update` 等注解行的 gutter 图标 |
 | JPA / Hibernate 预览 | 派生方法 / CRUD 调用 / `@Query` / `@NamedQuery` / Criteria 链 / `.hbm.xml` 命名查询所在行的 gutter 图标 |
-| Mapper 双向跳转 | mapper XML 语句行与 Mapper 接口方法行的跳转 gutter 图标，点击互跳（与同类导航插件共存时默认让位） |
+| Mapper 双向跳转 | mapper XML 语句行与 Mapper 接口方法行的跳转 gutter 图标，点击互跳（与同类导航插件共存时默认让位）；也可 `Ctrl+B` / `Ctrl+Click` 双向、`Ctrl+Alt+Home` 弹关联符号 |
+| iBatis 2.x 预览与跳转 | `<sqlMap>` 语句行 gutter 图标；语句行与 Java DAO 调用行双向箭头（不受同类插件让位影响），详见 [iBatis 2.x SQL 预览与跳转](../features/ibatis-preview.md) |
 | EXPLAIN 执行计划 | 预览面板按钮行「执行计划」按钮（英文界面 EXPLAIN） |
 | SQL 快捷模板（EXPLAIN / COUNT / 抽样 10 行） | 在 mapper XML 或预览编辑器里选中表名 → 右键菜单「SQL 快捷模板」组；默认不占键位，可在插件设置页「快捷键」节或 Keymap 自绑 |
 | SQL → Java | 选中 SQL 文本 → 右键菜单；或工具窗口侧边栏 tab |

@@ -14,7 +14,7 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| Database Dialect | Auto-infer | Pagination / upsert clauses render per dialect; defaults to "Auto-infer", can be pinned manually, and leaving it empty at project level follows the global setting. See [Wrapper → SQL Preview · Dialect pagination](/en/features/wrapper-preview#_14-dialect-pagination) |
+| Database Dialect | Auto-infer | Pagination / upsert clauses render per dialect; defaults to "Auto-infer", can be pinned manually, and leaving it empty at project level follows the global setting. See [Wrapper → SQL Preview · Dialect pagination](/en/features/wrapper-preview#dialect-pagination) |
 | Replace `?` Placeholders | On | Off = variables also render as `?` |
 | Formatted Output | On | Multi-line indent (Off = single line) |
 | Vertical Layout Column Tags | On | In vertical layout, each INSERT value line end shows a pairing `-- column` annotation (the vertical-layout button tooltip likewise notes that this can be turned off here) |
@@ -28,9 +28,10 @@ No IDE restart needed: re-trigger a preview and the new settings apply.
 | Tenant Column Name | `tenant_id` | Column name used for tenant injection, adjustable per business (e.g. `org_id` / `shop_id`) |
 | Tenant Column Default | 1 | Literal default appended to UPDATE SET / INSERT tenant columns |
 | Append Tenant Column on INSERT | On | Sub-switch: the INSERT column list gets the tenant column appended (aligned with MP `TenantLineInnerInterceptor` INSERT semantics); INSERT only — requires Tenant Injection to be on, UPDATE / DELETE unaffected |
-| Simulate Pagination Interceptor (COUNT preview) | On | For mapper methods / XML / annotation statements taking a `Page` / `IPage` argument, the preview **appends the pagination clause** and **emits a COUNT wrapper alongside** (`SELECT COUNT(*) FROM (...) TOTAL`), matching MyBatis-Plus `PaginationInnerInterceptor` runtime behaviour (skipped when `searchCount=false`). See [Wrapper → SQL Preview · pagination simulation](/en/features/wrapper-preview#_14-dialect-pagination) |
+| Simulate Pagination Interceptor (COUNT preview) | On | For mapper methods / XML / annotation statements taking a `Page` / `IPage` argument, the preview **appends the pagination clause** and **emits a COUNT wrapper alongside** (`SELECT COUNT(*) FROM (...) TOTAL`), matching MyBatis-Plus `PaginationInnerInterceptor` runtime behaviour (skipped when `searchCount=false`). See [Wrapper → SQL Preview · pagination simulation](/en/features/wrapper-preview#dialect-pagination) |
 | Append paginated COUNT preview | On | Sub-switch of the simulation: when off, only `LIMIT` is appended and no COUNT statement is produced; has no effect while the master switch is off (parent wins) |
 | Enable JdbcTemplate string-SQL preview | On | Shows a preview icon for string SQL arguments of `queryForList` / `update` and friends, triggerable with `Alt+Shift+Q`; named parameters (`NamedParameterJdbcTemplate` `:name` placeholders) are filled in |
+| In-house framework datasource language | Auto | Source language for the `<datasource>` of in-house `<pages>` page XML: Auto (judged by entityClass relevance) / SQL-only / HQL-only — pin with the latter two when Auto misjudges. See [XML / HQL Dynamic SQL Preview](/en/features/xml-preview) |
 | Show DataPermissionInterceptor runtime-difference hint | Off | When on, the warning area of SELECT / UPDATE / DELETE previews notes that the interceptor appends conditions dynamically at runtime |
 | Data-permission mock condition | empty | A hand-written WHERE fragment (e.g. `dept_id IN (1,2,3)`) appended to the end of SELECT / UPDATE / DELETE, for previewing the statement as data permissions would shape it |
 | Structured EXPLAIN rendering inside the preview panel | Off (experimental) | By default the plan goes to the native database console; when on, MySQL-family (tabular rows) and PostgreSQL-family (FORMAT JSON tree) plans render structurally inside the preview panel with index suggestions, while other dialects and any failure path fall back to the native console (both channels coexist) |
@@ -87,6 +88,7 @@ The default keeps `?` as a to-be-filled hint, avoiding NULL silently filtering r
 | JAR Business-Frame Prefixes | Empty | Package prefixes of in-house business tool libraries that run as dependency JARs (one per line): once registered, source jumps land on the SQL line inside the tool class instead of the upper caller line; use together with "Source-Capture Frame Skip Prefixes" |
 | Timestamp Display | On | Whether the time column appears in the entry list |
 | Timestamp Source | Log time | "Log time" shows the original time parsed from the log line (common formats recognized automatically, falling back to capture time when absent); "Capture time" shows when the plugin captured the log. The timestamp format setting applies to both sources alike |
+| Show class#method in source position | Off | Appends a method segment after each entry's source position (e.g. `[UserMapper#selectById]`): the console bridge takes the captured mapper statement id, enhanced capture takes the business method from the call stack; entries without method info stay unchanged. See [SQL Log](/en/features/sql-log) |
 | Dedup Window | 60000 ms | Same SQL (whitespace-insensitive) doesn't reappear within the window; toggling "Remove duplicate SQL" trims existing duplicates immediately |
 | Duration Prefix | `Time:` | Custom prefix for parsing execution time from logs (compatible with p6spy / MyBatis-Plus timing output) |
 | Slow Query Threshold | 1000 ms | Durations at or above this are flagged as slow queries in red |

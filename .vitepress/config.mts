@@ -128,7 +128,7 @@ export default defineConfig({
         'Call-stack popup with click-a-frame-to-jump',
         'JPA / Hibernate derived query and CRUD preview',
         'MPJ join query live preview',
-        '14-dialect pagination rendering'
+        '15-dialect pagination rendering'
       ],
       'offers': {
         '@type': 'Offer',
@@ -214,6 +214,7 @@ export default defineConfig({
             items: [
               { text: 'Wrapper → SQL 预览', link: '/features/wrapper-preview' },
               { text: 'XML / HQL 动态 SQL 预览', link: '/features/xml-preview' },
+              { text: 'iBatis 2.x SQL 预览与跳转', link: '/features/ibatis-preview' },
               { text: 'JPA / Hibernate SQL 预览', link: '/features/jpa-preview' },
               { text: '注解 SQL 预览', link: '/features/annotation-preview' },
               { text: 'SQL 转 QueryWrapper（Wrapper 反向生成 Java）', link: '/features/sql-to-java' },
@@ -303,6 +304,7 @@ export default defineConfig({
             items: [
               { text: 'Wrapper → SQL Preview', link: '/en/features/wrapper-preview' },
               { text: 'XML / HQL Dynamic SQL Preview', link: '/en/features/xml-preview' },
+              { text: 'iBatis 2.x SQL Preview & Navigation', link: '/en/features/ibatis-preview' },
               { text: 'JPA / Hibernate SQL Preview', link: '/en/features/jpa-preview' },
               { text: 'Annotation SQL Preview', link: '/en/features/annotation-preview' },
               { text: 'SQL to QueryWrapper (Reverse-Generate Wrapper Java Code)', link: '/en/features/sql-to-java' },

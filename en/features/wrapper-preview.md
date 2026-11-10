@@ -1,6 +1,6 @@
 ---
 title: "Wrapper → SQL Preview"
-description: "See the SQL your MyBatis-Plus Wrapper / LambdaQueryWrapper generates — static preview without launching the app or a database, 14-dialect pagination."
+description: "See the SQL your MyBatis-Plus Wrapper / LambdaQueryWrapper generates — static preview without launching the app or a database, 15-dialect pagination."
 ---
 
 # Wrapper → SQL Preview
@@ -24,6 +24,8 @@ Other preview icons (annotation SQL, XML, JPA/HQL, and more) keep the single-cli
 - String-based `QueryWrapper` / `UpdateWrapper` / `DeleteWrapper`
 - `MPJLambdaWrapper` / `MPJQueryWrapper` JOIN queries
 - `service.lambdaQuery()` / `service.lambdaUpdate()` and similar service chains
+
+Empty-parameter delete and update calls get preview anchors too: `mapper.delete(null)` / `service.remove(null)` / `mapper.update(entity, null)` — calls with no conditions attached — carry a gutter icon, and the panel shows a red full-table delete/update warning; non-MyBatis-Plus / JPA receivers (e.g. `redisTemplate.delete(null)`) stay unlit.
 
 ## Other ORM / JDBC Styles Supported
 
@@ -69,9 +71,24 @@ The parameter area can store named parameter sets ("Manage Presets"), and the va
 
 <GifPlayer src="/demo/preset-method-binding.gif" alt="Parameter presets are permanently bound to their method: in the preview of WrapperExtServiceImpl.listByNotAndNested, switching the preset dropdown to tom-query fills the username parameter with tom and updates the SQL to username LIKE '%tom%' in real time; after hand-editing the SQL text (deleted = 0 to 1), switching the preset again still fills the parameters — the binding lives on the declaring method and survives text rewrites" />
 
-### 14-Dialect Pagination
+### Fill in runtime-concatenated SQL
 
-The dialect count goes from 11 to 14: GaussDB is split out of the merged openGauss form into its own dialect — the settings dropdown, log badges and MCP dialect names now all show GaussDB instead of openGauss; two new dialects join the list, HighGo (`jdbc:highgo:`) and Vastbase (`jdbc:vastbase:` / `jdbc:dws:iam:`); and KingBase's PostgreSQL-protocol driver (`postgresql-for-kingbase`) is no longer mistaken for PostgreSQL. Also, previews under GaussDB / DM / HighGo / Vastbase used to always degrade to simplified mode (banner shown, table/column completion unavailable) because the parser registrations the platform requires were missing — fixed.
+Statements assembled at runtime in Java (string variables, ternaries, loop `append`) are no longer just an explanatory comment placeholder in the preview — the parameter area builds a "runtime value #N · type" row for each runtime placeholder, with controls matched to the semantics:
+
+| Placeholder shape | Control |
+|-------------------|---------|
+| Single value | string / number / boolean / NULL |
+| Loop | a list of values, expanded via the template found in your code |
+| Ternary | pick the true / false branch |
+| Optional fragment | check "include this segment" to splice it into the statement |
+
+Once filled, **preview / copy executable SQL / export replay script / execute directly** all draw from the same text; values render as literals (`O'Brien` → `'O''Brien'`). **Leaving them empty changes nothing** — existing behavior is untouched. Degraded placeholders for loop concatenation also say what gets appended: a template digest built from the `append` string literals, with variables / calls / ternary conditions replaced by `…`.
+
+### Dialect pagination
+
+### Dialect Pagination
+
+The dialect count goes from 11 to 14: GaussDB is split out of the merged openGauss form into its own dialect — the settings dropdown, log badges and MCP dialect names now all show GaussDB instead of openGauss; two new dialects join the list, HighGo (`jdbc:highgo:`) and Vastbase (`jdbc:vastbase:` / `jdbc:dws:iam:`); and KingBase's PostgreSQL-protocol driver (`postgresql-for-kingbase`) is no longer mistaken for PostgreSQL. Also, previews under GaussDB / DM / HighGo / Vastbase used to always degrade to simplified mode (banner shown, table/column completion unavailable) because the parser registrations the platform requires were missing — fixed. Since then ZTE GoldenDB (`jdbc:goldendb://`) joins as the 15th dialect, folded into the MySQL family row — pagination `LIMIT [offset,] count`, backtick identifiers, upsert `ON DUPLICATE KEY UPDATE`, and grammar-level `DELETE ... LIMIT` support; the full verification record lives in the [Dialect Support Matrix](./dialect-support).
 
 | Dialect | Syntax |
 |---------|--------|

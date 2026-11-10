@@ -24,6 +24,7 @@ description: "JPA / Hibernate 生成的 SQL 预览（show_sql 只有问号时的
 | 自定义 DAO 的 HQL 查询方法（如 `commonDao.findByQuery`） | 调用行 |
 | `.hbm.xml` 映射实体 | 映射解析自动参与 |
 | `.hbm.xml` 命名查询（`<query>` / `<sql-query>`） | 查询名所在行 |
+| 空 JPA 删除 / 更新调用（`repository.delete(entity)` / `ht.update(entity)` 等，此前因方法名与 Wrapper 工厂撞名漏锚） | 调用行 |
 
 预览快捷键 `Alt+Shift+Q` 对上述入口全部生效（光标置于目标行按快捷键，效果同点击图标）。
 

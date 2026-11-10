@@ -115,7 +115,7 @@ export const homeContent = {
           points: [
             { title: 'Lambda 链静态解析', description: '无需运行项目即可预览完整 SQL' },
             { title: '动态条件勾选', description: 'if / choose / where 等标签按需渲染' },
-            { title: '14 种方言分页', description: 'MySQL / PG / Oracle 等全方言分页语法' },
+            { title: '15 种方言分页', description: 'MySQL / PG / Oracle / GoldenDB 等全方言分页语法' },
           ],
         },
         {
@@ -134,7 +134,7 @@ export const homeContent = {
             },
             {
               title: '目标库角标',
-              description: '条目标注 [MySQL]、[DM（达梦）] 等，14 种方言与 HSQL / GBASE 全识别',
+              description: '条目标注 [MySQL]、[DM（达梦）] 等，15 种方言、磐维与 HSQL / GBASE 全识别',
             },
           ],
         },
@@ -176,7 +176,7 @@ export const homeContent = {
         {
           badge: '多框架支持',
           title: 'XML / 注解 / MPJ 全覆盖',
-          description: 'mapper XML 全动态标签按 MyBatis 语义渲染，注解 SQL 同样支持',
+          description: 'mapper XML 全动态标签按 MyBatis 语义渲染，注解 SQL 同样支持；iBatis 2.x sqlMap 也有独立渲染链',
           points: [
             { title: 'XML 动态标签', description: 'if / choose / foreach / bind 等全支持' },
             { title: '注解 SQL', description: '@Select / @Update / @Delete / @Insert' },
@@ -226,9 +226,9 @@ export const homeContent = {
       titleLine2Accent: '全覆盖',
       titleLine2: '多方言、多场景全覆盖',
       description:
-        '支持 14 种数据库方言分页渲染，参数自动替换为实际值，LIKE 自动拼百分号，动态条件面板勾选实时预览。',
+        '支持 15 种数据库方言分页渲染，参数自动替换为实际值，LIKE 自动拼百分号，动态条件面板勾选实时预览。',
       points: [
-        { title: '多方言支持', description: 'MySQL / PostgreSQL / Oracle / SQLServer 等 14 种方言分页语法' },
+        { title: '多方言支持', description: 'MySQL / PostgreSQL / Oracle / SQLServer 等 15 种方言分页语法' },
         { title: '参数自动替换', description: '? 占位符替换为实际值，按字段类型自动加引号' },
       ],
       link: '查看预览能力',
@@ -282,7 +282,7 @@ export const homeContent = {
           linkText: '看更新日志',
         },
         {
-          value: '14 种数据库方言',
+          value: '15 种数据库方言',
           label: 'Apache-2.0 · 永久免费',
           detail: '不发使用数据、代码不出本机；方言支持矩阵与验证依据全部公开。',
           link: '/features/dialect-support',
@@ -303,7 +303,7 @@ export const homeContent = {
       titleAccent: '免费',
       title: '完全免费',
       description: '只有一档，没有付费版。所有功能永久免费，无需注册，无需登录。',
-      headline: ['¥0 永久使用', 'Apache-2.0 开源', '不发使用数据 · 代码不出本机', '14 种数据库方言'],
+      headline: ['¥0 永久使用', 'Apache-2.0 开源', '不发使用数据 · 代码不出本机', '15 种数据库方言'],
       groups: [
         {
           name: 'SQL 预览',
@@ -360,7 +360,7 @@ export const homeContent = {
       eyebrow: 'Get Started',
       titleLine1: '准备好告别繁琐的',
       titleLine2: 'SQL 调试方式了吗？',
-      subtitle: 'Apache-2.0 完全免费，支持 14 种数据库方言。',
+      subtitle: 'Apache-2.0 完全免费，支持 15 种数据库方言。',
       primary: '立即免费下载',
       secondary: '查看文档',
       trust: ['永久免费使用', '开箱即用', '无需注册'],
@@ -495,7 +495,7 @@ export const homeContent = {
               description: 'if / choose / where tags rendered on demand',
             },
             {
-              title: '14 pagination dialects',
+              title: '15 pagination dialects',
               description: 'Pagination syntax for MySQL / PG / Oracle and the rest',
             },
           ],
@@ -519,7 +519,7 @@ export const homeContent = {
             {
               title: 'Target database badges',
               description:
-                'Entries tagged [MySQL], [DM] and so on, across 14 dialects plus HSQL / GBASE',
+                'Entries tagged [MySQL], [DM] and so on, across 15 dialects plus PanWeiDB and HSQL / GBASE',
             },
           ],
         },
@@ -585,7 +585,7 @@ export const homeContent = {
           badge: 'Multi-framework',
           title: 'XML / Annotation / MPJ Coverage',
           description:
-            'Every dynamic tag in mapper XML rendered with MyBatis semantics, with annotation SQL supported the same way.',
+            'Every dynamic tag in mapper XML rendered with MyBatis semantics, with annotation SQL supported the same way — and a dedicated render chain for iBatis 2.x sqlMap.',
           points: [
             { title: 'XML dynamic tags', description: 'if / choose / foreach / bind and more' },
             { title: 'Annotation SQL', description: '@Select / @Update / @Delete / @Insert' },
@@ -649,11 +649,11 @@ export const homeContent = {
       titleLine2Accent: 'scenarios',
       titleLine2: 'across dialects and scenarios',
       description:
-        'Pagination rendered for 14 database dialects, parameters replaced with actual values, LIKE gets its percent signs automatically, and dynamic conditions toggle live in the panel.',
+        'Pagination rendered for 15 database dialects, parameters replaced with actual values, LIKE gets its percent signs automatically, and dynamic conditions toggle live in the panel.',
       points: [
         {
           title: 'Multi-dialect support',
-          description: 'Pagination syntax for 14 dialects including MySQL / PostgreSQL / Oracle / SQLServer',
+          description: 'Pagination syntax for 15 dialects including MySQL / PostgreSQL / Oracle / SQLServer',
         },
         {
           title: 'Automatic parameter replacement',
@@ -711,7 +711,7 @@ export const homeContent = {
           linkText: 'Read the changelog',
         },
         {
-          value: '14 SQL dialects',
+          value: '15 SQL dialects',
           label: 'Apache-2.0 · free forever',
           detail: 'No usage data collected, code stays local; the dialect support matrix and its evidence are public.',
           link: '/en/features/dialect-support',
@@ -726,7 +726,7 @@ export const homeContent = {
       titleAccent: 'Free',
       title: 'Completely Free',
       description: 'One tier only — there is no paid version. Every feature free forever, no sign-up, no login.',
-      headline: ['$0 forever', 'Apache-2.0 open source', 'Reports no usage data · code stays local', '14 database dialects'],
+      headline: ['$0 forever', 'Apache-2.0 open source', 'Reports no usage data · code stays local', '15 database dialects'],
       groups: [
         {
           name: 'SQL preview',
@@ -782,7 +782,7 @@ export const homeContent = {
       eyebrow: 'Get Started',
       titleLine1: 'Ready to leave tedious',
       titleLine2: 'SQL debugging behind?',
-      subtitle: 'Free under Apache-2.0, with support for 14 SQL dialects.',
+      subtitle: 'Free under Apache-2.0, with support for 15 SQL dialects.',
       primary: 'Install — Free',
       secondary: 'Read the Docs',
       trust: ['Free forever', 'Works out of the box', 'No sign-up'],

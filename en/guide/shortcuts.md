@@ -9,8 +9,9 @@ Default key bindings for Windows / Linux and macOS, plus every entry point for e
 | SQL preview (Wrapper / XML / annotation / HQL·JPQL / custom DAO HQL / JdbcTemplate / `@NamedQuery` / `.hbm.xml` named queries / string SQL in method bodies) | `Alt+Shift+Q` | `Option+Shift+Q` |
 | SQL → Java reverse conversion | `Alt+Shift+J` | `Cmd+Shift+J` |
 | Execute SQL from preview popup (Ultimate + Database plugin) | `Ctrl+Enter` | `Cmd+Enter` |
+| Mapper / iBatis two-way navigation | `Ctrl+B` / `Ctrl+Click` (`Ctrl+Alt+Home` opens the related-symbols chooser) | `Cmd+B` / `Cmd+Click` (related-symbols key: see Keymap) |
 
-Bindings can be changed in `Settings` > `Keymap` by searching for the plugin action names.
+Bindings can be changed in `Settings` > `Keymap` by searching for the plugin action names. The navigation shortcuts belong to platform actions (gotoDeclarationHandler / gotoRelatedProvider), so Keymap rebinding follows automatically; positions the plugin doesn't hit fall back to the native behavior.
 
 ## Other entry points
 
@@ -19,7 +20,8 @@ Bindings can be changed in `Settings` > `Keymap` by searching for the plugin act
 | SQL preview | Caret on a Wrapper chain / mapper statement → right-click `Convert to SQL`; or the gutter icon (left-click previews, right-click offers "Recent Executions") |
 | Annotation SQL preview | Gutter icon on `@Select` / `@Update` lines |
 | JPA / Hibernate preview | Gutter icon on derived methods / CRUD calls / `@Query` / `@NamedQuery` / Criteria chains / `.hbm.xml` named queries |
-| Mapper two-way navigation | Navigation gutter icons on mapper XML statement lines and Mapper interface method lines — click either to jump to its counterpart (yields by default when a peer navigation plugin is present) |
+| Mapper two-way navigation | Navigation gutter icons on mapper XML statement lines and Mapper interface method lines — click either to jump to its counterpart (yields by default when a peer navigation plugin is present); `Ctrl+B` / `Ctrl+Click` also jump both ways and `Ctrl+Alt+Home` opens related symbols |
+| iBatis 2.x preview & navigation | Gutter icon on `<sqlMap>` statement lines; two-way arrows between statement lines and Java DAO call lines (not affected by the peer-plugin yield), see [iBatis 2.x SQL Preview & Navigation](../features/ibatis-preview.md) |
 | EXPLAIN plan | "EXPLAIN" button in the preview panel button row |
 | SQL quick templates (EXPLAIN / COUNT / 10-row sample) | Select a table name in a mapper XML or the preview editor → the "SQL quick templates" context menu; no default shortcut — bind your own in the plugin's "Shortcuts" settings section or in Keymap |
 | SQL → Java | Select SQL text → context menu; or the sidebar tab in the tool window |

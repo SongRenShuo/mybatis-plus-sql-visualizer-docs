@@ -14,6 +14,7 @@
 | Wrapper 链（Lambda / 字符串）转 SQL | 支持 | 不涉及 | 手工 |
 | MPJ 联表（JOIN）转 SQL | 支持 | 不涉及 | 手工 |
 | XML 动态标签（if/choose/foreach 等）按 MyBatis 语义渲染 | 支持 | 部分 | 手工 |
+| iBatis 2.x sqlMap 预览、参数交互与双向跳转 | 支持 | 部分 | 手工 |
 | 注解 SQL / `<script>` / Provider 预览 | 支持 | 不涉及 | 手工 |
 | JPA / Hibernate（派生方法、CRUD 写路径、JPQL、HQL、Criteria、Specification、QBE） | 支持 | 不涉及 | 手工 |
 | 其他 ORM 链式框架预览（xbatis / Easy-Query / MyBatis Dynamic SQL / Querydsl 等） | 支持 | 不涉及 | 手工 |
@@ -34,7 +35,7 @@
 | SQL 反向转 Wrapper Java 代码 | 支持 | 不支持 | 不支持 |
 | 动态条件勾选实时重渲染 | 支持 | 不支持 | 不支持 |
 | UPDATE / DELETE 无 WHERE 警示 | 支持 | 不支持 | 靠人工 |
-| 14 种方言分页渲染 | 支持 | 不支持 | 手工 |
+| 15 种方言分页渲染 | 支持 | 不支持 | 手工 |
 
 ## 两条路线的定位差异
 
@@ -59,7 +60,7 @@
 
 `—` 表示非该插件的主打方向；表中描述刻意写得宽泛，具体版本行为以各家官方页面为准。
 
-按需组合使用并不冲突：比如用 MyBatisX 或 MyBatisCodeHelperPro 做跳转与代码生成，用 SQL Visualizer 预览 SQL、还原运行期日志。本插件检测到同类导航插件在位时，也会自动让出 Mapper 跳转图标，避免图标叠在一行。
+按需组合使用并不冲突：比如用 MyBatisX 或 MyBatisCodeHelperPro 做跳转与代码生成，用 SQL Visualizer 预览 SQL、还原运行期日志。本插件检测到同类导航插件在位时，也会自动让出 Mapper 跳转图标，避免图标叠在一行；iBatis 的跳转箭头不受让位影响——竞品没有 iBatis 能力，双方同装也互不干扰。
 
 ## 什么时候特别合适
 

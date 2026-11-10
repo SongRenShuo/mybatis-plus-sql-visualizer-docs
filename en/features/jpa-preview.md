@@ -25,6 +25,7 @@ Static SQL preview for [Spring Data JPA](https://spring.io/projects/spring-data-
 | Custom DAO HQL query methods (e.g. `commonDao.findByQuery`) | call line |
 | `.hbm.xml` mapped entities | resolved automatically |
 | `.hbm.xml` named queries (`<query>` / `<sql-query>`) | query-name line |
+| Empty JPA delete / update calls (`repository.delete(entity)` / `ht.update(entity)` etc., previously unanchored because the method names collide with Wrapper factories) | call line |
 
 The preview shortcut `Alt+Shift+Q` works on all of the above (cursor on the target line, same effect as clicking the icon).
 

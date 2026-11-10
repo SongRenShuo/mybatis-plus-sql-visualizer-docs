@@ -127,7 +127,11 @@ Two more things to note for intranet deployment: the JDBC drivers needed by "Exe
 
 ## Which database dialects are supported for pagination syntax?
 
-14 dialects: MySQL, PostgreSQL, Oracle, SQL Server, H2, SQLite, MariaDB, DM (Dameng), KingBase, OceanBase, openGauss, GaussDB, HighGo, Vastbase. Pagination clauses and upsert conflict clauses render per dialect differences.
+15 dialects: MySQL, PostgreSQL, Oracle, SQL Server, H2, SQLite, MariaDB, DM (Dameng), KingBase, OceanBase, openGauss, GaussDB, HighGo, Vastbase, GoldenDB (ZTE). Pagination clauses and upsert conflict clauses render per dialect differences — see the [Dialect Support Matrix](../features/dialect-support.md) for the per-dialect shapes.
+
+## My legacy project uses iBatis 2.x — can I preview it?
+
+Yes. iBatis 2.x `<sqlMap>` files have a dedicated rendering chain: `#name#` placeholders and the 14 `<isXxx>` condition tags render with official-engine semantics (golden-checked against iBatis 2.3.4.726), parameters are toggleable and fillable, statements and Java DAO calls navigate both ways, and the editor gets highlighting and completion. MyBatis 3 `<mapper>` files are never misclassified. See [iBatis 2.x SQL Preview & Navigation](../features/ibatis-preview.md).
 
 ## Shortcut conflicts?
 

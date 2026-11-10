@@ -127,7 +127,11 @@ v2026.9.18 起，数据库方言默认改为「智能推断（跟随数据源）
 
 ## 支持哪些数据库方言的分页语法？
 
-14 种：MySQL、PostgreSQL、Oracle、SQL Server、H2、SQLite、MariaDB、DM（达梦）、KingBase（金仓）、OceanBase、openGauss、GaussDB、HighGo（瀚高）、Vastbase（海量）。分页子句和 upsert 冲突子句按方言差异渲染。
+15 种：MySQL、PostgreSQL、Oracle、SQL Server、H2、SQLite、MariaDB、DM（达梦）、KingBase（金仓）、OceanBase、openGauss、GaussDB、HighGo（瀚高）、Vastbase（海量）、GoldenDB（中兴）。分页子句和 upsert 冲突子句按方言差异渲染，逐方言形态见[方言支持矩阵](../features/dialect-support.md)。
+
+## 老项目用的是 iBatis 2.x，能预览吗？
+
+能。iBatis 2.x 的 `<sqlMap>` 文件有独立渲染链：`#name#` 占位、14 种 `<isXxx>` 条件标签按官方引擎语义渲染（渲染口径以 iBatis 2.3.4.726 做黄金对照），参数可勾选可填值，语句与 Java DAO 调用双向跳转，编辑器还有着色与补全；MyBatis 3 的 `<mapper>` 文件不会被误判。详见 [iBatis 2.x SQL 预览与跳转](../features/ibatis-preview.md)。
 
 ## 快捷键冲突怎么办？
 

@@ -17,11 +17,13 @@ What's shipped and what's next. Per-feature details live in [Features](/en/featu
 ### Preview & diagnostics
 
 - Wrapper → SQL static parsing (Lambda / string / MPJ / Kotlin), plus XML and annotation dynamic-SQL preview (OGNL panel)
+- iBatis 2.x sqlMap preview, interactive parameters and two-way navigation (dedicated render chain, golden-checked against the official engine)
+- Fill-in values for runtime-concatenated SQL; HQL recognition for in-house `<pages>` datasources
 - HQL / JPQL / JPA Criteria preview, `.hbm.xml` named queries, JPA Repository derived queries and CRUD write paths
 - Gutter anchor: left-click preview, right-click recent executions (editable / multi-select in a dialog)
 - Real EXPLAIN plans, cross-session plan history and side-by-side comparison
 - JOIN relationship diagram, SQL performance advice, Wrapper chain complexity score
-- Paging / upsert rendering for 14 database dialects, with dialect inference
+- Paging / upsert rendering for 15 database dialects, with dialect inference
 - Logical delete / multi-tenancy / dynamic table name / data-permission simulation
 - DML impact rehearsal, execution guardrails (timeout / unbounded-write confirmation), rollback snapshots and replay-script export
 - One-click diagnostic report, pre-execution schema check with dialect capability self-test, copy as AI context
@@ -40,7 +42,8 @@ See [SQL → Java](/en/features/sql-to-java) · [Code completion](/en/features/c
 
 ### Logs & history
 
-- Multi-framework log capture (Log → SQL restoration), including ShardingSphere two-segment logs
+- Multi-framework log capture (Log → SQL restoration), including ShardingSphere two-segment logs and iBatis 2.x three-line groups
+- Optional class#method in the source position, cross-channel dedup folding, storm catch-up and dropped counters
 - Duration display with slow-query detection, N+1 same-template counter badge
 - Precise source jump, call-stack popup with click-to-frame navigation, scheduled-task thread stacks
 - Persistent SQL history tab: two-level navigation, favorites and pins, regex search, history diff

@@ -14,6 +14,7 @@ For the same problem — seeing what SQL MyBatis actually produces — there are
 | Wrapper chains (Lambda / string) to SQL | Yes | N/A | Manual |
 | MPJ join (JOIN) queries to SQL | Yes | N/A | Manual |
 | XML dynamic tags (if/choose/foreach…) rendered with MyBatis semantics | Yes | Partial | Manual |
+| iBatis 2.x sqlMap preview, interactive parameters and two-way navigation | Yes | Partial | Manual |
 | Annotation SQL / `<script>` / Provider preview | Yes | N/A | Manual |
 | JPA / Hibernate (derived queries, CRUD write paths, JPQL, HQL, Criteria, Specification, QBE) | Yes | N/A | Manual |
 | Other ORM chain frameworks (xbatis / Easy-Query / MyBatis Dynamic SQL / Querydsl …) | Yes | N/A | Manual |
@@ -34,7 +35,7 @@ For the same problem — seeing what SQL MyBatis actually produces — there are
 | Reverse-convert SQL to Wrapper Java code | Yes | No | No |
 | Toggle dynamic conditions and re-render in real time | Yes | No | No |
 | Warning for UPDATE / DELETE without WHERE | Yes | No | Relies on human eyes |
-| Pagination rendering for 14 dialects | Yes | No | Manual |
+| Pagination rendering for 15 dialects | Yes | No | Manual |
 
 ## Two different routes
 
@@ -59,7 +60,7 @@ Beyond the MyBatis Log Plugin family, a few other MyBatis plugins are common in 
 
 `—` means it is not that plugin's focus; descriptions here are deliberately broad — exact version behavior belongs to each vendor's official page.
 
-Combining them as needed does not conflict: for example, use MyBatisX or MyBatisCodeHelperPro for navigation and code generation, and SQL Visualizer for SQL preview and runtime log restore. When a similar navigation plugin is detected, this plugin also yields the Mapper navigation gutter icons on its own, keeping the gutter tidy.
+Combining them as needed does not conflict: for example, use MyBatisX or MyBatisCodeHelperPro for navigation and code generation, and SQL Visualizer for SQL preview and runtime log restore. When a similar navigation plugin is detected, this plugin also yields the Mapper navigation gutter icons on its own, keeping the gutter tidy; iBatis jump arrows are unaffected by the yield — competitors have no iBatis capability, so both installed together never interfere.
 
 ## Where it shines
 

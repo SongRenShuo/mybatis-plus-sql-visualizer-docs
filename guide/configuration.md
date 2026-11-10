@@ -14,7 +14,7 @@
 
 | 配置项 | 默认值 | 作用 |
 |--------|--------|------|
-| 数据库方言 | 智能推断 | 分页 / upsert 子句按方言渲染，默认「智能推断」、可手动固定，项目级留空 = 跟随全局。详见 [Wrapper → SQL 预览 · 方言分页](../features/wrapper-preview.md#_14-种方言分页渲染) |
+| 数据库方言 | 智能推断 | 分页 / upsert 子句按方言渲染，默认「智能推断」、可手动固定，项目级留空 = 跟随全局。详见 [Wrapper → SQL 预览 · 方言分页](../features/wrapper-preview.md#方言分页渲染) |
 | 替换 ? 占位符 | 开 | 关闭后变量也渲染为 `?` |
 | 格式化输出 | 开 | 多行缩进（关 = 单行） |
 | 竖向排列值行列名标注 | 开 | 预览竖排展示时 INSERT 每个值行尾显示 `-- 列名` 配对注释（竖排按钮 tooltip 同步提示可在此关闭） |
@@ -28,9 +28,10 @@
 | 租户列名 | `tenant_id` | 注入的租户列列名，可按业务调整（如 `org_id` / `shop_id`） |
 | 租户列默认值 | 1 | UPDATE SET / INSERT 追加租户列时的字面量默认值 |
 | INSERT 时追加租户列 | 开 | 子开关：开启后 INSERT 列清单追加租户列（对齐 MP `TenantLineInnerInterceptor` INSERT 语义）；仅 INSERT 生效，需同时开启多租户注入，UPDATE / DELETE 不受影响 |
-| 模拟分页拦截器（COUNT 查询预览） | 开 | mapper 方法 / XML / 注解语句带 `Page` / `IPage` 参数时，预览**尾追分页子句**并**并列产出** COUNT 包裹（`SELECT COUNT(*) FROM (...) TOTAL`），对齐 MyBatis-Plus `PaginationInnerInterceptor` 运行时行为（`searchCount=false` 时跳过）。详见 [Wrapper → SQL 预览 · 分页模拟](../features/wrapper-preview.md#_14-种方言分页渲染) |
+| 模拟分页拦截器（COUNT 查询预览） | 开 | mapper 方法 / XML / 注解语句带 `Page` / `IPage` 参数时，预览**尾追分页子句**并**并列产出** COUNT 包裹（`SELECT COUNT(*) FROM (...) TOTAL`），对齐 MyBatis-Plus `PaginationInnerInterceptor` 运行时行为（`searchCount=false` 时跳过）。详见 [Wrapper → SQL 预览 · 分页模拟](../features/wrapper-preview.md#方言分页渲染) |
 | 附分页 COUNT 查询预览 | 开 | 分页模拟的子开关：关闭后只追加 `LIMIT`、不再生成 COUNT 语句；总开关关闭时本项不生效（父开关优先） |
 | 启用 JdbcTemplate SQL 字符串预览 | 开 | 为 `queryForList` / `update` 等方法的字符串 SQL 实参显示预览图标并支持 `Alt+Shift+Q`；命名参数（`NamedParameterJdbcTemplate` 的 `:name` 占位符）可回填 |
+| 自研框架数据源语言 | 自动 | 自研框架 `<pages>` 页面 XML 的 `<datasource>` 源语言：自动（按 entityClass 相关性判定）/ 仅 SQL / 仅 HQL 三档，自动误判时用后两档固定。详见 [XML / HQL 动态 SQL 预览](../features/xml-preview.md) |
 | 显示 DataPermissionInterceptor 运行时差异提示 | 关 | 开启后 SELECT / UPDATE / DELETE 预览的警告区提示「运行时该拦截器会动态追加条件」 |
 | 数据权限模拟条件 | 空 | 手动填写的 WHERE 片段（如 `dept_id IN (1,2,3)`），追加到 SELECT / UPDATE / DELETE 语句末尾，用于预览数据权限生效后的形态 |
 | 预览面板内结构化渲染 EXPLAIN | 关（实验特性） | 默认走原生数据库控制台；开启后 MySQL 家族（表格行）与 PostgreSQL 家族（FORMAT JSON 树）的计划在预览面板内结构化渲染并附索引建议，其余方言与任何失败路径自动回退原生控制台（双通道并存） |
@@ -87,6 +88,7 @@
 | JAR 业务帧包名前缀 | 空 | 以依赖 JAR 形态运行的公司自研业务工具库包名前缀（一行一个）：登记后跳转落进工具类内部的 SQL 行而不是上层调用方那一行，与「源码捕获帧过滤前缀」配套使用 |
 | 时间戳显示 | 开 | 条目列表是否显示时间列 |
 | 时间来源 | 日志时间 | 「日志时间」显示日志行中解析出的原始时间（自动识别常见日志格式，未解析到时回退捕获时间），「捕获时间」显示插件捕获到日志的时刻；时间戳格式设置对两种来源同样生效 |
+| 来源位置显示类名#方法名 | 关 | 每条 SQL 的来源位置后追加方法段（如 `[UserMapper#selectById]`）：控制台桥取捕获的 mapper 语句 id，增强捕获取调用栈业务方法，无方法信息的条目保持原样。详见 [SQL 日志工具窗口](../features/sql-log.md) |
 | 去重窗口 | 60000 ms | 相同 SQL（忽略空白差异）在窗口内重复不显示；勾选「移除重复的sql」后已有重复条目立即裁剪 |
 | 耗时前缀 | `Time:` | 从日志解析执行耗时的自定义前缀（兼容 p6spy / MyBatis-Plus 耗时输出） |
 | 慢查询阈值 | 1000 ms | 耗时达到该值判为慢查询，列表红色标示 |

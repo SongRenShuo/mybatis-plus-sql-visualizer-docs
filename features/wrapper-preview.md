@@ -1,6 +1,6 @@
 ---
 title: "Wrapper → SQL 预览"
-description: "查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL——不启动项目、不连数据库，静态解析 Wrapper 链即时预览，参数回填、14 种方言分页渲染。"
+description: "查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL——不启动项目、不连数据库，静态解析 Wrapper 链即时预览，参数回填、15 种方言分页渲染。"
 ---
 
 # Wrapper → SQL 预览
@@ -25,6 +25,8 @@ description: "查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL—�
 - 字符串版 `QueryWrapper` / `UpdateWrapper` / `DeleteWrapper`
 - `MPJLambdaWrapper` / `MPJQueryWrapper` 联表查询
 - `service.lambdaQuery()` / `service.lambdaUpdate()` 等服务链
+
+空参删除与更新调用同样有预览入口：`mapper.delete(null)` / `service.remove(null)` / `mapper.update(entity, null)` 这类「没拼任何条件」的调用行也挂 gutter 图标，预览面板给全表删除 / 更新的红字警示；非 MyBatis-Plus / JPA 接收者（如 `redisTemplate.delete(null)`）不亮图标。
 
 ## 支持的其他 ORM / JDBC 写法
 
@@ -70,9 +72,22 @@ description: "查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL—�
 
 <GifPlayer src="/demo/preset-method-binding.gif" alt="参数预设永久绑定方法：在 WrapperExtServiceImpl 的 listByNotAndNested 预览里，从预设下拉切到 tom-query，username 参数自动回填 tom、SQL 实时变 username LIKE '%tom%'；手工改写 SQL 文本（deleted = 0 改 1）后再次切换预设，参数照常回填——绑定在声明方法上，不因文本改写丢失" />
 
-### 14 种方言分页渲染
+### 运行期拼接的 SQL 可以填值
 
-方言总数 11 → 14：GaussDB 从 openGauss 的并入形态拆为独立方言——设置页下拉、日志库角标与 MCP 方言名都如实显示 GaussDB，不再一律写 openGauss；新增瀚高 HighGo（`jdbc:highgo:`）与海量 Vastbase（`jdbc:vastbase:` / `jdbc:dws:iam:`）两方言；金仓的 PG 协议版驱动（`postgresql-for-kingbase`）也不再被误认成 PostgreSQL。另外，GaussDB / 达梦 / 瀚高 / 海量四种方言下预览此前恒降级为简化模式（顶部横幅提示、表 / 列补全不可用），缺平台所需的语法解析器注册所致，已修复。
+Java 里运行期拼接出来的语句（字符串变量、三元、循环 `append`）在预览里不再只是说明性注释占位——参数区为每个运行期占位建一行「运行时值 #N · 类型」，按语义给不同控件：
+
+| 占位形态 | 控件 |
+|---------|------|
+| 单值 | 填字符串 / 数字 / 布尔 / NULL |
+| 循环 | 填一组值，按代码里的模板展开 |
+| 三元 | 选真 / 假分支 |
+| 可选片段 | 勾「包含这段」决定是否拼进语句 |
+
+填值后**预览 / 复制可执行 SQL / 导出回放脚本 / 直接执行**四条链路取同一份文本；值按字面量渲染（`O'Brien` → `'O''Brien'`）。**留空即原样**——不填不影响任何既有行为。循环内拼接的降级占位会带上「追加的是什么」：取 `append` 的字符串字面量做模板摘要，变量 / 调用 / 三元条件替 `…`，占位不再是干巴巴一句「运行时重复执行」。
+
+### 方言分页渲染
+
+方言总数 11 → 14：GaussDB 从 openGauss 的并入形态拆为独立方言——设置页下拉、日志库角标与 MCP 方言名都如实显示 GaussDB，不再一律写 openGauss；新增瀚高 HighGo（`jdbc:highgo:`）与海量 Vastbase（`jdbc:vastbase:` / `jdbc:dws:iam:`）两方言；金仓的 PG 协议版驱动（`postgresql-for-kingbase`）也不再被误认成 PostgreSQL。另外，GaussDB / 达梦 / 瀚高 / 海量四种方言下预览此前恒降级为简化模式（顶部横幅提示、表 / 列补全不可用），缺平台所需的语法解析器注册所致，已修复。此后中兴 GoldenDB（`jdbc:goldendb://`）作为第 15 种方言并入 MySQL 族行——分页 `LIMIT [offset,] count`、反引号标识符、upsert `ON DUPLICATE KEY UPDATE`、`DELETE ... LIMIT` 文法级支持，完整验证口径见[方言支持矩阵](./dialect-support)。
 
 | 方言 | 分页语法 |
 |------|---------|

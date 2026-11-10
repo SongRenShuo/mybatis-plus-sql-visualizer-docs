@@ -15,6 +15,8 @@ Gutter icon at `<select>` / `<update>` / `<delete>` / `<insert>` lines in mapper
 
 Mapper XMLs from in-house frameworks (root element name not fixed, SQL written inside custom tags as CDATA or text — RFListPage and the like) preview as well: once the first text segment of a leaf tag starts with SELECT / INSERT / UPDATE / DELETE / WITH / REPLACE, the gutter icon appears, with no reliance on tag or root element names.
 
+The `<datasource>` of in-house `<pages>` page XML is covered too: when recognized as HQL it goes through the JPA / HQL conversion pipeline — entity name → table, property path → column, JOIN secondary-table entity mapping, named / positional parameter extraction, with framework placeholders (e.g. `#{SESSION_BASE_ORGAN}`) preprocessed into named parameters; the preview panel offers read-only "Source: HQL (converted)" and "Original" tabs for comparison. Source-language detection is automatic by default (based on the entityClass-to-root-identifier relationship), and the settings' "In-house framework datasource language" can pin it to SQL-only or HQL-only as overrides.
+
 Settings → "Interface & actions" has a master switch, "Detect SQL embedded in generic XML (leaf tag text/CDATA)", on by default.
 
 ::: details HQL carriers in generic XML (When to read: your custom tags contain HQL)
@@ -27,10 +29,12 @@ Mapper XML `select` / `insert` / `update` / `delete` tag lines and Mapper interf
 
 Targets are resolved by `namespace` + tag `id`; when resolution fails no icon is shown — the plugin never guesses a same-named method as a fallback. The icons obey the gutter master switch and the "mapper XML statements" group switch in settings.
 
+Beyond the icons, navigation is also wired into IDEA's native entries: Ctrl+B / Ctrl+Click jumps both ways between Mapper interface methods and XML statements, and Ctrl+Alt+Home pops up the "related symbols" chooser — the keys are owned by platform actions, so rebinding in the Keymap follows automatically.
+
 <GifPlayer src="/demo/mapper-nav-jump.gif" alt="Mapper two-way navigation: in UserMapper.xml, clicking the navigation icon on the selectUserListByXml statement line jumps to the matching selectUserListByXml method in the UserMapper interface; clicking the icon on that interface method line jumps back to the XML statement" />
 
 ::: details Coexisting with peer navigation plugins (When to read: you have MyBatisCodeHelperPro or similar installed)
-When a peer MyBatis navigation plugin (currently: MyBatisCodeHelperPro) is enabled, it draws its own jump arrow on the same line — two icons stacked on one line help nobody, so this plugin **yields** its two navigation icons by default. The behavior is controlled by the setting "Yield Mapper navigation icons when a peer MyBatis navigation plugin is present" (on by default, in the same block as the gutter group switches): turn it off to keep this plugin's icons even when the peer is present. Other gutters (SQL preview, annotation SQL, JPA / HQL, JDBC, Wrapper chains, etc.) are unaffected by the yielding.
+When a peer MyBatis navigation plugin (currently: MyBatisCodeHelperPro) is enabled, it draws its own jump arrow on the same line — two icons stacked on one line help nobody, so this plugin **yields** its two navigation icons by default. The behavior is controlled by the setting "Yield Mapper navigation icons when a peer MyBatis navigation plugin is present" (on by default, in the same block as the gutter group switches): turn it off to keep this plugin's icons even when the peer is present. Other gutters (SQL preview, annotation SQL, JPA / HQL, JDBC, Wrapper chains, etc.) are unaffected by the yielding. The yield gate only applies to MyBatis mapper files — iBatis jump arrows always show, since competitors have no iBatis capability and there is no icon conflict (see [iBatis 2.x SQL Preview & Navigation](./ibatis-preview)).
 :::
 
 ## Supported Dynamic Tags
