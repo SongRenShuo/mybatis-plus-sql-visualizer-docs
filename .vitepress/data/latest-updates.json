@@ -2,22 +2,22 @@
   "_comment": "构建期由 scripts/generate-changelog.mjs 从 JetBrains Marketplace API 自动重写，手工改动会被覆盖。summaryZh 取对应版本 notes 首条纯文本（≤80 字）；summaryEn 沿用此前的手工翻译（中文摘要变了就不再沿用），新版本在翻译前与 summaryZh 同文。首页「最近更新」打开时会用 /api/changelog 实时刷新，本文件是构建期兜底。数据来源 https://plugins.jetbrains.com/api/plugins/33633/updates",
   "updates": [
     {
+      "version": "2026.11.8",
+      "date": "2026-11-07",
+      "summaryZh": "2026.3 上切换数据源不再只剩当前一个源，也不会静默跑到旧库",
+      "summaryEn": "2026.3 上切换数据源不再只剩当前一个源，也不会静默跑到旧库"
+    },
+    {
+      "version": "2026.11.7",
+      "date": "2026-11-07",
+      "summaryZh": "自研框架页面的数据源自动识别 HQL 并转成可执行 SQL",
+      "summaryEn": "自研框架页面的数据源自动识别 HQL 并转成可执行 SQL"
+    },
+    {
       "version": "2026.11.4",
       "date": "2026-11-04",
       "summaryZh": "增强捕获修好 Oracle，MyBatis 业务 SQL 不再只剩连接校验那一条，失败语句也不再重复上报",
       "summaryEn": "增强捕获修好 Oracle，MyBatis 业务 SQL 不再只剩连接校验那一条，失败语句也不再重复上报"
-    },
-    {
-      "version": "2026.11.3",
-      "date": "2026-11-03",
-      "summaryZh": "修复执行 SQL 后预览面板下半区空白、连原生控制台工具栏都不出现的问题，结果不再只落在 Database 工具窗",
-      "summaryEn": "修复执行 SQL 后预览面板下半区空白、连原生控制台工具栏都不出现的问题，结果不再只落在 Database 工具窗"
-    },
-    {
-      "version": "2026.11.2",
-      "date": "2026-11-02",
-      "summaryZh": "修复 IDEA 2026.2 上预览窗「执行 SQL」提示没有匹配的已配置数据源、点了也执行不了的问题，现在平台侧出错会如实报出原因，不再一律归到方言不匹配",
-      "summaryEn": "Fixed IDEA 2026.2: \"Execute SQL\" in the preview window reported no matching configured data source and refused to run — platform-side failures now report the real cause instead of being blamed on a dialect mismatch"
     }
   ]
 }
