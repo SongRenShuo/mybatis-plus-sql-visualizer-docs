@@ -84,9 +84,9 @@ Statements assembled at runtime in Java (string variables, ternaries, loop `appe
 
 Once filled, **preview / copy executable SQL / export replay script / execute directly** all draw from the same text; values render as literals (`O'Brien` → `'O''Brien'`). **Leaving them empty changes nothing** — existing behavior is untouched. Degraded placeholders for loop concatenation also say what gets appended: a template digest built from the `append` string literals, with variables / calls / ternary conditions replaced by `…`.
 
-### Dialect pagination
+<GifPlayer src="/demo/ib3_runtime_fill.gif" alt="Fill in runtime-concatenated SQL: typing 111 into the keyword row of the listByOptionalIf preview and hitting Refresh makes AND order_no LIKE '%111%' appear; minAmount filled with 111 adds AND amount >= 111 in place; unchecking minAmount's &quot;include this segment&quot; and refreshing collapses that whole segment while ORDER BY id DESC stays" />
 
-### Dialect Pagination
+### Dialect pagination
 
 The dialect count goes from 11 to 14: GaussDB is split out of the merged openGauss form into its own dialect — the settings dropdown, log badges and MCP dialect names now all show GaussDB instead of openGauss; two new dialects join the list, HighGo (`jdbc:highgo:`) and Vastbase (`jdbc:vastbase:` / `jdbc:dws:iam:`); and KingBase's PostgreSQL-protocol driver (`postgresql-for-kingbase`) is no longer mistaken for PostgreSQL. Also, previews under GaussDB / DM / HighGo / Vastbase used to always degrade to simplified mode (banner shown, table/column completion unavailable) because the parser registrations the platform requires were missing — fixed. Since then ZTE GoldenDB (`jdbc:goldendb://`) joins as the 15th dialect, folded into the MySQL family row — pagination `LIMIT [offset,] count`, backtick identifiers, upsert `ON DUPLICATE KEY UPDATE`, and grammar-level `DELETE ... LIMIT` support; the full verification record lives in the [Dialect Support Matrix](./dialect-support).
 

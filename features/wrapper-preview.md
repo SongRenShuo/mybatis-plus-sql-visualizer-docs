@@ -85,6 +85,8 @@ Java 里运行期拼接出来的语句（字符串变量、三元、循环 `appe
 
 填值后**预览 / 复制可执行 SQL / 导出回放脚本 / 直接执行**四条链路取同一份文本；值按字面量渲染（`O'Brien` → `'O''Brien'`）。**留空即原样**——不填不影响任何既有行为。循环内拼接的降级占位会带上「追加的是什么」：取 `append` 的字符串字面量做模板摘要，变量 / 调用 / 三元条件替 `…`，占位不再是干巴巴一句「运行时重复执行」。
 
+<GifPlayer src="/demo/ib3_runtime_fill.gif" alt="运行期拼接的 SQL 可以填值：listByOptionalIf 预览的「运行时值」行 keyword 填 111 点刷新，SQL 出现 AND order_no LIKE '%111%'；minAmount 填 111 刷新后 AND amount >= 111 就地出现；取消勾 minAmount 的「包含这段」再刷新，对应整段收起、ORDER BY id DESC 仍在" />
+
 ### 方言分页渲染
 
 方言总数 11 → 14：GaussDB 从 openGauss 的并入形态拆为独立方言——设置页下拉、日志库角标与 MCP 方言名都如实显示 GaussDB，不再一律写 openGauss；新增瀚高 HighGo（`jdbc:highgo:`）与海量 Vastbase（`jdbc:vastbase:` / `jdbc:dws:iam:`）两方言；金仓的 PG 协议版驱动（`postgresql-for-kingbase`）也不再被误认成 PostgreSQL。另外，GaussDB / 达梦 / 瀚高 / 海量四种方言下预览此前恒降级为简化模式（顶部横幅提示、表 / 列补全不可用），缺平台所需的语法解析器注册所致，已修复。此后中兴 GoldenDB（`jdbc:goldendb://`）作为第 15 种方言并入 MySQL 族行——分页 `LIMIT [offset,] count`、反引号标识符、upsert `ON DUPLICATE KEY UPDATE`、`DELETE ... LIMIT` 文法级支持，完整验证口径见[方言支持矩阵](./dialect-support)。
