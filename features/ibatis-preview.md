@@ -9,6 +9,8 @@ iBatis 2.x 的 `<sqlMap>` 文件与 MyBatis mapper 同待遇：语句预览、SQ
 
 渲染口径以 iBatis 官方 2.3.4.726 引擎做黄金对照——不连数据库直取引擎真值，20 种典型形态逐字节一致，包括「`prepend` 逐字拼接不补空格」这类反直觉行为（真实输出会出现 `ANDORG_NAME` 这种粘连，预览原样复现、不做美化）。
 
+<GifPlayer src="/demo/ib1_ibatis_preview.gif" alt="iBatis 2.x 语句预览：点 User.xml 的 selectByCondition 语句行 gutter 图标弹出预览，点「全选」四条件齐勾、WHERE 三段（ID = 1 / STATUS = 1 / AGE > 19）同时出现；取消勾 isNotNull: id 后 AND ID = 1 消失、勾回还原；username 条件填值 tom 后 SQL 实时出现 USER_NAME LIKE '%tom%'——勾选与填值都按 iBatis 引擎语义即时渲染，不满足条件的段由引擎裁掉" />
+
 ## 触发方式
 
 `<sqlMap>` 文件里的语句行（`<select>` / `<insert>` / `<update>` / `<delete>` / `<statement>` / `<procedure>`）左侧 gutter 图标，点击即预览。
@@ -73,6 +75,8 @@ iBatis 2.x 的 `<sqlMap>` 文件与 MyBatis mapper 同待遇：语句预览、SQ
 ### 双向箭头
 
 与 MyBatis mapper 文件同款的跳转箭头：语句行箭头落到 Java DAO 的调用实参，调用行箭头落到 XML 语句的 `id` 属性；不依赖箭头时 Ctrl+B / Ctrl+Click 同样可跳。
+
+<GifPlayer src="/demo/ib2_ibatis_nav.gif" alt="双向跳转：点 User.xml 的 selectById 语句行跳转箭头，编辑器落到 UserDaoImpl 的 queryForObject(&quot;User.selectById&quot;, id) 调用行；再点调用行箭头，跳回 XML 语句行" />
 
 ::: details 与同类导航插件共存（何时看：装了 MyBatisCodeHelperPro 时）
 iBatis 的跳转箭头**不受**「与同类 MyBatis 导航插件共存时让位」开关影响——竞品没有 iBatis 能力、不会在同一行画自己的箭头，不存在图标冲突，双方同装时本插件的 iBatis 箭头照常显示。该让位开关只作用于 MyBatis mapper 文件的跳转图标（见 [XML / HQL 动态 SQL 预览](./xml-preview)）。
