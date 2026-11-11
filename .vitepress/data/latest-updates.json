@@ -2,22 +2,22 @@
   "_comment": "构建期由 scripts/generate-changelog.mjs 从 JetBrains Marketplace API 自动重写，手工改动会被覆盖。summaryZh 取对应版本 notes 首条纯文本（≤80 字）；summaryEn 沿用此前的手工翻译（中文摘要变了就不再沿用），新版本在翻译前与 summaryZh 同文。首页「最近更新」打开时会用 /api/changelog 实时刷新，本文件是构建期兜底。数据来源 https://plugins.jetbrains.com/api/plugins/33633/updates",
   "updates": [
     {
+      "version": "2026.11.11",
+      "date": "2026-11-10",
+      "summaryZh": "抓不到某类 SQL 时不再只有空白，状态栏会直接说明是让位丢弃、组装失败、门禁抑制还是登记盲区",
+      "summaryEn": "抓不到某类 SQL 时不再只有空白，状态栏会直接说明是让位丢弃、组装失败、门禁抑制还是登记盲区"
+    },
+    {
+      "version": "2026.11.10",
+      "date": "2026-11-10",
+      "summaryZh": "iBatis 2.x 全面支持，sqlMap 的预览、着色、折叠、补全与双向跳转都到位，DTD 随插件内置、离线可用",
+      "summaryEn": "iBatis 2.x 全面支持，sqlMap 的预览、着色、折叠、补全与双向跳转都到位，DTD 随插件内置、离线可用"
+    },
+    {
       "version": "2026.11.8",
       "date": "2026-11-07",
       "summaryZh": "2026.3 上切换数据源不再只剩当前一个源，也不会静默跑到旧库",
       "summaryEn": "2026.3 上切换数据源不再只剩当前一个源，也不会静默跑到旧库"
-    },
-    {
-      "version": "2026.11.7",
-      "date": "2026-11-07",
-      "summaryZh": "自研框架页面的数据源自动识别 HQL 并转成可执行 SQL",
-      "summaryEn": "自研框架页面的数据源自动识别 HQL 并转成可执行 SQL"
-    },
-    {
-      "version": "2026.11.4",
-      "date": "2026-11-04",
-      "summaryZh": "增强捕获修好 Oracle，MyBatis 业务 SQL 不再只剩连接校验那一条，失败语句也不再重复上报",
-      "summaryEn": "增强捕获修好 Oracle，MyBatis 业务 SQL 不再只剩连接校验那一条，失败语句也不再重复上报"
     }
   ]
 }

@@ -1,8 +1,20 @@
 [
   {
+    "version": "2026.11.11",
+    "date": "2026-11-10",
+    "notesHtml": "<ul>\n    <li>抓不到某类 SQL 时不再只有空白，状态栏会直接说明是让位丢弃、组装失败、门禁抑制还是登记盲区</li>\n    <li>一条语句抛异常之后，同一线程后续的 SQL 不再整片消失，出错那条语句也会如实上榜并标记错误</li>\n    <li>MyBatis 的 STATEMENT 语句与 iBatis 普通 Statement 语句的日志都能识别</li>\n    <li>iBatis 批处理不产生日志这件事会在面板上说清楚，不再像插件坏了</li>\n    <li>pg 家族存储过程、华为兼容模式批处理、读写分离连接等增强捕获登记缺口补齐</li>\n    <li>状态栏新增「门禁陈旧」读数，长事务合法嵌套不再被误报</li>\n    <li>Mac 与 UOS 上点执行 SQL 恒报 findPsi 的问题已修</li>\n    <li>预览执行写语句成功后不再被误报等待结果超时</li>\n    <li>iBatis 动态条件面板的全选与清除按钮生效，SQL 预览随勾选实时重渲染</li>\n    <li>好用的话，欢迎到 Marketplace 页评分留言</li>\n</ul>",
+    "summaryZh": "抓不到某类 SQL 时不再只有空白，状态栏会直接说明是让位丢弃、组装失败、门禁抑制还是登记盲区"
+  },
+  {
+    "version": "2026.11.10",
+    "date": "2026-11-10",
+    "notesHtml": "<ul>\n    <li>iBatis 2.x 全面支持，sqlMap 的预览、着色、折叠、补全与双向跳转都到位，DTD 随插件内置、离线可用</li>\n    <li>iBatis 预览参数可填值，动态条件按行勾选、iterate 可填值列表，SQL 随填值变化</li>\n    <li>iBatis 语句 id 与 DAO 调用点之间的 Ctrl+B 与 Ctrl+Click 双向都通，装了别的跳转插件也不受影响</li>\n    <li>新增中兴 GoldenDB 方言，连接、角标与增强捕获已接全，方言总数达 15 种</li>\n    <li>SQL 列表追赶与风暴期刷新优化，高并发抓取不再卡顿，控制台清屏后自动恢复</li>\n</ul>",
+    "summaryZh": "iBatis 2.x 全面支持，sqlMap 的预览、着色、折叠、补全与双向跳转都到位，DTD 随插件内置、离线可用"
+  },
+  {
     "version": "2026.11.8",
     "date": "2026-11-07",
-    "notesHtml": "<ul>\n    <li>2026.3 上切换数据源不再只剩当前一个源，也不会静默跑到旧库</li>\n    <li>选了平台不提供的数据源会直接阻断并说明原因，不再悄悄换源执行</li>\n    <li>日期时间参数改用标准类型字面量，Oracle 预览执行不再报 ORA-01843</li>\n    <li>面板、复制可执行 SQL、捕获列表与模型链的日期参数统一口径</li>\n    <li>SQL Server 与 SQLite 维持引号形态，行为不变</li>\n    <li>好用的话，欢迎到 Marketplace 页评分留言</li>\n</ul>",
+    "notesHtml": "<ul>\n    <li>2026.3 上切换数据源不再只剩当前一个源，也不会静默跑到旧库</li>\n    <li>选了平台不提供的数据源会直接阻断并说明原因，不再悄悄换源执行</li>\n    <li>日期时间参数改用标准类型字面量，Oracle 预览执行不再报 ORA-01843</li>\n    <li>面板、复制可执行 SQL、捕获列表与模型链的日期参数统一口径</li>\n    <li>SQL Server 与 SQLite 维持引号形态，行为不变</li>\n</ul>",
     "summaryZh": "2026.3 上切换数据源不再只剩当前一个源，也不会静默跑到旧库"
   },
   {
@@ -56,8 +68,8 @@
   {
     "version": "2026.10.26",
     "date": "2026-10-26",
-    "notesHtml": "<ul>\n    <li>实体打包进 JAR/lib 模块且该模块无命名配置时，嵌入列前缀按查询宿主模块判定，@Embedded 不再丢前缀</li>\n    <li>嵌入列解析新增诊断日志，报障时可在 idea.log 按关键词定位判定链路</li>\n</ul>",
-    "summaryZh": "实体打包进 JAR/lib 模块且该模块无命名配置时，嵌入列前缀按查询宿主模块判定，@Embedded 不再丢前缀"
+    "notesHtml": "<ul>\n    <li>实体打包进 JAR/lib 模块且该模块无命名配置时，嵌入列前缀按查询宿主模块判定，<code>@Embedded</code> 不再丢前缀</li>\n    <li>嵌入列解析新增诊断日志，报障时可在 idea.log 按关键词定位判定链路</li>\n</ul>",
+    "summaryZh": "实体打包进 JAR/lib 模块且该模块无命名配置时，嵌入列前缀按查询宿主模块判定，"
   },
   {
     "version": "2026.10.23",
@@ -92,8 +104,8 @@
   {
     "version": "2026.10.6",
     "date": "2026-10-05",
-    "notesHtml": "<ul>\n    <li>@Embedded 嵌入值对象识别补全，JPA 点路径覆写、Spring Data 形态与 prefix、MP 混合注解实体展平</li>\n    <li>SQL 日志屏蔽，右键一键屏蔽保活心跳类 SQL，管理对话框支持结构匹配与拖拽缩放</li>\n    <li>新增 OceanBase 与 openGauss 方言，方言扩至 11 种，执行计划与连接串推断同步支持</li>\n    <li>通用 XML 内嵌 SQL 识别，自研框架自定义标签内的 SQL 与 HQL 可直接预览</li>\n    <li>XML 预览 List 参数按签名拆分多值渲染</li>\n    <li>空参数填充策略三态化，默认保留 ? 占位提示，可切换 NULL 与空字符串</li>\n    <li>注入无法识别项目类型时改引导开启增强捕获</li>\n    <li>无别名 HQL 裸属性与嵌入段限定符位列名映射修复</li>\n    <li>嵌入段驼峰路径在派生查询中的伪列修复</li>\n    <li>foreach 集合元素值渲染修复，数值元素不再误加引号、所填值不再丢失</li>\n    <li>XML 预览无 Wrapper 参数语句误报红色警示修复</li>\n    <li>控制台通道在仅有语句行的工程零产出修复</li>\n    <li>premain 注入范围收窄，不再落入 Gradle 测试与 IDE 任务的 fork 进程</li>\n    <li>T-SQL 控制流批次切分误合并修复</li>\n    <li>回滚产物含 identity 包装时静态检查误报与默认执行不完整修复</li>\n    <li>MCP 只读闸门误杀同名标量函数修复，SQL Server 方括号语句不再整类拒绝</li>\n    <li>SQL Server 方括号语句在性能建议与批量合并链不再静默降级</li>\n    <li>agent 通道慢拨号不再被误判为正常掉线</li>\n</ul>",
-    "summaryZh": "@Embedded 嵌入值对象识别补全，JPA 点路径覆写、Spring Data 形态与 prefix、MP 混合注解实体展平"
+    "notesHtml": "<ul>\n    <li><code>@Embedded</code> 嵌入值对象识别补全，JPA 点路径覆写、Spring Data 形态与 prefix、MP 混合注解实体展平</li>\n    <li>SQL 日志屏蔽，右键一键屏蔽保活心跳类 SQL，管理对话框支持结构匹配与拖拽缩放</li>\n    <li>新增 OceanBase 与 openGauss 方言，方言扩至 11 种，执行计划与连接串推断同步支持</li>\n    <li>通用 XML 内嵌 SQL 识别，自研框架自定义标签内的 SQL 与 HQL 可直接预览</li>\n    <li>XML 预览 List 参数按签名拆分多值渲染</li>\n    <li>空参数填充策略三态化，默认保留 ? 占位提示，可切换 NULL 与空字符串</li>\n    <li>注入无法识别项目类型时改引导开启增强捕获</li>\n    <li>无别名 HQL 裸属性与嵌入段限定符位列名映射修复</li>\n    <li>嵌入段驼峰路径在派生查询中的伪列修复</li>\n    <li>foreach 集合元素值渲染修复，数值元素不再误加引号、所填值不再丢失</li>\n    <li>XML 预览无 Wrapper 参数语句误报红色警示修复</li>\n    <li>控制台通道在仅有语句行的工程零产出修复</li>\n    <li>premain 注入范围收窄，不再落入 Gradle 测试与 IDE 任务的 fork 进程</li>\n    <li>T-SQL 控制流批次切分误合并修复</li>\n    <li>回滚产物含 identity 包装时静态检查误报与默认执行不完整修复</li>\n    <li>MCP 只读闸门误杀同名标量函数修复，SQL Server 方括号语句不再整类拒绝</li>\n    <li>SQL Server 方括号语句在性能建议与批量合并链不再静默降级</li>\n    <li>agent 通道慢拨号不再被误判为正常掉线</li>\n</ul>",
+    "summaryZh": "@Embedded"
   },
   {
     "version": "2026.9.23",
@@ -134,7 +146,7 @@
   {
     "version": "2026.9.4",
     "date": "2026-09-04",
-    "notesHtml": "<ul>\n    <li>JdbcTemplate / NamedParameterJdbcTemplate SQL 字符串源码预览</li>\n    <li>JOIN 图换用 IDEA 原生图框架</li>\n    <li>JOIN 图渲染对齐 Database 原生显示图</li>\n    <li>JOIN 图 B 路径：直接内嵌 Database 原生显示图 + 虚拟外键 JOIN 线</li>\n    <li>非 Wrapper 预览快捷键贯通 + @NamedQuery 实体级预览</li>\n    <li>SQL 日志列表 EDT 冻结修复 + 自动保存历史 SQL 无限递归修复</li>\n    <li>SqlFormatter 关键字分派修复 + SQL 预览关键字选择粘连修复</li>\n</ul>",
+    "notesHtml": "<ul>\n    <li>JdbcTemplate / NamedParameterJdbcTemplate SQL 字符串源码预览</li>\n    <li>JOIN 图换用 IDEA 原生图框架</li>\n    <li>JOIN 图渲染对齐 Database 原生显示图</li>\n    <li>JOIN 图 B 路径：直接内嵌 Database 原生显示图 + 虚拟外键 JOIN 线</li>\n    <li>非 Wrapper 预览快捷键贯通 + <code>@NamedQuery</code> 实体级预览</li>\n    <li>SQL 日志列表 EDT 冻结修复 + 自动保存历史 SQL 无限递归修复</li>\n    <li>SqlFormatter 关键字分派修复 + SQL 预览关键字选择粘连修复</li>\n</ul>",
     "summaryZh": "JdbcTemplate / NamedParameterJdbcTemplate SQL 字符串源码预览"
   },
   {
@@ -146,7 +158,7 @@
   {
     "version": "2026.8.21",
     "date": "2026-08-21",
-    "notesHtml": "<ul>\n    <li>JPA/Hibernate SQL 预览支持</li>\n    <li>Hibernate/JPA SQL 日志捕获支持</li>\n    <li>SQL→Java 反向子查询 JOIN 解析 + MConsumer 形态</li>\n    <li>JPA 分页修复（Pageable → LIMIT）+ @Query 路由优先</li>\n    <li>JPQL IN 子句三层修复 + 复制时剥离注释</li>\n</ul>",
+    "notesHtml": "<ul>\n    <li>JPA/Hibernate SQL 预览支持</li>\n    <li>Hibernate/JPA SQL 日志捕获支持</li>\n    <li>SQL→Java 反向子查询 JOIN 解析 + MConsumer 形态</li>\n    <li>JPA 分页修复（Pageable → LIMIT）+ <code>@Query</code> 路由优先</li>\n    <li>JPQL IN 子句三层修复 + 复制时剥离注释</li>\n</ul>",
     "summaryZh": "JPA/Hibernate SQL 预览支持"
   },
   {
@@ -170,7 +182,7 @@
   {
     "version": "2026.8.17",
     "date": "2026-08-17",
-    "notesHtml": "<ul>\n    <li>SQL→Java 生成代码三改进</li>\n    <li>调用方法按调用类真实 API 选择</li>\n    <li>UPSERT 按方言渲染与反向分页宽容</li>\n    <li>日志五项修复</li>\n    <li>三处图标统一优化 + 功能截图 5 张入库</li>\n    <li>SQL→Java 右键预览高亮 + 快捷键可配置</li>\n    <li>SQL→Java 调用形态按 MPJ 1.5.6 实证重写 + 性能修复</li>\n    <li>手动选择实体类 + AUTO 形态 @TableName 反查 + ? 占位符反向识别</li>\n</ul>",
+    "notesHtml": "<ul>\n    <li>SQL→Java 生成代码三改进</li>\n    <li>调用方法按调用类真实 API 选择</li>\n    <li>UPSERT 按方言渲染与反向分页宽容</li>\n    <li>日志五项修复</li>\n    <li>三处图标统一优化 + 功能截图 5 张入库</li>\n    <li>SQL→Java 右键预览高亮 + 快捷键可配置</li>\n    <li>SQL→Java 调用形态按 MPJ 1.5.6 实证重写 + 性能修复</li>\n    <li>手动选择实体类 + AUTO 形态 <code>@TableName</code> 反查 + ? 占位符反向识别</li>\n</ul>",
     "summaryZh": "SQL→Java 生成代码三改进"
   },
   {
