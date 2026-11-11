@@ -45,7 +45,7 @@ const server = createServer(async (req, res) => {
       res.writeHead(200, {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'public, max-age=3600',
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=3600',
       })
       res.end(JSON.stringify(data))
     } catch (err) {
