@@ -249,6 +249,7 @@ export default defineConfig({
               { text: '需求反馈池', link: '/about/feedback' },
               { text: 'Bug 悬赏', link: '/about/bounty' },
               { text: '友情推荐', link: '/about/friends' },
+              { text: '支持与赞助', link: '/about/support' },
               { text: '隐私说明', link: '/about/privacy' }
             ]
           }
@@ -339,6 +340,7 @@ export default defineConfig({
               { text: 'Feedback Pool', link: '/en/about/feedback' },
               { text: 'Bug Bounty', link: '/en/about/bounty' },
               { text: 'Friend Recommendations', link: '/en/about/friends' },
+              { text: 'Support & Sponsor', link: '/en/about/support' },
               { text: 'Privacy', link: '/en/about/privacy' }
             ]
           }

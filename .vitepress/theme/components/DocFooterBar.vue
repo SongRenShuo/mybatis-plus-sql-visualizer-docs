@@ -14,6 +14,7 @@ const items = computed(() =>
         { text: 'Changelog', href: '/en/about/changelog' },
         { text: 'FAQ', href: '/en/guide/faq' },
         { text: 'Community', href: '/en/about/feedback' },
+        { text: 'Sponsor', href: '/en/about/support' },
         { text: 'Privacy', href: '/en/about/privacy' }
       ]
     : [
@@ -21,6 +22,7 @@ const items = computed(() =>
         { text: '更新日志', href: '/about/changelog' },
         { text: 'FAQ', href: '/guide/faq' },
         { text: '社区', href: '/about/feedback' },
+        { text: '赞助', href: '/about/support' },
         { text: '隐私说明', href: '/about/privacy' }
       ]
 )
