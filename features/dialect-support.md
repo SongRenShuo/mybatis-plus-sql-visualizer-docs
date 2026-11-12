@@ -34,7 +34,7 @@ description: "15 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、
 ## 使用注意
 
 - SQL Server 的 `OFFSET … FETCH` 必须跟在 `ORDER BY` 之后：语句没有排序时，分页渲染会自动补 `ORDER BY (SELECT NULL)` 占位，否则产物在真机直接报语法错
-- OceanBase 的执行计划返回 OB 自有的 ASCII 计划树（单列 `Query Plan`），按文本档呈现
+- OceanBase 的执行计划返回 OB 自有的 ASCII 计划树（单列 `Query Plan`），按文本档呈现；插件按文本树规则识别全表扫描类形态并给出索引建议（与 MySQL 同口径，社区镜像 OB CE 4.3.5 实证）——建议经 MCP `sqlv_explain` 的建议节承载，预览面板的结构化渲染面仍只认 MySQL / PostgreSQL 两族格式，OceanBase 的 EXPLAIN 照旧直送原生控制台
 - GaussDB 的执行计划目前是官方文档级验证（真机读数留账）；瀚高 / 海量的验证实例为社区第三方镜像，OceanBase 为社区版镜像
 - GoldenDB 的渲染形态来自厂商文档与驱动级对照（vendor 驱动连 MySQL 8.0 协议实例，384 个保留字逐词全量扫描 PASS），尚未在 GoldenDB 引擎上验证；执行计划模板未登记，能力矩阵如实显示不支持
 - 磐维 PanWeiDB：`jdbc:panwei:` / `jdbc:panweidb:` 连接可识别、增强捕获已登记，日志条目角标显示「Panwei（磐维）」；渲染恒按 Oracle 方言——磐维的 SQL 兼容模式由建库参数决定（出厂默认 A＝Oracle），PG / MySQL 模式的库请在面板手动改选
@@ -87,7 +87,7 @@ description: "15 种数据库方言支持矩阵：MySQL、PostgreSQL、Oracle、
 - 除 GoldenDB 外的 14 种方言渲染套件都有真机或镜像实例读数，但「全部方言都在厂商官方实例上验证」不成立：瀚高、海量为社区第三方镜像（瀚高为 V6.0.1，非 V9 线）；OceanBase 的验证实例为社区版 OB CE 镜像；GaussDB 与 openGauss 的读数都取自 GaussDB Kernel 503.1.0（2023 年内核，兼容命名 A/B/C/PG，不等于 openGauss 5.x / 6.x 的新命名与关键字表），官方 openGauss 5.0.0 实例因 public schema 无 CREATE 权限未能建夹具表；GaussDB 商用版需华为授权或云实例，未验证；GoldenDB 只有厂商文档与驱动级替代对照，无引擎读数。
 - 增强捕获的金仓 / 瀚高 / 海量三族 attach 端到端尚无读数，这三族的「增强捕获已验证」不成立。
 - SQL Server 的 `OFFSET … FETCH` 必须跟在 `ORDER BY` 之后，无排序分页时插件补 `ORDER BY (SELECT NULL)` 占位（`b0e79325`，真机实证）。
-- OceanBase 的 `EXPLAIN` 返回 OB 自有的 ASCII 计划树（单列 `Query Plan`），按文本档接收（`58b8b5f3`，社区镜像实证）。
+- OceanBase 的 `EXPLAIN` 返回 OB 自有的 ASCII 计划树（单列 `Query Plan`），按文本档接收（`58b8b5f3`，社区镜像实证）；文本树索引建议规则补齐（TABLE SCAN / TABLE FULL SCAN，与 MySQL 同口径，建议节挂 MCP `sqlv_explain` 输出，`9219ca61`）。
 - 方言清单以插件仓 `DialectRegistry.dialects` 为准，共 15 种；设置页下拉顺序与本表一致。
 
 **依据索引**

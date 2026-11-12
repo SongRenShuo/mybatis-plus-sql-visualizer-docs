@@ -70,6 +70,7 @@ description: "MyBatis 日志里只有问号？自动还原成带真实参数的�
 - **双路打印合并**：同时开启 Hibernate `show_sql` 与 logger 时，同一条 SQL 自动合并为一个条目，参数归到一处，不再出现零参残留与「参数数量不匹配」误报
 - **参数缺失提示**：完全没有捕获到参数绑定日志时，面板提示未捕获到参数并引导开启 TRACE 级别（JdbcTemplate 语句会具体指到 `org.springframework.jdbc.core`）；只有参数确实不齐才提示数量不匹配
 - **只打语句行的工程**：语句后静默 1 秒即判定该条已完整并交出列表（如仅开 JdbcTemplate DEBUG、Tomcat 按请求新建线程），不再一直停在「已扫描 N 行 / 产出 0 条」
+- **尾部补刷**：MyBatis 与 Hibernate 通道接入静默冲刷——会话结束前的最后几条 SQL 不再等下一次执行才上屏，与 JdbcTemplate 通道的既有行为对齐
 :::
 
 手动贴日志走面板的「日志 → SQL」页签——粘贴 MyBatis / Hibernate / JdbcTemplate 日志文本即还原为可执行 SQL，也可以直接从剪贴板一键读取：

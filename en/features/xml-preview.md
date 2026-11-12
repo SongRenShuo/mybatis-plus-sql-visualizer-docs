@@ -1,6 +1,6 @@
 ---
 title: "XML / HQL Dynamic SQL Preview"
-description: "MyBatis XML dynamic SQL preview (foreach / if / choose result) — mapper XML rendered to executable SQL per MyBatis semantics; HQL and JPQL supported too."
+description: "MyBatis XML dynamic SQL preview (foreach / if / choose result) — mapper XML rendered to executable SQL per MyBatis semantics, OGNL conditions toggleable, MBG Example statements restored from call sites; HQL and JPQL supported too."
 ---
 
 # XML / HQL Dynamic SQL Preview
@@ -85,6 +85,26 @@ When an `if` test fails to evaluate, the preview no longer silently expands it a
 Test expressions beyond the restricted OGNL surface get a dimmed annotation on the condition line: syntax outside the subset (ternaries, static method calls, `new`, etc.) is marked "unsupported expression form", while resolvable syntax containing runtime-degraded calls is marked "contains runtime-degraded calls"; hover for the concrete reason. Common shapes like `list.size()` and `isEmpty()` are never flagged — annotations are hints only, and neither the expansion behavior nor the toggle semantics change.
 :::
 
+## MBG Example statements: conditions restored from call sites
+
+With MyBatis Generator (MBG) Example usage, the conditions don't live in the XML — they are assembled into the `Example` object at runtime on the Java side, leaving only placeholders like `${criterion.condition}` inside the XML statement. Previewing such a statement used to yield a broken skeleton; the panel now works backwards from the mapper method's **call site**: it finds the example variable passed in, walks the `and*` / `or*` calls in the same method body and reads the constants handed to `addCriterion`, so `${criterion.condition}` turns from a placeholder into a real column name and operator.
+
+The recognition surface covers statements whose `parameterType` ends with Example (MBG's naming convention); the statement-line gutter icon triggers as usual. The backwards resolution has clear boundaries: two queries in the same method collect only the conditions of the Example actually passed as the argument; conditions opened by `example.or()` are grouped per Criteria and joined with `or`; when no call site can be found or the method body has no addCriterion constants, it falls back to the plain skeleton without raising an error.
+
+### A left panel you can fill and read
+
+- **Fillable rows named by the condition itself**: row names are the conditions (e.g. `staff_login LIKE value`, `create_time between start/end`), and range conditions split into "start value / end value" — no more unreadable names like "condition 2 value"
+- **"Clear" reclaims explicitly**: seeded expansion keys are dropped together, so nothing like `BETWEEN '11' AND ?` lingers
+- **Read-only containers**: value boxes of the condition-object containers (`oredCriteria` / `criteria.criteria`) are read-only and say where to fill values — the entry point is the condition-named rows above; collections of restored element objects don't echo historical values and show "N restored" instead
+- **Untaken branches say so**: value boxes of branches not expanded this round show a dimmed "not expanded this round: filling these has no effect on the output"
+- **Skeleton converges without a call site**: for delete / update where no call site can be resolved, the skeleton stays in the form below instead of degrading into one without any placeholder; the `criterion.condition` inside double braces marks a value that couldn't be resolved, and copied output carries a counted header comment asking for replacement (see "${} Direct-Substitution Banner & Execution Confirmation" below)
+
+  ```sql
+  WHERE ( {{criterion.condition}} ? )
+  ```
+
+When a mapper file opens, gutter rendering prefetches one round of condition resolution for such statements in the background (with failure memory and a single-in-flight guard), so the first open no longer resolves on the spot — the preview is ready immediately.
+
 ## Example
 
 ```xml
@@ -115,6 +135,13 @@ ORDER BY create_time DESC
 - When a preview contains `${}` raw substitution, the panel shows a dismissible non-modal banner at the top ("preview contains N ${} direct substitutions — the text is not escaped, mind the SQL injection surface"); once dismissed it stays dismissed for the IDE session
 - "Execute SQL" and "EXPLAIN" pop a confirmation first, noting that raw segments are currently filled with mock values — choosing No aborts; after confirming once, the same panel won't ask again
 - Copying executable SQL doesn't prompt; instead the output carries a `-- contains ${} raw segments (mock values)` header comment so the risk travels with the artifact
+- When the output still holds `${}` segments that couldn't be resolved, they are marked with double-brace placeholders as-is, and the header comment becomes a counted notice:
+
+  ```sql
+  -- contains N unresolved ${} placeholders shown as {{...}}; replace them before executing
+  ```
+
+  The share panel's copy chain is wired the same way.
 
 <GifPlayer src="/demo/xml-exec-guard.gif" alt="Previewing a statement with ${} direct substitution: a banner appears at the top of the panel reading 'preview contains 1 ${} direct substitution — the text is not escaped, mind the SQL injection surface' with a close button on its right, and ORDER BY ${orderBy} in the SQL renders with a mock value as ORDER BY 1; clicking Execute SQL first pops the confirmation gate 'SQL contains ${} raw segments (currently filled with mock values); confirm the values are trustworthy before executing. Continue? Yes / No', and No aborts" />
 
@@ -144,6 +171,7 @@ The "Empty parameter fill strategy" radio under "SQL Preview" in settings (Place
 - **Unbounded-write findings list**: the UPDATE / DELETE execution confirmation lists static-analysis findings when unbounded-write patterns hit — full-table without WHERE, always-true conditions (`1=1` etc.), bare-wildcard `LIKE '%'` and more; with no findings the confirmation text stays unchanged
 - **Execution timeout**: the "Execution timeout" setting (seconds, default 30, 0 = unlimited) cancels the statement before reporting the error, so hung queries no longer sit in loading forever
 - **Error localization**: execution errors are enriched with SQLState / driver error codes and the reported error position, and a "Locate failing statement" button jumps straight to that statement's start line in the preview source
+- **Diagnosable failures**: when the temporary SQL file can't get a PSI, the failure row states the concrete reason and carries two entries — "retry with project-root location" (writes the temp file under the project root `.sql-visualizer/`, which ships its own `.gitignore`) and "open file type settings"; changes to exclusion / ignore settings take effect on the very next execution
 - **Disconnected DDL probing**: when the connection drops while a CREATE-type DDL runs, the plugin probes in the background whether the object now exists and reports honestly ("exists" / "not detected") — "couldn't check" is never dressed up as "didn't take effect"
 - **Multi-statement confirmation**: one-click execution of Log → SQL output runs a single statement directly, while multiple statements pop a candidate-selection overlay
 - **`\G` suffix stripping**: a MySQL CLI `\G` suffix (e.g. `SELECT 1\G`) pasted into the preview or console is stripped before execution; non-MySQL data sources are never stripped
@@ -205,6 +233,7 @@ The selected text is used **verbatim as the table name** (no identifier validati
 
 - In vertical layout, each UPDATE SET item gets a trailing "column (new) = expression" annotation (self-referencing forms like `a = a + 1` read as the new value as-is), making old-vs-new comparison easier
 - For multi-column dynamic INSERT, the preview labels each VALUES expression / SELECT projection with inlay hints showing the target column name — column-value misalignment is visible at a glance (suppressed when the projection already carries a same-name alias, or when it can't be judged statically)
+- When the output turns into a full-table DELETE / UPDATE without WHERE, a "full-table write risk" warning banner appears directly at the top of the preview, taking priority over ordinary render warnings; the check reads only the unfilled output — literals and comments are blanked out first, so a `where` inside a parameter value never trips it
 - The preview panel and the Log → SQL panel embed non-modal degradation banners saying which part wasn't restored, why, and what you can do about it — no more silent truncation
 
 ## HQL / JPQL Preview

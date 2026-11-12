@@ -176,7 +176,7 @@ export const homeContent = {
         {
           badge: '多框架支持',
           title: 'XML / 注解 / MPJ 全覆盖',
-          description: 'mapper XML 全动态标签按 MyBatis 语义渲染，注解 SQL 同样支持；iBatis 2.x sqlMap 也有独立渲染链',
+          description: 'mapper XML 全动态标签按 MyBatis 语义渲染，注解 SQL 同样支持；iBatis 2.x sqlMap 有独立渲染链，MBG Example 语句还能从调用点还原条件',
           points: [
             { title: 'XML 动态标签', description: 'if / choose / foreach / bind 等全支持' },
             { title: '注解 SQL', description: '@Select / @Update / @Delete / @Insert' },
@@ -585,7 +585,7 @@ export const homeContent = {
           badge: 'Multi-framework',
           title: 'XML / Annotation / MPJ Coverage',
           description:
-            'Every dynamic tag in mapper XML rendered with MyBatis semantics, with annotation SQL supported the same way — and a dedicated render chain for iBatis 2.x sqlMap.',
+            'Every dynamic tag in mapper XML rendered with MyBatis semantics, with annotation SQL supported the same way — a dedicated render chain for iBatis 2.x sqlMap, and conditions of MBG Example statements restored from their call sites.',
           points: [
             { title: 'XML dynamic tags', description: 'if / choose / foreach / bind and more' },
             { title: 'Annotation SQL', description: '@Select / @Update / @Delete / @Insert' },

@@ -1,6 +1,6 @@
 ---
 title: "iBatis 2.x SQL 预览与跳转"
-description: "iBatis 2.x（sqlMap）老工程的 SQL 预览：#name# 占位、14 种动态条件标签按官方引擎语义渲染，参数可勾选可填值，sqlMap 语句与 Java DAO 调用双向跳转。"
+description: "iBatis 2.x（sqlMap）老工程的 SQL 预览：#name# 占位、14 种动态条件标签按官方引擎语义渲染，参数可勾选可填值，sqlMap 语句与 Java DAO 调用行可直接预览、双向跳转。"
 ---
 
 # iBatis 2.x SQL 预览与跳转
@@ -16,6 +16,8 @@ iBatis 2.x 的 `<sqlMap>` 文件与 MyBatis mapper 同待遇：语句预览、SQ
 `<sqlMap>` 文件里的语句行（`<select>` / `<insert>` / `<update>` / `<delete>` / `<statement>` / `<procedure>`）左侧 gutter 图标，点击即预览。
 
 文件识别按「根元素是 `<sqlMap>` / DOCTYPE 命中 iBatis 标识 / classpath 上有 `com.ibatis.sqlmap.client.SqlMapClient`」三选二判定——iBatis 与 MyBatis 3 的标签名高度重叠（`<select>` / `<insert>` 两边都有），MyBatis 3 的 `<mapper>` 文件不会被误判成 iBatis。
+
+Java 侧同样能起预览：`SqlMapExecutor` 调用行（`client.queryForList("User.selectAll", id)` 这类）在跳转箭头旁有一枚预览图标，点开直接渲染对应语句，不用先跳进 XML；`Alt+Shift+Q` 在调用行与方法定义行同样可用，MCP 的 `sqlv_render_sql` 也支持从调用行取 SQL（见 [MCP Server](./mcp)）。
 
 ## 占位符与动态标签
 
@@ -46,6 +48,7 @@ iBatis 2.x 的 `<sqlMap>` 文件与 MyBatis mapper 同待遇：语句预览、SQ
 - **动态条件按行勾选**：14 种 `<isXxx>` 条件逐行列出，勾选即展开进 WHERE，取消即收起，与 MyBatis 的 OGNL 面板同款交互
 - **值可填**：参数行输入值后占位即时替换；`<iterate>` 给填值列表（逗号分隔，按长度展开 `ids[0..n-1]`）
 - **数值比较**：`compareValue="18"` 与值 `"9"` 按数值比较判定，不再走字典序误判 `"9" > "18"` 成立
+- **引号按参数类型决定**：裸 `#name#` 参数按语句 `parameterClass` 的字段类型决定引号——字段是 String 时，填纯数字也照常带引号，不会变成裸数字比较；占位符自带 jdbcType 时仍以 jdbcType 为准
 
 声明了 `<parameterMap>` 且语句体内手写 `?` 的语句，参数名按位置对齐到 `<parameter>` 声明——面板显示真实属性名（如 `username` / `email`），不再一律 `param1..N`；未消费的声明单独提示。没有 `<parameterMap>` 时仍显示 `param1..N` 并注明「参数名不可知」。
 

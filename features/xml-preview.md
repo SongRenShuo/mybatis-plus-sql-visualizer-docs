@@ -1,6 +1,6 @@
 ---
 title: "XML / HQL 动态 SQL 预览"
-description: "MyBatis XML 动态 SQL 预览（foreach / if / choose 拼接结果）——mapper XML 按 MyBatis 语义渲染成可执行 SQL，OGNL 条件可勾选，Hibernate HQL 与 JPA JPQL 同样可预览。"
+description: "MyBatis XML 动态 SQL 预览（foreach / if / choose 拼接结果）——mapper XML 按 MyBatis 语义渲染成可执行 SQL，OGNL 条件可勾选，MBG Example 语句的条件可从调用点还原，Hibernate HQL 与 JPA JPQL 同样可预览。"
 ---
 
 # XML / HQL 动态 SQL 预览
@@ -85,6 +85,26 @@ if 的 test 表达式求值失败时不再静默按 true 展开——会记一�
 超出受限 OGNL 支持面的 test 表达式，条件行会带一条淡色标注：语法不支持（三元运算、静态方法、`new` 等）标「不支持的表达式形态」，含运行期降级形态标「含运行期降级调用」，悬停可看具体理由。`list.size()`、`isEmpty()` 这类常见写法不会标注；标注只是提示，条件展开行为与勾选开关语义不变。
 :::
 
+## MBG Example 语句：条件按调用点还原
+
+MyBatis Generator（MBG）生成的 Example 用法里，条件不写在 XML 中——运行期在 Java 侧拼进 `Example` 对象，XML 语句体内只有 `${criterion.condition}` 这样的占位，直接预览出来是残缺骨架。现在面板会从 mapper 方法的**调用点**反推条件：找到传入的 example 变量，在同一方法体里逐个解析 `and*` / `or*` 调用并读取 `addCriterion` 的常量，`${criterion.condition}` 由占位符变成真实列名与操作符。
+
+识别面是 `parameterType` 以 Example 结尾的语句（MBG 的命名惯例），语句行 gutter 图标照常触发。反推有明确边界：同一方法里先后两次查询，只收与实参同一个 Example 的条件；`example.or()` 另开的条件按 Criteria 分组、以 `or` 连接；解析不到调用点或方法体里没有 addCriterion 常量时回退普通骨架，不报错。
+
+### 左栏可填可解释
+
+- **按条件文本生成可填行**：行名就是条件本身（如 `staff_login LIKE 值`、`create_time between 起始值/结束值`），区间条件分「起始值 / 结束值」两格，不再是「条件 2 值」这类读不懂的名字
+- **「清除」显式回收**：已播种的展开项一并清掉，不再残留 `BETWEEN '11' AND ?`
+- **容器只读**：条件对象容器（`oredCriteria` / `criteria.criteria`）的值框一律只读，并注明去哪里填——填值入口是上面按条件生成的行；已还原元素对象的集合不回显历史值，显示「已还原 N 项」
+- **没走到的分支如实说明**：分支没被勾选展开的值框给灰字「本轮未展开：填了不影响产物」
+- **没有调用点的语句骨架收敛**：delete / update 解析不到调用点时，骨架固定收敛为下方形态，不再退化成连占位符都没有的样式；双花括号里的 `criterion.condition` 表示这里没求到值，复制产物头部会带一条带计数的注释提醒替换（见下文「${} 直替提示与执行确认」）
+
+  ```sql
+  WHERE ( {{criterion.condition}} ? )
+  ```
+
+打开 mapper 文件时，gutter 渲染会对这类语句在后台预取一次条件解析（带失败记忆与单条在途护栏），首次点开不必现场反推，预览即开即得。
+
 ## 示例
 
 ```xml
@@ -115,6 +135,13 @@ ORDER BY create_time DESC
 - 预览含 `${}` 直替时，面板顶部显示一条非模态提示横幅（「预览含 N 处 ${} 直接替换——替换文本未转义，注意 SQL 注入面」），可关闭，关闭后本 IDE 会话不再弹
 - 「执行 SQL」与「EXPLAIN」前会弹确认框，说明 raw 段当前以模拟值填充，选否即中止；确认一次后同一面板不再重复弹
 - 复制可执行 SQL 不弹窗，产物头部带一行 `-- contains ${} raw segments (mock values)` 注释，让风险随产物走
+- 产物里有没有求到值的 `${}` 时，该段以双花括号占位原样标出，头部注释相应变为带计数的占位提醒：
+
+  ```sql
+  -- contains N unresolved ${} placeholders shown as {{...}}; replace them before executing
+  ```
+
+  分享面板的复制链同样接上。
 
 <GifPlayer src="/demo/xml-exec-guard.gif" alt="含 ${} 直替的语句预览：面板顶部出现「⚠ 预览含 1 处 ${} 直接替换——替换文本未转义，注意 SQL 注入面」横幅（右侧带关闭 ✕），SQL 里 ORDER BY ${orderBy} 以模拟值渲染成 ORDER BY 1；点「执行 SQL」后先弹出确认闸门「SQL 含 ${} 原文拼接段（当前以模拟值填充），执行前请确认值的真实性。继续？Yes / No」，选 No 即中止" />
 
@@ -144,6 +171,7 @@ ORDER BY create_time DESC
 - **无界写发现清单**：UPDATE / DELETE 的执行确认在静态检查命中无界写特征时列出发现——无 WHERE 全表、恒真条件（`1=1` 等）、`LIKE '%'` 纯通配等；无发现时确认文案保持不变
 - **执行超时**：设置项「执行超时」（秒，默认 30，0 = 不限），超时先请求取消再报错，挂死查询不再停在加载态
 - **报错定位**：执行报错富化 SQLState / 驱动错误码与出错位置，「定位到出错语句」按钮一键跳到预览源中该语句起始行
+- **失败可诊断**：执行用的临时 SQL 文件建不出 PSI 时，失败行给出具体原因，并带「改用项目根落点重试」（把临时文件写到项目根 `.sql-visualizer/`，目录自带 `.gitignore`）与「打开文件类型设置」两个入口；排除 / 忽略设置改动后下一次执行立即生效
 - **断连 DDL 探测**：连接断开时执行 CREATE 类 DDL，后台探测对象是否已存在并如实警示（「已存在」/「未检出」），不把「没查到」包装成「没生效」
 - **多语句确认**：日志转 SQL 产物一键执行，单条直通、多条弹候选勾选浮层
 - **`\G` 后缀剥离**：MySQL 命令行的 `\G` 后缀（如 `SELECT 1\G`）粘进预览或控制台执行前自动剥离；非 MySQL 数据源不剥离
@@ -205,6 +233,7 @@ mapper XML 与预览编辑器里选中文本后，右键菜单「SQL 快捷模�
 
 - 竖排模式下 UPDATE 的 SET 各项行尾追加「列名 (new) = 表达式」标注（自引用写法如 `a = a + 1` 原样即新值），新旧值对照更直观
 - 多列动态 INSERT 的预览在每个 VALUES 表达式 / SELECT 投影旁以 inlay 提示标出目标列名，列-值错位一眼可见（投影已带同名列别名、或静态不可判时不重复提示）
+- 产物变成没有 WHERE 的全表 DELETE / UPDATE 时，预览顶部直接给「全表写风险」警示横幅，优先级高于普通渲染警示；判据只看未回填产物——字面量与注释先挖空再判，参数值里出现 `where` 字样不会误触发
 - 预览面板与日志转 SQL 面板内嵌非模态降级提示，说明哪段没还原、为什么、能做什么，不再静默截断
 
 ## HQL / JPQL 预览

@@ -70,6 +70,7 @@ With enhanced capture none of this applies — skip it, along with the "log form
 - **Merging double-printed statements**: when both Hibernate `show_sql` and its logger print the same statement, the two paths merge into one entry with the parameters kept together — no zero-parameter leftovers, no false "parameter count mismatch"
 - **Missing-parameter hints**: if a statement had no parameter-binding log captured at all, the preview says so and guides you to enable TRACE level (for JdbcTemplate it names `org.springframework.jdbc.core` specifically); only genuinely incomplete parameters report a count mismatch
 - **Statement-line-only projects**: after 1 second of silence the statement is judged complete and handed over (JdbcTemplate on DEBUG only, Tomcat spawning a thread per request), instead of staying stuck at "N lines scanned / 0 produced"
+- **Tail flush**: the MyBatis and Hibernate channels gained a silent flush — the last few SQL statements before a session ends no longer wait for the next execution to show up, matching the existing JdbcTemplate behavior
 :::
 
 Manual log pasting lives in the panel's "Log → SQL" tab — paste MyBatis / Hibernate / JdbcTemplate log text and it is restored into executable SQL, or read straight from the clipboard in one click:

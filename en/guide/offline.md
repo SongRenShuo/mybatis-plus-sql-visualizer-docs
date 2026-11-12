@@ -95,6 +95,12 @@ The manifest URL and the package URL are independent — host both internally, o
 
 The override only changes where the manifest and the package are fetched from — download and install still go through the plugin's built-in one-click flow: the new version hot-swaps into the running IDE (no restart), with automatic fallback to the restart script when dynamic install isn't available. Exactly the same behavior as the internet update channel.
 
+### Local install-package directory
+
+The "Update & Diagnostics" area also offers a more direct local channel: point **Local install-package directory** at a folder holding plugin zip packages (an intranet share works), and the plugin automatically detects the highest usable version in it and can install it — restart-free when the platform supports it, falling back to a restart on older IDEs. The install check only accepts this plugin's own packages: the plugin id inside the package must match, bundled unrelated plugins are rejected, and an IDE build-number mismatch refuses the install. When the directory doesn't exist / isn't readable / the path is invalid, the status line lists the reasons one by one. "Check local packages" scans and compares using the field's current value (no need to apply first), and "Open" opens the folder in the system file manager; leaving it empty turns the channel off.
+
+It is independent of the manifest override: the override governs "where new versions are discovered", the local directory governs "the packages are right here" — use either one or both.
+
 ## Building and releasing is a separate matter
 
 Everything above concerns the **runtime**. If you need to *build* this plugin or publish your own release inside a fully isolated network, you additionally need Maven repositories (the project defaults to an Aliyun mirror plus Maven Central) and the JetBrains plugin portal (for Gradle plugins and target IDE distributions), which require an internal mirror and a warm offline cache.

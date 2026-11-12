@@ -1,6 +1,6 @@
 ---
 title: "iBatis 2.x SQL Preview & Navigation"
-description: "SQL preview for legacy iBatis 2.x (sqlMap) projects: #name# placeholders and 14 dynamic condition tags rendered with official-engine semantics, fillable parameters, and two-way navigation between sqlMap statements and Java DAO calls."
+description: "SQL preview for legacy iBatis 2.x (sqlMap) projects: #name# placeholders and 14 dynamic condition tags rendered with official-engine semantics, fillable parameters, preview from sqlMap statements and Java DAO call lines, and two-way navigation."
 ---
 
 # iBatis 2.x SQL Preview & Navigation
@@ -16,6 +16,8 @@ Rendering fidelity is golden-checked against the official iBatis 2.3.4.726 engin
 A gutter icon appears on statement lines (`<select>` / `<insert>` / `<update>` / `<delete>` / `<statement>` / `<procedure>`) inside `<sqlMap>` files; click to preview.
 
 File recognition requires two of three signals: root element `<sqlMap>`, a DOCTYPE matching an iBatis identifier, or `com.ibatis.sqlmap.client.SqlMapClient` on the classpath. Tag names overlap heavily between iBatis and MyBatis 3 (`<select>` / `<insert>` exist in both), so a MyBatis 3 `<mapper>` file is never misclassified as iBatis.
+
+The Java side starts previews too: a `SqlMapExecutor` call line (such as `client.queryForList("User.selectAll", id)`) carries a preview icon next to the navigation arrow — click it to render the corresponding statement without jumping into the XML first; `Alt+Shift+Q` works on call lines and method declarations alike, and the MCP `sqlv_render_sql` tool accepts call lines as well (see [MCP Server](./mcp)).
 
 ## Placeholders and dynamic tags
 
@@ -46,6 +48,7 @@ iBatis previews used to render a fixed no-parameter baseline — every `<dynamic
 - **Toggle conditions per row**: all 14 `<isXxx>` conditions listed row by row; check to expand into the WHERE, uncheck to collapse — same interaction as the OGNL panel for MyBatis
 - **Fill values**: typing into a parameter row substitutes the placeholder live; `<iterate>` gets a value list (comma-separated, expanded as `ids[0..n-1]`)
 - **Numeric comparison**: `compareValue="18"` compared against value `"9"` numerically — no more lexicographic misjudgment where `"9" > "18"` held true
+- **Quoting follows the parameter type**: bare `#name#` parameters take their quotes from the field type of the statement's `parameterClass` — a String field keeps its quotes even when you type a plain number, instead of turning into a bare numeric comparison; when the placeholder itself carries a jdbcType, jdbcType still wins
 
 For statements that declare a `<parameterMap>` and hand-write `?` in the body, parameter names align positionally to the `<parameter>` declarations — the panel shows real property names (`username` / `email`) instead of `param1..N`, and unconsumed declarations are flagged separately. Without a `<parameterMap>` the rows stay `param1..N` with a "parameter names unknown" note.
 

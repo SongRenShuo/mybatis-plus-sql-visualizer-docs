@@ -15,6 +15,7 @@ For the same problem — seeing what SQL MyBatis actually produces — there are
 | MPJ join (JOIN) queries to SQL | Yes | N/A | Manual |
 | XML dynamic tags (if/choose/foreach…) rendered with MyBatis semantics | Yes | Partial | Manual |
 | iBatis 2.x sqlMap preview, interactive parameters and two-way navigation | Yes | Partial | Manual |
+| MBG Example statements with conditions restored from call sites (MyBatis Generator) | Yes | No | Manual |
 | Annotation SQL / `<script>` / Provider preview | Yes | N/A | Manual |
 | JPA / Hibernate (derived queries, CRUD write paths, JPQL, HQL, Criteria, Specification, QBE) | Yes | N/A | Manual |
 | Other ORM chain frameworks (xbatis / Easy-Query / MyBatis Dynamic SQL / Querydsl …) | Yes | N/A | Manual |

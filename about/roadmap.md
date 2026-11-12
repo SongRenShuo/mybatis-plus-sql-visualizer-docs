@@ -18,6 +18,7 @@
 
 - Wrapper → SQL 静态解析（Lambda / 字符串 / MPJ / Kotlin），XML 与注解动态 SQL 预览（OGNL 面板）
 - iBatis 2.x sqlMap 预览、参数交互与双向跳转（独立渲染链，按官方引擎保真对照）
+- MBG Example 语句预览按调用点还原条件（列名与操作符自调用点反推，左栏按条件文本可填）
 - 运行期拼接 SQL 填值，自研框架 `<pages>` 数据源 HQL 识别
 - HQL / JPQL / JPA Criteria 预览、`.hbm.xml` 命名查询、JPA Repository 派生查询与 CRUD 写路径
 - gutter 锚点左键预览、右键最近执行记录（弹框内可编辑 / 多选）
@@ -25,7 +26,7 @@
 - JOIN 关系可视化图、SQL 性能分析建议、Wrapper 链复杂度评分
 - 15 种数据库方言的分页 / upsert 渲染，方言智能推断
 - 逻辑删除 / 多租户 / 动态表名 / 数据权限模拟
-- DML 影响面预演、执行护栏（超时 / 无界写确认）、回滚快照与回放脚本导出
+- DML 影响面预演、执行护栏（超时 / 无界写确认 / 全表写风险横幅）、回滚快照与回放脚本导出
 - 一键诊断报告、执行前 Schema 校验与方言能力自检、复制为 AI 上下文
 
 详见[Wrapper 预览](/features/wrapper-preview) · [XML 预览](/features/xml-preview) · [注解预览](/features/annotation-preview) · [JPA 预览](/features/jpa-preview) · [方言支持](/features/dialect-support)
@@ -57,7 +58,7 @@
 - MCP Server 十一个只读工具
 - SQL 分享（Markdown / HTML / 可执行 SQL）
 - 设置导入导出与按项目覆盖
-- Gitee 抢先体验更新通道、自更新免重启
+- Gitee 抢先体验更新通道、自更新免重启、本地安装包目录（内网 zip 目录识别安装）
 - 错误与反馈一键上报需求池
 
 详见[MCP 工具](/features/mcp)

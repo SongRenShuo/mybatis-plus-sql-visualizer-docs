@@ -18,6 +18,7 @@ What's shipped and what's next. Per-feature details live in [Features](/en/featu
 
 - Wrapper → SQL static parsing (Lambda / string / MPJ / Kotlin), plus XML and annotation dynamic-SQL preview (OGNL panel)
 - iBatis 2.x sqlMap preview, interactive parameters and two-way navigation (dedicated render chain, golden-checked against the official engine)
+- MBG Example statement preview with conditions restored from call sites (column names and operators resolved backwards from the call site, fillable rows named after the conditions)
 - Fill-in values for runtime-concatenated SQL; HQL recognition for in-house `<pages>` datasources
 - HQL / JPQL / JPA Criteria preview, `.hbm.xml` named queries, JPA Repository derived queries and CRUD write paths
 - Gutter anchor: left-click preview, right-click recent executions (editable / multi-select in a dialog)
@@ -25,7 +26,7 @@ What's shipped and what's next. Per-feature details live in [Features](/en/featu
 - JOIN relationship diagram, SQL performance advice, Wrapper chain complexity score
 - Paging / upsert rendering for 15 database dialects, with dialect inference
 - Logical delete / multi-tenancy / dynamic table name / data-permission simulation
-- DML impact rehearsal, execution guardrails (timeout / unbounded-write confirmation), rollback snapshots and replay-script export
+- DML impact rehearsal, execution guardrails (timeout / unbounded-write confirmation / full-table write-risk banner), rollback snapshots and replay-script export
 - One-click diagnostic report, pre-execution schema check with dialect capability self-test, copy as AI context
 
 See [Wrapper preview](/en/features/wrapper-preview) · [XML preview](/en/features/xml-preview) · [Annotation preview](/en/features/annotation-preview) · [JPA preview](/en/features/jpa-preview) · [Dialect support](/en/features/dialect-support)
@@ -57,7 +58,7 @@ See [SQL log](/en/features/sql-log)
 - MCP Server with eleven read-only tools
 - SQL sharing (Markdown / HTML / executable SQL)
 - Settings import / export with per-project overrides
-- Gitee early-access channel, restart-free self-update
+- Gitee early-access channel, restart-free self-update, local install-package directory (install from an intranet folder of zips)
 - One-click error and feedback reporting to the feedback pool
 
 See [MCP tools](/en/features/mcp)

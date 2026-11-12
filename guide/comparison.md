@@ -15,6 +15,7 @@
 | MPJ 联表（JOIN）转 SQL | 支持 | 不涉及 | 手工 |
 | XML 动态标签（if/choose/foreach 等）按 MyBatis 语义渲染 | 支持 | 部分 | 手工 |
 | iBatis 2.x sqlMap 预览、参数交互与双向跳转 | 支持 | 部分 | 手工 |
+| MBG Example 语句按调用点还原条件（MyBatis Generator） | 支持 | 不支持 | 手工 |
 | 注解 SQL / `<script>` / Provider 预览 | 支持 | 不涉及 | 手工 |
 | JPA / Hibernate（派生方法、CRUD 写路径、JPQL、HQL、Criteria、Specification、QBE） | 支持 | 不涉及 | 手工 |
 | 其他 ORM 链式框架预览（xbatis / Easy-Query / MyBatis Dynamic SQL / Querydsl 等） | 支持 | 不涉及 | 手工 |
