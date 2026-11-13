@@ -44,3 +44,7 @@ wrangler.toml
 .playwright-mcp/
 # WorkBuddy AI 沙盒运行时产物
 .workbuddy-ai/
+
+# 会话临时产物（探针脚本、构建/部署日志、提交信息文件、验收截图）——
+# 发布侧已由 config.mts srcExclude 挡住，这里再挡住版本管理噪音
+tmp/
