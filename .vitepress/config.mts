@@ -71,6 +71,23 @@ export default defineConfig({
   // 2026-11-05 发现它此前没被排除，临时写进 tmp/ 的 markdown 会直接发布成公开页。
   srcExclude: ['docs/**', 'tmp/**', 'README.md'],
 
+  // markdown 渲染层给所有表格包一层横向滚动容器（.mp-table-scroll，样式在
+  // theme/style.css 表格段）：窄视口（769–1023 档正文列仅 550~694px）放不下
+  // 的宽表在列内滚动，而不是把整页撑出横向滚动条；列宽足够时表格保持
+  // display:table 全宽语义，桌面视觉零变化。
+  markdown: {
+    config(md) {
+      const renderToken = (tokens: any, idx: number, options: any, env: any, self: any) =>
+        self.renderToken(tokens, idx, options)
+      const tableOpen = md.renderer.rules.table_open ?? renderToken
+      const tableClose = md.renderer.rules.table_close ?? renderToken
+      md.renderer.rules.table_open = (tokens, idx, options, env, self) =>
+        '<div class="mp-table-scroll">' + tableOpen(tokens, idx, options, env, self)
+      md.renderer.rules.table_close = (tokens, idx, options, env, self) =>
+        tableClose(tokens, idx, options, env, self) + '</div>'
+    },
+  },
+
   title: 'SQL Visualizer',
   description: siteDescription,
 

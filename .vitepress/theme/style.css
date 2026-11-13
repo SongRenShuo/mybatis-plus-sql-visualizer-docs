@@ -446,7 +446,10 @@
   padding: 14px 20px !important;
   text-align: left;
   border-bottom: 2px solid var(--border-color);
-  white-space: nowrap;
+  /* 表头不强制单行：nowrap 让长表头（如「MyBatis Log Plugin 类」190px）成为表格
+     不可收缩最小宽，窄视口 960 档容器 550px 时整页横向溢出。桌面列宽足够时
+     表头本就单行，视觉不变；窄列下自然折行。 */
+  white-space: normal;
 }
 
 .vp-doc table td {
@@ -478,6 +481,12 @@
 
 .vp-doc table tr:last-child td:last-child {
   border-bottom-right-radius: 11px;
+}
+
+/* 表格横向滚动容器（markdown 渲染层包裹，出处 config.mts markdown.config）：
+   宽表在正文列内滚动而非撑破页面（960 档 comparison 页曾整页溢出 86px）。 */
+.mp-table-scroll {
+  overflow-x: auto;
 }
 
 @media (max-width: 768px) {
@@ -515,6 +524,16 @@
   color: var(--primary-color) !important;
   padding: 2px 8px !important;
   border-radius: 6px;
+}
+
+/* 表格单元格内的行内代码放开换行：全局行内代码 nowrap 让长调用链成为表格
+   的不可收缩最小宽（如 wrapper-preview「写法示例」表最长 58 字符 ≈558px），
+   窄视口（960 档容器仅 550px）会把表格撑出容器产生整页横向滚动 72px。
+   只在表格这一处允许换行（break-spaces 按空格断行、anywhere 兜底超长
+   单 token），列宽够时仍单行显示，桌面视觉不变。 */
+.vp-doc table :not(pre) > code {
+  white-space: break-spaces;
+  overflow-wrap: anywhere;
 }
 
 /* ---------- Keystroke 样式 ---------- */
