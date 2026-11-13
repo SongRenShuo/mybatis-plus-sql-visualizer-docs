@@ -1,0 +1,7 @@
+# Cloudflare Pages 响应头规则（计划 20261114-0027 P0-4）
+# /demo/* 是内容寻址式的演示媒体（mp4/webp/gif），弱网下 must-revalidate 4h
+# 档会让复访逐个回源校验；这里放宽到 7 天 + must-revalidate。
+# 不用 immutable：演示素材同名替换换代（无指纹文件名），immutable 会让老
+# 访客最多一年看不到更新。functions/_middleware.js 对非拦截路径放行，两者共存。
+/demo/*
+  Cache-Control: public, max-age=604800, must-revalidate

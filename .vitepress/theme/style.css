@@ -667,6 +667,10 @@ kbd {
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--border-color);
+  /* 固定宽高比占位（弱网媒体优化 20261114-0027 P0-3）：poster/视频未加载时
+     容器不再高度塌陷。实测 72 个 mp4 尺寸只有 1280x920 与 1266x912 两档
+     （比例差 <0.3%）+ 1 个 1440x1036（同比例），单一比例足够。 */
+  aspect-ratio: 1280 / 920;
 }
 
 .mp-gif-player { width: 100%; }

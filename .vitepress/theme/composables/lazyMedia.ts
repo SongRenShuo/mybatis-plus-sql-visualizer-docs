@@ -77,3 +77,18 @@ export function whenNear(el: Element | null | undefined, margin: number, run: ()
     if (!tasks.size) detach()
   }
 }
+
+/**
+ * 弱网探测（计划 20261114-0027 P1-6）：saveData 开启或 2g 级网络时，
+ * GifPlayer 把门控距离收到 0（仅视口内加载）并关闭自动播放。
+ * 连接信息 API 不存在（Firefox/Safari）按非弱网处理——距离门控本身已限流。
+ */
+export function weakNetwork(): boolean {
+  if (typeof navigator === 'undefined') return false
+  const conn = (
+    navigator as { connection?: { saveData?: boolean; effectiveType?: string } }
+  ).connection
+  if (!conn) return false
+  if (conn.saveData) return true
+  return conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g'
+}
