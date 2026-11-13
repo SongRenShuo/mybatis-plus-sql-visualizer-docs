@@ -16,6 +16,8 @@ const rootEl = ref<HTMLElement>()
 const playing = ref(true)
 /** 视频加载失败 → 进入「poster + 点击重试」降级态（不再回退 52MB GIF） */
 const loadError = ref(false)
+/** 弱网模式：用户是否已手动开始播放（决定播放图标显隐） */
+const playStarted = ref(false)
 /** 重试计数：>0 时给视频 src 加 cache-bust 查询串绕过坏缓存 */
 const retries = ref(0)
 /** poster（同名 .webp，mp4 首帧导出，≤20KB）与视频地址，由距离门控写入 */
@@ -80,6 +82,12 @@ function retry() {
   mediaSrc.value = derivedVideo.value
 }
 
+/** 弱网点播放图标开始播放；非弱网走 autoplay，不出图标 */
+function startPlay() {
+  playStarted.value = true
+  togglePlay()
+}
+
 function togglePlay() {
   if (!videoEl.value) return
   if (videoEl.value.paused) {
@@ -131,6 +139,17 @@ function togglePlay() {
       @error="onVideoError"
     ></video>
     <span v-if="video" class="mp-gif-player__badge">{{ playing ? 'DEMO' : '⏸' }}</span>
+    <!-- 弱网模式（不自动播放）的播放入口：居中圆形图标让用户知道这是可播的视频；
+         非弱网始终 autoplay，不出图标。点击播放后图标消失。 -->
+    <button
+      v-if="weak && useVideo && !playStarted && !loadError"
+      class="mp-gif-player__play"
+      type="button"
+      aria-label="播放演示"
+      @click.stop="startPlay"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+    </button>
     <!-- 弱网失败降级：poster 常驻 + 手动重试（cache-bust 绕过坏缓存） -->
     <button
       v-if="loadError"
@@ -156,6 +175,31 @@ function togglePlay() {
   position: absolute;
   inset: 0;
   height: 100%;
+}
+
+/* 弱网模式播放入口：半透明圆底 + 白色三角，点按开始后消失 */
+.mp-gif-player__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mp-gif-player__play svg {
+  width: 30px;
+  height: 30px;
+  fill: #fff;
+  margin-left: 3px; /* 视觉居中：三角形重心偏右 */
 }
 
 /* 弱网失败降级：居中重试按钮，朴素原生控件 */
