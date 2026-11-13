@@ -655,9 +655,9 @@ kbd {
 .mp-gif-player img { display: block; max-width: 100%; }
 
 /* 宽屏把布局上限从 VitePress 默认 1440px 放宽到 1680px：1600 视口下默认上限会
-   白白空掉两侧各 80px，而正文列（688px 文本 measure）并不需要跟着变宽——
-   放宽后侧栏左移、大纲右移，中间留给演示图的「可用带」随之变大。
-   正文 measure 保持不动，只影响横向排布，长表格/代码块顺带获得更多宽度。 */
+   白白空掉两侧各 80px——放宽后侧栏左移、大纲右移，正文列与演示动图
+   （见下方「正文宽度对齐动图宽度」规则，800px）有充足空间放下。
+   只影响横向排布，长表格/代码块顺带获得更多宽度。 */
 :root {
   --vp-layout-max-width: 1680px;
 }
@@ -673,55 +673,45 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
   filter: invert(1) hue-rotate(180deg) saturate(1.05);
 }
 
-/* 桌面/平板端：宽幅演示图（GIF 与示意 SVG）越过正文行宽上限
-   （.VPDoc.has-aside .content-container{max-width:688px}）多占一点，
-   但**必须留在左侧栏与右侧大纲之间**并留出安全间距。
-   为什么之前是错的：首版只按「不产生横向滚动」判定，实测图片左缘越进侧栏 48px、
-   右缘越进大纲 80px（1600 视口）——图片视觉上被两栏「压住」。横向不滚动 ≠ 没压住。
-   出血量按「两侧可用空白取小者 − 安全间距」定：≥1280px 时实测内容列左右余量约
-   112/80px（1600）→ 取 56px 出血（图片 800px，两侧各留 ≥24px 间距）；
-   1024–1279px 大纲已隐藏，右侧余量约 100px → 同样取 56px；
-   768–1023px 更窄，取 24px。三档均以浏览器实测间距 ≥24px 为准校准。
-   width 用 calc 同步加宽——组件根元素带 width:100%，只给负边距会左移并右侧溢出。 */
-@media (min-width: 1440px) {
-  .mp-gif-player,
-  .vp-doc p > img[src^="/demo/"] {
-    max-width: none;
+/* 正文宽度对齐演示动图宽度（2026-11-13 定案，计划 docs/开发计划/
+   20261113-2315-文档页正文宽度对齐动图宽度-开发计划.md）：
+   以前是动图带出血越过 688px 正文列占 800px，现在反过来把正文列放宽到与
+   动图同宽——对 content-container 本身施加与原动图完全相同的出血
+   （负 margin + width calc，纯 max-width 在窄视口可用空间不足 736/800 时
+   量不出「文字变宽」，实测 1366 视口可用仅 652px），容器足迹＝原动图足迹，
+   动图视觉宽度逐档不变、文字列随之对齐。
+   VitePress 1.6.4 VPDoc.vue 里 .VPDoc.has-aside .content-container{max-width:688px}
+   是 scoped 硬编码（编译后带 data-v 属性选择器，特异性 0-4-0），
+   故须 5 class 链（0-5-0）压过。
+   档位照抄原动图出血规则实测校准值：
+   768–1023 与 1280–1439 档出血 ±24px（原 24px 出血档），上限 736px；
+   1024–1279 与 ≥1440 档出血 ±56px（原 56px 出血档），上限 800px。
+   max-width 是上限不是强制宽，空间不足时自动收缩，无溢出风险；
+   实测各档与侧栏/大纲间距 ≥32px。≥768 才生效——<768 手机端 VPDoc 内边距
+   只有 24px，容器出血会顶穿，手机端文字保持原布局、动图整行出血照旧。 */
+@media (min-width: 768px) {
+  .VPDoc.has-aside .container .content .content-container {
+    width: calc(100% + 48px);
+    margin-left: -24px;
+    margin-right: -24px;
+    max-width: 736px;
+  }
+}
+@media (min-width: 1024px) {
+  .VPDoc.has-aside .container .content .content-container {
     width: calc(100% + 112px);
     margin-left: -56px;
     margin-right: -56px;
+    max-width: 800px;
   }
 }
-
-/* 1280–1439px：大纲已出现但容器余量最小（实测右侧仅约 64px），出血收到 24px，
-   保证与大纲仍留 ≥24px 间距——这一档宁小勿挤。 */
+/* 1280–1439px：大纲已出现但容器余量最小——这一档宁小勿挤。 */
 @media (min-width: 1280px) and (max-width: 1439px) {
-  .mp-gif-player,
-  .vp-doc p > img[src^="/demo/"] {
-    max-width: none;
+  .VPDoc.has-aside .container .content .content-container {
     width: calc(100% + 48px);
     margin-left: -24px;
     margin-right: -24px;
-  }
-}
-
-@media (min-width: 1024px) and (max-width: 1279px) {
-  .mp-gif-player,
-  .vp-doc p > img[src^="/demo/"] {
-    max-width: none;
-    width: calc(100% + 112px);
-    margin-left: -56px;
-    margin-right: -56px;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .mp-gif-player,
-  .vp-doc p > img[src^="/demo/"] {
-    max-width: none;
-    width: calc(100% + 48px);
-    margin-left: -24px;
-    margin-right: -24px;
+    max-width: 736px;
   }
 }
 
