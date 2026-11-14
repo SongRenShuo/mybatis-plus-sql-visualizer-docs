@@ -30,13 +30,15 @@ const media = [
  * 演示媒体从 GIF 换成 H.264 MP4：全站 69 个 GIF 合计 52MB，转码后 18.7MB（-64%），
  * 首页这 8 位从约 7.0MB 降到约 2.4MB，且视频可流式播放，不必整份下完。
  */
-const states = reactive(media.map(() => ({ posterSrc: '', videoSrc: '', gifError: false })))
+const states = reactive(media.map(() => ({ posterSrc: '', videoSrc: '', gifError: false, isPlaying: false, pendingPlay: false })))
 
 const features = computed(() =>
   c.value.capability.items.map((item, i) => ({ ...item, ...media[i], ...states[i] })),
 )
 
 const gates = []
+/** 各视频元素引用（v-for 函数 ref 填充），播放按钮用 */
+const videoEls = reactive({})
 
 onMounted(() => {
   if (!sectionEl.value) return
@@ -48,6 +50,25 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => gates.forEach((cancel) => cancel()))
+
+function onCanplay(i) {
+  // 点播放按钮时视频还没挂载的意图在这里兑现
+  if (states[i].pendingPlay) {
+    states[i].pendingPlay = false
+    videoEls[i]?.play()
+  }
+}
+
+function startPlay(i) {
+  const video = videoEls[i]
+  if (states[i].videoSrc && video) {
+    video.play()
+  } else {
+    // 用户主动点击 = 明确意图，直接放行加载不再排队，canplay 后自动开播
+    states[i].pendingPlay = true
+    states[i].videoSrc = media[i].videoSrc
+  }
+}
 </script>
 
 <template>
@@ -79,6 +100,7 @@ onBeforeUnmount(() => gates.forEach((cancel) => cancel()))
             />
             <video
               v-if="item.videoSrc && !item.gifError"
+              :ref="(el) => (videoEls[index] = el)"
               :src="item.videoSrc"
               :poster="item.posterSrc || undefined"
               muted
@@ -88,8 +110,22 @@ onBeforeUnmount(() => gates.forEach((cancel) => cancel()))
               preload="metadata"
               :aria-label="item.title"
               class="feature-video feature-video--video"
+              @canplay="onCanplay(index)"
+              @playing="states[index].isPlaying = true"
+              @pause="states[index].isPlaying = false"
               @error="states[index].gifError = true"
             />
+            <!-- 播放入口：视频还没真正开播就显示（弱网缓冲/autoplay 被 stall/被暂停），
+                 'playing' 后自动消失。与功能详解页 GifPlayer 同款交互。 -->
+            <button
+              v-if="item.videoSrc && !item.gifError && !item.isPlaying"
+              class="feature-play-btn"
+              type="button"
+              :aria-label="`播放演示：${item.title}`"
+              @click.stop="startPlay(index)"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+            </button>
           </div>
 
           <div class="feature-content" :class="{ reverse: item.reverse }">
@@ -198,6 +234,32 @@ onBeforeUnmount(() => gates.forEach((cancel) => cancel()))
   inset: 0;
   height: 100%;
   object-fit: cover;
+}
+
+/* 播放入口：半透明圆底 + 白色三角，与功能详解页 GifPlayer 同款（20261114-0027 三轮） */
+.feature-play-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.feature-play-btn svg {
+  width: 30px;
+  height: 30px;
+  fill: #fff;
+  margin-left: 3px;
 }
 
 @media (max-width: 767px) {
