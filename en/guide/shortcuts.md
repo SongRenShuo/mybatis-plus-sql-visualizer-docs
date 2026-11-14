@@ -1,3 +1,8 @@
+---
+title: "Shortcuts & Triggers Cheat Sheet"
+description: "Default key bindings for Windows / Linux and macOS plus every entry point, covering SQL preview, SQL-to-Java, popup execution and navigation."
+---
+
 # Shortcuts & Triggers
 
 Default key bindings for Windows / Linux and macOS, plus every entry point for each feature.

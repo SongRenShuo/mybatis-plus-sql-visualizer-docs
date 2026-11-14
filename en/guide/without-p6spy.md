@@ -1,3 +1,8 @@
+---
+title: "Full SQL with Real Parameters Without p6spy"
+description: "p6spy needs a JDBC driver swap; this page explains what that costs and lists ways to get complete SQL with real parameters without touching the project."
+---
+
 # Seeing complete SQL with real parameters without p6spy
 
 p6spy is a common choice for observing SQL, but it asks you to swap the data source's JDBC driver for a proxy implementation. If a dependency cannot pass the audit, the multi-datasource setup is untouchable, or you only occasionally need to check one statement — there are ways that do not touch the project. This page first explains how p6spy works and what it costs to adopt, then lists the alternatives.

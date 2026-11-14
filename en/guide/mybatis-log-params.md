@@ -1,3 +1,8 @@
+---
+title: "How Question Marks in MyBatis Logs Become Real Parameters"
+description: "Why MyBatis logs separate the statement from its parameters, the usual ways to fill them back in, and the plugin's one-click restore."
+---
+
 # Turning the ? marks in MyBatis logs into real parameters
 
 When MyBatis prints SQL, the statement and its parameters come apart: the `Preparing:` line carries a string of `?` marks, and the values follow on the next `Parameters:` line. To copy a runnable SQL you have to fill the parameters back in, in order — strings need quoting, dates need formatting, and with many values it is easy to misalign. This page walks through the common approaches and ends with the one-click option inside the plugin.

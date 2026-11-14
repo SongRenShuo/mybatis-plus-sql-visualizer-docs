@@ -1,3 +1,8 @@
+---
+title: "Quick Start"
+description: "Install the plugin and get your first SQL preview within three minutes, whether for Wrapper chains, XML dynamic SQL or runtime logs."
+---
+
 # Getting Started
 
 Get up and running with SQL Visualizer in 3 minutes.

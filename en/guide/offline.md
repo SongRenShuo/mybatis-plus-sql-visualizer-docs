@@ -1,3 +1,8 @@
+---
+title: "Offline or Air-gapped Installation"
+description: "Core features run entirely locally, so an air-gapped environment is fine; this page covers which network calls exist, offline install notes and intranet updates."
+---
+
 # Offline & Intranet Environments
 
 Every core capability of SQL Visualizer runs locally — the plugin **works fully without internet access**. This page covers which network calls exist, what to prepare for an air-gapped deployment, and how to point the update channel at your intranet.

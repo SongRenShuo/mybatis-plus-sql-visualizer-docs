@@ -1,3 +1,8 @@
+---
+title: "Compatibility & Requirements (IDEA 2024.3+)"
+description: "The plugin requires IntelliJ IDEA 2024.3 or later; Community, Ultimate and Android Studio are all supported, with no extra JDK to install."
+---
+
 # Compatibility & Requirements
 
 ## IDE versions

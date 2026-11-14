@@ -1,3 +1,8 @@
+---
+title: "FAQ"
+description: "Answers to the most common questions — missing gutter icons, IDE compatibility, executing SQL and more."
+---
+
 # FAQ
 
 ## Which IDE versions are supported?

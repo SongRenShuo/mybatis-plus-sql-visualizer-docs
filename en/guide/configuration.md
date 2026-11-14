@@ -1,3 +1,8 @@
+---
+title: "Configuration Reference"
+description: "Every plugin setting lives under Settings > Tools > SQL Visualizer; each option's default value and effect explained, no IDE restart needed."
+---
+
 # Configuration
 
 All settings are located at `Settings > Tools > SQL Visualizer`. The search box at the top-left of the Settings dialog finds these entries directly — every plugin setting is registered with the IDE settings search index. The plugin landing page has its own search box on top of that; both index the same data and return the same hits.

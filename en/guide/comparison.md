@@ -1,3 +1,8 @@
+---
+title: "How to See the SQL MyBatis Actually Runs — Approach Comparison"
+description: "Compare SQL Visualizer with MyBatis Log Plugin and hand-joined log lines on seeing the final SQL, so you can pick the approach that fits."
+---
+
 # Why SQL Visualizer
 
 In one line: **see the final SQL while you write code; once your app runs, real parameters, timings and source locations drop into the list by themselves; and SQL can be converted back into Java code.**
