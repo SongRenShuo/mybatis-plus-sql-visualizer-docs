@@ -1,3 +1,8 @@
+---
+title: "SQL Visualizer 常见问题 FAQ"
+description: "汇总 gutter 图标不显示、IDE 版本兼容、执行 SQL 等高频问题，按问题直达答案。"
+---
+
 # 常见问题 FAQ
 
 ## 插件支持哪些 IDE 版本？

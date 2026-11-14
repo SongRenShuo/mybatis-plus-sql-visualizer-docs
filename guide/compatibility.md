@@ -1,3 +1,8 @@
+---
+title: "SQL Visualizer 版本兼容与安装要求（IDEA 2024.3+）"
+description: "插件要求 IntelliJ IDEA 2024.3 及以上，Community 与 Ultimate、Android Studio 均可使用，无需额外装 JDK。"
+---
+
 # 版本兼容与安装要求
 
 ## IDE 版本

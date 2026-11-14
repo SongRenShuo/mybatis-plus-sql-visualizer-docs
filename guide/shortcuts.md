@@ -1,3 +1,8 @@
+---
+title: "SQL Visualizer 快捷键与触发方式速查"
+description: "Windows / Linux 与 macOS 默认键位及各功能入口一览，含 SQL 预览、SQL 转 Java、弹窗执行与双向跳转。"
+---
+
 # 快捷键与触发方式速查
 
 Windows / Linux 与 macOS 的默认键位，以及各功能的入口方式。

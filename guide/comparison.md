@@ -1,3 +1,8 @@
+---
+title: "MyBatis 查看最终执行 SQL 的方案对比"
+description: "对比 SQL Visualizer 与 MyBatis Log Plugin、手拼日志等方案在查看最终 SQL 上的能力差异，供选型参考。"
+---
+
 # 为什么选择 SQL Visualizer
 
 一句话：**写代码时就看见最终 SQL；应用跑起来后，真实参数、耗时与源码位置自动入列；SQL 还能反向转回 Java 代码。**

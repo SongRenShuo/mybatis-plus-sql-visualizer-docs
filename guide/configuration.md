@@ -1,3 +1,8 @@
+---
+title: "SQL Visualizer 配置详解（Settings → Tools）"
+description: "插件全部配置集中在 Settings > Tools > SQL Visualizer，逐项说明默认值与作用，改完即生效、无需重启 IDE。"
+---
+
 # 配置详解
 
 所有配置位于 `Settings > Tools > SQL Visualizer`。设置对话框左上角的搜索框能直接搜到这些条目——插件的每个设置项都登记进了 IDE 设置搜索的索引；插件自己的落地页里另有一个页内搜索，两者索引同一份数据，命中结果一致。

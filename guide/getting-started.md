@@ -1,3 +1,8 @@
+---
+title: "SQL Visualizer 快速开始"
+description: "装好插件后按目标直达：预览 Wrapper 链、XML 动态 SQL 或运行期 SQL 日志，每条最多三步见效。"
+---
+
 # 快速开始
 
 3 分钟上手 SQL Visualizer。
