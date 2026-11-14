@@ -1,4 +1,5 @@
 ---
+title: "SQL Visualizer MCP Server (SQL Tools for AI Agents)"
 description: "MCP Server hands SQL capabilities to AI agents — eleven read-only sqlv_* tools: render SQL, restore logs, schema, EXPLAIN plans, rollback plans, perf advice."
 ---
 

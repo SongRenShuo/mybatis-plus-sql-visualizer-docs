@@ -1,5 +1,5 @@
 ---
-title: "Wrapper → SQL Preview"
+title: "MyBatis-Plus Wrapper SQL Preview (No App or Database Needed)"
 description: "See the SQL your MyBatis-Plus Wrapper / LambdaQueryWrapper generates — static preview without launching the app or a database, 15-dialect pagination."
 ---
 

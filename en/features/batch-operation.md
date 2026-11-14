@@ -1,4 +1,5 @@
 ---
+title: "MyBatis-Plus Batch SQL Preview (saveBatch / updateBatchById)"
 description: "Batch parameter panel for saveBatch / updateBatchById — expand by column with per-column toggles, UPSERT conflict clauses per dialect, FieldFill simulation."
 ---
 

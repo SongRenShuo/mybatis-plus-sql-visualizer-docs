@@ -1,4 +1,5 @@
 ---
+title: "JPA / Hibernate SQL Preview (Without Starting Spring)"
 description: "Preview the SQL JPA / Hibernate generates — the alternative when show_sql only prints question marks. Repository methods, JPQL / HQL, Criteria, .hbm.xml."
 ---
 

@@ -1,4 +1,5 @@
 ---
+title: "MyBatis Annotation SQL Preview (@Select / @Update / @Insert / @Delete)"
 description: "Preview @Select / @Update / @Delete / @Insert annotation SQL — click the gutter icon for the SQL; <script> dynamic SQL and Provider annotations supported."
 ---
 
