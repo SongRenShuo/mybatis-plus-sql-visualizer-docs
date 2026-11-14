@@ -16,9 +16,30 @@ const LEGACY_HOSTS = new Set([
 
 const BLOCKED_PREFIXES = ['/tmp/', '/_probe/']
 
-export function onRequest(context) {
+// 站长平台文件验证（Google / Bing / 百度）：CF Pages 的 HTML 规范化会把 /xxx.html
+// 308 到 /xxx，百度验证器不跟跳转（实测报「未知原因:308」）。这里对验证文件路径
+// 精确放行——直接按无后缀路径取静态资产原文，以 200 返回，绕开 308。
+const VERIFY_FILE_RE = /^\/(baidu_verify_[\w-]+|googled[\w]+|BingSiteAuth)\.html$/
+
+export async function onRequest(context) {
   const { request } = context
   const url = new URL(request.url)
+
+  const verifyMatch = url.pathname.match(VERIFY_FILE_RE)
+  if (verifyMatch) {
+    const assetUrl = new URL(request.url)
+    assetUrl.pathname = url.pathname.replace(/\.html$/, '')
+    const asset = await context.env.ASSETS.fetch(new Request(assetUrl.toString()))
+    if (asset.ok) {
+      return new Response(asset.body, {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'no-store',
+        },
+      })
+    }
+  }
 
   if (BLOCKED_PREFIXES.some((p) => url.pathname.startsWith(p))) {
     return new Response('Not Found', {
