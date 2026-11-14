@@ -10,6 +10,7 @@
     "deploy": "node scripts/sync-plugin-version.mjs && node scripts/generate-changelog.mjs && vitepress build --ignoreDeadLinks && node scripts/prepare-pagefind.mjs && pagefind --site .vitepress/dist --exclude-selectors \"[data-nosnippet], .VPNav, .VPSidebar, .VPFooter, .VPBackToTop, .pf-trigger, .VPLocalNav, .VPSkipLink\" && wrangler pages deploy .vitepress/dist --project-name sql-visualizer-docs --branch main --commit-dirty=true"
   },
   "devDependencies": {
+    "image-size": "^2.1.0",
     "marked": "^15.0.12",
     "pagefind": "^1.5.2",
     "puppeteer-core": "^24.43.1",

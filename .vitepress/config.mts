@@ -3,6 +3,7 @@ import llmstxt from 'vitepress-plugin-llms'
 import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, extname, resolve, sep } from 'node:path'
+import { imageSize } from 'image-size'
 
 // dev server 只服务源码目录，构建产物里的 pagefind 索引（npm run build 生成）不在其列，
 // 站内搜索弹窗会落到「加载失败」。这里把 .vitepress/dist/pagefind 只读挂到 /pagefind；
@@ -85,6 +86,30 @@ export default defineConfig({
         '<div class="mp-table-scroll">' + tableOpen(tokens, idx, options, env, self)
       md.renderer.rules.table_close = (tokens, idx, options, env, self) =>
         tableClose(tokens, idx, options, env, self) + '</div>'
+      // 静态 /demo/ 图弱网占位（计划 20261114-0027 五轮）：功能详解页的演示视频有
+      // poster+宽高比占位，而 md 里直接写的静态演示图（安装流程截图、设置页截图、
+      // 示意 SVG）什么都没有——弱网加载期间版面塌陷跳动。这里构建期实测尺寸注入
+      // width/height（浏览器据此保留空间），并加 loading=lazy（不与首屏抢带宽）
+      // 与 decoding=async。GifPlayer 组件位不经此路径（它是组件标签不是 md 图片）。
+      const imageOpen = md.renderer.rules.image ?? renderToken
+      md.renderer.rules.image = (tokens, idx, options, env, self) => {
+        const token = tokens[idx]
+        const src = (token.attrGet('src') || '').split('?')[0]
+        if (src.startsWith('/demo/')) {
+          try {
+            const dim = imageSize(readFileSync(resolve(process.cwd(), 'public' + src)))
+            if (dim.width && dim.height) {
+              token.attrSet('width', String(dim.width))
+              token.attrSet('height', String(dim.height))
+            }
+          } catch {
+            /* 读不到尺寸就只加 lazy */
+          }
+          token.attrSet('loading', 'lazy')
+          token.attrSet('decoding', 'async')
+        }
+        return imageOpen(tokens, idx, options, env, self)
+      }
     },
   },
 
