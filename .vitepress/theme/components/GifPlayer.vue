@@ -16,8 +16,11 @@ const rootEl = ref<HTMLElement>()
 const playing = ref(true)
 /** 视频加载失败 → 进入「poster + 点击重试」降级态（不再回退 52MB GIF） */
 const loadError = ref(false)
-/** 弱网模式：用户是否已手动开始播放（决定播放图标显隐） */
-const playStarted = ref(false)
+/** 视频是否已真正开播（'playing' 事件）——播放按钮的显隐依据：
+    只要还没开播（弱网待点、autoplay 被 stall、被暂停）就显示按钮 */
+const isPlaying = ref(false)
+/** 用户点播放按钮时视频尚未挂载 → 记住意图，canplay 后自动开播 */
+const pendingPlay = ref(false)
 /** 重试计数：>0 时给视频 src 加 cache-bust 查询串绕过坏缓存 */
 const retries = ref(0)
 /** poster（同名 .webp，mp4 首帧导出，≤20KB）与视频地址，由距离门控写入 */
@@ -65,9 +68,13 @@ onBeforeUnmount(() => {
   releaseSlotIfHeld()
 })
 
-/** 首帧就绪：归还队列槽位，放行下一个视频 */
+/** 首帧就绪：归还队列槽位，放行下一个视频；点过播放按钮则立即开播 */
 function onVideoReady() {
   releaseSlotIfHeld()
+  if (pendingPlay.value) {
+    pendingPlay.value = false
+    videoEl.value?.play()
+  }
 }
 
 function onVideoError() {
@@ -82,10 +89,15 @@ function retry() {
   mediaSrc.value = derivedVideo.value
 }
 
-/** 弱网点播放图标开始播放；非弱网走 autoplay，不出图标 */
+/** 播放按钮：视频未开播时点击即播。若视频还没挂载（门控未放行/排队中），
+    记下意图直接加载（用户主动点击=明确意图，不再排队），canplay 后自动开播 */
 function startPlay() {
-  playStarted.value = true
-  togglePlay()
+  if (mediaSrc.value && videoEl.value) {
+    videoEl.value.play()
+  } else {
+    pendingPlay.value = true
+    mediaSrc.value = derivedVideo.value
+  }
 }
 
 function togglePlay() {
@@ -136,13 +148,16 @@ function togglePlay() {
       preload="metadata"
       :aria-label="alt || undefined"
       @canplay="onVideoReady"
+      @playing="isPlaying = true"
+      @pause="isPlaying = false"
       @error="onVideoError"
     ></video>
     <span v-if="video" class="mp-gif-player__badge">{{ playing ? 'DEMO' : '⏸' }}</span>
-    <!-- 弱网模式（不自动播放）的播放入口：居中圆形图标让用户知道这是可播的视频；
-         非弱网始终 autoplay，不出图标。点击播放后图标消失。 -->
+    <!-- 播放入口：只要视频还没真正开播就显示（弱网待点、autoplay 被 stall、被暂停均覆盖），
+         'playing' 事件后自动消失——不依赖弱网判定（手机 effectiveType 多报 4g，按弱网
+         显隐会导致用户永远看不到按钮）。非弱网自动播放很快接管，按钮只闪现片刻。 -->
     <button
-      v-if="weak && useVideo && !playStarted && !loadError"
+      v-if="useVideo && !isPlaying"
       class="mp-gif-player__play"
       type="button"
       aria-label="播放演示"
