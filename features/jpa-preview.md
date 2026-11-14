@@ -1,4 +1,5 @@
 ---
+title: "JPA / Hibernate SQL 预览（不启动 Spring，show_sql 问号的替代）"
 description: "JPA / Hibernate 生成的 SQL 预览（show_sql 只有问号时的替代）——Repository 方法、JPQL / HQL、Criteria、.hbm.xml 静态还原完整 SQL，不启动 Spring、不连数据库。"
 ---
 

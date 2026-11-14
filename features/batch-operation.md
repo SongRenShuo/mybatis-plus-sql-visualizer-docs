@@ -1,4 +1,5 @@
 ---
+title: "MyBatis-Plus 批量操作 SQL 预览（saveBatch / updateBatchById）"
 description: "saveBatch / updateBatchById 等批量 SQL 参数面板——按列展开、逐列勾选，UPSERT 冲突子句按方言渲染，FieldFill 填充列可安全模拟。"
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "Wrapper → SQL 预览"
+title: "MyBatis-Plus Wrapper 预览最终 SQL（不启动项目，参数自动回填）"
 description: "查看 MyBatis-Plus Wrapper / LambdaQueryWrapper 生成的 SQL——不启动项目、不连数据库，静态解析 Wrapper 链即时预览，参数回填、15 种方言分页渲染。"
 ---
 
