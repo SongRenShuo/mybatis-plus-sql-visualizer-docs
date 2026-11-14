@@ -145,7 +145,7 @@ export default defineConfig({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       'name': 'SQL Visualizer',
-      'description': 'IntelliJ IDEA 插件：MyBatis-Plus SQL 调试利器',
+      'description': 'IntelliJ IDEA 的 SQL 调试插件：静态预览 MyBatis-Plus Wrapper、XML/注解、JPA/HQL 的最终 SQL，运行期捕获真实参数与耗时，支持 EXPLAIN 执行计划与 SQL 反向转 Java 代码。',
       'url': 'https://sql-visualizer.jvtools.cn',
       'inLanguage': ['zh-CN', 'en']
     })],
@@ -277,6 +277,7 @@ export default defineConfig({
               { text: '版本兼容', link: '/guide/compatibility' },
               { text: '内网与离线环境', link: '/guide/offline' },
               { text: '为什么选择 SQL Visualizer', link: '/guide/comparison' },
+              { text: '怎么看 MyBatis 最终执行的 SQL', link: '/guide/view-final-sql' },
               { text: '常见问题 FAQ', link: '/guide/faq' },
               { text: 'MyBatis 日志里的问号怎么变成真实参数', link: '/guide/mybatis-log-params' },
               { text: '不用 p6spy，怎么看到带真实参数的完整 SQL', link: '/guide/without-p6spy' }
@@ -368,6 +369,7 @@ export default defineConfig({
               { text: 'Compatibility', link: '/en/guide/compatibility' },
               { text: 'Offline & Intranet', link: '/en/guide/offline' },
               { text: 'Why SQL Visualizer', link: '/en/guide/comparison' },
+              { text: 'How to see the SQL MyBatis actually runs', link: '/en/guide/view-final-sql' },
               { text: 'FAQ', link: '/en/guide/faq' },
               { text: 'Turning the ? marks in MyBatis logs into real parameters', link: '/en/guide/mybatis-log-params' },
               { text: 'Seeing complete SQL with real parameters without p6spy', link: '/en/guide/without-p6spy' }
