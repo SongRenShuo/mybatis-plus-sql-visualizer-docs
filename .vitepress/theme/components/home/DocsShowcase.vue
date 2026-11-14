@@ -9,6 +9,12 @@ const mediaAlt = lang.value.startsWith('zh') ? 'Wrapper → SQL 预览演示' : 
 
 /** 演示媒体用同名 mp4（GIF 的 1/4 体积）；poster 常驻底层撑布局，视频失败时摘掉叠层 */
 const gifError = ref(false)
+/** 播放按钮：视频还没真正开播（'playing' 未触发）就显示，开播后消失（20261114-0027 四轮） */
+const videoEl = ref(null)
+const isPlaying = ref(false)
+function startPlay() {
+  videoEl.value?.play()
+}
 </script>
 
 <template>
@@ -73,6 +79,7 @@ const gifError = ref(false)
           />
           <video
             v-if="!gifError"
+            ref="videoEl"
             :src="'/demo/wrapper-preview.mp4'"
             poster="/demo/wrapper-preview.webp"
             :aria-label="mediaAlt"
@@ -82,8 +89,19 @@ const gifError = ref(false)
             autoplay
             preload="metadata"
             class="docs-showcase-video docs-showcase-video--gif"
+            @playing="isPlaying = true"
+            @pause="isPlaying = false"
             @error="gifError = true"
           />
+          <button
+            v-if="!gifError && !isPlaying"
+            class="docs-showcase-play-btn"
+            type="button"
+            aria-label="播放演示"
+            @click.stop="startPlay"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -239,5 +257,32 @@ const gifError = ref(false)
 .docs-showcase-video--gif {
   position: absolute;
   inset: 0;
+}
+
+/* 播放入口：视频未开播时显示，开播后消失（与 GifPlayer/FeatureAlternate 同款；
+   video-wrap 已有 position:relative 作定位基准） */
+.docs-showcase-play-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.docs-showcase-play-btn svg {
+  width: 30px;
+  height: 30px;
+  fill: #fff;
+  margin-left: 3px;
 }
 </style>

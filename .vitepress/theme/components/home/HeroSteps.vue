@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import { useHomeContent } from '../../composables/useHomeContent'
 
 /**
@@ -10,6 +11,14 @@ import { useHomeContent } from '../../composables/useHomeContent'
  * 统一处理（含 prefers-reduced-motion 直接补类），本组件不自己挂观察器。
  */
 const { c } = useHomeContent()
+
+/** 播放按钮：视频还没真正开播（'playing' 未触发）就显示，开播后消失——
+    与功能详解页 GifPlayer / FeatureAlternate 同款交互（20261114-0027 四轮） */
+const videoEl = ref(null)
+const isPlaying = ref(false)
+function startPlay() {
+  videoEl.value?.play()
+}
 </script>
 
 <template>
@@ -46,6 +55,7 @@ const { c } = useHomeContent()
 
         <div class="steps-media mp-reveal">
           <video
+            ref="videoEl"
             src="/demo/wrapper-preview.mp4"
             poster="/demo/wrapper-preview.webp"
             :aria-label="c.steps.imageAlt"
@@ -55,7 +65,18 @@ const { c } = useHomeContent()
             autoplay
             preload="metadata"
             class="steps-gif"
+            @playing="isPlaying = true"
+            @pause="isPlaying = false"
           ></video>
+          <button
+            v-if="!isPlaying"
+            class="steps-play-btn"
+            type="button"
+            :aria-label="`${c.steps.title} 播放演示`"
+            @click.stop="startPlay"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -210,5 +231,35 @@ const { c } = useHomeContent()
   display: block;
   background-color: var(--bg-secondary);
   /* 窗框已在源文件裁掉，不再用 clip-path 补偿 */
+}
+
+/* 播放入口：视频未开播时显示，开播后消失（与 GifPlayer/FeatureAlternate 同款） */
+.steps-media {
+  position: relative;
+}
+
+.steps-play-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.steps-play-btn svg {
+  width: 30px;
+  height: 30px;
+  fill: #fff;
+  margin-left: 3px;
 }
 </style>
