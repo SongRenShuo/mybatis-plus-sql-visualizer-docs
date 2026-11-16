@@ -44,6 +44,20 @@ This is the first batch (MVP): common chain queries are covered; rarer method sh
 
 ## Features
 
+### Statement Type & Preview Target
+
+The meta line at the top of the preview panel states how the statement type was determined: "Type basis: `remove()` consumption (line 235)" — the evidence is right there in the open, no need to dig through source code.
+
+When the same wrapper variable is consumed in several places (common in real projects: the variable goes through `update(entity, w)` first, gets reassigned, then hits `delete(w)`), the toolbar shows a "Statement: UPDATE" switch entry listing every consumption site of that variable (with method name and line number) — switch the preview target as needed, and hovering also reveals all candidates.
+
+The boundaries of type inference are equally visible:
+
+- Inference picks the consumption closest to the cursor — calls inside the anchor's own statement win, otherwise the nearest one after the anchor; a "declaration and consumption separated" shape (`w = new …; service.remove(w);`) still resolves to DELETE
+- Reassignment starts a new segment: the anchor only collects conditions from its own segment, so conditions assembled before a reassignment never leak into the statement after it
+- Same-named calls on JDK containers (`list.remove(wrapper)` / `map.remove(k, wrapper)`) don't count as SQL consumption — a method-name collision is not a MyBatis-Plus consumption
+
+For `update(entity, wrapper)` previews the SET section gets a parameter source per column: one row each (e.g. `patch.order_no`), fill whichever column you want to change — no longer a single shared input that overwrites every column at once.
+
 ### Dynamic Condition Toggles
 
 <GifPlayer src="/demo/wrapper-params.gif" alt="Unticking the username condition in the preview panel drops a WHERE clause in real time, ticking it back restores it; typing values (tom / 1, unquoted) replaces the placeholders with 'tom' / 1 instantly — quoting is decided by the plugin from the column type" />
@@ -160,6 +174,8 @@ Entities with `@TableLogic` auto-append `AND deleted = value` (the value is conf
 ### Execute SQL
 
 With IntelliJ IDEA Ultimate + Database plugin, a temporary `.sql` file is created automatically after preview, then executed with `Ctrl+Enter`. The preview dialog is non-modal: when a data source password expires during execution, IDEA's credential prompt is never hidden behind it, so you can type right away. Execution failures are reported inline in the panel instead of a modal dialog interrupting you.
+
+Opening a preview only shows the SQL — the execution console is prepared when you first execute (or switch data source), so opening a preview no longer drags the whole project into a brief re-index and completion stays responsive. Opening a mapper file also triggers one background warm-up of the preview assembly (compute-only, no UI built, result discarded), moving the cold-start cost to before your click so the first open is faster.
 
 The panel's status row is explicit about where the current data source came from: an active console binding reads "bound"; when only a memory hit applies it reads "data source (last used)" or "data source (last used in this module)" — in a multi-module project each module remembers its own source and never borrows another module's database; with neither, it says "no data source bound (run one query in the console to bind)".
 

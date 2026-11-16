@@ -29,6 +29,8 @@ Mapper XML `select` / `insert` / `update` / `delete` tag lines and Mapper interf
 
 Targets are resolved by `namespace` + tag `id`; when resolution fails no icon is shown — the plugin never guesses a same-named method as a fallback. The icons obey the gutter master switch and the "mapper XML statements" group switch in settings.
 
+Resolution runs on a custom IDE index: icons appear within milliseconds even in large projects, no longer slowing down with project size or going missing for long stretches; while the index is still warming up the icons don't flash away either — a statement confirmed to exist in this session stays put. Once an interface method is deleted or the `<mapper namespace>` is renamed, the icon is withdrawn immediately instead of lingering on a dead target.
+
 Beyond the icons, navigation is also wired into IDEA's native entries: Ctrl+B / Ctrl+Click jumps both ways between Mapper interface methods and XML statements, and Ctrl+Alt+Home pops up the "related symbols" chooser — the keys are owned by platform actions, so rebinding in the Keymap follows automatically.
 
 <GifPlayer src="/demo/mapper-nav-jump.gif" alt="Mapper two-way navigation: in UserMapper.xml, clicking the navigation icon on the selectUserListByXml statement line jumps to the matching selectUserListByXml method in the UserMapper interface; clicking the icon on that interface method line jumps back to the XML statement" />
@@ -57,6 +59,8 @@ Fully-qualified `refid="other.namespace.fragmentId"` includes expand across file
 Dynamic tags inside the fragment (`<if>` / `<foreach>` etc.) render as usual, `${}` dynamic refids are supported, and property substitution plus cycle detection apply the same.
 
 When the target can't be resolved the preview continues, with the warning naming the concrete reason: no mapper file for the namespace / no such fragment under that namespace / the same fragment id declared in multiple files (ambiguous — the difference is reported as-is). Bare ids still resolve within the current file only, matching MyBatis runtime behavior.
+
+Fragment lookup goes through the IDE index by namespace — editing a shared cross-namespace fragment takes effect on the very next preview, without a stale-value window and without slowing down as the project grows. `@Constant@` static constants inside included fragments resolve too (previously they always evaluated to empty), including constants declared on a superclass or interface via the `@Subclass@constant` form.
 
 ## Mapper XML Editing Support
 
@@ -103,7 +107,7 @@ The recognition surface covers statements whose `parameterType` ends with Exampl
   WHERE ( {{criterion.condition}} ? )
   ```
 
-When a mapper file opens, gutter rendering prefetches one round of condition resolution for such statements in the background (with failure memory and a single-in-flight guard), so the first open no longer resolves on the spot — the preview is ready immediately.
+When a mapper file opens, gutter rendering prefetches one round of condition resolution for such statements in the background (with failure memory and a single-in-flight guard); in large projects the first open shows a placeholder skeleton right away and the real conditions fill in automatically once resolution lands, so the first open no longer resolves on the spot.
 
 ## Example
 
@@ -232,7 +236,7 @@ The selected text is used **verbatim as the table name** (no identifier validati
 ## Render Annotations & Degradation Banners
 
 - In vertical layout, each UPDATE SET item gets a trailing "column (new) = expression" annotation (self-referencing forms like `a = a + 1` read as the new value as-is), making old-vs-new comparison easier
-- For multi-column dynamic INSERT, the preview labels each VALUES expression / SELECT projection with inlay hints showing the target column name — column-value misalignment is visible at a glance (suppressed when the projection already carries a same-name alias, or when it can't be judged statically)
+- For multi-column dynamic INSERT, the preview labels each VALUES expression / SELECT projection with inlay hints showing the target column name — column-value misalignment is visible at a glance (suppressed when the projection already carries a same-name alias, or when it can't be judged statically); when IDEA Ultimate's own built-in column-name hint is active the plugin yields and keeps only the native one — without Database Tools (Community edition) or when detection fails, the plugin keeps its own hint, and if you turn that hint off in IDEA settings the plugin doesn't add it back
 - When the output turns into a full-table DELETE / UPDATE without WHERE, a "full-table write risk" warning banner appears directly at the top of the preview, taking priority over ordinary render warnings; the check reads only the unfilled output — literals and comments are blanked out first, so a `where` inside a parameter value never trips it
 - The preview panel and the Log → SQL panel embed non-modal degradation banners saying which part wasn't restored, why, and what you can do about it — no more silent truncation
 

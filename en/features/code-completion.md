@@ -24,6 +24,16 @@ description: "SQL completion in mapper XML and Java SQL annotations — Ctrl+Spa
 | XML dynamic tags | `<if>` / `<where>` / `<foreach>` etc.; for the `collection` attribute of `<foreach>`, when the method takes a single collection parameter with no `@Param`, the candidates include the `collection` / `list` / `array` shortcut names (matching MyBatis parameter-naming semantics) |
 | OGNL expressions | Property names in `<if test="...">` |
 
+## Column Candidates & Casing
+
+When the entity column is camelCase (`delFlag`) but the SQL is written in upper snake case, typing `DEL_F` still completes `DEL_FLAG` — column candidates cover all three forms (original / snake / UPPER_SNAKE) and any hit is enough.
+
+Insertion form follows the casing you're typing: upper-case SQL gets upper-case suggestions, lower-case gets lower-case, and mixed or empty prefixes fall back to the entity's original form; every alias is registered as a findable string, so whichever form you type can be searched.
+
+MBG-generated queries are recognized by convention: the argument of `selectByExample(XxxExample)` is a query-condition object and never becomes a fake `xxx_example` "entity" — the plugin looks up the same-package entity `Xxx` per MBG convention for columns, and skips silently when that fails (better nothing than a fake list). When the mapper interface and its generics both fail to resolve, a fallback derives columns by reverse-locating the entity from the FROM / JOIN table names in the statement text — only after both primary entity paths fail.
+
+Opening a mapper XML warms up the table/column context in the background, so the first completion doesn't parse from scratch; the cross-file fragment-name and mybatis-config variable lists are built once per project and refreshed by index state, so long completion sessions in large projects no longer rescan file by file.
+
 ## Data-Source Column Completion
 
 With a data source configured (IDEA Ultimate's Database tool window), column completion merges the data source's real columns into the candidate list alongside entity columns — entity columns first, data-source-only columns listed as well; for columns present in both, the comment and type come from the data source, and each candidate's tail text marks the database type. Warm-up runs in the background when the preview opens and when the console is ready, so completion never waits.

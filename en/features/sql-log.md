@@ -20,7 +20,7 @@ Auto-captures SQL as it runs, restores everything into a unified list of executa
 | Manual capture | Sidebar "SQL Visualizer" tool window → the "SQL Log" tab → the "Capture" button (first in the panel toolbar) |
 | Auto-listen | With "Auto-start listening on project launch" enabled in settings, capture starts automatically when you run / debug the project — no button click needed |
 
-First-time onboarding: opening a code file that uses MyBatis-Plus pops a one-time pointer notification (once per machine, can be turned off in settings). The first successful capture in a session also pops a notification linking straight to the log panel.
+First-time onboarding: opening a code file that uses MyBatis-Plus pops a one-time pointer notification (once per machine, can be turned off in settings). The first successful capture also pops a notification linking straight to the log panel — this one appears **at most once per machine** and is skipped when the log window is already open, when the capture just auto-expanded it, or when the toggle is off (governed by "Show One-Time Hint on First SQL Capture" under "UI & Actions" in settings).
 
 A few details about auto-listen: enabling the setting does not start listening immediately — it triggers when the project runs. Clicking "Stop capture" suppresses auto-start for the rest of the session — it will not pop back on its own. As long as the switch stays on, the next project run starts capture again.
 

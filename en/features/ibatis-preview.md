@@ -79,6 +79,8 @@ The first string argument of `SqlMapExecutor` entry methods (`queryForObject` / 
 
 The same jump arrows as MyBatis mapper files: a statement line's arrow lands on the Java DAO call argument, and a call line's arrow lands on the XML statement's `id` attribute; Ctrl+B / Ctrl+Click works without the arrows too.
 
+Both sides resolve through a custom IDE index — no more half-beat delay in large projects, and an interruption mid-lookup no longer withdraws icons that were already shown. A statement line's arrow only recognizes two reference forms — a bare `id` and the fully-qualified `namespace.id` of the same file — and never claims same-named statements across namespaces; once the calling code is renamed or deleted, the arrow goes away with it, and statements without call sites no longer carry an arrow.
+
 <GifPlayer src="/demo/ib2_ibatis_nav.gif" alt="Two-way navigation: clicking the jump arrow on User.xml's selectById statement line lands the editor on UserDaoImpl's queryForObject(&quot;User.selectById&quot;, id) call line; clicking the call line's arrow jumps back to the XML statement line" />
 
 ::: details Coexisting with similar navigation plugins (when: MyBatisCodeHelperPro installed)

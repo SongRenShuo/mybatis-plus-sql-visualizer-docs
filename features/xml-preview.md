@@ -29,6 +29,8 @@ mapper XML 的 `select` / `insert` / `update` / `delete` 标签行与 Mapper 接
 
 跳转目标按 `namespace` + 标签 `id` 解析，解析不到就不显示图标，也不会猜一个同名方法凑数。图标受设置页 gutter 总开关与「mapper XML 语句」分组开关控制。
 
+解析走 IDE 自定义索引：大工程里图标毫秒级出现，不再随项目体量变慢或长期缺席；索引尚未就绪时也不会闪没——本会话确认过存在的语句不再消失。接口方法删掉或 `<mapper namespace>` 改名后，图标立即摘除，不留「指向已死目标」的旧图标。
+
 除点击图标外，跳转也接入了 IDEA 原生入口：Ctrl+B / Ctrl+Click 在 Mapper 接口方法与 XML 语句间双向跳转，Ctrl+Alt+Home 弹出「关联符号」选择——键位归平台 action 所有，在 Keymap 里改绑自动跟随。
 
 <GifPlayer src="/demo/mapper-nav-jump.gif" alt="Mapper 双向跳转：UserMapper.xml 里点 selectUserListByXml 语句行的跳转图标，编辑器落到 UserMapper 接口中同名的 selectUserListByXml 方法行；再点该接口方法行的跳转图标，跳回 XML 语句" />
@@ -57,6 +59,8 @@ mapper XML 的 `select` / `insert` / `update` / `delete` 标签行与 Mapper 接
 片段内的 `<if>` / `<foreach>` 等动态标签照常渲染，`${}` 动态 refid 也支持，property 静态替换与环检测同样生效。
 
 找不到目标时预览不中断，警示给出具体原因：namespace 无 mapper 文件 / 该 namespace 下无此片段 / 多个文件重复声明同名片段（歧义，差异如实标注）。裸 id 仍只在本文件内查找，与 MyBatis 运行时一致。
+
+片段定位按 namespace 走 IDE 索引——改了跨命名空间的公共片段，下一次预览立即生效，不随项目 XML 数量变慢。片段里的 `@常量@` 静态常量也能求值：被 include 进来的片段同样认得出（此前一律求值为空），常量声明在父类或接口上时按 `@子类@常量` 解析。
 
 ## mapper XML 编辑辅助
 
@@ -103,7 +107,7 @@ MyBatis Generator（MBG）生成的 Example 用法里，条件不写在 XML 中�
   WHERE ( {{criterion.condition}} ? )
   ```
 
-打开 mapper 文件时，gutter 渲染会对这类语句在后台预取一次条件解析（带失败记忆与单条在途护栏），首次点开不必现场反推，预览即开即得。
+打开 mapper 文件时，gutter 渲染会对这类语句在后台预取一次条件解析（带失败记忆与单条在途护栏），大工程里首次打开立即出占位骨架，解析落地后自动补上真实条件，首次点开不必现场反推。
 
 ## 示例
 
@@ -232,7 +236,7 @@ mapper XML 与预览编辑器里选中文本后，右键菜单「SQL 快捷模�
 ## 渲染标注与降级提示
 
 - 竖排模式下 UPDATE 的 SET 各项行尾追加「列名 (new) = 表达式」标注（自引用写法如 `a = a + 1` 原样即新值），新旧值对照更直观
-- 多列动态 INSERT 的预览在每个 VALUES 表达式 / SELECT 投影旁以 inlay 提示标出目标列名，列-值错位一眼可见（投影已带同名列别名、或静态不可判时不重复提示）
+- 多列动态 INSERT 的预览在每个 VALUES 表达式 / SELECT 投影旁以 inlay 提示标出目标列名，列-值错位一眼可见（投影已带同名列别名、或静态不可判时不重复提示）；IDEA Ultimate 自带同款列名提示时本插件让位，只留原生那枚——未装 DatabaseTools（Community 版）或检测不到时照常提示，你在 IDEA 设置里关掉该提示本插件也不补回
 - 产物变成没有 WHERE 的全表 DELETE / UPDATE 时，预览顶部直接给「全表写风险」警示横幅，优先级高于普通渲染警示；判据只看未回填产物——字面量与注释先挖空再判，参数值里出现 `where` 字样不会误触发
 - 预览面板与日志转 SQL 面板内嵌非模态降级提示，说明哪段没还原、为什么、能做什么，不再静默截断
 

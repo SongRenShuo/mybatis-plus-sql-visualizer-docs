@@ -79,6 +79,8 @@ Java 侧同样能起预览：`SqlMapExecutor` 调用行（`client.queryForList("
 
 与 MyBatis mapper 文件同款的跳转箭头：语句行箭头落到 Java DAO 的调用实参，调用行箭头落到 XML 语句的 `id` 属性；不依赖箭头时 Ctrl+B / Ctrl+Click 同样可跳。
 
+两侧解析都走 IDE 自定义索引，大工程里不再慢半拍、中途被打断也不会把已显示的图标无故摘掉。XML 语句行的箭头只认两种引用形态——裸 `id` 与「本文件 `namespace.id`」全限定写法，不跨命名空间认领同名语句；调用代码改名或删除后箭头随之消失，没有调用点的语句不再挂箭头。
+
 <GifPlayer src="/demo/ib2_ibatis_nav.gif" alt="双向跳转：点 User.xml 的 selectById 语句行跳转箭头，编辑器落到 UserDaoImpl 的 queryForObject(&quot;User.selectById&quot;, id) 调用行；再点调用行箭头，跳回 XML 语句行" />
 
 ::: details 与同类导航插件共存（何时看：装了 MyBatisCodeHelperPro 时）
