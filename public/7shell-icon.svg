@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="46 46 932 932" role="img" aria-label="7Shell">
+  <title>7Shell</title>
+  <rect x="48" y="48" width="928" height="928" rx="208" fill="#12161d" stroke="#2b3342" stroke-width="4" />
+  <g fill="none" stroke-width="100" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M304 296 L664 296 L420 728" stroke="#4da3ff" />
+    <path d="M570 728 L720 728" stroke="#e6ebf5" />
+  </g>
+</svg>

@@ -16,6 +16,16 @@ A few good things built by fellow independent developers — IDEA plugins and de
 </div>
 
 <div class="friend-card">
+  <a href="https://github.com/7wdn/7shell" target="_blank" rel="noopener noreferrer" class="friend-card__link">
+    <img src="/7shell-icon.svg" width="40" height="40" alt="7Shell Logo" class="friend-card__icon"/>
+    <div class="friend-card__info">
+      <h3 class="friend-card__title">7Shell</h3>
+      <p class="friend-card__desc">An open-source SSH and operations client for Windows, macOS and Linux, built with Rust and Tauri. Terminals, an SFTP workbench, Docker and Kubernetes management, host monitoring and batch execution all live in one window; credentials stay in an encrypted local vault, and MCP tools are exposed for AI clients.</p>
+    </div>
+  </a>
+</div>
+
+<div class="friend-card">
   <a href="https://cli-manager.github.io" target="_blank" rel="noopener noreferrer" class="friend-card__link">
     <img src="/cli-manager-logo.png" width="40" height="40" alt="CLI Manager Logo" class="friend-card__icon"/>
     <div class="friend-card__info">

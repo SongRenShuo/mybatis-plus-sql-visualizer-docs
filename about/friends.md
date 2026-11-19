@@ -16,6 +16,16 @@
 </div>
 
 <div class="friend-card">
+  <a href="https://github.com/7wdn/7shell" target="_blank" rel="noopener noreferrer" class="friend-card__link">
+    <img src="/7shell-icon.svg" width="40" height="40" alt="7Shell Logo" class="friend-card__icon"/>
+    <div class="friend-card__info">
+      <h3 class="friend-card__title">7Shell</h3>
+      <p class="friend-card__desc">开源的 SSH 与运维客户端，Windows、macOS、Linux 都能用，Rust + Tauri 构建。终端、SFTP 文件面板、Docker 与 Kubernetes 管理、主机监控和批量执行都集中在同一个窗口，凭据保存在本地加密的 vault 里，还开放 MCP 工具供 AI 客户端调用。</p>
+    </div>
+  </a>
+</div>
+
+<div class="friend-card">
   <a href="https://cli-manager.github.io" target="_blank" rel="noopener noreferrer" class="friend-card__link">
     <img src="/cli-manager-logo.png" width="40" height="40" alt="CLI Manager Logo" class="friend-card__icon"/>
     <div class="friend-card__info">
