@@ -2,22 +2,22 @@
   "_comment": "构建期由 scripts/generate-changelog.mjs 从 JetBrains Marketplace API 自动重写，手工改动会被覆盖。summaryZh 取对应版本 notes 首条纯文本（≤80 字）；summaryEn 沿用此前的手工翻译（中文摘要变了就不再沿用），新版本在翻译前与 summaryZh 同文。首页「最近更新」打开时会用 /api/changelog 实时刷新，本文件是构建期兜底。数据来源 https://plugins.jetbrains.com/api/plugins/33633/updates",
   "updates": [
     {
+      "version": "2026.11.17",
+      "date": "2026-11-17",
+      "summaryZh": "iBatis 自研语句名里的 @ 不再让快捷键预览误报未找到",
+      "summaryEn": "iBatis 自研语句名里的 @ 不再让快捷键预览误报未找到"
+    },
+    {
+      "version": "2026.11.16",
+      "date": "2026-11-16",
+      "summaryZh": "Mapper 与 iBatis 的跳转图标改走自定义索引, 大工程冷开毫秒级定位",
+      "summaryEn": "Mapper 与 iBatis 的跳转图标改走自定义索引, 大工程冷开毫秒级定位"
+    },
+    {
       "version": "2026.11.14",
       "date": "2026-11-14",
       "summaryZh": "打开 mapper 就在后台预热预览, 大工程里预览先出骨架、条件随后自动补齐, 点开更快",
       "summaryEn": "打开 mapper 就在后台预热预览, 大工程里预览先出骨架、条件随后自动补齐, 点开更快"
-    },
-    {
-      "version": "2026.11.12",
-      "date": "2026-11-12",
-      "summaryZh": "MBG Example 预览在真实大工程里也能还原条件: 从调用点反推列名与操作符,",
-      "summaryEn": "MBG Example 预览在真实大工程里也能还原条件: 从调用点反推列名与操作符,"
-    },
-    {
-      "version": "2026.11.11",
-      "date": "2026-11-10",
-      "summaryZh": "抓不到某类 SQL 时不再只有空白，状态栏会直接说明是让位丢弃、组装失败、门禁抑制还是登记盲区",
-      "summaryEn": "抓不到某类 SQL 时不再只有空白，状态栏会直接说明是让位丢弃、组装失败、门禁抑制还是登记盲区"
     }
   ]
 }
