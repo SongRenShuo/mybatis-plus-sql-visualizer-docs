@@ -25,12 +25,12 @@ next:
 
 <div class="qr-cards">
   <div class="qr-card">
-    <img src="/wechat-qr.png" width="180" height="180" alt="Author WeChat QR code" class="qr-card__img"/>
+    <img src="/wechat-qr.webp" width="180" height="180" alt="Author WeChat QR code" class="qr-card__img" loading="lazy" decoding="async"/>
     <div class="qr-card__title">Author WeChat</div>
     <div class="qr-card__desc">Scan to add the author as a friend. Questions about usage and development are both welcome — please note "SQL Visualizer" in your friend request.</div>
   </div>
   <div class="qr-card">
-    <img src="/group-qr.jpg" width="180" height="180" alt="User group QR code" class="qr-card__img"/>
+    <img src="/group-qr.webp" width="180" height="180" alt="User group QR code" class="qr-card__img" loading="lazy" decoding="async"/>
     <div class="qr-card__title">User Group</div>
     <div class="qr-card__desc">Scan to join the SQL Visualizer user group on WeChat. If the code has expired, add the author's WeChat and they will invite you in.</div>
   </div>

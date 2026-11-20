@@ -5,3 +5,12 @@
 # 访客最多一年看不到更新。functions/_middleware.js 对非拦截路径放行，两者共存。
 /demo/*
   Cache-Control: public, max-age=604800, must-revalidate
+
+# 关于页二维码与赞助码（20261120）：四张图内容长期不变但会随群码/收款码
+# 换图重部署，同样走 7 天 + must-revalidate 而不是默认 4h 回源校验。
+/wechat-qr.webp
+  Cache-Control: public, max-age=604800, must-revalidate
+/group-qr.webp
+  Cache-Control: public, max-age=604800, must-revalidate
+/donate/*
+  Cache-Control: public, max-age=604800, must-revalidate

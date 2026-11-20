@@ -17,12 +17,12 @@ SQL Visualizer 是免费开源插件（[Apache-2.0](https://opensource.org/licen
 
 <div class="donate-cards">
   <div class="donate-card">
-    <img src="/donate/wechat-pay.png" width="220" height="220" alt="微信赞赏码" class="donate-card__img"/>
+    <img src="/donate/wechat-pay.webp" width="220" height="220" alt="微信赞赏码" class="donate-card__img" loading="lazy" decoding="async"/>
     <div class="donate-card__title">微信赞赏</div>
     <div class="donate-card__desc">微信扫码，金额随意。</div>
   </div>
   <div class="donate-card">
-    <img src="/donate/alipay-pay.png" width="220" height="220" alt="支付宝收款码" class="donate-card__img"/>
+    <img src="/donate/alipay-pay.webp" width="220" height="220" alt="支付宝收款码" class="donate-card__img" loading="lazy" decoding="async"/>
     <div class="donate-card__title">支付宝</div>
     <div class="donate-card__desc">支付宝扫码付款，金额随意。</div>
   </div>

@@ -17,12 +17,12 @@ If it has saved you some time, you can buy me a coffee with the payment codes be
 
 <div class="donate-cards">
   <div class="donate-card">
-    <img src="/donate/wechat-pay.png" width="220" height="220" alt="WeChat sponsorship QR code" class="donate-card__img"/>
+    <img src="/donate/wechat-pay.webp" width="220" height="220" alt="WeChat sponsorship QR code" class="donate-card__img" loading="lazy" decoding="async"/>
     <div class="donate-card__title">WeChat</div>
     <div class="donate-card__desc">Scan in WeChat — any amount is fine.</div>
   </div>
   <div class="donate-card">
-    <img src="/donate/alipay-pay.png" width="220" height="220" alt="Alipay payment QR code" class="donate-card__img"/>
+    <img src="/donate/alipay-pay.webp" width="220" height="220" alt="Alipay payment QR code" class="donate-card__img" loading="lazy" decoding="async"/>
     <div class="donate-card__title">Alipay</div>
     <div class="donate-card__desc">Scan in Alipay — any amount is fine.</div>
   </div>
