@@ -41,6 +41,15 @@ useReveal()
     <footer class="mp-footer">
       <div class="container">
         <p class="mp-footer__text">{{ c.footer }}</p>
+        <!-- 2026-11-21 可发现性批：Star 引导走文字而非数字徽章（star 少时徽章负效果），
+             链接直指 GitHub 仓库，不承诺任何利益 -->
+        <p class="mp-footer__star">
+          {{ c.footerStar.before }}<a
+            href="https://github.com/SongRenShuo/mybatis-plus-sql-visualizer"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{{ c.footerStar.linkText }}</a>{{ c.footerStar.after }}
+        </p>
       </div>
     </footer>
     <BackToTop />
@@ -68,5 +77,20 @@ useReveal()
   color: var(--text-secondary);
   font-size: 0.875rem;
   margin: 0;
+}
+
+.mp-footer__star {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0.5rem 0 0;
+}
+
+.mp-footer__star a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.mp-footer__star a:hover {
+  text-decoration: underline;
 }
 </style>

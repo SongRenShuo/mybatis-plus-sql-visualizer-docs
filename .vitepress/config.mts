@@ -152,7 +152,8 @@ export default defineConfig({
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
-      'name': 'SQL Visualizer',
+      'name': 'MyBatis SQL Visualizer',
+      'alternateName': ['SQL Visualizer', 'MyBatis-Plus SQL Visualizer'],
       'applicationCategory': 'DeveloperApplication',
       'operatingSystem': 'Windows, macOS, Linux',
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus / MPJ / JPA / Hibernate 的 SQL 调试利器',
@@ -329,7 +330,9 @@ export default defineConfig({
     en: {
       label: 'English',
       lang: 'en-US',
-      title: 'SQL Visualizer',
+      // 2026-11-21 与插件端新 Marketplace 展示名对齐（B1 案）：英文页 title 后缀带全名，
+      // 中文侧品牌资产（title / og:title / WebSite JSON-LD）保持不动
+      title: 'MyBatis SQL Visualizer',
       description:
         'IntelliJ IDEA plugin: SQL debugging companion for MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate — live SQL preview of Wrapper chains and XML/annotation/HQL dynamic SQL (incl. MPJ joins), real EXPLAIN execution plans, runtime capture of real parameters and durations with slow-query highlighting, log-to-source navigation, SQL-to-Java reverse conversion, and MCP Server tools.',
       themeConfig: {

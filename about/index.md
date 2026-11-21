@@ -11,6 +11,8 @@ next:
 
 [**SongRenShuo**](https://gitee.com/songrenshuo) — 独立开发者，专注于 IntelliJ 平台插件与 Java 生态工具。
 
+SQL Visualizer 是独立开发者的社区开源项目，与 MyBatis / MyBatis-Plus（baomidou）、JetBrains 无隶属或合作关系；站内对上述框架的表述均为功能兼容性说明。
+
 ## 联系方式
 
 | 渠道 | 链接 |

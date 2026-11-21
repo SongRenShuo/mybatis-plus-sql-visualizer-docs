@@ -384,6 +384,14 @@ export const homeContent = {
     backToTop: { label: '返回顶部' },
 
     footer: '基于 Apache-2.0 协议开源发布 · Copyright © 2026-present SongRenShuo',
+
+    // 页脚 Star 引导（2026-11-21 可发现性批）：只说「觉得有用」，不承诺利益、不挂数字徽章
+    //（GitHub star 数量少时徽章反而难看），链接在组件里写死仓库地址
+    footerStar: {
+      before: '觉得有用的话，欢迎到 ',
+      linkText: 'GitHub 仓库',
+      after: ' 点个 Star',
+    },
   },
 
   en: {
@@ -806,5 +814,11 @@ export const homeContent = {
     backToTop: { label: 'Back to top' },
 
     footer: 'Open source under Apache-2.0 · Copyright © 2026-present SongRenShuo',
+
+    footerStar: {
+      before: 'If you find it useful, consider giving a Star on ',
+      linkText: 'GitHub',
+      after: '',
+    },
   },
 }

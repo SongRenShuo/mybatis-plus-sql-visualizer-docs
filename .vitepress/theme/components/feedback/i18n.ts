@@ -68,6 +68,10 @@ const messages = {
     subscribeBtn: '订阅',
     subscribeSuccess: '确认邮件已发送，请查收并点击确认链接',
     subscribeFailed: '订阅失败，请稍后再试',
+    // Marketplace 评分引导（2026-11-21 可发现性批）：V47 口径，沿用内容营销 W1 双语定稿
+    //（≤60 字、不出现「五星/好评」、不承诺互惠、只说「真实体验」）
+    reviewText: '用着顺手的话，留一条评价吧——你的一句真实体验，比十次下载更能帮到后来的人。',
+    reviewLink: '去 JetBrains Marketplace 评分',
     submitSuccess: '提交成功！您的反馈编号是',
     tipTitleMin: '标题至少 5 个字符',
     tipTitleMax: '标题不超过 200 字',
@@ -204,6 +208,8 @@ const messages = {
     subscribeBtn: 'Subscribe',
     subscribeSuccess: 'Confirmation email sent — please check your inbox and click the link',
     subscribeFailed: 'Subscription failed, please try again later',
+    reviewText: 'If it saves you time, an honest review helps the next user find it.',
+    reviewLink: 'Rate on JetBrains Marketplace',
     submitSuccess: 'Submitted! Your feedback ID is',
     tipTitleMin: 'Title must be at least 5 characters',
     tipTitleMax: 'Title must be at most 200 characters',
