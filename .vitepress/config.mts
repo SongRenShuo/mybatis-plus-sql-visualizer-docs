@@ -129,7 +129,8 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'SQL Visualizer' }],
-    ['meta', { property: 'og:title', content: 'SQL Visualizer' }],
+    // 2026-11-21 主控修正口径：og:title 与中文首页 title 同形态（品牌词前置 + 描述段带词）
+    ['meta', { property: 'og:title', content: 'SQL Visualizer — IntelliJ IDEA 的 MyBatis / JPA SQL 预览与调试插件' }],
     ['meta', { property: 'og:description', content: siteDescription }],
     ['meta', { property: 'og:url', content: 'https://sql-visualizer.jvtools.cn/' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -153,7 +154,9 @@ export default defineConfig({
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
       'name': 'MyBatis SQL Visualizer',
-      'alternateName': ['SQL Visualizer', 'MyBatis-Plus SQL Visualizer'],
+      // 2026-11-21 主控修正：alternateName 收窄为当前品牌词；旧全名形态由 GitHub 仓库
+      // homepage 外链传给引擎，旧名检索量趋零不再进实体（避免实体噪音）
+      'alternateName': ['SQL Visualizer'],
       'applicationCategory': 'DeveloperApplication',
       'operatingSystem': 'Windows, macOS, Linux',
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus / MPJ / JPA / Hibernate 的 SQL 调试利器',

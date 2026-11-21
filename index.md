@@ -1,6 +1,6 @@
 ---
 layout: false
-title: SQL Visualizer | IntelliJ IDEA SQL 预览与调试插件
+title: SQL Visualizer — IntelliJ IDEA 的 MyBatis / JPA SQL 预览与调试插件
 titleTemplate: false
 head:
   - - meta
