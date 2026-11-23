@@ -52,8 +52,10 @@ const pluginVersion: string = (() => {
 // 站点主描述（og:description 与站点 description 同文，避免两处手写漂移）
 // 2026-11-23 实体强化：开头用全名（llms.txt 的 > 摘要行直接取这条），并单列 MCP 能力一句，
 // 让「MyBatis SQL Visualizer」与「11 个只读 MCP 工具」在 llms.txt 开头即可检索到。
+// 2026-11-23 二轮（CSDN SEO 扩展诊断）：原 252 字符，og:description 过长且首页 meta description 165 超 150-160 区间；
+// 压到 159 字符，兼顾 og:description 与 llms.txt 摘要行（目录条目仍带各页 description，信息不丢）。
 const siteDescription =
-  'MyBatis SQL Visualizer 是 IntelliJ IDEA 的 SQL 调试插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 Wrapper 链、XML/注解/HQL 动态 SQL 实时预览（含 MPJ 联表 JOIN），真实 EXPLAIN 执行计划，运行期捕获真实参数与耗时（慢查询标红与静态性能建议），日志一键跳回源码，SQL 反向转 Java 代码；另提供 11 个确定性只读 MCP 工具，供 AI 编码助手调用。'
+  'MyBatis SQL Visualizer 是 IntelliJ IDEA 的 SQL 调试插件：不启动项目即可预览 MyBatis-Plus Wrapper、mapper XML、注解与 HQL 的 SQL；运行期捕获真实参数与耗时，慢查询标红并跳回源码；另提供 11 个只读 MCP 工具供 AI 编码助手调用。'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({

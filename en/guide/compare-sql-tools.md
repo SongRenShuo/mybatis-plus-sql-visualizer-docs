@@ -1,6 +1,6 @@
 ---
 title: "MyBatis SQL Debugging Plugins Compared"
-description: "Three families of MyBatis SQL debugging plugins for IntelliJ IDEA — log restoration, navigation & code generation, and write-time preview with runtime capture. How each works, who the main plugins are, and when each fits."
+description: 'Three families of MyBatis SQL debugging plugins for IntelliJ IDEA: log restoration, navigation and code generation, write-time preview with runtime capture.'
 ---
 
 # MyBatis SQL Debugging Plugins Compared
