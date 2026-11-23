@@ -1,6 +1,66 @@
 ---
 title: "Quick Start"
 description: "Install the plugin and get your first SQL preview within three minutes, whether for Wrapper chains, XML dynamic SQL or runtime logs."
+head:
+  - - script
+    - type: application/ld+json
+    - |
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Install SQL Visualizer and run your first SQL preview",
+        "description": "Install SQL Visualizer from the JetBrains Marketplace in IntelliJ IDEA, then generate your first SQL preview on a MyBatis-Plus Wrapper chain.",
+        "inLanguage": "en",
+        "totalTime": "PT3M",
+        "url": "https://sql-visualizer.jvtools.cn/en/guide/getting-started",
+        "tool": [
+          { "@type": "HowToTool", "name": "IntelliJ IDEA 2024.3 or later" }
+        ],
+        "step": [
+          {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Open the plugin marketplace",
+            "text": "In IDEA, open Settings/Preferences > Plugins > Marketplace."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Search for SQL Visualizer",
+            "text": "Type SQL Visualizer into the Marketplace search box."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Install the plugin",
+            "text": "Click Install. Alternatively, download the package from the JetBrains Marketplace or Gitee Releases and use Install Plugin from Disk... (no extraction needed)."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 4,
+            "name": "Restart IDEA if needed",
+            "text": "If the plugin entry does not appear right after install, restart IDEA once; later version updates usually hot-swap without a restart."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 5,
+            "name": "Put the caret on a Wrapper chain",
+            "text": "Click the plugin icon in the gutter on the left (it sits on the variable declaration line, e.g. the queryWrapper line); or put the caret on any identifier in the chain, variable or method name."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 6,
+            "name": "Press the preview shortcut",
+            "text": "Press Alt+Shift+Q (Option+Shift+Q on macOS)."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 7,
+            "name": "Read the generated SQL",
+            "text": "The dialog shows the generated SQL. From there, the EXPLAIN button in the preview panel shows the real execution plan, which requires IntelliJ IDEA Ultimate with a configured data source."
+          }
+        ]
+      }
 ---
 
 # Getting Started

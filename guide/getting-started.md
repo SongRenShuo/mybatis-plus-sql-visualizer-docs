@@ -1,6 +1,66 @@
 ---
 title: "SQL Visualizer 快速开始"
 description: "装好插件后按目标直达：预览 Wrapper 链、XML 动态 SQL 或运行期 SQL 日志，每条最多三步见效。"
+head:
+  - - script
+    - type: application/ld+json
+    - |
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "安装 SQL Visualizer 并运行第一个 SQL 预览",
+        "description": "在 IntelliJ IDEA 里通过 Marketplace 安装 SQL Visualizer，然后在 MyBatis-Plus Wrapper 代码上生成第一个 SQL 预览。",
+        "inLanguage": "zh-CN",
+        "totalTime": "PT3M",
+        "url": "https://sql-visualizer.jvtools.cn/guide/getting-started",
+        "tool": [
+          { "@type": "HowToTool", "name": "IntelliJ IDEA 2024.3 及以上" }
+        ],
+        "step": [
+          {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "打开插件市场",
+            "text": "在 IDEA 中打开 Settings/Preferences > Plugins > Marketplace。"
+          },
+          {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "搜索 SQL Visualizer",
+            "text": "在 Marketplace 搜索框输入 SQL Visualizer。"
+          },
+          {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "安装插件",
+            "text": "点击 Install 安装。也可以从 JetBrains Marketplace 或 Gitee Releases 下载插件包，再用 Install Plugin from Disk... 安装（无需解压）。"
+          },
+          {
+            "@type": "HowToStep",
+            "position": 4,
+            "name": "按需重启 IDEA",
+            "text": "首次安装后若未看到插件入口，重启一次 IDEA；后续版本更新通常免重启热生效。"
+          },
+          {
+            "@type": "HowToStep",
+            "position": 5,
+            "name": "把光标放到 Wrapper 链上",
+            "text": "点代码左侧 gutter 的插件图标（它落在变量声明行，如 queryWrapper 那一行）；也可以把光标压在链内任一标识符上，变量名或方法名都行。"
+          },
+          {
+            "@type": "HowToStep",
+            "position": 6,
+            "name": "按预览快捷键",
+            "text": "按 Alt+Shift+Q（macOS 为 Option+Shift+Q）。"
+          },
+          {
+            "@type": "HowToStep",
+            "position": 7,
+            "name": "查看生成的 SQL",
+            "text": "弹窗显示生成的 SQL。之后可点预览面板的「执行计划」（EXPLAIN）按钮查看真实执行计划，需 IntelliJ IDEA Ultimate 且已配置数据源。"
+          }
+        ]
+      }
 ---
 
 # 快速开始
