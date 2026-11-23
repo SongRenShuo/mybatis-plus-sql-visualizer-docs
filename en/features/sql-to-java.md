@@ -1,9 +1,9 @@
 ---
-title: "SQL to QueryWrapper (Reverse-Generate Wrapper Java Code)"
+title: "SQL to Wrapper Code"
 description: "Convert SQL to QueryWrapper / LambdaQueryWrapper Java code — select SQL and get compilable MyBatis-Plus code; five default forms (AUTO plus four fixed), JOIN and subqueries covered."
 ---
 
-# SQL to QueryWrapper (Reverse-Generate Wrapper Java Code)
+# SQL to Wrapper Code
 <GifPlayer src="/demo/sql-to-java.gif" alt="SQL → Java Reverse Conversion Demo" />
 
 Select SQL text and one-click generate compilable MyBatis-Plus code — Settings offers five default forms (AUTO plus four fixed forms).
