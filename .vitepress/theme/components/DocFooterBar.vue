@@ -10,7 +10,7 @@ const isEn = computed(() => lang.value.startsWith('en'))
 const items = computed(() =>
   isEn.value
     ? [
-        { text: 'Install', href: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer', external: true },
+        { text: 'Install', href: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer', external: true },
         { text: 'Changelog', href: '/en/about/changelog' },
         { text: 'FAQ', href: '/en/guide/faq' },
         { text: 'Community', href: '/en/about/feedback' },
@@ -18,7 +18,7 @@ const items = computed(() =>
         { text: 'Privacy', href: '/en/about/privacy' }
       ]
     : [
-        { text: '安装', href: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer', external: true },
+        { text: '安装', href: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer', external: true },
         { text: '更新日志', href: '/about/changelog' },
         { text: 'FAQ', href: '/guide/faq' },
         { text: '社区', href: '/about/feedback' },

@@ -31,7 +31,7 @@ description: "装好插件后按目标直达：预览 Wrapper 链、XML 动态 S
 
 ### 方式二：手动下载插件安装
 
-1. 在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) 或 [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases) 下载插件包
+1. 在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer) 或 [Gitee Releases](https://gitee.com/songrenshuo/mybatis-plus-sql-visualizer/releases) 下载插件包
 2. 进入 IDE，打开 <kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>⚙</kbd> > <kbd>Install Plugin from Disk...</kbd>
 3. 选择下载的插件包（无需解压）
 4. 首次安装后若未看到插件入口，重启一次 IDEA；后续版本更新通常免重启热生效（离线更新通道亦支持热替换）

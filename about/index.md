@@ -21,7 +21,7 @@ SQL Visualizer 是独立开发者的社区开源项目，与 MyBatis / MyBatis-P
 | 源码仓库（镜像） | [GitHub · SongRenShuo/mybatis-plus-sql-visualizer](https://github.com/SongRenShuo/mybatis-plus-sql-visualizer) |
 | 问题反馈 | [官网需求池](https://sql-visualizer.jvtools.cn/about/feedback) |
 | Bug 悬赏 | [提交 Bug 报告，按等级领取悬赏](https://sql-visualizer.jvtools.cn/about/bounty) |
-| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) |
+| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer) |
 
 ## 微信交流
 

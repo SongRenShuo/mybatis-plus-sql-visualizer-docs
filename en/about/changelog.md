@@ -5,7 +5,7 @@ description: Release notes for every SQL Visualizer version, synced from JetBrai
 
 # Changelog
 
-Data source: [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-sql-visualizer).
+Data source: [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer).
 
 <script setup>
 import ChangelogList from '../../.vitepress/theme/components/ChangelogList.vue'

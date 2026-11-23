@@ -21,7 +21,7 @@ const { c, localePath } = useHomeContent()
 
       <div class="cta-buttons">
         <a
-          href="https://plugins.jetbrains.com/plugin/33633-sql-visualizer"
+          href="https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer"
           target="_blank"
           rel="noopener noreferrer"
           class="cta-btn-primary"

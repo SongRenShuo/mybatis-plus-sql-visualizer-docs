@@ -21,7 +21,7 @@ SQL Visualizer is an independent community open-source project, not affiliated w
 | Source (mirror) | [GitHub · SongRenShuo/mybatis-plus-sql-visualizer](https://github.com/SongRenShuo/mybatis-plus-sql-visualizer) |
 | Issues | [Feedback Pool](https://sql-visualizer.jvtools.cn/en/about/feedback) |
 | Bug Bounty | [Report a bug and earn a bounty](https://sql-visualizer.jvtools.cn/en/about/bounty) |
-| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) |
+| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer) |
 
 ## WeChat
 

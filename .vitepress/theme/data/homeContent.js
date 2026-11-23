@@ -71,7 +71,7 @@ export const homeContent = {
         {
           title: '安装插件',
           description: '从 JetBrains Marketplace 安装 SQL Visualizer。',
-          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer',
         },
         {
           title: '打开项目',
@@ -271,7 +271,7 @@ export const homeContent = {
           value: '687 次安装',
           label: 'JetBrains Marketplace 公开数据',
           detail: '数字直接取自 Marketplace 公开页——没有试用墙，也没有解锁门槛。',
-          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer',
           linkText: '查看 Marketplace',
         },
         {
@@ -452,7 +452,7 @@ export const homeContent = {
         {
           title: 'Install the plugin',
           description: 'Install SQL Visualizer from JetBrains Marketplace.',
-          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer',
         },
         {
           title: 'Open your project',
@@ -708,7 +708,7 @@ export const homeContent = {
           value: '687 installs',
           label: 'Public JetBrains Marketplace data',
           detail: 'Taken straight from the public Marketplace page — no paywall, no gated unlock.',
-          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer',
           linkText: 'View on Marketplace',
         },
         {
