@@ -1,6 +1,6 @@
 ---
 title: "SQL Visualizer 常见问题 FAQ"
-description: "汇总 gutter 图标不显示、IDE 版本兼容、执行 SQL 等高频问题，按问题直达答案。"
+description: "SQL Visualizer 常见问题：支持哪些 IDE 版本、gutter 图标为什么不显示、XML 没有高亮或补全怎么办、是否必须配方言与数据源、MPJ 联表与 JPA findAllById 支持情况、预览 SQL 与实际执行有差异吗、问号能否替换成真实值、EXPLAIN 与日志捕获失败怎么排查。"
 head:
   - - script
     - type: application/ld+json

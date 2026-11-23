@@ -1,6 +1,6 @@
 ---
 title: "SQL Visualizer 快速开始"
-description: "装好插件后按目标直达：预览 Wrapper 链、XML 动态 SQL 或运行期 SQL 日志，每条最多三步见效。"
+description: "SQL Visualizer 快速开始：装好插件后按目标直达——预览 MyBatis-Plus Wrapper 链、XML 动态 SQL、注解 SQL 或 JPA 派生查询，以及运行期 SQL 日志的捕获与还原；每条路径最多三步见效，含 IDE 版本要求与 Ultimate 专属功能边界。"
 head:
   - - script
     - type: application/ld+json

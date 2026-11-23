@@ -66,16 +66,19 @@ export default defineConfig({
   //（实测 `/features/wrapper-preview.html` → 308 → 无后缀 200）。产物仍是 .html 文件，只是链接不带后缀。
   cleanUrls: true,
 
-  // 2026-11-23：给导航 logo 补 alt。
-  // 背景：VitePress 1.6.4 的 themeConfig.logo 对象形式（light/dark/alt）实测不渲染 alt，
-  // 即使 light+dark 都给全，产物仍是 alt=""（配置被静默忽略，构建照常成功）；而 CSDN SEO
-  // 扩展按字面判定「图片缺少 ALT」。这里在构建期直接替换 HTML，爬虫读到的是带 alt 的版本。
-  // 注：装饰性 logo 写 alt=""+aria-hidden 本符合 a11y 规范，此改动只为过 SEO 工具检查。
+  // 2026-11-23：两处构建期修正。
+  // ① 给导航 logo 补 alt。背景：VitePress 1.6.4 的 themeConfig.logo 对象形式（light/dark/alt）
+  //    实测不渲染 alt，即使 light+dark 都给全，产物仍是 alt=""（配置被静默忽略，构建照常成功）；
+  //    而 CSDN SEO 扩展按字面判定「图片缺少 ALT」。这里在构建期直接替换 HTML。
+  //    注：装饰性 logo 写 alt=""+aria-hidden 本符合 a11y 规范，此改动只为过 SEO 工具检查。
+  // ② 修 vitepress-plugin-llms 的路径分隔符。它在 Windows 下用路径拼接生成页面顶部
+  //    「Are you an LLM? … at /guide\faq.md」提示，反斜杠进了 URL（线上实测所有内页都中招），
+  //    AI 抓取时按此路径请求会 404，与 llms.txt 的对齐也断掉。统一换成正斜杠。
   transformHtml(code) {
-    return code.replace(
-      /(<img src="\/logo\.svg" )alt=""/g,
-      '$1alt="SQL Visualizer"'
-    )
+    return code
+      .replace(/(<img src="\/logo\.svg" )alt=""/g, '$1alt="SQL Visualizer"')
+      .replace(/(read better optimized documentation at\s+)([^<\s"]+)/g,
+        (_m, prefix, path) => prefix + path.replace(/\\/g, '/'))
   },
 
   // 文档页显示「最后更新于」（构建期按文件跑 git log 取最后一次提交时间），

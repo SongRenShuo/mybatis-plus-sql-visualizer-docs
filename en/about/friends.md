@@ -1,4 +1,6 @@
 ---
+title: Friend Recommendations
+description: "Tools by fellow independent developers worth a look: Cool Request, an HTTP client inside IDEA, 7Shell terminal, and other utilities for backend work."
 ---
 
 # Friend Recommendations

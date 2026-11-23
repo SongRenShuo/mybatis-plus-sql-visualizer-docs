@@ -1,3 +1,8 @@
+---
+title: 开发路线
+description: "MyBatis SQL Visualizer 的开发路线：规划中的 MPJ fill 关联填充渲染、第二批 ORM 支持（jOOQ / Jimmer 等在调研）、JPA 派生查询长尾形态与大型 Wrapper 链解析性能优化，以及已完成能力的完整清单，可对照更新日志逐版查看。"
+---
+
 # 开发路线
 
 插件能力的完成情况与下一步方向。逐项能力说明见[功能详解](/features/wrapper-preview)，每个版本的完整更新明细见[更新日志](./changelog)。
