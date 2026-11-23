@@ -17,6 +17,23 @@
       />
     </div>
 
+    <!-- Marketplace 评分引导（2026-11-21 可发现性批）：V47 口径一句话 + Reviews 直链，
+         文案走 i18n 双语定稿，语言跟随页面 -->
+    <aside class="feedback-review">
+      <p class="feedback-review__text">{{ t('reviewText', locale) }}</p>
+      <a
+        href="https://plugins.jetbrains.com/plugin/33633-sql-visualizer/reviews"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="feedback-review__link"
+      >
+        {{ t('reviewLink', locale) }}
+        <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" aria-hidden="true">
+          <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5h6V3H3v18h18v-8h-2v6H5V5z" />
+        </svg>
+      </a>
+    </aside>
+
     <!-- 周报订阅入口放页尾：先看池子再收邮箱（后端带双重确认，这里只收集邮箱并透传后端文案） -->
     <SubscribeCard class="feedback-subscribe" :api-base="apiBase" :locale="locale" />
 
@@ -207,6 +224,45 @@ onBeforeUnmount(() => {
 
 .feedback-subscribe {
   margin-top: 16px;
+}
+
+/* Marketplace 评分引导条：与订阅卡同一卡片语言，轻量一行，不放评分数字（恒零是信任短板） */
+.feedback-review {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 20px;
+  margin-top: 16px;
+  padding: 14px 20px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-surface-muted);
+}
+
+.feedback-review__text {
+  flex: 1 1 320px;
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ui-fg-muted);
+}
+
+.feedback-review__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ui-accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.feedback-review__link:hover {
+  text-decoration: underline;
 }
 
 .modal-hint {

@@ -129,7 +129,8 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'SQL Visualizer' }],
-    ['meta', { property: 'og:title', content: 'SQL Visualizer' }],
+    // 2026-11-21 主控修正口径：og:title 与中文首页 title 同形态（品牌词前置 + 描述段带词）
+    ['meta', { property: 'og:title', content: 'SQL Visualizer — IntelliJ IDEA 的 MyBatis / JPA SQL 预览与调试插件' }],
     ['meta', { property: 'og:description', content: siteDescription }],
     ['meta', { property: 'og:url', content: 'https://sql-visualizer.jvtools.cn/' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
@@ -152,7 +153,10 @@ export default defineConfig({
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
-      'name': 'SQL Visualizer',
+      'name': 'MyBatis SQL Visualizer',
+      // 2026-11-21 主控修正：alternateName 收窄为当前品牌词；旧全名形态由 GitHub 仓库
+      // homepage 外链传给引擎，旧名检索量趋零不再进实体（避免实体噪音）
+      'alternateName': ['SQL Visualizer'],
       'applicationCategory': 'DeveloperApplication',
       'operatingSystem': 'Windows, macOS, Linux',
       'description': 'IntelliJ IDEA 插件：MyBatis-Plus / MPJ / JPA / Hibernate 的 SQL 调试利器',
@@ -277,6 +281,7 @@ export default defineConfig({
               { text: '版本兼容', link: '/guide/compatibility' },
               { text: '内网与离线环境', link: '/guide/offline' },
               { text: '为什么选择 SQL Visualizer', link: '/guide/comparison' },
+              { text: 'MyBatis SQL 调试方案对比', link: '/guide/compare-sql-tools' },
               { text: '怎么看 MyBatis 最终执行的 SQL', link: '/guide/view-final-sql' },
               { text: '常见问题 FAQ', link: '/guide/faq' },
               { text: 'MyBatis 日志里的问号怎么变成真实参数', link: '/guide/mybatis-log-params' },
@@ -329,7 +334,9 @@ export default defineConfig({
     en: {
       label: 'English',
       lang: 'en-US',
-      title: 'SQL Visualizer',
+      // 2026-11-21 与插件端新 Marketplace 展示名对齐（B1 案）：英文页 title 后缀带全名，
+      // 中文侧品牌资产（title / og:title / WebSite JSON-LD）保持不动
+      title: 'MyBatis SQL Visualizer',
       description:
         'IntelliJ IDEA plugin: SQL debugging companion for MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate — live SQL preview of Wrapper chains and XML/annotation/HQL dynamic SQL (incl. MPJ joins), real EXPLAIN execution plans, runtime capture of real parameters and durations with slow-query highlighting, log-to-source navigation, SQL-to-Java reverse conversion, and MCP Server tools.',
       themeConfig: {
@@ -369,6 +376,7 @@ export default defineConfig({
               { text: 'Compatibility', link: '/en/guide/compatibility' },
               { text: 'Offline & Intranet', link: '/en/guide/offline' },
               { text: 'Why SQL Visualizer', link: '/en/guide/comparison' },
+              { text: 'Compare MyBatis SQL Debugging Plugins', link: '/en/guide/compare-sql-tools' },
               { text: 'How to see the SQL MyBatis actually runs', link: '/en/guide/view-final-sql' },
               { text: 'FAQ', link: '/en/guide/faq' },
               { text: 'Turning the ? marks in MyBatis logs into real parameters', link: '/en/guide/mybatis-log-params' },
