@@ -3,6 +3,7 @@ prev: false
 next:
   text: 更新日志
   link: /about/changelog
+description: "MyBatis SQL Visualizer（SQL Visualizer）的作者、联系方式与项目背景。"
 ---
 
 # 关于

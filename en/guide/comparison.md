@@ -1,6 +1,6 @@
 ---
 title: "How to See the SQL MyBatis Actually Runs — Approach Comparison"
-description: "Compare SQL Visualizer with MyBatis Log Plugin and hand-joined log lines on seeing the final SQL, so you can pick the approach that fits."
+description: "Compare MyBatis SQL Visualizer with MyBatis Log Plugin and hand-joined log lines on seeing the final SQL, so you can pick the approach that fits."
 ---
 
 # Why SQL Visualizer
