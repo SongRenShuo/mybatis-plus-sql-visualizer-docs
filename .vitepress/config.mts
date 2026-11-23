@@ -433,7 +433,10 @@ export default defineConfig({
 
   // 主题配置（全局共享）
   themeConfig: {
-    logo: '/logo.svg',
+    // 2026-11-23：logo 由字符串改为对象形式并补 alt——CSDN SEO 扩展把导航 logo 的
+    // alt="" 判为「图片缺少 ALT」。VitePress 默认给装饰性 logo 写 alt=""+aria-hidden
+    // （a11y 上正确），但 SEO 工具按字面判定；补 alt 后两方都满足。
+    logo: { light: '/logo.svg', alt: 'SQL Visualizer' },
 
     socialLinks: [],
 
