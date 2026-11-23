@@ -930,8 +930,8 @@ html.dark .vp-doc p > img[src^="/demo/"][src$=".svg"] {
 
 /* 功能详解等分组里的同级条目拉开了行距，长标题不再挨成一团 */
 .VPSidebar .VPSidebarItem.level-1.is-link > .item {
-  padding-top: 7px !important;
-  padding-bottom: 7px !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
 }
 
 /* ---------- 搜索 ---------- */
