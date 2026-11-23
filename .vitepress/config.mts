@@ -66,6 +66,18 @@ export default defineConfig({
   //（实测 `/features/wrapper-preview.html` → 308 → 无后缀 200）。产物仍是 .html 文件，只是链接不带后缀。
   cleanUrls: true,
 
+  // 2026-11-23：给导航 logo 补 alt。
+  // 背景：VitePress 1.6.4 的 themeConfig.logo 对象形式（light/dark/alt）实测不渲染 alt，
+  // 即使 light+dark 都给全，产物仍是 alt=""（配置被静默忽略，构建照常成功）；而 CSDN SEO
+  // 扩展按字面判定「图片缺少 ALT」。这里在构建期直接替换 HTML，爬虫读到的是带 alt 的版本。
+  // 注：装饰性 logo 写 alt=""+aria-hidden 本符合 a11y 规范，此改动只为过 SEO 工具检查。
+  transformHtml(code) {
+    return code.replace(
+      /(<img src="\/logo\.svg" )alt=""/g,
+      '$1alt="SQL Visualizer"'
+    )
+  },
+
   // 文档页显示「最后更新于」（构建期按文件跑 git log 取最后一次提交时间），
   // 同时让 sitemap 自动带上 <lastmod>；单页可用 frontmatter `lastUpdated: false` 关闭。
   lastUpdated: true,
@@ -433,10 +445,10 @@ export default defineConfig({
 
   // 主题配置（全局共享）
   themeConfig: {
-    // 2026-11-23：logo 由字符串改为对象形式并补 alt——CSDN SEO 扩展把导航 logo 的
-    // alt="" 判为「图片缺少 ALT」。VitePress 默认给装饰性 logo 写 alt=""+aria-hidden
-    // （a11y 上正确），但 SEO 工具按字面判定；补 alt 后两方都满足。
-    logo: { light: '/logo.svg', alt: 'SQL Visualizer' },
+    // 2026-11-23：导航 logo 的 alt 见下方 buildEnd 的 transformHtml——
+    // VitePress 1.6.4 的 themeConfig.logo 对象形式（light/dark/alt）实测不渲染 alt，
+    // 即使 light+dark 都给全，产物仍是 alt=""。故回退成字符串，alt 在构建期注入。
+    logo: '/logo.svg',
 
     socialLinks: [],
 
