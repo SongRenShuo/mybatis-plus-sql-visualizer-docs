@@ -1,6 +1,6 @@
 ---
 title: "How to See the SQL MyBatis Actually Runs — by Scenario"
-description: "Preview Wrapper/XML/annotation SQL while coding, restore real parameters from question-mark logs, skip p6spy, and convert SQL back to Wrapper Java code — the right approach for each scenario."
+description: Preview Wrapper, XML and annotation SQL while coding, restore real parameters from logs, skip p6spy, and convert SQL back to Wrapper Java per scenario.
 head:
   - - script
     - type: application/ld+json

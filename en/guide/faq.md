@@ -1,6 +1,172 @@
 ---
 title: "FAQ"
 description: "Answers to the most common questions — missing gutter icons, IDE compatibility, executing SQL and more."
+head:
+  - - script
+    - type: application/ld+json
+    - |
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "inLanguage": "en",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Which IDE versions are supported?",
+            "acceptedAnswer": { "@type": "Answer", "text": "IntelliJ IDEA 2024.3 and above (since-build=243), compatible with the full 2024.3 / 2025.3 / 2026.2 series. Both Community and Ultimate are supported, but Execute SQL requires Ultimate plus the Database plugin." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why isn't the gutter icon showing?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The gutter icon appears only at Wrapper chain end lines (where .eq() or other terminal calls are), mapper XML <select> / <update> statement lines, Java Mapper interface @Select annotation lines, Hibernate HQL call lines and JPA @Query annotation lines plus Repository derived method lines. Ensure the cursor is at one of these positions; if it still does not show, check that Show Preview SQL Icon in Gutter is enabled in settings." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is there no SQL syntax highlighting or completion in mapper XML?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Syntax highlighting and in-statement completion inside mapper XML are provided by this plugin itself (language injection plus a built-in highlighter) — no SQL dialect configuration is needed. If nothing shows at all, check in this order: whether your plugin version includes it (provided from 2026.10.13 onward, releases 2026.10.9 and earlier do not have it), whether the root tag is <mapper> with a namespace, whether another MyBatis plugin is interfering, and whether project dependencies are imported and indexing finished; in-statement completion is triggered manually with Ctrl+Space." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to configure an SQL dialect to get highlighting?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. SQL highlighting and completion inside mapper XML are provided by this plugin and do not depend on any SQL dialect configuration. If the editor shows SQL dialect is not configured., that is an IDE platform weak warning, not an error from this plugin; pointing the project at the real dialect under Settings → Languages & Frameworks → SQL Dialects is a bonus, and skipping it does not affect highlighting." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is configuring a data source what makes XML highlighting work?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. A data source is a prerequisite for execution-class features: running SQL and EXPLAIN require a data source configured in the Database tool window first (Ultimate's Database plugin). The editor's syntax highlighting and completion do not read the data source — you get highlighting without one. Once configured, column completion additionally merges in the database's real columns and comments." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it support MyBatis-Plus-Join (MPJ) JOIN queries?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. MPJLambdaWrapper and MPJQueryWrapper JOIN preview, as well as MPJ-form SQL to Java reverse conversion, are all implemented. When selecting the MPJ form for reverse conversion, the project needs the mybatis-plus-join dependency (1.5.6+)." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does findAllById get a preview?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. findAllById expands into a primary-key IN (?, ?, ...) collection query and generates a preview like any other derived query." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there a difference between preview SQL and actual runtime SQL?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The preview aims to align with MyBatis-Plus runtime semantics. Static constant inlining, the single collection placeholder, and pagination literal calculation are inherent to static evaluation — semantically equivalent, only textually different." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can ? placeholders be recognized and replaced with actual values?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The left panel input supports comma-separated multi-value fill-in (input 1,2,3 → renders (1, 2, 3)); LIKE params auto-append a percent sign; quote wrapping is decided by the field type. Replace ? Placeholders is enabled by default in settings; turning it off renders variables as ? too." }
+          },
+          {
+            "@type": "Question",
+            "name": "EXPLAIN click fails or does nothing?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The most common cause is a missing data source: like Execute SQL, EXPLAIN relies on the Database tool window of IntelliJ IDEA Ultimate — configure a data source there first, then retry. Oracle registers the plan into the session-level PLAN_TABLE and the statement returns 0 rows, so query DBMS_XPLAN.DISPLAY on the database side over the same connection; SQL Server returns the plan XML in an extra result tab of the native console." }
+          },
+          {
+            "@type": "Question",
+            "name": "SQL log not capturing SQL?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Start with the diagnostics in the panel's empty state (enhanced-capture channel state and console lines scanned). Enhanced capture: confirm Enhanced Capture is enabled in settings and run or debug the project once, since it attaches with the application process. Console channel: the log must contain Preparing: / Parameters: (the ==> Preparing: form needs Mixed prefix enabled), parameter lines usually require TRACE level, check whether lines were hit by the Remove Lines Containing filter, and confirm the log goes to the run console rather than a separate log file." }
+          },
+          {
+            "@type": "Question",
+            "name": "The gutter right-click Recent Executions item is empty?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Recent Executions looks up executions near that spot from logs captured this session — it requires log capture to be on and to have captured executions at that spot before. An empty state right after a fresh session start, before any SQL has run, is normal; if logs are not being captured at all, go through the steps in the previous section." }
+          },
+          {
+            "@type": "Question",
+            "name": "Jump to Source in realtime logs misses — how to fix?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Jumps rely only on the positions the plugin actually captured — there is no table-name guessing fallback. Enhanced-capture entries carry the real call stack from execution time and land precisely; console-capture logs contain no call-site info, so copy the self-contained SqlSourceInterceptor shipped with the plugin into your project and register it as a MyBatis-Plus InnerInterceptor for a precise landing." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can the auto-opened log window be turned off for good?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Capturing the first SQL auto-expands the log window; once you close it manually, it will not auto-open again for the current session. To turn it off for good, disable Auto-Open Window on SQL Found in settings; re-enabling the switch or restarting the IDE restores auto-open." }
+          },
+          {
+            "@type": "Question",
+            "name": "Where did my SQL history go after upgrading?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Since v2026.9.2 the plugin's in-project data directory is renamed from .idea/mybatis-plus-sql-visualizer/ to .idea/sql-visualizer/ (history SQL and execution temp files). The rename does not migrate old data. To keep old records, manually copy the .sql files under the old directory's sql-history/ into the new one." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why did my SQL dialect change after upgrading?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Since v2026.9.18 the database dialect defaults to Auto-infer (follow the data source), and the fallback no longer hard-codes MySQL; configurations that never set a dialect manually enter inference mode automatically after upgrading (the old default was MySQL). To pin a dialect, pick one manually in settings — you can switch back to Auto-infer anytime." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can SQL to Java reverse conversion generate directly compilable code?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Generated code is strictly based on MyBatis-Plus public APIs (local jar decompilation as the sole authority), with no fictional methods. It auto-infers entity classes and generates type-safe code in Lambda form; when no entity is found it falls back to a string-column QueryWrapper." }
+          },
+          {
+            "@type": "Question",
+            "name": "How to switch the plugin UI language?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Settings → Tools → SQL Visualizer → UI Language, supporting Simplified Chinese / English / Follow System. The plugin language is independent of the IDE language setting; reopen the preview dialog to apply." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it work on an intranet with no internet access?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — core features are entirely offline: previews, parameter fill-in, reverse conversion, log restore, JOIN diagrams, formatting and CRUD generation all run locally, and the plugin reports no usage data and has no account validation. Only Check Update and Submit Feedback reach the internet, and both merely report a failure without blocking anything. For intranet deployment, pre-provision the JDBC drivers needed by Execute SQL, and a system property can repoint the update source to an intranet address." }
+          },
+          {
+            "@type": "Question",
+            "name": "Which database dialects are supported for pagination syntax?",
+            "acceptedAnswer": { "@type": "Answer", "text": "15 dialects: MySQL, PostgreSQL, Oracle, SQL Server, H2, SQLite, MariaDB, DM (Dameng), KingBase, OceanBase, openGauss, GaussDB, HighGo, Vastbase, GoldenDB (ZTE). Pagination clauses and upsert conflict clauses render per dialect differences." }
+          },
+          {
+            "@type": "Question",
+            "name": "My legacy project uses iBatis 2.x — can I preview it?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. iBatis 2.x <sqlMap> files have a dedicated rendering chain: #name# placeholders and the 14 <isXxx> condition tags render with official-engine semantics (golden-checked against iBatis 2.3.4.726), parameters are toggleable and fillable, statements and Java DAO calls navigate both ways, and the editor gets highlighting and completion. MyBatis 3 <mapper> files are never misclassified." }
+          },
+          {
+            "@type": "Question",
+            "name": "Shortcut conflicts?",
+            "acceptedAnswer": { "@type": "Answer", "text": "In the plugin settings page, click the Edit button next to the shortcut to re-record it. If it conflicts with another plugin, the dialog offers Use (coexist) or Force use (override). You can also change it directly in Settings → Keymap." }
+          },
+          {
+            "@type": "Question",
+            "name": "Where does the COUNT statement in a paginated preview come from?",
+            "acceptedAnswer": { "@type": "Answer", "text": "It is produced by the simulate pagination interceptor switch, which mirrors MyBatis-Plus PaginationInnerInterceptor runtime behaviour: a statement taking a Page / IPage argument gets the pagination clause appended, plus a COUNT wrapper emitted alongside it (SELECT COUNT(*) FROM (...) TOTAL). Statements with searchCount=false or a handwritten LIMIT produce only one of the two; to opt out, switch the master toggle off or drop just the COUNT half with the sub-switch." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can a preview show the effect of data permissions (DataPermission)?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Data permissions are appended dynamically by the interceptor at runtime, so a static preview cannot see them. The plugin offers two aids: a data-permission mock condition where you type a WHERE fragment that is appended to the end of SELECT / UPDATE / DELETE so you can preview the post-permission shape, and a show DataPermissionInterceptor runtime-difference hint switch that makes the preview's warning area note the statement will be rewritten at runtime." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can handwritten string SQL inside JdbcTemplate be previewed?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Enable JdbcTemplate string-SQL preview is on by default: string SQL arguments of queryForList / update and friends get a preview icon and can be triggered with Alt+Shift+Q; NamedParameterJdbcTemplate :name parameters are filled in." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why isn't the execution plan rendered as a table inside the panel?",
+            "acceptedAnswer": { "@type": "Answer", "text": "By default it goes to the native database console — structured EXPLAIN rendering inside the preview panel is an experimental feature, off by default. To render inside the panel, turn it on in settings: MySQL-family plans render as tabular rows, PostgreSQL-family as a FORMAT JSON tree with index suggestions, while other dialects and every failure path fall back to the native console — both channels coexist." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I have to retype parameter values every time?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. The parameter area has presets: the default preset remembers the values you typed and recalls them the next time you preview the same declaring method (presets are scoped per method), Manage Presets lets you save several named parameter sets and switch between them, and the conditions area offers deselect all / clear to wipe the current conditions quickly." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is the affected-row estimate unavailable?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The action only works for a single UPDATE / DELETE. Unparseable statements, multiple statements, non UPDATE / DELETE, JOIN or multi-table writes, no WHERE, and overly complex WHERE clauses report the reason instead of estimating; with no data source bound, a picker opens first and the probe retries once you choose one." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does the AI context block still contain original values?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Copy as AI Context only masks literals that match a rule (password-like column names, ID-card or mobile-number shapes); ordinary strings keep their original text — name = 'tom' for instance is not treated as sensitive. So the block makes no promise of being entirely secret-free: read it over before pasting into an external AI; for a stricter exit, turn on Display and export masking." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why isn't EXPLAIN plan history saved by default?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Raw execution plans are not redacted; predicates may contain business values, credentials or keys. Keep raw EXPLAIN plans across sessions is therefore off by default, which means plans are only comparable within the current session. Enabling it in settings saves plans isolated by project + data source UUID + dialect + SQL fingerprint; clearing preview history deletes them as well." }
+          },
+          {
+            "@type": "Question",
+            "name": "What to include when reporting issues?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Submit feedback at the Feedback Pool, and include the plugin version number (the Internal Build Number in settings supports one-click copy), the IDE version (Help → About), reproduction steps and sample code, and related logs or screenshots." }
+          }
+        ]
+      }
 ---
 
 # FAQ

@@ -3,6 +3,7 @@ prev: false
 next:
   text: Changelog
   link: /en/about/changelog
+description: "About MyBatis SQL Visualizer (SQL Visualizer): the author, contact details and project background."
 ---
 
 # About

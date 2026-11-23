@@ -1,6 +1,6 @@
 ---
 title: "iBatis 2.x SQL Preview & Navigation"
-description: "SQL preview for legacy iBatis 2.x (sqlMap) projects: #name# placeholders and 14 dynamic condition tags rendered with official-engine semantics, fillable parameters, preview from sqlMap statements and Java DAO call lines, and two-way navigation."
+description: 'Preview iBatis 2.x sqlMap SQL in IntelliJ IDEA: #name# placeholders and dynamic tags with official-engine semantics, fillable parameters, two-way navigation.'
 ---
 
 # iBatis 2.x SQL Preview & Navigation

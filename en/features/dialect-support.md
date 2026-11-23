@@ -1,6 +1,6 @@
 ---
 title: "Database Dialect Support Matrix"
-description: "15-dialect matrix: MySQL, PostgreSQL, Oracle, SQL Server, DM, KingBase, GaussDB, OceanBase, openGauss, GoldenDB and more — per-dialect pagination rendering and EXPLAIN."
+description: '15-dialect matrix for IntelliJ IDEA SQL preview: MySQL, PostgreSQL, Oracle, SQL Server, DM, KingBase, GaussDB, OceanBase, GoldenDB and more, with EXPLAIN.'
 ---
 
 # Database Dialect Support Matrix

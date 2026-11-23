@@ -1,6 +1,6 @@
 ---
 title: "MyBatis 查看最终执行 SQL 的方案对比"
-description: "对比 SQL Visualizer 与 MyBatis Log Plugin、手拼日志等方案在查看最终 SQL 上的能力差异，供选型参考。"
+description: "对比 MyBatis SQL Visualizer 与 MyBatis Log Plugin、手拼日志等方案在查看最终 SQL 上的能力差异，供选型参考。"
 ---
 
 # 为什么选择 SQL Visualizer

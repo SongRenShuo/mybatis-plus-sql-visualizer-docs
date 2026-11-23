@@ -1,6 +1,6 @@
 ---
 title: "MyBatis SQL Debugging Plugins Compared"
-description: "Three families of MyBatis SQL debugging plugins for IntelliJ IDEA — log restoration, navigation & code generation, and write-time preview with runtime capture. Start with the at-a-glance chooser, then compare capabilities dimension by dimension."
+description: 'Three families of MyBatis SQL debugging plugins for IntelliJ IDEA: log restoration, navigation and code generation, write-time preview with runtime capture.'
 ---
 
 # MyBatis SQL Debugging Plugins Compared
@@ -9,13 +9,20 @@ When debugging MyBatis / JPA SQL in IntelliJ IDEA, community plugins fall into t
 
 ## At a glance
 
-Find your situation first, then read on for the details:
+A decision table for common needs; details and representative plugins follow in the next three sections.
 
-| Your situation right now | Pick |
-|------|------|
-| The service is running; you just want the `?` in console logs filled in | Log restoration |
-| You want faster mapper writing: navigation, generation, completion | Navigation & generation |
-| You want to see the final SQL while coding without starting the app, then get real parameters and source locations at runtime | Write-time preview & capture |
+| Your situation | Look at first | Why |
+|----------------|---------------|-----|
+| Your app already prints SQL logs; you just want the question marks filled in | Log restoration family | Works on the logs you already have — no project changes, no added dependencies |
+| Your main pain is jumping between mapper XML and Java interfaces and generating CRUD templates | Navigation & generation family | Navigation, generation and completion are exactly this family's focus |
+| You want to confirm the final Wrapper / XML / annotation / JPA SQL while coding, without starting the service | Write-time preview & capture family | Static parsing renders immediately; the plugin requires IDEA 2024.3 or later |
+| You want real parameters, durations and affected rows at runtime, with a jump back to source | Write-time preview & capture family | The capture channel supplies real execution data; enhanced capture needs a one-time authorization in the plugin |
+| You want an AI coding agent to call SQL rendering, log restoration and schema lookup directly | Write-time preview & capture family | The plugin provides 11 read-only MCP tools, requiring IDEA 2025.2 or later with a working MCP Server |
+| You need EXPLAIN plans, real SQL execution or the JOIN diagram | Write-time preview & capture family | Runs through the IDE's embedded Database console, which requires Ultimate's Database Tools |
+| Your team will not accept an invasive driver such as p6spy | Log restoration family or write-time preview & capture family | Neither path changes the data source or adds a driver |
+| You want navigation and generation, plus the final SQL on demand | Navigation & generation family + write-time preview & capture family | The families are not mutually exclusive; when a same-kind navigation plugin is present, this plugin yields the Mapper gutter icons |
+
+Full breakdowns of each family follow in the next three sections; this plugin's boundaries are listed under "This plugin (SQL Visualizer)".
 
 ## How each family works
 

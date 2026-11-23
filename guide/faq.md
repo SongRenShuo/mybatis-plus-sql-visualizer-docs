@@ -1,6 +1,172 @@
 ---
 title: "SQL Visualizer 常见问题 FAQ"
 description: "汇总 gutter 图标不显示、IDE 版本兼容、执行 SQL 等高频问题，按问题直达答案。"
+head:
+  - - script
+    - type: application/ld+json
+    - |
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "inLanguage": "zh-CN",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "插件支持哪些 IDE 版本？",
+            "acceptedAnswer": { "@type": "Answer", "text": "IntelliJ IDEA 2024.3 及以上（since-build=243），兼容 2024.3 / 2025.3 / 2026.2 全系列。Community 与 Ultimate 均支持，但「执行 SQL」功能需要 Ultimate + Database 插件。" }
+          },
+          {
+            "@type": "Question",
+            "name": "为什么 gutter 图标不显示？",
+            "acceptedAnswer": { "@type": "Answer", "text": "Gutter 图标只出现在这些位置：Wrapper 链末尾行（.eq() 等终止调用所在行）、mapper XML 的 <select> / <update> 等语句行、Java Mapper 接口中 @Select 等注解行、Hibernate HQL 调用行与 JPA @Query 注解行及 Repository 推导方法行。确认光标位于上述位置；如仍不显示，检查设置页「代码左侧显示预览 SQL 图标」是否开启。" }
+          },
+          {
+            "@type": "Question",
+            "name": "为什么 mapper XML 里没有 SQL 语法高亮或代码补全？",
+            "acceptedAnswer": { "@type": "Answer", "text": "mapper XML 内的语法高亮与语句内补全由本插件自己提供（语言注入 + 自研高亮器），不需要配置 SQL 方言。完全看不到时按顺序排查：插件版本是否包含该能力（2026.10.13 起提供，2026.10.9 及更早的发行版不含）、文件根标签是否为带 namespace 的 <mapper>、是否与其他 MyBatis 插件冲突、项目依赖是否已导入且索引就绪；语句内补全用 Ctrl+Space 手动触发。" }
+          },
+          {
+            "@type": "Question",
+            "name": "需要配置 SQL 方言才有高亮吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不需要。mapper XML 里的 SQL 高亮和补全由本插件提供，不依赖 SQL 方言配置。编辑器里若出现 SQL dialect is not configured.，那是 IDE 平台的弱警告，不是本插件的报错；到 Settings → Languages & Frameworks → SQL Dialects 配上方言只是锦上添花，不配也不影响高亮。" }
+          },
+          {
+            "@type": "Question",
+            "name": "配置数据源是为了让 XML 里有高亮吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不是。数据源是执行类能力的前置：执行 SQL、EXPLAIN 要先在 Database 工具窗口配好数据源（Ultimate 的 Database 插件）。编辑器的语法高亮和补全不读数据源，不配数据源一样有高亮；配好数据源后，列名补全会额外并入数据库真实列与注释。" }
+          },
+          {
+            "@type": "Question",
+            "name": "支持 MyBatis-Plus-Join（MPJ）联表查询吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "支持。MPJLambdaWrapper 与 MPJQueryWrapper 联表预览、以及 MPJ 形态的 SQL→Java 反向转换均已实现。反向转换选择 MPJ 形态时，项目需引入 mybatis-plus-join 依赖（1.5.6+）。" }
+          },
+          {
+            "@type": "Question",
+            "name": "JPA 的 findAllById 有预览吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "有。findAllById 会展开为主键 IN (?, ?, ...) 集合查询，与其他派生查询一样直接生成预览。" }
+          },
+          {
+            "@type": "Question",
+            "name": "预览 SQL 与实际运行 SQL 有差异吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "预览目标是对齐 MyBatis-Plus 运行时语义。静态常量内联、集合单占位符、分页字面量计算这三类差异是静态求值的固有特性，语义等价、仅文本不同。" }
+          },
+          {
+            "@type": "Question",
+            "name": "? 占位符能不能识别并替换为实际值？",
+            "acceptedAnswer": { "@type": "Answer", "text": "可以。左侧面板输入框支持逗号分隔多值回填（输入 1,2,3 → 渲染为 (1, 2, 3)）；LIKE 参数自动拼百分号；按字段类型决定是否加引号。设置页「替换 ? 占位符」默认开启，关闭后变量也渲染为 ?。" }
+          },
+          {
+            "@type": "Question",
+            "name": "EXPLAIN 点击失败或没反应？",
+            "acceptedAnswer": { "@type": "Answer", "text": "最常见原因是未配置数据源：EXPLAIN 与「执行 SQL」一样依赖 IntelliJ IDEA Ultimate 的 Database 工具窗，先在里面配好数据源再试。Oracle 的计划行落在会话级 PLAN_TABLE、语句本身返回 0 行，按面板指引在同一连接的数据库端查 DBMS_XPLAN.DISPLAY 即可；SQL Server 的计划 XML 出现在原生控制台的附加结果页签里。" }
+          },
+          {
+            "@type": "Question",
+            "name": "SQL 日志捕获不到 SQL 怎么办？",
+            "acceptedAnswer": { "@type": "Answer", "text": "先看面板空态给出的诊断（增强捕获通道状态与控制台已扫描行数）。增强捕获通道：确认设置页「增强捕获」已开启，并运行或调试过一次项目（增强捕获随应用进程挂载）。控制台通道：应用日志需包含 Preparing: / Parameters:（==> Preparing: 形态需开启「混合前缀」）、参数行日志级别通常要开到 TRACE、检查是否被「移除包含关键字」过滤规则命中、确认日志输出到运行控制台而不是独立日志文件。" }
+          },
+          {
+            "@type": "Question",
+            "name": "gutter 右键「最近执行记录」是空的？",
+            "acceptedAnswer": { "@type": "Answer", "text": "「最近执行记录」从本次会话捕获的日志里反查该位置附近的执行，需要日志捕获处于开启状态，且此前已捕获过该位置的执行。新会话刚启动、还没跑过 SQL 时显示空态属正常现象；日志一直捕获不到时，按上一节（SQL 日志捕获不到 SQL）的步骤排查。" }
+          },
+          {
+            "@type": "Question",
+            "name": "实时日志「跳转到源码」跳不准怎么办？",
+            "acceptedAnswer": { "@type": "Answer", "text": "跳转只认插件真实捕获到的位置，不做表名猜测回退。增强捕获通道的条目自带执行时的真实调用栈，落点精确；控制台捕获通道的日志本身不含调用位置，需要把插件自带的自包含拦截器 SqlSourceInterceptor 复制到项目并注册为 MyBatis-Plus InnerInterceptor，才能有精确落点。" }
+          },
+          {
+            "@type": "Question",
+            "name": "自动弹出的日志窗口能彻底关掉吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "可以。捕获到第一条 SQL 时会自动展开日志窗口；手动关掉后，本次会话内不会再自动弹出。想彻底关闭，在设置页把「发现 SQL 时自动打开日志窗口」关掉即可；重新开启该开关或重启 IDE 后恢复自动展开。" }
+          },
+          {
+            "@type": "Question",
+            "name": "升级后 SQL 历史记录去哪了？",
+            "acceptedAnswer": { "@type": "Answer", "text": "v2026.9.2 起，插件在项目内的数据目录由 .idea/mybatis-plus-sql-visualizer/ 改名为 .idea/sql-visualizer/（历史 SQL 与执行临时文件），此次更名不做旧数据迁移。如需保留旧记录，可手动把旧目录 sql-history/ 下的 .sql 文件复制到新目录。" }
+          },
+          {
+            "@type": "Question",
+            "name": "升级后我的 SQL 方言怎么变了？",
+            "acceptedAnswer": { "@type": "Answer", "text": "v2026.9.18 起，数据库方言默认改为「智能推断（跟随数据源）」，兜底也不再硬编码 MySQL；老配置里如果从未手动设置过方言，升级后会自动进入推断模式（原默认 MySQL）。想固定某个方言，在设置页手动选定即可，随时可以切回「智能推断」。" }
+          },
+          {
+            "@type": "Question",
+            "name": "SQL → Java 反向转换生成的代码能直接编译吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "可以。生成代码严格基于 MyBatis-Plus 公开 API（以本地 jar 反编译为唯一权威），不含虚构方法。自动推断实体类后使用 Lambda 形态生成类型安全代码；找不到实体时回退字符串列 QueryWrapper。" }
+          },
+          {
+            "@type": "Question",
+            "name": "如何切换插件界面语言？",
+            "acceptedAnswer": { "@type": "Answer", "text": "Settings → Tools → SQL Visualizer → 界面语言，支持 简体中文 / English / 跟随系统。插件语言独立于 IDE 语言设置，切换后重新打开预览弹窗即生效。" }
+          },
+          {
+            "@type": "Question",
+            "name": "内网 / 无外网环境能用吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "可以，核心功能完全离线——预览、参数回填、反向转换、日志还原、JOIN 图、格式化、CRUD 生成都不需要外网，插件不发任何使用数据，也没有账号校验。仅「检查更新」与「提交反馈」两个可选入口会访问外网，失败时只提示不阻塞。内网部署需提前预置执行 SQL 所需的 JDBC 驱动，并可用系统属性把更新源换成内网地址。" }
+          },
+          {
+            "@type": "Question",
+            "name": "支持哪些数据库方言的分页语法？",
+            "acceptedAnswer": { "@type": "Answer", "text": "15 种：MySQL、PostgreSQL、Oracle、SQL Server、H2、SQLite、MariaDB、DM（达梦）、KingBase（金仓）、OceanBase、openGauss、GaussDB、HighGo（瀚高）、Vastbase（海量）、GoldenDB（中兴）。分页子句和 upsert 冲突子句按方言差异渲染。" }
+          },
+          {
+            "@type": "Question",
+            "name": "老项目用的是 iBatis 2.x，能预览吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "能。iBatis 2.x 的 <sqlMap> 文件有独立渲染链：#name# 占位、14 种 <isXxx> 条件标签按官方引擎语义渲染（以 iBatis 2.3.4.726 做黄金对照），参数可勾选可填值，语句与 Java DAO 调用双向跳转，编辑器还有着色与补全；MyBatis 3 的 <mapper> 文件不会被误判。" }
+          },
+          {
+            "@type": "Question",
+            "name": "快捷键冲突怎么办？",
+            "acceptedAnswer": { "@type": "Answer", "text": "在插件设置页点击快捷键旁的「编辑」按钮重新录制。若与其他插件冲突，弹窗提供「使用」（共存）或「强制使用」（抢占）选项。也可在 Settings → Keymap 中直接修改。" }
+          },
+          {
+            "@type": "Question",
+            "name": "分页查询的 COUNT 语句是从哪来的？",
+            "acceptedAnswer": { "@type": "Answer", "text": "那是「模拟分页拦截器」按 MyBatis-Plus PaginationInnerInterceptor 的运行时行为补出来的：带 Page / IPage 参数的语句会在原语句后尾追分页子句，并并列产出一条 COUNT 包裹（SELECT COUNT(*) FROM (...) TOTAL）。searchCount=false 与手写 LIMIT 的语句只产其一；可在设置页关掉总开关，或用子开关只去掉 COUNT 那半。" }
+          },
+          {
+            "@type": "Question",
+            "name": "预览里能体现数据权限（DataPermission）的影响吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "数据权限是运行期由拦截器动态追加条件的，静态预览看不到。可用设置页「SQL 预览」的「数据权限模拟条件」手填一段 WHERE 片段，追加到 SELECT / UPDATE / DELETE 末尾预览生效后的形态；也可打开「显示 DataPermissionInterceptor 运行时差异提示」，让预览警告区提醒这条语句在运行时会被动态改写。" }
+          },
+          {
+            "@type": "Question",
+            "name": "JdbcTemplate 里手写的字符串 SQL 能预览吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "可以。设置页「SQL 预览」的「启用 JdbcTemplate SQL 字符串预览」默认开启：queryForList / update 等方法的字符串 SQL 实参会有预览图标，也能用 Alt+Shift+Q 触发；NamedParameterJdbcTemplate 的 :name 命名参数可以回填。" }
+          },
+          {
+            "@type": "Question",
+            "name": "执行计划为什么没在面板里渲染成表格？",
+            "acceptedAnswer": { "@type": "Answer", "text": "默认就是走原生数据库控制台——「预览面板内结构化渲染 EXPLAIN」是实验特性、默认关闭。想要面板内结构化渲染可在设置页开启：MySQL 家族出表格行、PostgreSQL 家族出 FORMAT JSON 树并附索引建议；其余方言与任何失败路径都自动回退原生控制台，两条通道并存。" }
+          },
+          {
+            "@type": "Question",
+            "name": "参数值每次都要重填吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不用。预览面板的参数区有「预设」：默认预设会记住填过的值，并在下次预览同一声明方法时自动召回（预设按方法隔离）；「管理预设」里可以保存多套具名参数组合随时切换；动态条件区还有「全不选 / 清除」用来快速清空当前条件。" }
+          },
+          {
+            "@type": "Question",
+            "name": "预估影响行数为什么不可用？",
+            "acceptedAnswer": { "@type": "Answer", "text": "这个动作只对单条 UPDATE / DELETE 有效。语句无法解析、多语句、非 UPDATE / DELETE、JOIN / 多表写、无 WHERE、WHERE 过于复杂等形态会直接给出原因而不试算；若当前没有绑定数据源，会先弹数据源选择器，选定后自动重试。" }
+          },
+          {
+            "@type": "Question",
+            "name": "AI 上下文里为什么还有原始值？",
+            "acceptedAnswer": { "@type": "Answer", "text": "「复制为 AI 上下文」只对命中规则的敏感字面量打码（密码类列名、身份证 / 手机号形态），普通字符串仍保留原文，例如 name = 'tom' 不会被当成敏感值。所以这个块不承诺整段无机密，复制到外部 AI 之前请自己看一遍再删改；想要更严的出口可以开启「展示与导出脱敏」。" }
+          },
+          {
+            "@type": "Question",
+            "name": "EXPLAIN 计划历史为什么默认不保存？",
+            "acceptedAnswer": { "@type": "Answer", "text": "原始执行计划未脱敏，谓词里可能带业务值、凭据或密钥，所以「跨会话保留原始 EXPLAIN 计划」默认关闭，关闭时计划只在当前会话内可比。要跨会话对比需在设置页显式开启；开启后按项目 + 数据源 UUID + 方言 + SQL 指纹隔离保存，清除预览历史会一并删除。" }
+          },
+          {
+            "@type": "Question",
+            "name": "反馈问题需要提供什么信息？",
+            "acceptedAnswer": { "@type": "Answer", "text": "到官网需求池提交反馈，建议附上：插件版本号（设置页「内部构建号」可一键复制）、IDE 版本（Help → About）、复现步骤与示例代码、相关日志或截图。" }
+          }
+        ]
+      }
 ---
 
 # 常见问题 FAQ

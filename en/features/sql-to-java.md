@@ -1,6 +1,6 @@
 ---
 title: "SQL to Wrapper Code"
-description: "Convert SQL to QueryWrapper / LambdaQueryWrapper Java code — select SQL and get compilable MyBatis-Plus code; five default forms (AUTO plus four fixed), JOIN and subqueries covered."
+description: 'Convert SQL to QueryWrapper or LambdaQueryWrapper Java code in IntelliJ IDEA: select SQL and get compilable MyBatis-Plus code, JOIN and subqueries covered.'
 ---
 
 # SQL to Wrapper Code

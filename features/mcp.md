@@ -1,6 +1,6 @@
 ---
 title: "SQL Visualizer MCP Server（AI Agent 的 SQL 渲染与还原工具）"
-description: "MCP Server 把 SQL 能力交给 AI Agent——11 个只读 sqlv_* 工具：渲染可执行 SQL、还原日志、查表结构、EXPLAIN 执行计划、回滚预案与性能建议。"
+description: "MyBatis SQL Visualizer 的 MCP Server 把 SQL 能力交给 AI Agent——11 个只读 sqlv_* 工具：渲染可执行 SQL、还原日志、查表结构、EXPLAIN 执行计划、回滚预案与性能建议。"
 ---
 
 # MCP Server：给 AI Agent 的 SQL 工具

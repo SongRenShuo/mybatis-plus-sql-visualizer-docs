@@ -1,6 +1,6 @@
 ---
 title: "MyBatis XML Dynamic SQL Preview (foreach / if / choose)"
-description: "MyBatis XML dynamic SQL preview (foreach / if / choose result) — mapper XML rendered to executable SQL per MyBatis semantics, OGNL conditions toggleable, MBG Example statements restored from call sites; HQL and JPQL supported too."
+description: 'MyBatis mapper XML dynamic SQL preview: if / foreach / choose rendered per MyBatis semantics, OGNL conditions toggleable, MBG Example restored from call sites.'
 ---
 
 # XML / HQL Dynamic SQL Preview
