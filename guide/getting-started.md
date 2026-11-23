@@ -23,11 +23,11 @@ description: "装好插件后按目标直达：预览 Wrapper 链、XML 动态 S
 ### 方式一：IDE 内置插件系统安装（推荐）
 
 1. 打开 <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd>
-2. 搜索 `SQL Visualizer`
+2. 搜索 `MyBatis SQL Visualizer`（作者 SongRenShuo）
 3. 点击 <kbd>Install</kbd> 安装
 4. 首次安装后若未看到插件入口，重启一次 IDEA；后续版本更新通常免重启热生效（离线更新通道亦支持热替换）
 
-![Marketplace 里搜索 SQL Visualizer：结果首条即本插件（作者 SongRenShuo），右侧详情页带「安装」按钮与版本号](/demo/install-marketplace.webp)
+![Marketplace 里搜索 MyBatis SQL Visualizer：结果首条即本插件（作者 SongRenShuo），右侧详情页带「安装」按钮与版本号](/demo/install-marketplace.webp)
 
 ### 方式二：手动下载插件安装
 

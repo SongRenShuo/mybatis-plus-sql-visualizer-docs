@@ -23,11 +23,11 @@ Jump straight to your goal — each path pays off in at most three steps:
 ### Method 1: Install via IDE Plugin System (Recommended)
 
 1. Open <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd>
-2. Search for `SQL Visualizer`
+2. Search for `MyBatis SQL Visualizer` (author SongRenShuo)
 3. Click <kbd>Install</kbd>
 4. If the plugin entry does not appear right after install, restart IDEA once; later version updates usually hot-swap without a restart (the offline update channel supports hot-swap as well)
 
-![Searching "SQL Visualizer" in the Marketplace: the first result is this plugin (author SongRenShuo), and the detail pane on the right carries the Install button and the version number](/demo/install-marketplace.webp)
+![Searching "MyBatis SQL Visualizer" in the Marketplace: the first result is this plugin (author SongRenShuo), and the detail pane on the right carries the Install button and the version number](/demo/install-marketplace.webp)
 
 ### Method 2: Manual Download & Install
 
