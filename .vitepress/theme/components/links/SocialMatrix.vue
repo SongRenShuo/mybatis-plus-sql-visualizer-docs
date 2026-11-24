@@ -256,25 +256,44 @@ onUnmounted(() => {
   border-radius: 11px;
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
+  overflow: hidden;
   text-decoration: none;
+  /* 默认态就占住两层阴影（透明），否则 none → 两层会在过渡中突变 */
+  box-shadow:
+    0 8px 22px -12px transparent,
+    0 0 0 1px transparent;
   transition:
-    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
+    transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.34s ease,
+    box-shadow 0.34s ease;
+}
+
+/* 品牌色顶光单独一层：radial-gradient 无法参与 transition，只有 opacity 能平滑淡入 */
+.sm__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    130% 140% at 50% -20%,
+    color-mix(in srgb, var(--brand) 8%, transparent),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.34s ease;
+  pointer-events: none;
 }
 
 .sm__card:hover {
   transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--brand) 50%, var(--vp-c-divider));
-  /* 品牌色只在卡片内部做一层顶部径向光，被 border-radius 裁切，不会溢出成整页色块 */
-  background-image: radial-gradient(
-    130% 140% at 50% -20%,
-    color-mix(in srgb, var(--brand) 16%, transparent),
-    transparent 62%
-  );
+  /* 发光往背景色靠、浓度压低：红/橙品牌色用原浓度在卡片上会刺眼 */
+  border-color: color-mix(in srgb, var(--brand) 26%, var(--vp-c-divider));
   box-shadow:
-    0 8px 22px -12px color-mix(in srgb, var(--brand) 60%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--brand) 16%, transparent);
+    0 12px 28px -18px color-mix(in srgb, var(--brand) 30%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--brand) 7%, transparent);
+}
+
+.sm__card:hover::before {
+  opacity: 1;
 }
 
 .sm__card:focus-visible {
@@ -294,7 +313,7 @@ onUnmounted(() => {
   width: 22px;
   height: 22px;
   fill: var(--vp-c-text-2);
-  transition: fill 0.22s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: fill 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* 官方 favicon 是彩色位图，不能改色，靠缩放参与 hover 反馈 */
@@ -303,16 +322,16 @@ onUnmounted(() => {
   height: 22px;
   object-fit: contain;
   border-radius: 4px;
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .sm__card:hover .sm__icon img {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .sm__card:hover .sm__icon svg {
   fill: var(--brand);
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .sm__badge {
@@ -327,11 +346,11 @@ onUnmounted(() => {
   color: var(--brand);
   background: color-mix(in srgb, var(--brand) 15%, transparent);
   border: 1px solid color-mix(in srgb, var(--brand) 30%, transparent);
-  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .sm__card:hover .sm__badge {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .sm__name {
@@ -339,7 +358,7 @@ onUnmounted(() => {
   font-weight: 500;
   color: var(--vp-c-text-2);
   line-height: 1.3;
-  transition: color 0.22s ease;
+  transition: color 0.3s ease;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
