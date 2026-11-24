@@ -121,38 +121,6 @@ onUnmounted(() => {
   max-width: 980px;
   margin: 0 auto;
   padding: 3rem 1.25rem 5rem;
-  overflow: hidden;
-}
-
-/* 顶部静态光斑：极慢呼吸，给静止状态一点生命感。纯 CSS 合成层，不产生 TBT */
-.sm::before {
-  content: '';
-  position: absolute;
-  top: -14%;
-  left: 50%;
-  width: 680px;
-  height: 340px;
-  transform: translateX(-50%);
-  background: radial-gradient(
-    ellipse at center,
-    color-mix(in srgb, var(--vp-c-brand-1) 17%, transparent),
-    transparent 70%
-  );
-  filter: blur(46px);
-  pointer-events: none;
-  animation: sm-breathe 16s ease-in-out infinite;
-}
-
-@keyframes sm-breathe {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: translateX(-50%) scale(1);
-  }
-  50% {
-    opacity: 0.85;
-    transform: translateX(-50%) scale(1.09);
-  }
 }
 
 /* 跟随光标的光晕：只在精确指针设备上出现，纯装饰层不接收事件 */
@@ -289,7 +257,15 @@ onUnmounted(() => {
 .sm__card:hover {
   transform: translateY(-3px);
   border-color: color-mix(in srgb, var(--brand) 50%, var(--vp-c-divider));
-  box-shadow: 0 8px 22px -12px color-mix(in srgb, var(--brand) 60%, transparent);
+  /* 品牌色只在卡片内部做一层顶部径向光，被 border-radius 裁切，不会溢出成整页色块 */
+  background-image: radial-gradient(
+    130% 140% at 50% -20%,
+    color-mix(in srgb, var(--brand) 16%, transparent),
+    transparent 62%
+  );
+  box-shadow:
+    0 8px 22px -12px color-mix(in srgb, var(--brand) 60%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--brand) 16%, transparent);
 }
 
 .sm__card:focus-visible {
@@ -364,15 +340,6 @@ onUnmounted(() => {
   color: var(--vp-c-text-1);
 }
 
-/* 深色底下 17% 几乎看不见，提到 26% 才有存在感 */
-html.dark .sm::before {
-  background: radial-gradient(
-    ellipse at center,
-    color-mix(in srgb, var(--vp-c-brand-1) 26%, transparent),
-    transparent 70%
-  );
-}
-
 html.dark .sm__icon svg {
   fill: var(--vp-c-text-1);
   opacity: 0.85;
@@ -421,11 +388,6 @@ html.dark .sm__card:hover .sm__icon svg {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sm::before {
-    animation: none;
-    opacity: 0.6;
-  }
-
   .sm__item {
     animation: none;
   }
