@@ -1,9 +1,9 @@
 ---
-title: "MyBatis Log to Real SQL (Auto Parameter Substitution)"
+title: "SQL Log: Fill Question Marks With Params"
 description: "MyBatis log only shows question marks? Restore executable SQL with real parameters: slow queries red, EXPLAIN, jump to source. Hibernate / JdbcTemplate too."
 ---
 
-# MyBatis Log to Real SQL (Auto Parameter Substitution)
+# SQL Log: Fill Question Marks With Params
 
 <GifPlayer src="/demo/sql-log.gif" alt="SQL log capture and restore demo" />
 

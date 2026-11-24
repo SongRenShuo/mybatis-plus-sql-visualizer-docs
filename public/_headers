@@ -1,27 +1,30 @@
-# Cloudflare Pages 响应头规则（计划 20261114-0027 P0-4）
-# /demo/* 是内容寻址式的演示媒体（mp4/webp/gif），弱网下 must-revalidate 4h
-# 档会让复访逐个回源校验；这里放宽到 7 天 + must-revalidate。
-# 不用 immutable：演示素材同名替换换代（无指纹文件名），immutable 会让老
-# 访客最多一年看不到更新。functions/_middleware.js 对非拦截路径放行，两者共存。
+# Cloudflare Pages 响应头规则（计划 20261114-0027 P0-4；20261122 随 EdgeOne 接管收紧）
+# 背景：国内流量已切 EdgeOne（遵循源站 Cache-Control），CF 时代 7 天窗口在
+# 国内侧变成「同名替换换代后边缘最多 7 天旧媒体」，故收紧：
+#   /demo/*  24h —— 演示素材换代最多 1 天旧，当天复访仍命中边缘
+#   二维码   4h —— 收款/群码换图必须尽快生效，文件小回源校验便宜
+#   donate/* 24h
+# 不用 immutable：同名替换换代（无指纹文件名），immutable 会让老访客
+# 长期看不到更新。functions/_middleware.js 对非拦截路径放行，两者共存。
 /demo/*
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=86400, must-revalidate
 
-# 关于页二维码与赞助码（20261120）：二维码长期不变但会随群码/收款码换图重部署，
-# 同样走 7 天 + must-revalidate 而不是默认 4h 回源校验。每个变体单独列一条：
+# 关于页二维码与赞助码（20261120）：二维码长期不变但会随群码/收款码换图重部署。
+# 每个变体单独列一条：
 #   .webp —— 文档站页面（浏览器）
 #   .jpg  —— 插件内交流群弹窗、README、Marketplace 描述（JVM ImageIO 解不了 WebP）
 #   .png  —— 旧路径，已发布的插件版本与历史直链仍指向它，保留不删
 /wechat-qr.webp
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=14400, must-revalidate
 /wechat-qr.jpg
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=14400, must-revalidate
 /wechat-qr.png
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=14400, must-revalidate
 /group-qr.webp
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=14400, must-revalidate
 /group-qr.jpg
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=14400, must-revalidate
 /group-qr.png
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=14400, must-revalidate
 /donate/*
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=86400, must-revalidate

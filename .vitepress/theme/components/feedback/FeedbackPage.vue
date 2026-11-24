@@ -22,7 +22,7 @@
     <aside class="feedback-review">
       <p class="feedback-review__text">{{ t('reviewText', locale) }}</p>
       <a
-        href="https://plugins.jetbrains.com/plugin/33633-sql-visualizer/reviews"
+        href="https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer/reviews"
         target="_blank"
         rel="noopener noreferrer"
         class="feedback-review__link"

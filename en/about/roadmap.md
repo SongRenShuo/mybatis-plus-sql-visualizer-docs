@@ -1,3 +1,8 @@
+---
+title: Roadmap
+description: "Roadmap for MyBatis SQL Visualizer: planned MPJ fill rendering, a second batch of ORMs, JPA derived-query gaps, plus the full list of shipped features."
+---
+
 # Roadmap
 
 What's shipped and what's next. Per-feature details live in [Features](/en/features/wrapper-preview); full per-release notes are in the [Changelog](./changelog).

@@ -1,5 +1,6 @@
 ---
 title: Bug Bounty
+description: "Bug bounty rules for MyBatis SQL Visualizer: what counts as a valid report, how severity maps to rewards, which details to include, and what is out of scope."
 layout: page
 sidebar: false
 ---

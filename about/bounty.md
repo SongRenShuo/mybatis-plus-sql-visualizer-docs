@@ -1,5 +1,6 @@
 ---
 title: Bug 悬赏
+description: "MyBatis SQL Visualizer 的 Bug 悬赏规则与边界：什么样的报告算有效、按严重程度如何分级奖励、复现步骤与环境信息需要写清哪些内容，IDE 版本、插件版本、JDK 与操作系统怎么填，以及 IDE、数据库、第三方插件自身问题为何不计入。"
 layout: page
 sidebar: false
 ---

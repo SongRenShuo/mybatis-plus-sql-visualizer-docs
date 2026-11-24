@@ -95,9 +95,27 @@ Failures come back as structured `[CODE] message` text — no platform exception
 ## Requirements
 
 - IDEA 2025.2+: the MCP Server is built into the platform, nothing extra to install
-- IDEA 2026.1.x: as of v2026.10.29 the plugin registers its filter through that version line's tool-filter contract, and the MCP Server works as expected (older plugin versions made the platform's MCP service unavailable overall on that line — upgrading the plugin fixes it)
 - IDEA 2024.3 ~ 2025.1 do not support this feature set (the platform has no built-in MCP Server); all other plugin features are unaffected
 - Environments without the MCP Server plugin see zero impact: the plugin's MCP registration is not loaded at all, and every other feature works as usual
+
+### Version compatibility (read when: you want to know whether the settings-page gating applies on your IDE)
+
+The platform's tool-filter extension point has a different shape on each release line; the plugin probes it and adapts:
+
+| IDEA version (build tested) | Platform filter extension point | MCP server | Settings gating |
+|---|---|---|---|
+| 2024.3 ~ 2025.1 | No built-in MCP Server | Not supported | — |
+| 2025.2 / 2025.3 (253.31033) | None | Works | Not applied |
+| 2026.1.x early (261.17801) | None | Works | Not applied |
+| 2026.1.x intermediate (261.22158) | Present, returns `StateFlow` | Works | Not applied |
+| 2026.1.x (261.24374 / 261.25134) | Present, `getFilters` form | Works | Applied |
+| 2026.2 / 2026.3 (262.10968 / 263.7307) | Present, `applyFilters` form | Works | Applied |
+
+On the versions marked "Not applied", the plugin's tools are listed and callable exactly like any other tool; the only difference is that tools you disable on the settings page are not hidden from the agent's tool list — that platform generation simply has no matching extension point, so this is not a plugin fault.
+
+::: warning IDEA 2026.1.x (261) upgrade notice
+Plugin versions 2026.10.29 and earlier make the **built-in MCP Server unusable for every client** on IDEA 2026.1.x (261.22158 and later): any client connection returns 500, tools registered by other plugins disappear too, and turning off the plugin's own MCP master switch does not help (uninstalling the plugin is the only workaround). Upgrading to a fixed version restores it — no configuration change needed.
+:::
 
 ## Settings and Gating
 

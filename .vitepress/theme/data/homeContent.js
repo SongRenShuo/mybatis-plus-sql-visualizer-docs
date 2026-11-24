@@ -53,7 +53,7 @@ export const homeContent = {
       offlineTrack: 'gitee-releases',
       highlights: ['更新无需重启 IDEA', '内网环境离线可用', '不发使用数据 · 代码不出本机'],
       statLabels: ['最新版本', 'IDEA 支持', '开源协议'],
-      installPath: 'Settings → Plugins → Marketplace 搜索 SQL Visualizer',
+      installPath: 'Settings → Plugins → Marketplace 搜索 MyBatis SQL Visualizer',
       codeJavaLabel: 'UserService.java',
       codeSqlLabel: '实时预览 · 生成的 SQL',
     },
@@ -71,7 +71,7 @@ export const homeContent = {
         {
           title: '安装插件',
           description: '从 JetBrains Marketplace 安装 SQL Visualizer。',
-          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer',
         },
         {
           title: '打开项目',
@@ -271,7 +271,7 @@ export const homeContent = {
           value: '687 次安装',
           label: 'JetBrains Marketplace 公开数据',
           detail: '数字直接取自 Marketplace 公开页——没有试用墙，也没有解锁门槛。',
-          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer',
           linkText: '查看 Marketplace',
         },
         {
@@ -435,7 +435,7 @@ export const homeContent = {
         'Reports no usage data · your code never leaves the machine',
       ],
       statLabels: ['Latest version', 'IDEA support', 'License'],
-      installPath: 'Settings → Plugins → Marketplace, search for SQL Visualizer',
+      installPath: 'Settings → Plugins → Marketplace, search for MyBatis SQL Visualizer',
       codeJavaLabel: 'UserService.java',
       codeSqlLabel: 'Live preview · generated SQL',
     },
@@ -452,7 +452,7 @@ export const homeContent = {
         {
           title: 'Install the plugin',
           description: 'Install SQL Visualizer from JetBrains Marketplace.',
-          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer',
         },
         {
           title: 'Open your project',
@@ -708,7 +708,7 @@ export const homeContent = {
           value: '687 installs',
           label: 'Public JetBrains Marketplace data',
           detail: 'Taken straight from the public Marketplace page — no paywall, no gated unlock.',
-          link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer',
+          link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer',
           linkText: 'View on Marketplace',
         },
         {

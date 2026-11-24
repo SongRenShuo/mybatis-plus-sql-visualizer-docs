@@ -1,6 +1,6 @@
 ---
 title: "MyBatis 日志里的问号怎么变成真实参数"
-description: "解释 Preparing 与 Parameters 两段分离日志的成因和常见拼参做法，并给出插件一键还原完整 SQL 的方案。"
+description: "MyBatis 日志里 Preparing 与 Parameters 两段分离，参数要手工按顺序对回问号；这篇讲清成因、批量执行时的对位难点与常见拼参做法，并给出不引 p6spy 时把日志一键还原成可执行完整 SQL 的方案。"
 ---
 
 # MyBatis 日志里的问号怎么变成真实参数

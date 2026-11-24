@@ -66,16 +66,19 @@ export default defineConfig({
   //（实测 `/features/wrapper-preview.html` → 308 → 无后缀 200）。产物仍是 .html 文件，只是链接不带后缀。
   cleanUrls: true,
 
-  // 2026-11-23：给导航 logo 补 alt。
-  // 背景：VitePress 1.6.4 的 themeConfig.logo 对象形式（light/dark/alt）实测不渲染 alt，
-  // 即使 light+dark 都给全，产物仍是 alt=""（配置被静默忽略，构建照常成功）；而 CSDN SEO
-  // 扩展按字面判定「图片缺少 ALT」。这里在构建期直接替换 HTML，爬虫读到的是带 alt 的版本。
-  // 注：装饰性 logo 写 alt=""+aria-hidden 本符合 a11y 规范，此改动只为过 SEO 工具检查。
+  // 2026-11-23：两处构建期修正。
+  // ① 给导航 logo 补 alt。背景：VitePress 1.6.4 的 themeConfig.logo 对象形式（light/dark/alt）
+  //    实测不渲染 alt，即使 light+dark 都给全，产物仍是 alt=""（配置被静默忽略，构建照常成功）；
+  //    而 CSDN SEO 扩展按字面判定「图片缺少 ALT」。这里在构建期直接替换 HTML。
+  //    注：装饰性 logo 写 alt=""+aria-hidden 本符合 a11y 规范，此改动只为过 SEO 工具检查。
+  // ② 修 vitepress-plugin-llms 的路径分隔符。它在 Windows 下用路径拼接生成页面顶部
+  //    「Are you an LLM? … at /guide\faq.md」提示，反斜杠进了 URL（线上实测所有内页都中招），
+  //    AI 抓取时按此路径请求会 404，与 llms.txt 的对齐也断掉。统一换成正斜杠。
   transformHtml(code) {
-    return code.replace(
-      /(<img src="\/logo\.svg" )alt=""/g,
-      '$1alt="SQL Visualizer"'
-    )
+    return code
+      .replace(/(<img src="\/logo\.svg" )alt=""/g, '$1alt="SQL Visualizer"')
+      .replace(/(read better optimized documentation at\s+)([^<\s"]+)/g,
+        (_m, prefix, path) => prefix + path.replace(/\\/g, '/'))
   },
 
   // 文档页显示「最后更新于」（构建期按文件跑 git log 取最后一次提交时间），
@@ -262,7 +265,7 @@ export default defineConfig({
         'IntelliJ IDEA 插件：MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate 的 SQL 调试利器',
       themeConfig: {
         nav: [
-          { text: '安装', link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer' },
+          { text: '安装', link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer' },
           { text: '首页', link: '/' },
           { text: '功能详解', link: '/features/wrapper-preview' },
           { text: '使用指南', link: '/guide/getting-started' },
@@ -279,8 +282,8 @@ export default defineConfig({
               { text: 'iBatis 2.x SQL 预览与跳转', link: '/features/ibatis-preview' },
               { text: 'JPA / Hibernate SQL 预览', link: '/features/jpa-preview' },
               { text: '注解 SQL 预览', link: '/features/annotation-preview' },
-              { text: 'SQL 转 QueryWrapper（Wrapper 反向生成 Java）', link: '/features/sql-to-java' },
-              { text: 'MyBatis 日志转完整 SQL（问号自动替换参数）', link: '/features/sql-log' },
+              { text: 'SQL 反向转成 Wrapper 代码', link: '/features/sql-to-java' },
+              { text: 'SQL 日志问号自动填参数', link: '/features/sql-log' },
               { text: '批量操作参数面板', link: '/features/batch-operation' },
               { text: '根据实体类 / 表生成 INSERT 语句', link: '/features/crud-sql' },
               { text: '数据库方言支持矩阵', link: '/features/dialect-support' },
@@ -357,7 +360,7 @@ export default defineConfig({
         'IntelliJ IDEA plugin: SQL debugging companion for MyBatis-Plus / MyBatis-Plus-Join / JPA / Hibernate — live SQL preview of Wrapper chains and XML/annotation/HQL dynamic SQL (incl. MPJ joins), real EXPLAIN execution plans, runtime capture of real parameters and durations with slow-query highlighting, log-to-source navigation, SQL-to-Java reverse conversion, and MCP Server tools.',
       themeConfig: {
         nav: [
-          { text: 'Install', link: 'https://plugins.jetbrains.com/plugin/33633-sql-visualizer' },
+          { text: 'Install', link: 'https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer' },
           { text: 'Home', link: '/en/' },
           { text: 'Features', link: '/en/features/wrapper-preview' },
           { text: 'Guide', link: '/en/guide/getting-started' },
@@ -374,8 +377,8 @@ export default defineConfig({
               { text: 'iBatis 2.x SQL Preview & Navigation', link: '/en/features/ibatis-preview' },
               { text: 'JPA / Hibernate SQL Preview', link: '/en/features/jpa-preview' },
               { text: 'Annotation SQL Preview', link: '/en/features/annotation-preview' },
-              { text: 'SQL to QueryWrapper (Reverse-Generate Wrapper Java Code)', link: '/en/features/sql-to-java' },
-              { text: 'MyBatis Log to Real SQL (Auto Parameter Substitution)', link: '/en/features/sql-log' },
+              { text: 'SQL to Wrapper Code', link: '/en/features/sql-to-java' },
+              { text: 'SQL Log: Fill Question Marks With Params', link: '/en/features/sql-log' },
               { text: 'Batch Operation Panel', link: '/en/features/batch-operation' },
               { text: 'Generate INSERT Statements from Entity Classes / Tables', link: '/en/features/crud-sql' },
               { text: 'Dialect Support Matrix', link: '/en/features/dialect-support' },

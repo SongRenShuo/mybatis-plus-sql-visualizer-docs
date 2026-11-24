@@ -1,9 +1,9 @@
 ---
-title: "SQL 转 QueryWrapper（Wrapper 反向生成 Java）"
+title: "SQL 反向转成 Wrapper 代码"
 description: "SQL 转 QueryWrapper / LambdaQueryWrapper Java 代码——选中 SQL 一键生成可编译的 MyBatis-Plus 代码，五种默认形态（AUTO + 四种固定），JOIN、子查询、聚合均可还原。"
 ---
 
-# SQL 转 QueryWrapper（Wrapper 反向生成 Java）
+# SQL 反向转成 Wrapper 代码
 <GifPlayer src="/demo/sql-to-java.gif" alt="SQL → Java 反向转换演示" />
 
 选中 SQL 文本一键生成可编译的 MyBatis-Plus 代码——设置页提供五种默认形态（AUTO 自动选择 + 四种固定形态）。

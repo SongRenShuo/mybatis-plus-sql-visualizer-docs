@@ -1,9 +1,9 @@
 ---
-title: "MyBatis 日志转完整 SQL（问号自动替换参数）"
-description: "MyBatis 日志里只有问号？自动还原成带真实参数的可执行 SQL，慢查询标红、EXPLAIN、跳回源码。兼容 MyBatis / Hibernate / JdbcTemplate 日志。"
+title: "SQL 日志问号自动填参数"
+description: "MyBatis 日志里只有问号和参数行？插件自动还原成带真实参数的可执行 SQL：慢查询标红、可直接 EXPLAIN、能跳回源码，兼容 MyBatis / MyBatis-Plus / Hibernate / JdbcTemplate 日志，批量执行与多参数行也能对位。"
 ---
 
-# MyBatis 日志转完整 SQL（问号自动替换参数）
+# SQL 日志问号自动填参数
 
 <GifPlayer src="/demo/sql-log.gif" alt="SQL 日志捕获与还原演示" />
 
