@@ -39,9 +39,9 @@ function onMove(e: PointerEvent) {
   if (!el || rafPending) return
   rafPending = true
   requestAnimationFrame(() => {
-    const r = el.getBoundingClientRect()
-    el.style.setProperty('--mx', `${e.clientX - r.left}px`)
-    el.style.setProperty('--my', `${e.clientY - r.top}px`)
+    // 光晕层是 position: fixed，用视口坐标，避免只在容器盒子里发光
+    el.style.setProperty('--mx', `${e.clientX}px`)
+    el.style.setProperty('--my', `${e.clientY}px`)
     rafPending = false
   })
 }
@@ -123,18 +123,27 @@ onUnmounted(() => {
   padding: 3rem 1.25rem 5rem;
 }
 
-/* 跟随光标的光晕：只在精确指针设备上出现，纯装饰层不接收事件 */
+/* 跟随光标的光晕：fixed 铺满视口，才不会被矩阵容器边界截断。
+   z-index: 0 让它待在卡片之下、页面底色之上；pointer-events: none 不拦点击。 */
 .sm__aura {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
   background: radial-gradient(
-    420px circle at var(--mx) var(--my),
-    color-mix(in srgb, var(--vp-c-brand-1) 13%, transparent),
-    transparent 68%
+    1000px circle at var(--mx, 50%) var(--my, 30%),
+    color-mix(in srgb, var(--vp-c-brand-1) 10%, transparent) 0%,
+    transparent 78%
   );
   opacity: 0;
   transition: opacity 0.5s ease;
+}
+
+/* 内容压在光晕之上 */
+.sm__head,
+.sm__group {
+  position: relative;
+  z-index: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {
