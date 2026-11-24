@@ -22,7 +22,86 @@ SQL Visualizer is an independent community open-source project, not affiliated w
 | Source (mirror) | [GitHub · SongRenShuo/mybatis-plus-sql-visualizer](https://github.com/SongRenShuo/mybatis-plus-sql-visualizer) |
 | Issues | [Feedback Pool](https://sql-visualizer.jvtools.cn/en/about/feedback) |
 | Bug Bounty | [Report a bug and earn a bounty](https://sql-visualizer.jvtools.cn/en/about/bounty) |
-| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) |
+| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer) |
+
+## Social links
+
+Write-ups and day-to-day notes live on 13 platforms, grouped by tech communities, content platforms, and code/distribution — all on one page.
+
+<a class="matrix-cta" href="/en/links">
+  <span class="matrix-cta__badge" aria-hidden="true">13</span>
+  <span class="matrix-cta__body">
+    <span class="matrix-cta__title">See every account</span>
+    <span class="matrix-cta__sub">Zhihu · Juejin · CSDN · dev.to · 51CTO · Cnblogs · Tencent Cloud · Alibaba Cloud · Toutiao · Xiaohongshu · GitHub · Gitee · Marketplace</span>
+  </span>
+  <span class="matrix-cta__arrow" aria-hidden="true">→</span>
+</a>
+
+<style>
+.matrix-cta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.matrix-cta:hover {
+  border-color: var(--vp-c-brand-1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -14px var(--vp-c-brand-1);
+}
+
+.matrix-cta__badge {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--vp-c-brand-1);
+  background: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--vp-c-brand-1) 32%, transparent);
+}
+
+.matrix-cta__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+  min-width: 0;
+}
+
+.matrix-cta__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.matrix-cta__sub {
+  font-size: 0.8125rem;
+  color: var(--vp-c-text-3);
+  line-height: 1.4;
+}
+
+.matrix-cta__arrow {
+  margin-left: auto;
+  font-size: 1.125rem;
+  color: var(--vp-c-text-3);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.matrix-cta:hover .matrix-cta__arrow {
+  transform: translateX(3px);
+  color: var(--vp-c-brand-1);
+}
+</style>
 
 ## WeChat
 

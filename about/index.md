@@ -22,7 +22,86 @@ SQL Visualizer 是独立开发者的社区开源项目，与 MyBatis / MyBatis-P
 | 源码仓库（镜像） | [GitHub · SongRenShuo/mybatis-plus-sql-visualizer](https://github.com/SongRenShuo/mybatis-plus-sql-visualizer) |
 | 问题反馈 | [官网需求池](https://sql-visualizer.jvtools.cn/about/feedback) |
 | Bug 悬赏 | [提交 Bug 报告，按等级领取悬赏](https://sql-visualizer.jvtools.cn/about/bounty) |
-| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-sql-visualizer) |
+| Marketplace | [JetBrains Plugin Page](https://plugins.jetbrains.com/plugin/33633-mybatis-sql-visualizer) |
+
+## 账号矩阵
+
+文章和日常记录分散在 13 个平台，按技术社区、内容平台、代码与分发分组整理，一个页面看全。
+
+<a class="matrix-cta" href="/links">
+  <span class="matrix-cta__badge" aria-hidden="true">13</span>
+  <span class="matrix-cta__body">
+    <span class="matrix-cta__title">查看全部账号入口</span>
+    <span class="matrix-cta__sub">知乎 · 掘金 · CSDN · dev.to · 51CTO · 博客园 · 腾讯云 · 阿里云 · 头条 · 小红书 · GitHub · Gitee · Marketplace</span>
+  </span>
+  <span class="matrix-cta__arrow" aria-hidden="true">→</span>
+</a>
+
+<style>
+.matrix-cta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.matrix-cta:hover {
+  border-color: var(--vp-c-brand-1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -14px var(--vp-c-brand-1);
+}
+
+.matrix-cta__badge {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--vp-c-brand-1);
+  background: color-mix(in srgb, var(--vp-c-brand-1) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--vp-c-brand-1) 32%, transparent);
+}
+
+.matrix-cta__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+  min-width: 0;
+}
+
+.matrix-cta__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.matrix-cta__sub {
+  font-size: 0.8125rem;
+  color: var(--vp-c-text-3);
+  line-height: 1.4;
+}
+
+.matrix-cta__arrow {
+  margin-left: auto;
+  font-size: 1.125rem;
+  color: var(--vp-c-text-3);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.matrix-cta:hover .matrix-cta__arrow {
+  transform: translateX(3px);
+  color: var(--vp-c-brand-1);
+}
+</style>
 
 ## 微信交流
 
